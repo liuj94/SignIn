@@ -12,7 +12,7 @@ import com.zcitc.cloudhome.base.BaseBindingFragment
 
 
 import com.example.signin.R
-import com.example.signin.constants.PageRoutes
+import com.example.signin.PageRoutes
 import com.example.signin.helper.AppManager
 import com.example.signin.mvvm.bean.SelfUserData
 import com.example.signin.mvvm.ui.activity.SettingActivity
@@ -27,7 +27,7 @@ import com.example.signin.mvvm.bean.MenusData
 import com.example.signin.mvvm.ui.activity.PrivacyWebViewctivity
 import com.example.signin.mvvm.ui.adapter.MineTool2Adapter
 import com.example.signin.mvvm.vm.MainMyFVM
-import com.example.signin.utils.startCompres
+import com.example.signin.startCompres
 import com.example.signin.utils.takePhotoDialog
 
 

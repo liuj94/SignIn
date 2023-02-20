@@ -11,7 +11,7 @@ import com.example.signin.base.BaseBindingActivity
 
 
 import com.example.signin.constants.KeySet
-import com.example.signin.constants.PageRoutes
+import com.example.signin.PageRoutes
 import com.example.signin.databinding.ActivityMainHomeBinding
 import com.example.signin.helper.AppManager
 import com.example.signin.helper.CustomActionUtils
@@ -23,7 +23,7 @@ import com.example.signin.mvvm.ui.adapter.MainViewPagerAdapter
 import com.example.signin.mvvm.ui.widget.UpdateDialog
 import com.example.signin.mvvm.vm.MainHomeAVM
 import com.example.signin.utils.PushHelper
-import com.example.signin.utils.setTvGradientColor
+import com.example.signin.setTvGradientColor
 
 
 class MainHomeActivity : BaseBindingActivity<ActivityMainHomeBinding, MainHomeAVM>() {

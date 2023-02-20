@@ -1,4 +1,4 @@
-package com.example.signin.mvvm.ui.fragment
+package com.example.signin.fragment
 
 
 import android.app.Activity
@@ -11,37 +11,10 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dylanc.longan.toast
-import com.huantansheng.easyphotos.models.album.entity.Photo
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
-import com.youth.banner.adapter.BannerImageAdapter
-import com.youth.banner.holder.BannerImageHolder
-import com.zcitc.cloudhome.base.BaseBindingFragment
 import com.example.signin.R
-import com.example.signin.constants.KeySet
-import com.example.signin.constants.PageRoutes
-import com.example.signin.constants.PageRoutes.Companion.BASE_WB_CNNBFDC2
-import com.example.signin.constants.PageRoutes.Companion.BASE_WB_CNNBFDC2_GZ
-import com.example.signin.databinding.FragNewhomemainListBinding
-import com.example.signin.helper.AppManager
-import com.example.signin.helper.compress.CompressTool
-import com.example.signin.helper.database.LocalDataUtils
-import com.example.signin.helper.net.RequestCallback
-
-import com.example.signin.mvvm.bean.BannerData
-import com.example.signin.mvvm.bean.BannerModel
-import com.example.signin.mvvm.bean.MenusData
-import com.example.signin.mvvm.ui.activity.LiveListActivity
-
-import com.example.signin.mvvm.ui.activity.SettingActivity
-import com.example.signin.mvvm.ui.adapter.HomeFunctionToolAdapter
-import com.example.signin.mvvm.vm.MainHomeFVM
-import com.example.signin.utils.GlideUtils
-import com.example.signin.utils.getSelfData
-import com.example.signin.utils.gotoScanActivity
-import java.io.File
-import java.util.*
-
+import com.example.signin.PageRoutes
 
 /**
  *   author : LiuJie

@@ -1,4 +1,4 @@
-package com.zcitc.baselibrary
+package com.example.signin.base
 
 import android.app.Activity
 import android.content.res.Configuration

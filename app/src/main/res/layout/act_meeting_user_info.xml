@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F3F4F8"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:id="@+id/goback"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:paddingLeft="13dp"
+            android:paddingRight="13dp"
+            android:src="@drawable/md_nav_back" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="参会人信息"
+            android:textColor="#333333"
+            android:textSize="19sp" />
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="13dp"
+            android:paddingRight="13dp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/shape_bg_12">
+    <LinearLayout
+        android:paddingRight="16dp"
+        android:paddingLeft="18dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+<LinearLayout
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="姓名名"
+android:textStyle="bold"
+        android:textColor="#ff1a1a1a"
+        android:textSize="19sp"
+        />
+    <TextView
+        android:textStyle="bold"
+        android:id="@+id/gongshiName"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="公司名称公司名称"
+        android:textColor="#ff1a1a1a"
+        android:textSize="12sp"
+        />
+    <TextView
+
+        android:textStyle="bold"
+        android:id="@+id/zhengjiangType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="证件类型"
+        android:textColor="#ff1a1a1a"
+        android:textSize="12sp"
+        />
+</LinearLayout>
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#F3F4F8"/>
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:paddingRight="16dp"
+        android:paddingLeft="18dp"
+        android:layout_width="match_parent"
+        android:layout_height="35dp">
+        <TextView
+            android:id="@+id/jiedaidName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="接待员：马师傅"
+            android:textColor="#ff333333"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            />
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/lxCall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="联系参会人"
+            android:textStyle="bold"
+            android:textColor="#ff333333"
+            android:textSize="12sp"
+            />
+    </LinearLayout>
+</LinearLayout>
+
+
+            <TextView
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="订单信息"
+                android:textColor="#ff333333"
+                android:textSize="15sp"
+                />
+
+            <LinearLayout
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="8dp"
+                android:orientation="vertical"
+                android:background="@drawable/shape_bg_12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/menpiaomingcheng"/>
+                    <TextView
+                        android:id="@+id/menpiaoName"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="门票名称"
+                        android:textColor="#ff333333"
+                        android:textSize="14sp"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:gravity="left"
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/kaipiaoTime"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="9月27日 14:00"
+                            android:textColor="#ff030303"
+                            android:textSize="19sp"
+                            />
+                        <TextView
+                            android:id="@+id/kaipiaoType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="开票类型"
+                            android:textColor="#ff7d8592"
+                            android:textSize="12sp"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/kaipiaoPrice"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="¥50.00"
+                            android:textColor="#ff030303"
+                            android:textSize="19sp"
+                            />
+                        <TextView
+                            android:id="@+id/kaipiaoNum"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="发票票号"
+                            android:textColor="#ff7d8592"
+                            android:textSize="12sp"
+                            />
+                    </LinearLayout>
+                    <TextView
+                        android:layout_marginLeft="19dp"
+                        android:id="@+id/shen_he_kai_piao"
+                        android:background="@drawable/shape_bg_ff3974f6_15"
+                        android:layout_width="86dp"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:text="审核开票"
+                        android:textColor="#ffffffff"
+                        android:textSize="12sp"
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

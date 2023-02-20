@@ -1,14 +1,17 @@
-package com.example.signin.constants
+package com.example.signin
 
 
 interface PageRoutes {
 
     companion object {
+        val BaseUrl = "https://meeting.nbqichen.com:20882/prod-api/"
 
 
+        //登录
+        val Api_login = "$BaseUrl/login"
+        val Api_editUser = "$BaseUrl/system/user"
+        val Api_getUserInfo = "$BaseUrl/getInfo"
 
-        //转发统计
-//        val FORWARDING = "$BASE_GATEWAY$BASE_API_GZ/news-event/forwarding"
     }
 
 }

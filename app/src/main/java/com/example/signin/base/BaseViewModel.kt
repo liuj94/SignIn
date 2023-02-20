@@ -1,4 +1,4 @@
-package com.zcitc.baselibrary
+package com.example.signin.base
 
 import android.annotation.SuppressLint
 import android.app.Activity
