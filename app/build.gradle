@@ -66,6 +66,7 @@ dependencies {
     api 'com.github.DylanCaiCoding.ViewBindingKTX:viewbinding-ktx:2.1.0'
     api 'com.github.DylanCaiCoding.ViewBindingKTX:viewbinding-base:2.1.0'
     api 'com.github.DylanCaiCoding.Longan:longan:1.1.1'
+    implementation 'com.github.getActivity:XXPermissions:16.2'
 
 
 }
