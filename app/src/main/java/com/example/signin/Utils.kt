@@ -1,29 +1,11 @@
 package com.example.signin
 
-import android.app.Activity
 import android.content.Context
-import android.graphics.*
-import android.net.ConnectivityManager
-import android.net.Uri
-import android.os.Build
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.AbsoluteSizeSpan
-import android.util.Log
-import android.view.Display
-import android.view.View
-import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.alibaba.fastjson.JSON
 import com.example.signin.utils.ACache
-import com.hjq.permissions.OnPermissionCallback
-import com.hjq.permissions.XXPermissions
-import com.lzy.okgo.OkGo
-import com.lzy.okgo.https.HttpsUtils
-import com.lzy.okgo.model.HttpHeaders
 import java.text.SimpleDateFormat
 import java.util.Date
 

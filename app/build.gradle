@@ -68,5 +68,7 @@ dependencies {
     api 'com.github.DylanCaiCoding.Longan:longan:1.1.1'
     implementation 'com.github.getActivity:XXPermissions:16.2'
 
-
+    //youth banner
+    api 'com.youth.banner:banner:1.4.10'
+    api 'com.github.hackware1993:MagicIndicator:1.7.0'
 }

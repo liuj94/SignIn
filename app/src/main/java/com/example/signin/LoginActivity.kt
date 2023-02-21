@@ -1,17 +1,15 @@
 package com.example.signin
 
+import com.dylanc.longan.toast
+import com.example.signin.base.BaseBindingActivity
+import com.example.signin.base.BaseViewModel
+import com.example.signin.databinding.ActLoginBinding
 
 
-
-class LoginActivity : BaseActivity<ActivityLoginBinding, BaseViewModel>(){
+class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>(){
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
-    private var lastSendCodeTime: Long = 0
-
-    private var isCodeMode = true
-
-//    override fun initView(savedInstanceState: Bundle?) = R.layout.activity_login
     override fun initData() {
 
     }
@@ -21,8 +19,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, BaseViewModel>(){
             toast( "再按一次返回退出程序")
             exitTime = System.currentTimeMillis()
         } else {
-            LocalDataUtils.delValue(KeySet.IS_VERIFICATION_FINGERPRINT)
-            AppManager.getAppManager().appExit()
+
+            System.exit(0);
         }
     }
 

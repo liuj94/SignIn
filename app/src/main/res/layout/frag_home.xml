@@ -3,5 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F3F4F8">
+    <net.lucode.hackware.magicindicator.MagicIndicator
+        android:id="@+id/magicIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#f5f5f5"
+        android:paddingLeft="5dp"
+        android:paddingBottom="3dp" />
 
+    <com.example.signin.view.ViewPagerForScrollView
+        android:id="@+id/homeVp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

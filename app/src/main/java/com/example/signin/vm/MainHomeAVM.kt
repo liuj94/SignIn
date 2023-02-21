@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.signin.base.BaseViewModel
 
 import com.example.signin.fragment.HomeMainFragment
-import com.example.signin.mvvm.ui.fragment.MyFragment
+import com.example.signin.fragment.MyFragment
 
 import kotlin.collections.ArrayList
 
