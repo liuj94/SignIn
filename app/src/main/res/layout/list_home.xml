@@ -55,5 +55,5 @@
         android:paddingBottom="16dp"
         android:text="进行中"
         android:textColor="#ff666666"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 </RelativeLayout>

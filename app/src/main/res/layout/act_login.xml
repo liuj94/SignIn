@@ -106,6 +106,28 @@
                 android:textSize="16sp"
                 />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal|bottom"
+            android:orientation="vertical"
+            android:paddingBottom="50dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="码上会议"
+                android:textColor="#ff999999"
+                android:textSize="10sp"
+                />
+            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="码上互动技术支持"
+                android:textColor="#ff999999"
+                android:textSize="10sp"
+                />
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>
