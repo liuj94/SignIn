@@ -1,10 +1,16 @@
 package com.example.signin.net;
 
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 
+import com.example.signin.App;
+import com.example.signin.AppManager;
+import com.example.signin.LoginActivity;
+import com.example.signin.MainHomeActivity;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.request.base.Request;
 
@@ -66,10 +72,7 @@ public abstract class RequestCallback<T> extends AbsCallback<T> {
             }
 
             if (data.isSuccess()) {
-                return data.getResult();
-            }else if(data.getStatus() ==304){
-                Log.d("getAdAllList", "==========data.getStatus() ==304==============");
-                throw new RequestException(304, "不刷新数据");
+                return data.getData();
             }
 
             else {
@@ -134,11 +137,11 @@ public abstract class RequestCallback<T> extends AbsCallback<T> {
 //                //FLApplication.Companion.getInstance().toast("请先登录");
 //                return;
 //            }
-//            if (((RequestException) response.getException()).getStatusCode() == 401) {
-//                LocalDataUtils.INSTANCE.clearLoginInfo();
-//                AppManager.getAppManager().startActivity(LoginActivity.class);
-//                return;
-//            }
+            if (((RequestException) response.getException()).getStatusCode() == 401) {
+                Toast.makeText(App.Companion.getInstance(),"登录过期",Toast.LENGTH_SHORT).show();
+                AppManager.getAppManager().startActivity(LoginActivity.class);
+                return;
+            }
 //            if (((RequestException) response.getException()).getStatusCode() == 404) {
 //                //toast("服务器异常");
 //                Toast.makeText(FLApplication.Companion.getInstance(),"服务器异常",Toast.LENGTH_SHORT).show();

@@ -8,20 +8,21 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/top_bg" />
+        android:src="@mipmap/denglubg" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 <RelativeLayout
+    android:paddingTop="30dp"
     android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_height="80dp">
     <ImageView
         android:paddingRight="13dp"
         android:paddingLeft="13dp"
         android:id="@+id/goback"
-        android:src="@drawable/md_nav_back"
+
         android:layout_width="wrap_content"
         android:layout_height="50dp"/>
     <TextView

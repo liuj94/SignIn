@@ -37,4 +37,5 @@ abstract class BaseBindingFragment<VB : ViewBinding,T : BaseViewModel> : Fragmen
     abstract fun initData()
     fun initListener(){}
 
+
 }

@@ -81,19 +81,20 @@
             android:hint="请输入手机号"
             android:inputType="textPassword"
             android:padding="11dp"
+            android:lines="11"
             android:background="@drawable/shape_bg_ffe1e2e5_5"
             android:textColor="#ff333333"
             android:textColorHint="#ff999999"
             android:textSize="16sp"
             />
         <TextView
-            android:id="@+id/login"
+            android:id="@+id/add"
             android:gravity="center"
             android:background="@drawable/shape_bg_ff3974f6_10"
             android:layout_marginTop="50dp"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:text="登 录"
+            android:text="确定"
             android:textColor="#ffffffff"
             android:textSize="16sp"
             />

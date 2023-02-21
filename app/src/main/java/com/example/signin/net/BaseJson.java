@@ -5,8 +5,8 @@ import android.text.TextUtils;
 public class BaseJson<T> {
     private String message;
     private String msg;
-    private T result;
-    private int status;
+    private T data;
+    private int code;
 
     public String getMsg() {
         if (TextUtils.isEmpty(msg)) {
@@ -30,24 +30,24 @@ public class BaseJson<T> {
         this.message = message;
     }
 
-    public T getResult() {
-        return result;
+    public T getData() {
+        return data;
     }
 
-    public void setResult(T result) {
-        this.result = result;
+    public void setData(T data) {
+        this.data = data;
     }
 
     public int getStatus() {
-        return status;
+        return code;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setStatus(int code) {
+        this.code = code;
     }
 
     public boolean isSuccess() {
-        return this.status == 0;
+        return this.code == 0;
     }
 
     @Override
@@ -55,8 +55,8 @@ public class BaseJson<T> {
         return "BaseJson{" +
                 "message='" + message + '\'' +
                 ", msg='" + msg + '\'' +
-                ", result=" + result +
-                ", status=" + status +
+                ", result=" + data +
+                ", status=" + code +
                 '}';
     }
 }

@@ -1,0 +1,45 @@
+//package com.example.signin.bean
+//
+//data class User(
+//    val admin: Boolean,
+//    val avatar: String?,
+//    val beginCreateDate: String?,
+//    val beginCreateTime: String?,
+//    val business: Business,
+//    val businessId: Int,
+//    val code: String,
+//    val createBy: String,
+//    val createTime: String,
+//    val dateFormat: String,
+//    val dateType: Int,
+//    val delFlag: String,
+//    val dept: Dept,
+//    val deptId: Int,
+//    val email: String,
+//    val endCreateDate: String,
+//    val endCreateTime: String,
+//    val groupBy: String,
+//    val loginDate: String,
+//    val loginIp: String,
+//    val meetingId: Int,
+//    val nickName: String,
+//    val onLine: Int,
+//
+//    val phonenumber: String,
+//
+//    val remark: String,
+//    val roleId: Int,
+//
+//    val salt: String,
+//    val searchValue: String,
+//    val sex: String,
+//    val signUpId: Int,
+//    val signUpLocationId: Int,
+//    val siteId: Int,
+//    val status: String,
+//    val updateBy: String,
+//    val updateTime: String,
+//    val userId: Int,
+//    val userName: String,
+//    val userType: String
+//)

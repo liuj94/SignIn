@@ -15,8 +15,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <RelativeLayout
+
+            android:paddingTop="30dp"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="80dp">
             <ImageView
                 android:paddingRight="13dp"
                android:paddingLeft="13dp"

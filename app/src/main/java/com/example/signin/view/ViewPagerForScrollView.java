@@ -1,5 +1,11 @@
 package com.example.signin.view;
 
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.View;
+
+import androidx.viewpager.widget.ViewPager;
+
 public class ViewPagerForScrollView extends ViewPager {
     public ViewPagerForScrollView(Context context) {
         super(context);

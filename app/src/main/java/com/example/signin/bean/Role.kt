@@ -1,0 +1,31 @@
+package com.example.signin.bean
+
+data class Role(
+    val admin: Boolean,
+    val beginCreateDate: String,
+    val beginCreateTime: String,
+    val createBy: String,
+    val createTime: String,
+    val dataScope: String,
+    val dateFormat: String,
+    val dateType: Int,
+    val delFlag: String,
+    val deptCheckStrictly: Boolean,
+    val deptIds: List<Any>,
+    val endCreateDate: String,
+    val endCreateTime: String,
+    val flag: Boolean,
+    val groupBy: String,
+    val menuCheckStrictly: Boolean,
+    val menuIds: List<Any>,
+    val params: ParamsXXX,
+    val remark: String,
+    val roleId: Int,
+    val roleKey: String,
+    val roleName: String,
+    val roleSort: String,
+    val searchValue: String,
+    val status: String,
+    val updateBy: String,
+    val updateTime: String
+)

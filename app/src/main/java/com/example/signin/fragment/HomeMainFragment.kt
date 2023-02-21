@@ -3,11 +3,25 @@ package com.example.signin.fragment
 
 import android.os.Build
 import android.view.View
+import android.widget.EditText
+import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
+import com.dylanc.longan.toast
+import com.example.signin.PageRoutes
 import com.example.signin.R
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
+import com.example.signin.bean.MeetingData
+import com.example.signin.bean.UserInfoData
 import com.example.signin.databinding.FragHomeBinding
+import com.example.signin.mvvm.ui.adapter.HomeListAdapter
+import com.example.signin.net.RequestCallback
+import com.lzy.okgo.OkGo
+import com.lzy.okgo.model.Response
 
 /**
  *   author : LiuJie
@@ -25,6 +39,8 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
 
 
     private var isVisibleFirst: Boolean = true
+    private var adapter: HomeListAdapter ? = null
+    private var list: MutableList<MeetingData>  = ArrayList()
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
@@ -32,39 +48,50 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
 //            setStatusBarHeight(toolbarView)
             isVisibleFirst = false
 
+            binding.recyclerview.layoutManager = LinearLayoutManager(activity)
+            adapter = HomeListAdapter().apply {
+                submitList(list)
+                setOnItemClickListener { _, _, position ->
 
+                }
+            }
+            binding.recyclerview.adapter = adapter
+            getData()
         }
 
     }
 
-    private fun initTabList(dates: AdvertisementRecommendationData) {
+    private fun getData() {
+        OkGo.get<List<MeetingData>>(PageRoutes.Api_meetingList)
+            .tag(PageRoutes.Api_meetingList)
+            .headers("Authorization",kv.getString("token",""))
+            .execute(object : RequestCallback<List<MeetingData>>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
 
-        var titles: MutableList<String> = ArrayList()
-        var redirectUrl: MutableList<String> = ArrayList()
-        var orderNo: MutableList<String> = ArrayList()
-        for (it in dates.datas) {
-            titles.add(it.tags)
-            redirectUrl.add(it.redirectUrl)
-            orderNo.add(it.menuCode.toString())
-        }
-        if (titles.size > 0) {
-            mBinding.magicIndicator.visibility = View.VISIBLE
-        }
-        mBinding.homeVp.adapter = TabPagerAdapter(childFragmentManager, redirectUrl, orderNo)
-        mBinding.homeVp.offscreenPageLimit = titles.size
-        context?.let {
-            mBinding.magicIndicator.setBackgroundColor(
-                ContextCompat.getColor(context!!, R.color.gray_f5f5f5)
-            )
-        }
-        val commonNavigator = CommonNavigator(activity)
-        commonNavigator.isAdjustMode = false
-        commonNavigator.adapter = MyCommonNavigatorAdapter(activity, titles, mBinding.homeVp)
-        mBinding.magicIndicator.navigator = commonNavigator
+                }
 
-        ViewPagerHelper.bind(mBinding.magicIndicator, mBinding.homeVp)
+                override fun onMySuccess(data: List<MeetingData>) {
+                    super.onMySuccess(data)
+
+                    adapter?.submitList(data)
+                    adapter?.notifyDataSetChanged()
+
+                }
+
+                override fun onError(response: Response<List<MeetingData>>) {
+                    super.onError(response)
+                    toast(response.message())
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+
+                }
 
 
+            })
     }
+
 
 }

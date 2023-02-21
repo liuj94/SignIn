@@ -8,12 +8,13 @@ import com.example.signin.base.BaseBindingFragment
 
 import com.example.signin.base.BaseViewModel
 import com.example.signin.databinding.FragHomeBinding
+import com.example.signin.databinding.FragMyBinding
 
 /**
  *   author : LiuJie
  *   date   : 2021/2/2513:36
  */
-class   MyFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
+class   MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
 
     companion object {
         fun newInstance(): MyFragment {
