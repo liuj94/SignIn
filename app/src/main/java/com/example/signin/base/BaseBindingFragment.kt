@@ -19,7 +19,7 @@ abstract class BaseBindingFragment<VB : ViewBinding,T : BaseViewModel> : Fragmen
         obtainViewModel(this,getViewModel())
     }
     abstract fun getViewModel(): Class<T>
-    override val kv = MMKV.mmkvWithID("cloudhomeMMKV")
+    override val kv = MMKV.mmkvWithID("MyDataMMKV")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {

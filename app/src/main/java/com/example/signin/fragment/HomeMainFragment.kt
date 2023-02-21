@@ -57,11 +57,15 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
             }
             binding.recyclerview.adapter = adapter
             getData()
+            binding.refresh.setOnRefreshListener {
+                getData()
+            }
         }
 
     }
 
     private fun getData() {
+       var token =  kv.getString("token","")
         OkGo.get<List<MeetingData>>(PageRoutes.Api_meetingList)
             .tag(PageRoutes.Api_meetingList)
             .headers("Authorization",kv.getString("token",""))
