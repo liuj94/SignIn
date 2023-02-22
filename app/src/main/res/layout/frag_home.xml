@@ -15,32 +15,113 @@
             android:id="@+id/title"
             android:gravity="center"
             android:textColor="#333"
-            android:textSize="19sp"
+            android:textStyle="bold"
+            android:textSize="16sp"
             android:text="会议列表"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </RelativeLayout>
     <LinearLayout
+android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="50dp">
+        android:gravity="bottom"
+        android:layout_height="60dp">
         <LinearLayout
+            android:id="@+id/btnLl1"
+            android:padding="10dp"
             android:orientation="vertical"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
+            <TextView
+                android:id="@+id/btnTv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="全部"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                />
+            <View
+                android:id="@+id/btnV1"
+                android:layout_marginTop="5dp"
+                android:layout_width="25dp"
+                android:layout_height="3dp"
+                android:background="@drawable/shape_line_3974f6"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/btnLl2"
+            android:padding="10dp"
             android:orientation="vertical"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
+            <TextView
+                android:id="@+id/btnTv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="进行中"
+                android:textColor="#5B5B5B"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                />
+            <View
+                android:visibility="invisible"
+                android:id="@+id/btnV2"
+                android:layout_marginTop="5dp"
+                android:layout_width="25dp"
+                android:layout_height="3dp"
+                android:background="@drawable/shape_line_3974f6"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/btnLl3"
+            android:padding="10dp"
             android:orientation="vertical"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
+            <TextView
+                android:id="@+id/btnTv3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已过期"
+                android:textColor="#5B5B5B"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                />
+            <View
+                android:visibility="invisible"
+                android:id="@+id/btnV3"
+                android:layout_marginTop="5dp"
+                android:layout_width="25dp"
+                android:layout_height="3dp"
+                android:background="@drawable/shape_line_3974f6"/>
+        </LinearLayout>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+        <LinearLayout
+           android:layout_marginBottom="10dp"
+            android:layout_width="85dp"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:background="@drawable/shape_bg_3974f6_fff_17">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/shousuo"/>
+            <TextView
+                android:layout_marginLeft="9dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="搜索"
+                android:textColor="#ff8b8b8b"
+                android:textSize="15sp"
+                />
         </LinearLayout>
     </LinearLayout>
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
@@ -67,6 +148,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:background="@color/white"
 
             tools:ignore="MissingClass" />
