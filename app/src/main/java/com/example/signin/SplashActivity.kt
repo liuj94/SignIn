@@ -1,13 +1,8 @@
 package com.example.signin
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import androidx.databinding.DataBindingUtil.setContentView
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.databinding.ActSplashBinding
-import com.example.signin.databinding.ActivityMainBinding
-import com.example.signin.mvvm.vm.MainHomeAVM
 
 class SplashActivity : BaseBindingActivity<ActSplashBinding, BaseViewModel>() {
 
@@ -22,6 +17,7 @@ class SplashActivity : BaseBindingActivity<ActSplashBinding, BaseViewModel>() {
         } else {
             com.dylanc.longan.startActivity<MainHomeActivity>()
         }
+        finish()
     }
 
 }

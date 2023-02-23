@@ -77,4 +77,6 @@ dependencies {
 
     implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.0-beta02"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
+
+    implementation 'com.github.RelinRan:CircleProgressView:2022.7.28.1'
 }

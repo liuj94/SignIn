@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F3F4F8"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+ >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/white"
+        android:paddingTop="30dp">
+
+        <ImageView
+            android:id="@+id/goback"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:padding="13dp"
+            android:src="@mipmap/arrowsleft" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="签到点设置"
+            android:textColor="#ff333333"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_bg_12"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/ov_ccc" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="账号信息"
+                    android:textColor="#ff333333"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="123456789"
+                    android:textColor="#ff333333"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_bg_12"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="15dp">
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                 >
+            <TextView
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="签到模式"
+                android:textColor="#ff1a1a1a"
+                android:textSize="14sp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自动"
+                android:textColor="#ff333333"
+                android:textSize="12sp"
+                />
+            </LinearLayout>
+
+            <TextView
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="签到成功显示时长"
+                android:textColor="#ff474747"
+                android:textSize="12sp"
+                />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <TextView
+        android:gravity="center"
+        android:background="@drawable/shape_bg_9999_fff_17"
+        android:layout_width="45dp"
+        android:layout_height="20dp"
+        android:text="1s"
+        android:textColor="#ff666666"
+        android:textSize="12sp"
+        />
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:background="@drawable/shape_bg_9999_fff_17"
+        android:layout_width="45dp"
+        android:layout_height="20dp"
+        android:text="2s"
+        android:textColor="#ff666666"
+        android:textSize="12sp"
+        />
+    <TextView
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:background="@drawable/shape_bg_9999_fff_17"
+        android:layout_width="45dp"
+        android:layout_height="20dp"
+        android:text="3s"
+        android:textColor="#ff666666"
+        android:textSize="12sp"
+        />
+    <TextView
+        android:gravity="center"
+        android:background="@drawable/shape_bg_9999_fff_17"
+        android:layout_width="60dp"
+        android:layout_height="20dp"
+        android:text="自定义"
+        android:textColor="#ff666666"
+        android:textSize="12sp"
+        />
+</LinearLayout>
+
+            <View
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#F3F4F8"/>
+
+
+            <LinearLayout
+android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="语音提示"
+                    android:textColor="#ff1a1a1a"
+                    android:textSize="14sp"
+                    />
+                <ImageView
+                    android:id="@+id/kg1"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+
+                    android:src="@mipmap/kaiguan1" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                >
+                <TextView
+
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="签到成功提示"
+                    android:textColor="#ff474747"
+                    android:textSize="12sp"
+                    />
+                <EditText
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_bg_f3f4f8_4"
+                    android:maxLines="1"
+                    android:paddingLeft="12dp"
+                    android:textColor="#ff474747"
+                    android:textSize="11sp"
+                    android:textColorHint="#ffa3a3a3"
+                    android:hint="输入提示内容"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                >
+                <TextView
+
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="重复签到提示"
+                    android:textColor="#ff474747"
+                    android:textSize="12sp"
+                    />
+                <EditText
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_bg_f3f4f8_4"
+                    android:maxLines="1"
+                    android:paddingLeft="12dp"
+                    android:textColor="#ff474747"
+                    android:textSize="11sp"
+                    android:textColorHint="#ffa3a3a3"
+                    android:hint="输入提示内容"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                >
+                <TextView
+
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="识别失败提示"
+                    android:textColor="#ff474747"
+                    android:textSize="12sp"
+                    />
+                <EditText
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_bg_f3f4f8_4"
+                    android:maxLines="1"
+                    android:paddingLeft="12dp"
+                    android:textColor="#ff474747"
+                    android:textSize="11sp"
+                    android:textColorHint="#ffa3a3a3"
+                    android:hint="输入提示内容"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="振动提示"
+                    android:textColor="#ff1a1a1a"
+                    android:textSize="14sp"
+                    />
+                <ImageView
+                    android:id="@+id/kg2"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+
+                    android:src="@mipmap/kaiguan1" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

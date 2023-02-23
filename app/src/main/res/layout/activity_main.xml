@@ -4,7 +4,7 @@
 <!--    <data>-->
 
 <!--    </data>-->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,8 +17,7 @@
         android:id="@+id/mViewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/mMainBottomRg"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_weight="1" />
 
     <RadioGroup
         android:id="@+id/mMainBottomRg"
@@ -72,4 +71,4 @@
     </RadioGroup>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout><!--</layout>-->
+</LinearLayout><!--</layout>-->

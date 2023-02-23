@@ -1,24 +1,23 @@
 package com.example.signin.fragment
 
 
+import android.graphics.Color
 import android.os.Build
 import android.view.View
-import android.widget.EditText
-import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.customview.customView
+import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
+import com.example.signin.MeetingDeActivity
 import com.example.signin.PageRoutes
 import com.example.signin.R
+
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.MeetingData
-import com.example.signin.bean.UserInfoData
+
 import com.example.signin.databinding.FragHomeBinding
-import com.example.signin.mvvm.ui.adapter.HomeListAdapter
+import com.example.signin.adapter.HomeListAdapter
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
@@ -39,35 +38,91 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
 
 
     private var isVisibleFirst: Boolean = true
-    private var adapter: HomeListAdapter ? = null
+    private var adapter: HomeListAdapter? = null
     private var list: MutableList<MeetingData>  = ArrayList()
-
+    //-1,全部;2,进行中;3,过期
+    var state = -1
+    //pageNum:
+    //1
+    //pageSize:
+    var pageNum = 1
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
         if ( isVisibleFirst) {
 //            setStatusBarHeight(toolbarView)
             isVisibleFirst = false
-
+            binding.btnLl1.setOnClickListener {
+                list.clear()
+                state = -1
+                pageNum = 1
+                binding.btnTv1.setTextColor(Color.parseColor("#ff333333"))
+                binding.btnTv2.setTextColor(Color.parseColor("#5B5B5B"))
+                binding.btnTv3.setTextColor(Color.parseColor("#5B5B5B"))
+                binding.btnV1.visibility = View.VISIBLE
+                binding.btnV2.visibility = View.INVISIBLE
+                binding.btnV3.visibility = View.INVISIBLE
+                getData()
+            }
+            binding.btnLl2.setOnClickListener {
+                list.clear()
+                pageNum = 1
+                state = 2
+                binding.btnTv2.setTextColor(Color.parseColor("#ff333333"))
+                binding.btnTv1.setTextColor(Color.parseColor("#5B5B5B"))
+                binding.btnTv3.setTextColor(Color.parseColor("#5B5B5B"))
+                binding.btnV2.visibility = View.VISIBLE
+                binding.btnV1.visibility = View.INVISIBLE
+                binding.btnV3.visibility = View.INVISIBLE
+                getData()
+            }
+            binding.btnLl3.setOnClickListener {
+                list.clear()
+                state = 3
+                pageNum = 1
+                binding.btnTv3.setTextColor(Color.parseColor("#ff333333"))
+                binding.btnTv2.setTextColor(Color.parseColor("#5B5B5B"))
+                binding.btnTv1.setTextColor(Color.parseColor("#5B5B5B"))
+                binding.btnV3.visibility = View.VISIBLE
+                binding.btnV2.visibility = View.INVISIBLE
+                binding.btnV1.visibility = View.INVISIBLE
+                getData()
+            }
             binding.recyclerview.layoutManager = LinearLayoutManager(activity)
             adapter = HomeListAdapter().apply {
                 submitList(list)
                 setOnItemClickListener { _, _, position ->
-
+                    setEmptyViewLayout(context, R.layout.layout_emptyview)
+                    emptyView = View.inflate(activity, R.layout.layout_emptyview,null)
+                  startActivity<MeetingDeActivity>("meetingId" to ""+list[position].id,
+                  "meetingName" to ""+list[position].name)
                 }
             }
+
             binding.recyclerview.adapter = adapter
             getData()
             binding.refresh.setOnRefreshListener {
+                pageNum = 1
+                list.clear()
                 getData()
             }
+            binding.refresh.setOnLoadMoreListener {
+                pageNum ++
+                getData()
+            }
+
         }
 
     }
 
     private fun getData() {
-       var token =  kv.getString("token","")
-        OkGo.get<List<MeetingData>>(PageRoutes.Api_meetingList)
-            .tag(PageRoutes.Api_meetingList)
+
+        var url = PageRoutes.Api_meetingList+"pageNum="+pageNum+"&pageSize=10"
+        if(state !=-1){
+             url = PageRoutes.Api_meetingList+"status="+state+"&pageNum="+pageNum+"&pageSize=10"
+        }
+
+        OkGo.get<List<MeetingData>>(url)
+            .tag(url)
             .headers("Authorization",kv.getString("token",""))
             .execute(object : RequestCallback<List<MeetingData>>() {
                 override fun onSuccessNullData() {
@@ -78,7 +133,7 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
                 override fun onMySuccess(data: List<MeetingData>) {
                     super.onMySuccess(data)
 
-                    adapter?.submitList(data)
+                    list.addAll(data)
                     adapter?.notifyDataSetChanged()
 
                 }
@@ -90,7 +145,8 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
 
                 override fun onFinish() {
                     super.onFinish()
-
+                    binding.refresh.finishRefresh()
+                    binding.refresh.finishLoadMore()
                 }
 
 

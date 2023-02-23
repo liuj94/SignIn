@@ -1,8 +1,5 @@
-package com.example.signin.mvvm.ui.adapter
+package com.example.signin.adapter
 
-
-import android.graphics.Color
-import android.view.View
 
 import com.example.signin.base.BaseBindingAdapter
 import com.example.signin.bean.MeetingData

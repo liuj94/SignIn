@@ -4,21 +4,51 @@ package com.example.signin
 interface PageRoutes {
 
     companion object {
-        val BaseUrl = "https://meeting.nbqichen.com:20882/prod-api"
+        val BaseUrlApi = "https://meeting.nbqichen.com:20882/prod-api"
+        val BaseUrl = "https://meeting.nbqichen.com:20882"
 
 
         //登录
-        val Api_login = "$BaseUrl/login"
-        val Api_editUser = "$BaseUrl/system/user"
-        val Api_getUserInfo = "$BaseUrl/getInfo"
+        val Api_login = "$BaseUrlApi/login"
+        val Api_editUser = "$BaseUrlApi/system/user"
+        val Api_getUserInfo = "$BaseUrlApi/getInfo"
         //appStatus	-1,全部;1,进行中;2,过期
-        val Api_meetingList = "$BaseUrl/manager/meeting/list"
-        val Api_meeting_statistics = "$BaseUrl/manager/meeting/meeting/statistics/{id}"
-        val Api_meeting_business = "$BaseUrl/manager/meeting/business/{id}"
+        val Api_meetingList = "$BaseUrlApi/manager/meeting/list?"
 
-        //type 1 注册签到2 来程签到3 入住签到4 会场签到5 餐饮签到6 礼品签到7 返程签到
-        val Api_meetingSignUpLocationList = "$BaseUrl/manager/meetingSignUpLocation/list"
-        val Api_meetingSignUpLocation = "$BaseUrl/manager/meetingSignUpLocation/{id}"
+//        val Api_meeting_statistics = "$BaseUrl/manager/meeting/meeting/statistics/{id}"
+        val Api_meeting_statistics = "$BaseUrlApi/manager/meeting/meeting/statistics/"
+//        val Api_meeting_business = "$BaseUrl/manager/meeting/business/{id}"
+        val Api_meeting_business = "$BaseUrlApi/manager/meeting/business/"
+
+        val Api_meeting_sign_up_app_list = "$BaseUrlApi/manager/meeting/sign/up/app/list?meetingId="
+
+
+        //manager/meetingSignUpLocation/list?meetingId=20&signUpId=
+        val Api_meetingSignUpLocation = "$BaseUrlApi/manager/meetingSignUpLocation/list?meetingId="
+        val Api_meetinguser = "$BaseUrlApi/manager/meeting/user/list?meetingId="
+//        val Api_meetinguser_data = "$BaseUrlApi/manager/meeting/user/35?id=35"
+        val Api_meetinguser_data = "$BaseUrlApi/manager/meeting/user/35?id=35"
+
+        /**
+         * status
+         * 注册报到 sys_zhuce
+        住宿安排 sys_ruzhu
+        会场签到 sys_huichang
+        来程接机 sys_laicheng
+        礼品发放 sys_liping
+        返程送客 sys_fancheng
+        餐饮安排 sys_canyin
+        这7个 是用status
+
+        userMeetingSignUpStatus
+        user_meeting_sign_up_status
+
+
+        userMeetingType
+        user_meeting_type
+         */
+        val Api_datatype = "$BaseUrlApi/common/dict/data/type/"
+
 
     }
 

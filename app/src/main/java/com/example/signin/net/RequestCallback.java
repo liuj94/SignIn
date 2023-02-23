@@ -1,6 +1,5 @@
 package com.example.signin.net;
 
-import android.app.Application;
 import android.app.ProgressDialog;
 import android.util.Log;
 import android.widget.Toast;
@@ -10,7 +9,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.signin.App;
 import com.example.signin.AppManager;
 import com.example.signin.LoginActivity;
-import com.example.signin.MainHomeActivity;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.request.base.Request;
 
@@ -108,7 +106,9 @@ public abstract class RequestCallback<T> extends AbsCallback<T> {
     public void onMySuccess(T data) {
 
     }
+    public void onTotal(int total) {
 
+    }
     public void onSuccessNullData() {
 
     }

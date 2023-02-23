@@ -14,10 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="80dp">
         <ImageView
-            android:paddingRight="13dp"
-            android:paddingLeft="13dp"
+            android:src="@mipmap/arrowsleft"
+            android:padding="13dp"
             android:id="@+id/goback"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="50dp"/>
         <TextView
             android:textStyle="bold"

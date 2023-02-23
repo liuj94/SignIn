@@ -1,12 +1,10 @@
 package com.example.signin
 
-import android.os.AsyncTask.execute
 import android.widget.EditText
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.alibaba.fastjson.JSON
-import com.dylanc.longan.lifecycleOwner
 import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
 import com.example.signin.base.BaseBindingActivity
@@ -74,7 +72,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                                 override fun onMySuccess(data: UserInfoData) {
                                     super.onMySuccess(data)
 
-//                                    if(data.user.userName.isNullOrEmpty()||data.user.phonenumber.isNullOrEmpty()){
+                                    if(data.user.userName.isNullOrEmpty()||data.user.phonenumber.isNullOrEmpty()){
                                         MaterialDialog(this@LoginActivity).show {
                                           customView(	//自定义弹窗
                                                 viewRes = R.layout.tc_user_add,//自定义文件
@@ -91,12 +89,13 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                                             cancelOnTouchOutside(false)	//点击外部不消失
                                         }
 
-//                                    }else{
-////                                        com.dylanc.longan.startActivity<MainHomeActivity>("id" to liveDataList[position].id)
-//                                        kv.putString("userData",data.user.toString())
-//                                        startActivity<MainHomeActivity>()
-//
-//                                    }
+                                    }else{
+//                                        com.dylanc.longan.startActivity<MainHomeActivity>("id" to liveDataList[position].id)
+                                        kv.putString("userData",JSON.toJSONString(data.user))
+                                        startActivity<MainHomeActivity>()
+                                         finish()
+
+                                    }
                                 }
 
                                 override fun onError(response: Response<UserInfoData>) {
@@ -143,8 +142,9 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
 
                 override fun onSuccess(response: Response<String>?) {
                     super.onSuccess(response)
-                    kv.putString("userData",userData)
+                    kv.putString("userData",JSON.toJSONString(userData))
                     startActivity<MainHomeActivity>()
+                    finish()
                 }
 
                 override fun onError(response: Response<String>) {

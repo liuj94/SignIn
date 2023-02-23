@@ -6,8 +6,8 @@ import java.io.Serializable;
  * author : LiuJie
  * date   : 2023/2/226:36
  */
-@lombok.Data
-class MeetingStatisticsData implements Serializable {
+
+public class MeetingStatisticsData implements Serializable {
 
     /**
      * browseCount : 0
@@ -22,14 +22,14 @@ class MeetingStatisticsData implements Serializable {
      */
 
     private String browseCount;
-    private String leaveCount;//请假
-    private String todayBeReviewedCount;//待审核
-    private String todayInsertUserCount;//报名
+    private int leaveCount;//请假
+    private int todayBeReviewedCount;//待审核
+    private int todayInsertUserCount;//报名
     private String totalAmount;//金额
     private String userMeetingCount;//会议报名
-    private String yesterdayBeReviewedCount;//昨天待审核
-    private String yesterdayInsertUserCount;
-    private String yesterdayLeaveCount;//昨日请假
+    private int yesterdayBeReviewedCount;//昨天待审核
+    private int yesterdayInsertUserCount;
+    private int yesterdayLeaveCount;//昨日请假
 
     public String getBrowseCount() {
         return browseCount;
@@ -39,27 +39,27 @@ class MeetingStatisticsData implements Serializable {
         this.browseCount = browseCount;
     }
 
-    public String getLeaveCount() {
+    public int getLeaveCount() {
         return leaveCount;
     }
 
-    public void setLeaveCount(String leaveCount) {
+    public void setLeaveCount(int leaveCount) {
         this.leaveCount = leaveCount;
     }
 
-    public String getTodayBeReviewedCount() {
+    public int getTodayBeReviewedCount() {
         return todayBeReviewedCount;
     }
 
-    public void setTodayBeReviewedCount(String todayBeReviewedCount) {
+    public void setTodayBeReviewedCount(int todayBeReviewedCount) {
         this.todayBeReviewedCount = todayBeReviewedCount;
     }
 
-    public String getTodayInsertUserCount() {
+    public int getTodayInsertUserCount() {
         return todayInsertUserCount;
     }
 
-    public void setTodayInsertUserCount(String todayInsertUserCount) {
+    public void setTodayInsertUserCount(int todayInsertUserCount) {
         this.todayInsertUserCount = todayInsertUserCount;
     }
 
@@ -79,27 +79,27 @@ class MeetingStatisticsData implements Serializable {
         this.userMeetingCount = userMeetingCount;
     }
 
-    public String getYesterdayBeReviewedCount() {
+    public int getYesterdayBeReviewedCount() {
         return yesterdayBeReviewedCount;
     }
 
-    public void setYesterdayBeReviewedCount(String yesterdayBeReviewedCount) {
+    public void setYesterdayBeReviewedCount(int yesterdayBeReviewedCount) {
         this.yesterdayBeReviewedCount = yesterdayBeReviewedCount;
     }
 
-    public String getYesterdayInsertUserCount() {
+    public int getYesterdayInsertUserCount() {
         return yesterdayInsertUserCount;
     }
 
-    public void setYesterdayInsertUserCount(String yesterdayInsertUserCount) {
+    public void setYesterdayInsertUserCount(int yesterdayInsertUserCount) {
         this.yesterdayInsertUserCount = yesterdayInsertUserCount;
     }
 
-    public String getYesterdayLeaveCount() {
+    public int getYesterdayLeaveCount() {
         return yesterdayLeaveCount;
     }
 
-    public void setYesterdayLeaveCount(String yesterdayLeaveCount) {
+    public void setYesterdayLeaveCount(int yesterdayLeaveCount) {
         this.yesterdayLeaveCount = yesterdayLeaveCount;
     }
 }

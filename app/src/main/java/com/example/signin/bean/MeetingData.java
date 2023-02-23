@@ -80,6 +80,7 @@ public class MeetingData implements Serializable {
     private String remark;
 
     private int id;
+    private int meetingId;
     private String name;
     private String status;
     private int businessId;
@@ -122,6 +123,14 @@ public class MeetingData implements Serializable {
     private String customerQr;
     private String userType;
     private String userId;
+
+    public int getMeetingId() {
+        return meetingId;
+    }
+
+    public void setMeetingId(int meetingId) {
+        this.meetingId = meetingId;
+    }
 
     public String getSearchValue() {
         return searchValue;

@@ -5,8 +5,17 @@ import android.text.TextUtils;
 public class BaseJson<T> {
     private String message;
     private String msg;
+    private int total;
     private T data;
     private int code;
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
 
     public String getMsg() {
         if (TextUtils.isEmpty(msg)) {
@@ -38,16 +47,16 @@ public class BaseJson<T> {
         this.data = data;
     }
 
-    public int getStatus() {
+    public int getCode() {
         return code;
     }
 
-    public void setStatus(int code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
     public boolean isSuccess() {
-        return this.code == 0;
+        return this.code == 200;
     }
 
     @Override

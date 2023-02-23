@@ -1,10 +1,13 @@
 package com.example.signin.base
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.dylanc.mmkv.MMKVOwner
@@ -36,6 +39,7 @@ abstract class BaseBindingFragment<VB : ViewBinding,T : BaseViewModel> : Fragmen
     }
     abstract fun initData()
     fun initListener(){}
+    fun Activity.hideSoftInput() = currentFocus?.let { (getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(it.windowToken, 0) }
 
 
 }

@@ -146,13 +146,17 @@ android:paddingTop="10dp"
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:background="@color/white"
 
             tools:ignore="MissingClass" />
+                <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                   />
         <!--            tools:listitem="@layout/item_feed_back"-->
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </LinearLayout>
