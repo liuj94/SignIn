@@ -65,6 +65,44 @@ public class SiginData implements Serializable {
      */
 
     private String searchValue;
+    private String meetingSignUpCount;
+    private String modelType;
+
+    private String signUpNeedCount;
+    private boolean isMyselect;
+
+    public String getMeetingSignUpCount() {
+        return meetingSignUpCount;
+    }
+
+    public void setMeetingSignUpCount(String meetingSignUpCount) {
+        this.meetingSignUpCount = meetingSignUpCount;
+    }
+
+    public String getModelType() {
+        return modelType;
+    }
+
+    public void setModelType(String modelType) {
+        this.modelType = modelType;
+    }
+
+    public String getSignUpNeedCount() {
+        return signUpNeedCount;
+    }
+
+    public void setSignUpNeedCount(String signUpNeedCount) {
+        this.signUpNeedCount = signUpNeedCount;
+    }
+
+    public boolean isMyselect() {
+        return isMyselect;
+    }
+
+    public void setMyselect(boolean myselect) {
+        isMyselect = myselect;
+    }
+
     private String createBy;
     private String createTime;
     private String updateBy;

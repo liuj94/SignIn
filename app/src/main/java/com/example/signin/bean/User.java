@@ -5,6 +5,35 @@ public class User {
     public String phonenumber;
     public String userName;
     public String userId;
+    public String name;
+    public String mobile;
+    public String status;
+    public String nickName;
+    public String userType;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getAvatar() {
         return avatar;

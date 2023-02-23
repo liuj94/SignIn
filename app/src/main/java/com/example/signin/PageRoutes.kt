@@ -20,6 +20,8 @@ interface PageRoutes {
 //        val Api_meeting_business = "$BaseUrl/manager/meeting/business/{id}"
         val Api_meeting_business = "$BaseUrlApi/manager/meeting/business/"
 
+        val Api_ed_meetingSignUpLocation = "$BaseUrlApi/manager/meetingSignUpLocation"
+
         val Api_meeting_sign_up_app_list = "$BaseUrlApi/manager/meeting/sign/up/app/list?meetingId="
 
 
@@ -27,7 +29,7 @@ interface PageRoutes {
         val Api_meetingSignUpLocation = "$BaseUrlApi/manager/meetingSignUpLocation/list?meetingId="
         val Api_meetinguser = "$BaseUrlApi/manager/meeting/user/list?meetingId="
 //        val Api_meetinguser_data = "$BaseUrlApi/manager/meeting/user/35?id=35"
-        val Api_meetinguser_data = "$BaseUrlApi/manager/meeting/user/35?id=35"
+        val Api_meetinguser_data = "$BaseUrlApi/manager/meeting/user/"
 
         /**
          * status
@@ -48,6 +50,9 @@ interface PageRoutes {
         user_meeting_type
          */
         val Api_datatype = "$BaseUrlApi/common/dict/data/type/"
+
+//        val Api_datatype = "$BaseUrlApi/manager/meeting/sign/up/{id}"
+        val Api_signdata = "$BaseUrlApi/manager/meeting/sign/up/"
 
 
     }

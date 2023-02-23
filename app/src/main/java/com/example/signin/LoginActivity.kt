@@ -82,7 +82,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                                             ).apply {
                                               findViewById<TextView>(R.id.add).setOnClickListener {
                                                   add(findViewById<EditText>(R.id.phone).text.toString().trim(),
-                                                      findViewById<EditText>(R.id.userName).text.toString().trim(),data.user.toString())
+                                                      findViewById<EditText>(R.id.userName).text.toString().trim(),JSON.toJSONString(data.user))
                                               }
                                           }
 
@@ -142,7 +142,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
 
                 override fun onSuccess(response: Response<String>?) {
                     super.onSuccess(response)
-                    kv.putString("userData",JSON.toJSONString(userData))
+                    kv.putString("userData",userData)
                     startActivity<MainHomeActivity>()
                     finish()
                 }

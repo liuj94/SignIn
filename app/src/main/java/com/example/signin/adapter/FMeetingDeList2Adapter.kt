@@ -87,8 +87,8 @@ class FMeetingDeList2Adapter: BaseBindingAdapter<SiginData, ListMeetingde2Bindin
         params["status"] = status
         params["voiceStatus"] = voiceStatus
 
-        OkGo.put<String>(PageRoutes.Api_editUser)
-            .tag(PageRoutes.Api_editUser)
+        OkGo.put<String>(PageRoutes.Api_ed_meetingSignUpLocation)
+            .tag(PageRoutes.Api_ed_meetingSignUpLocation)
             .upJson(JSON.toJSONString(params))
             .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token",""))
             .execute(object : RequestCallback<String>() {

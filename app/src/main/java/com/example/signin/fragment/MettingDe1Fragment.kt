@@ -73,35 +73,7 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
             list.addAll(data.list)
             adapter?.notifyDataSetChanged()
         }
-//        OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
-//            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
-//            .headers("Authorization", kv.getString("token", ""))
-//            .execute(object : RequestCallback<List<SiginUpListData>>() {
-//                override fun onSuccessNullData() {
-//                    super.onSuccessNullData()
-//
-//                }
-//
-//                override fun onMySuccess(data: List<SiginUpListData>) {
-//                    super.onMySuccess(data)
-//                    list.clear()
-//                    list.addAll(data)
-//                    adapter?.notifyDataSetChanged()
-//
-//                }
-//
-//                override fun onError(response: Response<List<SiginUpListData>>) {
-//                    super.onError(response)
-//                    toast(response.message())
-//                }
-//
-//                override fun onFinish() {
-//                    super.onFinish()
-//
-//                }
-//
-//
-//            })
+
     }
 
     private fun getData() {

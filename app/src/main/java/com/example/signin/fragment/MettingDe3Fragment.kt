@@ -8,6 +8,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
+import com.example.signin.MeetingUserDectivity
 import com.example.signin.PageRoutes
 import com.example.signin.adapter.FMeetingDeList3Adapter
 import com.example.signin.adapter.SelectMeetingAdapter
@@ -67,6 +68,8 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 binding.selectLl.visibility = View.GONE
                 setSelect2Data(siginUpList[position].type)
                 adapter?.setSiginUp2List(siginUp2List)
+                status = ""
+                binding.name2Tv.text = "筛选"
                 getList()
             }
         }
@@ -102,7 +105,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         adapter = FMeetingDeList3Adapter().apply {
             submitList(list)
             setOnItemClickListener { _, _, position ->
-
+                com.dylanc.longan.startActivity<MeetingUserDectivity>("id" to list[position].id.toString())
             }
         }
         binding.recyclerview.adapter = adapter
@@ -163,7 +166,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         if (!status.isNullOrEmpty()) {
             url = "$url&status=$status"
         }
-        if(!nameMobile.isNullOrEmpty()){
+        if (!nameMobile.isNullOrEmpty()) {
             url = "$url&nameMobile=$nameMobile"
         }
         OkGo.get<MeetingUserModel>(url)
@@ -211,7 +214,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
     }
 
-    private fun setSelect2Data(type : Int) {
+    private fun setSelect2Data(type: Int) {
         //1 注册签到2 来程签到3 入住签到4 会场签到5 餐饮签到6 礼品签到7 返程签到
         var model: TypeModel
         if (!kv.getString("TypeModel", "").isNullOrEmpty()) {
