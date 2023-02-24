@@ -141,6 +141,7 @@ public class SiginData implements Serializable {
     private String useAllStatus;
     private int totalUserCount;
     private int currentUserCount;
+    private int localSignUpCount;
     private int signUpStatus;
     private String ticketIds;
     private int shockStatus;
@@ -152,12 +153,29 @@ public class SiginData implements Serializable {
     private int type;
     private String businessId;
     private String percent;
-    private String signUpCount;
+    private String signUpCount = "0";
+    private String beUserCount= "0";
     private String levelCount;
     private String siteName;
     private String personChargeUsername;
     private String userType;
     private String userId;
+
+    public String getBeUserCount() {
+        return beUserCount;
+    }
+
+    public void setBeUserCount(String beUserCount) {
+        this.beUserCount = beUserCount;
+    }
+
+    public int getLocalSignUpCount() {
+        return localSignUpCount;
+    }
+
+    public void setLocalSignUpCount(int localSignUpCount) {
+        this.localSignUpCount = localSignUpCount;
+    }
 
     public String getSearchValue() {
         return searchValue;

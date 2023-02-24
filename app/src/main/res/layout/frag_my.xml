@@ -90,19 +90,36 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="25dp"
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"/>
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"/>
+
+
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:paddingTop="10dp"
+                    android:visibility="invisible">
+
+                    <net.lucode.hackware.magicindicator.MagicIndicator
+                        android:id="@+id/toolFristMagicIndicator"
+                        android:layout_width="100dp"
+                        android:layout_height="10dp"
+
+                        />
+
+
+            </LinearLayout>
 
 
 

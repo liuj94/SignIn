@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.toast
+import com.example.signin.MeetingSiginDectivity
 import com.example.signin.PageRoutes
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
@@ -72,7 +73,9 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
             adapter = FMeetingDeList2Adapter().apply {
                 submitList(list)
                 setOnItemClickListener { _, _, position ->
-
+                    var params =meetingid + "&signUpId=" + signUpId+"&signUpLocationId="+list[position].id
+                    com.dylanc.longan.startActivity<MeetingSiginDectivity>("id" to ""+list[position].id,
+                        "name" to list[position].name,"params" to ""+params)
                 }
             }
             binding.recyclerview.adapter = adapter

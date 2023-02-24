@@ -66,7 +66,7 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/num"
+                    android:id="@+id/phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -92,87 +92,116 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                  >
-            <TextView
-                android:layout_weight="1"
-                android:textStyle="bold"
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="签到模式"
+                    android:textColor="#ff1a1a1a"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/kgtv"
+                    android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="签到模式"
-                android:textColor="#ff1a1a1a"
-                android:textSize="14sp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="自动"
+                android:text="(自动)"
                 android:textColor="#ff333333"
                 android:textSize="12sp"
                 />
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/kg"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
 
-            <TextView
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="签到成功显示时长"
-                android:textColor="#ff474747"
-                android:textSize="12sp"
-                />
+                    android:src="@mipmap/kaiguan2" />
+            </LinearLayout>
 <LinearLayout
+    android:layout_marginBottom="15dp"
+    android:visibility="gone"
+    android:orientation="vertical"
+    android:id="@+id/settime"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content">
     <TextView
-        android:gravity="center"
-        android:background="@drawable/shape_bg_9999_fff_17"
-        android:layout_width="45dp"
-        android:layout_height="20dp"
-        android:text="1s"
-        android:textColor="#ff666666"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="1dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="签到成功显示时长"
+        android:textColor="#ff474747"
         android:textSize="12sp"
         />
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:gravity="center"
-        android:background="@drawable/shape_bg_9999_fff_17"
-        android:layout_width="45dp"
-        android:layout_height="20dp"
-        android:text="2s"
-        android:textColor="#ff666666"
-        android:textSize="12sp"
-        />
-    <TextView
-        android:layout_marginRight="10dp"
-        android:gravity="center"
-        android:background="@drawable/shape_bg_9999_fff_17"
-        android:layout_width="45dp"
-        android:layout_height="20dp"
-        android:text="3s"
-        android:textColor="#ff666666"
-        android:textSize="12sp"
-        />
-    <TextView
-        android:gravity="center"
-        android:background="@drawable/shape_bg_9999_fff_17"
-        android:layout_width="60dp"
-        android:layout_height="20dp"
-        android:text="自定义"
-        android:textColor="#ff666666"
-        android:textSize="12sp"
-        />
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+<!--        #3974F6-->
+        <TextView
+            android:id="@+id/time1"
+            android:gravity="center"
+            android:background="@drawable/shape_bg_9999_fff_17"
+            android:layout_width="45dp"
+            android:layout_height="20dp"
+            android:text="1s"
+            android:textColor="#ff666666"
+            android:textSize="12sp"
+            />
+        <TextView
+            android:id="@+id/time2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:background="@drawable/shape_bg_9999_fff_17"
+            android:layout_width="45dp"
+            android:layout_height="20dp"
+            android:text="2s"
+            android:textColor="#ff666666"
+            android:textSize="12sp"
+            />
+        <TextView
+            android:id="@+id/time3"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:background="@drawable/shape_bg_3974f6_17"
+            android:layout_width="45dp"
+            android:layout_height="20dp"
+            android:text="3s"
+            android:textColor="#ff666666"
+            android:textSize="12sp"
+            />
+        <EditText
+            android:maxLength="1000"
+            android:id="@+id/time4"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:gravity="center"
+            android:background="@drawable/shape_bg_9999_fff_17"
+            android:layout_width="wrap_content"
+            android:minWidth="60dp"
+            android:layout_height="20dp"
+            android:hint="自定义"
+            android:textColorHint="#ff333333"
+            android:textColor="#ff666666"
+            android:textSize="12sp"
+            />
+    </LinearLayout>
+    <View
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#F3F4F8"/>
 </LinearLayout>
 
-            <View
-                android:layout_marginTop="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="#F3F4F8"/>
+
+
 
 
             <LinearLayout
-android:layout_marginTop="15dp"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
@@ -184,7 +213,7 @@ android:layout_marginTop="15dp"
                     android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="语音提示"
+                    android:text="语音状态"
                     android:textColor="#ff1a1a1a"
                     android:textSize="14sp"
                     />
@@ -213,6 +242,8 @@ android:layout_marginTop="15dp"
                     android:textSize="12sp"
                     />
                 <EditText
+                    android:id="@+id/okMsg"
+                    android:singleLine="true"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_bg_f3f4f8_4"
@@ -243,6 +274,8 @@ android:layout_marginTop="15dp"
                     android:textSize="12sp"
                     />
                 <EditText
+                    android:id="@+id/failedMsg"
+                    android:singleLine="true"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_bg_f3f4f8_4"
@@ -273,6 +306,8 @@ android:layout_marginTop="15dp"
                     android:textSize="12sp"
                     />
                 <EditText
+                    android:id="@+id/repeatMsg"
+                    android:singleLine="true"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_bg_f3f4f8_4"

@@ -44,21 +44,37 @@
                 android:id="@+id/item_yhxx"
                 layout="@layout/item_yhxx" />
 
-            <include layout="@layout/item_ddxx" />
+            <include
+                android:id="@+id/item_ddxx"
+                layout="@layout/item_ddxx" />
 
-            <include layout="@layout/item_fcxx" />
-
-
-            <include layout="@layout/item_zcbd" />
-            <include layout="@layout/item_rzxx" />
-            <include layout="@layout/item_hcqd" />
-            <include layout="@layout/item_cyxi" />
+            <include
+                android:id="@+id/item_lcxx"
+                layout="@layout/item_lcxx" />
 
 
+            <include
+                android:id="@+id/item_zcbd"
+                layout="@layout/item_zcbd" />
+            <include
+                android:id="@+id/item_rzxx"
+                layout="@layout/item_rzxx" />
+            <include
+                android:id="@+id/item_hcqd"
+                layout="@layout/item_hcqd" />
+            <include
+                android:id="@+id/item_cyxi"
+                layout="@layout/item_cyxi" />
 
-            <include layout="@layout/item_fcxx" />
+
+
+            <include
+                android:id="@+id/item_fcxx"
+                layout="@layout/item_fcxx" />
             <!-- 礼品发放-->
-            <include layout="@layout/item_lpff" />
+            <include
+                android:id="@+id/item_lpff"
+                layout="@layout/item_lpff" />
             <TextView
                 android:layout_marginTop="21dp"
                 android:paddingBottom="27dp"

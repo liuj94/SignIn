@@ -54,7 +54,7 @@ public class MeetingUserDeData implements Serializable {
     private int backTravelStatus;
     private int lodgingStatus;
     private int userMeetingType;
-    private String userMeetingTrip;
+    private UserMeetingTrip userMeetingTrip;
     private String backUserMeetingTrip;
     private String userMeetingGift;
     private String userMeetingTypeName;
@@ -204,11 +204,11 @@ public class MeetingUserDeData implements Serializable {
         this.userMeetingType = userMeetingType;
     }
 
-    public String getUserMeetingTrip() {
+    public UserMeetingTrip getUserMeetingTrip() {
         return userMeetingTrip;
     }
 
-    public void setUserMeetingTrip(String userMeetingTrip) {
+    public void setUserMeetingTrip(UserMeetingTrip userMeetingTrip) {
         this.userMeetingTrip = userMeetingTrip;
     }
 
@@ -315,7 +315,7 @@ public class MeetingUserDeData implements Serializable {
         private String meetingName;
         private int ticketId;
         private String ticketName;
-        private int amount;
+        private String amount;
         private String payType;
         private String payStatus;
         private String payParam;
@@ -521,11 +521,11 @@ public class MeetingUserDeData implements Serializable {
             this.ticketName = ticketName;
         }
 
-        public int getAmount() {
+        public String getAmount() {
             return amount;
         }
 
-        public void setAmount(int amount) {
+        public void setAmount(String amount) {
             this.amount = amount;
         }
 

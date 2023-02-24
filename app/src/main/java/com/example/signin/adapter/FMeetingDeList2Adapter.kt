@@ -72,7 +72,7 @@ class FMeetingDeList2Adapter: BaseBindingAdapter<SiginData, ListMeetingde2Bindin
             setState(item.id,item.status,voiceStatus,item)
         }
         holder.sz.setOnClickListener {
-           startActivity<SigninSetActivity>("id" to item.id)
+           startActivity<SigninSetActivity>("id" to ""+item.id)
         }
         holder.qd.setOnClickListener {
 

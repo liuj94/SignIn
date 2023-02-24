@@ -14,16 +14,12 @@ import com.example.signin.PageRoutes
 import com.example.signin.R
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
-import com.example.signin.bean.MeetingData
 import com.example.signin.databinding.FragMeetingde4Binding
-import com.example.signin.adapter.HomeListAdapter
 import com.example.signin.adapter.SelectDataAdapter
 import com.example.signin.adapter.SelectMeetingAdapter
-import com.example.signin.adapter.SelectTypeDataAdapter
 import com.example.signin.bean.SiginData
 import com.example.signin.bean.SiginUpListData
 import com.example.signin.bean.SiginUpListModel
-import com.example.signin.mvvm.ui.adapter.FMeetingDeList2Adapter
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
@@ -109,7 +105,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                     binding.ztiv.setImageResource(R.drawable.ov_ccc)
                 }else if(selectList2[position].voiceStatus==1){
                     binding.ztname.text = "当前对讲处于开启状态"
-                    binding.ztname.setTextColor(Color.parseColor("#02E801"))
+                    binding.ztname.setTextColor(Color.parseColor("#3974f6"))
                     binding.thstate.setImageResource(R.mipmap.tonghua3)
                     binding.ztiv.setImageResource(R.drawable.ov_3974f6)
                 }
@@ -161,7 +157,10 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 // 监听到回车键，会执行2次该方法。按下与松开
                 nameMobile = binding.et.text.toString().trim()
-
+                binding.et.setText(nameMobile)
+                nameMobile?.let {
+                    binding.et.setSelection(it.length)
+                }
                 activity?.hideSoftInput()
             }
             false
@@ -179,9 +178,11 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         val params = HashMap<String, String>()
         params["id"] = id
         if(signUpStatu=="1"){
-            params["signUpStatus"] = "2"
+
+            params["addressStatus"] = "2"
         }else{
-            params["signUpStatus"] = "1"
+
+            params["addressStatus"] = "1"
         }
 
 
@@ -205,7 +206,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                         binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
                     }else{
                         binding.moshitv.text = "签出模式"
-                        binding.moshiiv.setImageResource(R.mipmap.kaigunkai)
+                        binding.moshiiv.setImageResource(R.mipmap.kaiguank)
                     }
                 }
 
@@ -234,8 +235,9 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         binding.et.setText("")
         binding.ztname.setTextColor(Color.parseColor("#999999"))
         binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
+        binding.ztiv.setImageResource(R.drawable.ov_ccc)
         binding.thstate.setImageResource(R.mipmap.tonghua1)
-        binding.roundProgress.progress = 5000
+        binding.roundProgress.progress = 0
         binding.roundProgress.maxProgress = 5000
     }
 
@@ -285,8 +287,8 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             })
     }
     private fun getSiginData() {
-        OkGo.get<SiginData>(PageRoutes.Api_signdata +  siginlocationId)
-            .tag(PageRoutes.Api_signdata )
+        OkGo.get<SiginData>(PageRoutes.Api_meetingSignUpLocationDe +  siginlocationId)
+            .tag(PageRoutes.Api_meetingSignUpLocationDe )
             .headers("Authorization", kv.getString("token", ""))
             .execute(object : RequestCallback<SiginData>() {
                 override fun onSuccessNullData() {
@@ -296,17 +298,20 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
                 override fun onMySuccess(data: SiginData) {
                     super.onMySuccess(data)
-                    binding.num1.text  = data.signUpNeedCount
-                    binding.num2.text  = data.signUpCount
-                    binding.num3.text  = data.meetingSignUpCount
+                    binding.num1.text  =""+ data.beUserCount
+                    binding.num2.text  = ""+data.signUpCount
+                    binding.num3.text  = ""+data.localSignUpCount
+//                    binding.num1.text  = data.signUpNeedCount
+//                    binding.num2.text  = data.signUpCount
+//                    binding.num3.text  = data.meetingSignUpCount
                     //01 签入模式 02 签入签出模式
-                    signUpStatus = data.modelType
-                   if(data.modelType == "1"){
+                    signUpStatus = data.addressStatus
+                   if(data.addressStatus == "1"){
                        binding.moshitv.text = "签入模式"
                        binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
                    }else{
                        binding.moshitv.text = "签出模式"
-                       binding.moshiiv.setImageResource(R.mipmap.kaigunkai)
+                       binding.moshiiv.setImageResource(R.mipmap.kaiguank)
                    }
 
                 }

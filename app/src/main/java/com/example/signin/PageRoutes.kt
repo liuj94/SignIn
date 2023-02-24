@@ -54,6 +54,11 @@ interface PageRoutes {
 //        val Api_datatype = "$BaseUrlApi/manager/meeting/sign/up/{id}"
         val Api_signdata = "$BaseUrlApi/manager/meeting/sign/up/"
 
+//        val Api_signdata = "$BaseUrlApi/manager/meetingSignUpLocation/{id}"
+        val Api_meetingSignUpLocationDe = "$BaseUrlApi/manager/meetingSignUpLocation/"
+
+
+
 
     }
 

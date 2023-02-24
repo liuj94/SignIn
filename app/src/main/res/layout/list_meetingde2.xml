@@ -57,6 +57,7 @@
             android:textSize="12sp" />
         <ImageView
             android:id="@+id/kg1"
+            android:layout_marginLeft="2dp"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
 
@@ -69,6 +70,7 @@
             android:textColor="#ff333333"
             android:textSize="12sp" />
         <ImageView
+            android:layout_marginLeft="2dp"
             android:id="@+id/kg2"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
@@ -96,8 +98,8 @@
             />
         <ImageView
             android:id="@+id/qd"
-            android:layout_width="50dp"
-            android:layout_height="35dp"
+            android:layout_width="45dp"
+            android:layout_height="32dp"
             android:src="@mipmap/qiandaol" />
     </LinearLayout>
 

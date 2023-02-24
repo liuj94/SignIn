@@ -63,7 +63,10 @@ public abstract class RequestCallback<T> extends AbsCallback<T> {
             try {
                 data = JSONObject.parseObject(bodyStr, mType);
             } catch (Exception e) {
-                Log.d("convertResponse", "Exception=" + e.toString());
+                BaseEJson  d = JSONObject.parseObject(bodyStr, BaseEJson.class);
+                onErrorBusiness("服务器错误");
+                throw new RequestException(d.getCode(), d.getMsg());
+
             }
             if (data == null) {
                 throw new RequestException(response.code(), "解析错误:数据解析出错");
@@ -72,7 +75,6 @@ public abstract class RequestCallback<T> extends AbsCallback<T> {
             if (data.isSuccess()) {
                 return data.getData();
             }
-
             else {
                 throw new RequestException(response.code(), data.getMessage());
             }
@@ -124,39 +126,24 @@ public abstract class RequestCallback<T> extends AbsCallback<T> {
         super.onError(response);
 
         if (response.getException() instanceof RequestException) {
-//            if (((RequestException) response.getException()).getStatusCode() == 403) {
-//                try{
-//                    if(response.getRawResponse().request().url().equals("api/account/login/mobile/refresh_code")){
-//                        LocalDataUtils.INSTANCE.clearLoginInfo();
-//                        AppManager.getAppManager().startActivity(LoginActivity.class);
-//                    }
-//                }catch (Exception e){
-//                }
-//
-//
-//                //FLApplication.Companion.getInstance().toast("请先登录");
-//                return;
-//            }
+
             if (((RequestException) response.getException()).getStatusCode() == 401) {
                 Toast.makeText(App.Companion.getInstance(),"登录过期",Toast.LENGTH_SHORT).show();
                 AppManager.getAppManager().startActivity(LoginActivity.class);
                 return;
             }
-//            if (((RequestException) response.getException()).getStatusCode() == 404) {
-//                //toast("服务器异常");
-//                Toast.makeText(FLApplication.Companion.getInstance(),"服务器异常",Toast.LENGTH_SHORT).show();
+
+//            if (response.code() == 500) {
+//                onErrorBusiness(((RequestException) response.getException()).getMsg());
 //                return;
 //            }
-            if (response.code() == 200) {
-                onErrorBusiness(((RequestException) response.getException()).getMsg());
-                return;
-            }
+            onErrorBusiness("服务器错误");
 //            Toast.makeText(FLApplication.Companion.getInstance(),((RequestException) response.getException()).getMsg(),Toast.LENGTH_SHORT).show();
             //toast(((RequestException) response.getException()).getMsg());
         } else {
             //toast(response.getException().getMessage());
 //            Toast.makeText(FLApplication.Companion.getInstance(),response.getException().getMessage(),Toast.LENGTH_SHORT).show();
-            onErrorBusiness("请求错误");
+            onErrorBusiness("服务器错误");
         }
 
     }

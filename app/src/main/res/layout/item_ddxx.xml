@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/menpiaomingcheng"/>
             <TextView
-                android:id="@+id/dd_Name"
+                android:id="@+id/dd_name"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:layout_width="wrap_content"

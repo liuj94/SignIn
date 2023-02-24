@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#00000000">
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="80dp"-->
+<!--        android:background="#00000000"-->
+<!--        android:paddingTop="30dp">-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/goback"-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:padding="13dp"-->
+<!--            android:src="@mipmap/arrowsleft" />-->
+
+<!--        <TextView-->
+<!--            android:background="#00000000"-->
+<!--            android:id="@+id/title"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center"-->
+<!--            android:text="签到"-->
+<!--            android:textColor="#333333"-->
+<!--            android:textSize="16sp"-->
+<!--            android:textStyle="bold" />-->
+<!--    </RelativeLayout>-->
+    <cn.bingoogolapple.qrcode.zxing.ZXingView
+        android:id="@+id/mZXingView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:qrcv_animTime="2000"
+        app:qrcv_borderColor="@color/colorPrimaryDark"
+        app:qrcv_borderSize="1dp"
+        app:qrcv_cornerColor="@color/colorPrimaryDark"
+        app:qrcv_cornerDisplayType="center"
+        app:qrcv_cornerLength="20dp"
+        app:qrcv_cornerSize="1dp"
+        app:qrcv_isAutoZoom="true"
+        app:qrcv_isBarcode="false"
+        app:qrcv_isOnlyDecodeScanBoxArea="false"
+        app:qrcv_isScanLineReverse="true"
+        app:qrcv_isShowDefaultGridScanLineDrawable="false"
+        app:qrcv_isShowDefaultScanLineDrawable="true"
+        app:qrcv_isShowLocationPoint="true"
+        app:qrcv_isShowTipBackground="false"
+        app:qrcv_isShowTipTextAsSingleLine="false"
+        app:qrcv_isTipTextBelowRect="false"
+        app:qrcv_maskColor="#00000000"
+        app:qrcv_qrCodeTipText=""
+        app:qrcv_rectWidth="1000dp"
+        app:qrcv_scanLineColor="@color/colorPrimaryDark"
+        app:qrcv_scanLineMargin="0dp"
+        app:qrcv_scanLineSize="0.5dp"
+        app:qrcv_tipTextColor="@android:color/white"
+        app:qrcv_tipTextSize="12sp"
+        app:qrcv_toolbarHeight="0dp"
+        app:qrcv_topOffset="0dp"
+        app:qrcv_verticalBias="-1" />
+
+    <ImageView
+        android:id="@+id/goback"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:padding="13dp"
+        android:src="@mipmap/close" />
+</RelativeLayout>

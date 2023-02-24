@@ -53,6 +53,7 @@
                     />
             </LinearLayout>
             <ImageView
+                android:id="@+id/tx"
                 android:src="@mipmap/touxiang"
                 android:layout_width="55dp"
                 android:layout_height="55dp"/>

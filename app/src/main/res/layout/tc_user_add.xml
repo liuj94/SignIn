@@ -40,6 +40,7 @@
                 />
         </LinearLayout>
         <EditText
+            android:singleLine="true"
             android:id="@+id/userName"
             android:layout_marginTop="6dp"
             android:layout_width="match_parent"
@@ -74,6 +75,7 @@
                 />
         </LinearLayout>
         <EditText
+            android:singleLine="true"
             android:id="@+id/phone"
             android:layout_marginTop="6dp"
             android:layout_width="match_parent"

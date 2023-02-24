@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/laichengxingxi"/>
             <TextView
-                android:id="@+id/lc_oName"
+                android:id="@+id/lc_Name"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:layout_width="wrap_content"
@@ -84,6 +84,7 @@
                     />
             </LinearLayout>
             <TextView
+                android:id="@+id/time"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:layout_width="wrap_content"

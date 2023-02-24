@@ -46,9 +46,11 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
     //1
     //pageSize:
     var pageNum = 1
+
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
-        if ( isVisibleFirst) {
+
+
 //            setStatusBarHeight(toolbarView)
             isVisibleFirst = false
             binding.btnLl1.setOnClickListener {
@@ -91,8 +93,7 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
             adapter = HomeListAdapter().apply {
                 submitList(list)
                 setOnItemClickListener { _, _, position ->
-                    setEmptyViewLayout(context, R.layout.layout_emptyview)
-                    emptyView = View.inflate(activity, R.layout.layout_emptyview,null)
+                    setEmptyViewLayout( requireActivity(), R.layout.layout_emptyview)
                   startActivity<MeetingDeActivity>("meetingId" to ""+list[position].id,
                   "meetingName" to ""+list[position].name)
                 }
@@ -112,7 +113,7 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
 
         }
 
-    }
+
 
     private fun getData() {
 
@@ -135,6 +136,14 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
 
                     list.addAll(data)
                     adapter?.notifyDataSetChanged()
+                    if(pageNum==1 && list.size<=0){
+                        binding.recyclerview.visibility = View.GONE
+                        binding.kong.visibility = View.VISIBLE
+                    }else{
+                        binding.recyclerview.visibility = View.VISIBLE
+                        binding.kong.visibility = View.GONE
+                    }
+
 
                 }
 

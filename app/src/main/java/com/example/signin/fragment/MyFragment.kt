@@ -4,7 +4,6 @@ package com.example.signin.fragment
 import android.os.Build
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.databinding.DataBindingUtil
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.alibaba.fastjson.JSON
@@ -14,6 +13,8 @@ import com.example.signin.AboutActivity
 import com.example.signin.LoginActivity
 import com.example.signin.PageRoutes
 import com.example.signin.R
+import com.example.signin.adapter.IconFristPagerAdapter
+import com.example.signin.adapter.MyCommonNavigatorAdapter2
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.MeetingData
@@ -22,9 +23,9 @@ import com.example.signin.databinding.FragMyBinding
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
-import com.youth.banner.holder.BannerImageHolder
-import com.youth.banner.indicator.RectangleIndicator
-import com.youth.banner.listener.OnBannerListener
+import net.lucode.hackware.magicindicator.ViewPagerHelper
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
+import java.util.ArrayList
 
 
 /**
@@ -48,7 +49,7 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
         if (!kv.getString("userData", "").isNullOrEmpty()) {
             var data = JSON.parseObject(kv.getString("userData", ""), User::class.java)
             activity?.let {
-                Glide.with(it).load(PageRoutes.BaseUrl + data.avatar).into(binding.img)
+                Glide.with(it).load(PageRoutes.BaseUrl + data.avatar).error(R.drawable.ov_999).into(binding.img)
             }
             binding.name.text = data.nickName
             binding.phone.text = data.phonenumber
@@ -93,10 +94,24 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
 
 
     }
+    private fun initFistToolAdapter(pageIcon: List<MeetingData>) {
 
-    private fun initView() {
+        val recommends: MutableList<String> = ArrayList()
 
+        for (data in pageIcon) {
+            recommends.add("")
+        }
+
+
+       binding.viewPager.adapter = IconFristPagerAdapter(childFragmentManager, pageIcon)
+        val commonNavigator = CommonNavigator(activity)
+        commonNavigator.isAdjustMode = false
+        commonNavigator.adapter = MyCommonNavigatorAdapter2(activity, recommends, binding.viewPager, 20)
+        binding.toolFristMagicIndicator.navigator = commonNavigator
+        ViewPagerHelper.bind(binding.toolFristMagicIndicator, binding.viewPager)
+        binding.viewPager.pageMargin = 30
     }
+
 
     //totalAmount enterCount totalSignUpCount
     private fun getData() {
@@ -112,7 +127,7 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
 
                 override fun onMySuccess(data: List<MeetingData>) {
                     super.onMySuccess(data)
-
+                    initFistToolAdapter(data)
 
                 }
 

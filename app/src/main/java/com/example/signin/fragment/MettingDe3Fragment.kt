@@ -139,7 +139,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
         }
         binding.sous.setOnClickListener {
-            nameMobile = binding.et.text.toString().trim()
+
             getList()
             activity?.hideSoftInput()
         }
@@ -147,12 +147,24 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 // 监听到回车键，会执行2次该方法。按下与松开
                 nameMobile = binding.et.text.toString().trim()
+                binding.et.setText(nameMobile)
+                nameMobile?.let {
+                    binding.et.setSelection(it.length)
+                }
                 getList()
                 activity?.hideSoftInput()
             }
             false
         })
-
+        binding.refresh.setOnRefreshListener {
+            pageNum = 1
+            list.clear()
+            getList()
+        }
+        binding.refresh.setOnLoadMoreListener {
+            pageNum ++
+            getList()
+        }
 
     }
 
@@ -180,6 +192,13 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                         list.addAll(response.body().data)
                         adapter?.notifyDataSetChanged()
                         binding.num.text = "名单列表（" + response.body().total + "）"
+                        if(pageNum==1 && list.size<=0){
+                            binding.recyclerview.visibility = View.GONE
+                            binding.kong.visibility = View.VISIBLE
+                        }else{
+                            binding.recyclerview.visibility = View.VISIBLE
+                            binding.kong.visibility = View.GONE
+                        }
                     }
                 }
 
