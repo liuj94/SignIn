@@ -6,16 +6,26 @@
     android:gravity="center"
     android:background="@drawable/shape_bg_12">
     <TextView
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginTop="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="确认退出登录当前账号"
+        android:text="签到提示"
+        android:textStyle="bold"
         android:textColor="#ff333333"
         android:textSize="16sp"
         />
+    <EditText
+        android:id="@+id/et"
+        android:textColor="#666666"
+        android:textColorHint="#999999"
+        android:hint="请输入座位号"
+        android:layout_margin="25dp"
+        android:background="@drawable/shape_bg_f3f4f8_5"
+        android:layout_width="match_parent"
+        android:padding="5dp"
+        android:layout_height="wrap_content"/>
     <View
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="10dp"
         android:background="#D8D8D8"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>

@@ -57,6 +57,11 @@ interface PageRoutes {
 //        val Api_signdata = "$BaseUrlApi/manager/meetingSignUpLocation/{id}"
         val Api_meetingSignUpLocationDe = "$BaseUrlApi/manager/meetingSignUpLocation/"
 
+       //审核订单
+        val Api_examine = "$BaseUrlApi/exe/meeting/user/examine"
+        //签到
+        val Api_sigin = "$BaseUrlApi/exe/meeting/user"
+
 
 
 

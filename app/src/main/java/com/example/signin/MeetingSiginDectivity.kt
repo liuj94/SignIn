@@ -200,7 +200,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
                 override fun onError(response: Response<SiginData>) {
                     super.onError(response)
-                    toast(response.message())
+
                 }
 
                 override fun onFinish() {

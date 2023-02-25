@@ -179,10 +179,10 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         params["id"] = id
         if(signUpStatu=="1"){
 
-            params["addressStatus"] = "2"
+            params["signUpStatus"] = "2"
         }else{
 
-            params["addressStatus"] = "1"
+            params["signUpStatus"] = "1"
         }
 
 
@@ -212,7 +212,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
                 override fun onError(response: Response<String>) {
                     super.onError(response)
-                    toast(response.message())
+
                 }
 
                 override fun onFinish() {
@@ -275,7 +275,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
                 override fun onError(response: Response<List<SiginData>>) {
                     super.onError(response)
-                    toast(response.message())
+
                 }
 
                 override fun onFinish() {
@@ -318,7 +318,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
                 override fun onError(response: Response<SiginData>) {
                     super.onError(response)
-                    toast(response.message())
+
                 }
 
                 override fun onFinish() {

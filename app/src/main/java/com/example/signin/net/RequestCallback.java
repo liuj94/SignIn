@@ -64,7 +64,7 @@ public abstract class RequestCallback<T> extends AbsCallback<T> {
                 data = JSONObject.parseObject(bodyStr, mType);
             } catch (Exception e) {
                 BaseEJson  d = JSONObject.parseObject(bodyStr, BaseEJson.class);
-                onErrorBusiness("服务器错误");
+//                onErrorBusiness("服务器错误");
                 throw new RequestException(d.getCode(), d.getMsg());
 
             }
@@ -76,7 +76,8 @@ public abstract class RequestCallback<T> extends AbsCallback<T> {
                 return data.getData();
             }
             else {
-                throw new RequestException(response.code(), data.getMessage());
+//                onErrorBusiness(data.getMessage());
+                throw new RequestException(response.code(), data.getMsg());
             }
         } else {
             if (bodyStr != null) {
@@ -137,13 +138,13 @@ public abstract class RequestCallback<T> extends AbsCallback<T> {
 //                onErrorBusiness(((RequestException) response.getException()).getMsg());
 //                return;
 //            }
-            onErrorBusiness("服务器错误");
-//            Toast.makeText(FLApplication.Companion.getInstance(),((RequestException) response.getException()).getMsg(),Toast.LENGTH_SHORT).show();
-            //toast(((RequestException) response.getException()).getMsg());
+//            onErrorBusiness("服务器错误");
+            Toast.makeText(App.Companion.getInstance(),((RequestException) response.getException()).getMsg(),Toast.LENGTH_SHORT).show();
+//            toast(((RequestException) response.getException()).getMsg());
         } else {
             //toast(response.getException().getMessage());
 //            Toast.makeText(FLApplication.Companion.getInstance(),response.getException().getMessage(),Toast.LENGTH_SHORT).show();
-            onErrorBusiness("服务器错误");
+//            onErrorBusiness("服务器错误");
         }
 
     }

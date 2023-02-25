@@ -108,7 +108,7 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
                 override fun onError(response: Response<MeetingStatisticsData>) {
                     super.onError(response)
-                    toast(response.message())
+
                 }
 
                 override fun onFinish() {

@@ -98,10 +98,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                                     }
                                 }
 
-                                override fun onError(response: Response<UserInfoData>) {
-                                    super.onError(response)
-                                    toast(response.message())
-                                }
+
 
                                 override fun onFinish() {
                                     super.onFinish()
@@ -114,7 +111,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
 
                     override fun onError(response: Response<Token>) {
                         super.onError(response)
-                        toast(response.message())
+
                         mViewModel.isShowLoading.value = false
                     }
 
@@ -149,7 +146,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
 
                 override fun onError(response: Response<String>) {
                     super.onError(response)
-                    toast(response.message())
+
                     mViewModel.isShowLoading.value = false
                 }
 

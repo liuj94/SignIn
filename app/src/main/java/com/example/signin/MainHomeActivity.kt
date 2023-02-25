@@ -129,7 +129,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, MainHomeAVM>()
 
                 override fun onError(response: Response<List<TypeData>>) {
                     super.onError(response)
-                    toast(response.message())
+
                     mViewModel.isShowLoading.value = false
                 }
 

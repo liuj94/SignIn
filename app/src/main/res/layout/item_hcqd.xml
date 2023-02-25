@@ -13,6 +13,30 @@
         android:textSize="15sp"
         android:textStyle="bold" />
     <LinearLayout
+        android:id="@+id/kong"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="8dp"
+        android:orientation="vertical"
+        android:background="@drawable/shape_bg_12"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <TextView
+
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="暂无相关信息"
+            android:padding="15dp"
+            android:textColor="#ff333333"
+            android:textSize="14sp"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll"
         android:layout_marginTop="5dp"
 
         android:paddingBottom="5dp"
@@ -33,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/zhucebaodao"/>
             <TextView
-                android:id="@+id/zc_oName"
+                android:id="@+id/name"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:layout_width="wrap_content"
@@ -60,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:id="@+id/zc_data"
+                    android:id="@+id/data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="9月27日"
@@ -69,7 +93,7 @@
                     android:textSize="12sp"
                     />
                 <TextView
-
+                    android:id="@+id/time"
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -83,6 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
+                        android:id="@+id/address"
                         android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -91,6 +116,7 @@
                         android:textSize="12sp"
                         />
                     <TextView
+                        android:id="@+id/location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="请到5号桌"
@@ -104,7 +130,10 @@
                 android:layout_marginLeft="19dp"
                 android:id="@+id/zc_btn"
                 android:background="@drawable/shape_bg_ff3974f6_15"
-                android:layout_width="86dp"
+                android:layout_width="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:minWidth="76dp"
                 android:layout_height="30dp"
                 android:gravity="center"
                 android:text="签到"

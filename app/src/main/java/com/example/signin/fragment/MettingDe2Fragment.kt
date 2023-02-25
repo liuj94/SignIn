@@ -121,7 +121,7 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
 
                 override fun onError(response: Response<List<SiginData>>) {
                     super.onError(response)
-                    toast(response.message())
+
                 }
 
                 override fun onFinish() {
@@ -171,7 +171,7 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
 //
 //                override fun onError(response: Response<List<SiginUpListData>>) {
 //                    super.onError(response)
-//                    toast(response.message())
+//
 //                }
 //
 //                override fun onFinish() {

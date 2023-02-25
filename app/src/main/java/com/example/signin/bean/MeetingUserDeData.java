@@ -45,8 +45,9 @@ public class MeetingUserDeData implements Serializable {
     private String corporateName;
     private int orderId;
     private String originatingTrip;
-    private String backTrackingTrip;
+    private UserMeetingTrip backTrackingTrip;
     private String userMeetingAccommodation;
+    private String meetingSignUpLocation;
     private String userSignUpLogDTOS;
     private UserOrderBean userOrder;
     private String startTime;
@@ -56,7 +57,7 @@ public class MeetingUserDeData implements Serializable {
     private int userMeetingType;
     private UserMeetingTrip userMeetingTrip;
     private String backUserMeetingTrip;
-    private String userMeetingGift;
+    private UserMeetingGift userMeetingGift;
     private String userMeetingTypeName;
     private List<MeetingSignUpsBean> meetingSignUps;
 
@@ -132,11 +133,11 @@ public class MeetingUserDeData implements Serializable {
         this.originatingTrip = originatingTrip;
     }
 
-    public String getBackTrackingTrip() {
+    public UserMeetingTrip getBackTrackingTrip() {
         return backTrackingTrip;
     }
 
-    public void setBackTrackingTrip(String backTrackingTrip) {
+    public void setBackTrackingTrip(UserMeetingTrip backTrackingTrip) {
         this.backTrackingTrip = backTrackingTrip;
     }
 
@@ -220,11 +221,11 @@ public class MeetingUserDeData implements Serializable {
         this.backUserMeetingTrip = backUserMeetingTrip;
     }
 
-    public String getUserMeetingGift() {
+    public UserMeetingGift getUserMeetingGift() {
         return userMeetingGift;
     }
 
-    public void setUserMeetingGift(String userMeetingGift) {
+    public void setUserMeetingGift(UserMeetingGift userMeetingGift) {
         this.userMeetingGift = userMeetingGift;
     }
 
@@ -779,16 +780,16 @@ public class MeetingUserDeData implements Serializable {
         private String meetingName;
         private String createUserId;
         private int select;
-        private int status;
+        private String status;
         private String modelType;
         private int personChargeId;
-        private String personChargeName;
+        private String personChargeName = "";
         private String personChargeMobile;
         private String personChargeUsername;
         private int delTf;
         private UserMeetingSignUpBean userMeetingSignUp;
-        private String userMeetingTrip;
-        private String backUserMeetingTrip;
+        private UserMeetingTrip userMeetingTrip;
+        private BackUserMeetingTrip backUserMeetingTrip;
         private String userMeetingAccommodation;
         private MeetingSignUpLocationBean meetingSignUpLocation;
         private String userType;
@@ -1053,11 +1054,11 @@ public class MeetingUserDeData implements Serializable {
             this.select = select;
         }
 
-        public int getStatus() {
+        public String getStatus() {
             return status;
         }
 
-        public void setStatus(int status) {
+        public void setStatus(String status) {
             this.status = status;
         }
 
@@ -1117,19 +1118,19 @@ public class MeetingUserDeData implements Serializable {
             this.userMeetingSignUp = userMeetingSignUp;
         }
 
-        public String getUserMeetingTrip() {
+        public UserMeetingTrip getUserMeetingTrip() {
             return userMeetingTrip;
         }
 
-        public void setUserMeetingTrip(String userMeetingTrip) {
+        public void setUserMeetingTrip(UserMeetingTrip userMeetingTrip) {
             this.userMeetingTrip = userMeetingTrip;
         }
 
-        public String getBackUserMeetingTrip() {
+        public BackUserMeetingTrip getBackUserMeetingTrip() {
             return backUserMeetingTrip;
         }
 
-        public void setBackUserMeetingTrip(String backUserMeetingTrip) {
+        public void setBackUserMeetingTrip(BackUserMeetingTrip backUserMeetingTrip) {
             this.backUserMeetingTrip = backUserMeetingTrip;
         }
 
@@ -1636,10 +1637,10 @@ public class MeetingUserDeData implements Serializable {
             private String personChargeMobile;
             private int status;
             private int voiceStatus;
-            private String location;
+            private String location = "";
             private String startTime;
             private String endTime;
-            private String address;
+            private String address = "";
             private String addressStatus;
             private int signUpType;
             private String userMeetingTypes;

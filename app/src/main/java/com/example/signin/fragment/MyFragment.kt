@@ -133,7 +133,7 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
 
                 override fun onError(response: Response<List<MeetingData>>) {
                     super.onError(response)
-                    toast(response.message())
+
                 }
 
                 override fun onFinish() {

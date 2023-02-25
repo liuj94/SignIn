@@ -2,34 +2,34 @@ package com.example.signin.bean;
 
 import java.io.Serializable;
 
+/**
+ * author : LiuJie
+ * date   : 2023/2/2419:59
+ */
 
-public class UserMeetingTrip implements Serializable {
+public class UserMeetingGift implements Serializable {
 
     /**
      * beginCreateDate :
      * beginCreateTime :
+     * businessId : 0
+     * businessName :
      * createBy :
      * createTime :
      * dateFormat :
      * dateType : 0
-     * endAddress :
-     * endCity :
      * endCreateDate :
      * endCreateTime :
-     * endDate :
-     * endTime :
+     * giftName :
      * groupBy :
      * id : 0
+     * meetingId : 0
+     * meetingName :
+     * orderId : 0
      * params : {}
      * remark :
      * searchValue :
-     * signUpId : 0
-     * startAddress :
-     * startCity :
-     * startDate :
-     * startTime :
-     * transport :
-     * type : 0
+     * status : 0
      * updateBy :
      * updateTime :
      * userId : 0
@@ -38,27 +38,23 @@ public class UserMeetingTrip implements Serializable {
 
     private String beginCreateDate;
     private String beginCreateTime;
+    private int businessId;
+    private String businessName;
     private String createBy;
     private String createTime;
     private String dateFormat;
     private int dateType;
-    private String endAddress="";
-    private String endCity="";
     private String endCreateDate;
     private String endCreateTime;
-    private String endDate;
-    private String endTime;
+    private String giftName;
     private String groupBy;
     private int id;
-    private String remark="";
+    private int meetingId;
+    private String meetingName;
+    private int orderId;
+    private String remark;
     private String searchValue;
-    private int signUpId;
-    private String startAddress="";
-    private String startCity="";
-    private String startDate;
-    private String startTime;
-    private String transport;
-    private int type;
+    private int status;
     private String updateBy;
     private String updateTime;
     private int userId;
@@ -78,6 +74,22 @@ public class UserMeetingTrip implements Serializable {
 
     public void setBeginCreateTime(String beginCreateTime) {
         this.beginCreateTime = beginCreateTime;
+    }
+
+    public int getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(int businessId) {
+        this.businessId = businessId;
+    }
+
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
     }
 
     public String getCreateBy() {
@@ -112,22 +124,6 @@ public class UserMeetingTrip implements Serializable {
         this.dateType = dateType;
     }
 
-    public String getEndAddress() {
-        return endAddress;
-    }
-
-    public void setEndAddress(String endAddress) {
-        this.endAddress = endAddress;
-    }
-
-    public String getEndCity() {
-        return endCity;
-    }
-
-    public void setEndCity(String endCity) {
-        this.endCity = endCity;
-    }
-
     public String getEndCreateDate() {
         return endCreateDate;
     }
@@ -144,20 +140,12 @@ public class UserMeetingTrip implements Serializable {
         this.endCreateTime = endCreateTime;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public String getGiftName() {
+        return giftName;
     }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
+    public void setGiftName(String giftName) {
+        this.giftName = giftName;
     }
 
     public String getGroupBy() {
@@ -176,6 +164,30 @@ public class UserMeetingTrip implements Serializable {
         this.id = id;
     }
 
+    public int getMeetingId() {
+        return meetingId;
+    }
+
+    public void setMeetingId(int meetingId) {
+        this.meetingId = meetingId;
+    }
+
+    public String getMeetingName() {
+        return meetingName;
+    }
+
+    public void setMeetingName(String meetingName) {
+        this.meetingName = meetingName;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -192,60 +204,12 @@ public class UserMeetingTrip implements Serializable {
         this.searchValue = searchValue;
     }
 
-    public int getSignUpId() {
-        return signUpId;
+    public int getStatus() {
+        return status;
     }
 
-    public void setSignUpId(int signUpId) {
-        this.signUpId = signUpId;
-    }
-
-    public String getStartAddress() {
-        return startAddress;
-    }
-
-    public void setStartAddress(String startAddress) {
-        this.startAddress = startAddress;
-    }
-
-    public String getStartCity() {
-        return startCity;
-    }
-
-    public void setStartCity(String startCity) {
-        this.startCity = startCity;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getTransport() {
-        return transport;
-    }
-
-    public void setTransport(String transport) {
-        this.transport = transport;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getUpdateBy() {

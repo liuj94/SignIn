@@ -162,7 +162,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             getList()
         }
         binding.refresh.setOnLoadMoreListener {
-            pageNum ++
+            pageNum++
             getList()
         }
 
@@ -174,7 +174,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             return
         }
         var url =
-            PageRoutes.Api_meetinguser + meetingid + "&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
+            PageRoutes.Api_meetinguser + meetingid + "&orderByColumn=createTime&isAsc=desc&&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
         if (!status.isNullOrEmpty()) {
             url = "$url&status=$status"
         }
@@ -187,15 +187,15 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             .execute(object : JsonCallback<MeetingUserModel>(MeetingUserModel::class.java) {
 
                 override fun onSuccess(response: Response<MeetingUserModel>) {
-                    list.clear()
+
                     response?.let {
                         list.addAll(response.body().data)
                         adapter?.notifyDataSetChanged()
                         binding.num.text = "名单列表（" + response.body().total + "）"
-                        if(pageNum==1 && list.size<=0){
+                        if (pageNum == 1 && list.size <= 0) {
                             binding.recyclerview.visibility = View.GONE
                             binding.kong.visibility = View.VISIBLE
-                        }else{
+                        } else {
                             binding.recyclerview.visibility = View.VISIBLE
                             binding.kong.visibility = View.GONE
                         }
@@ -208,7 +208,8 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 }
 
                 override fun onFinish() {
-
+                    binding.refresh.finishLoadMore()
+                    binding.refresh.finishRefresh()
                 }
             })
 

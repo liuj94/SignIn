@@ -60,7 +60,7 @@ var meetingName = ""
 
                 override fun onError(response: Response<List<SiginUpListData>>) {
                     super.onError(response)
-                    toast(response.message())
+
                     getFragmentLists()
                 }
 
