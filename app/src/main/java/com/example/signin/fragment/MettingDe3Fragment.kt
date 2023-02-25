@@ -113,6 +113,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
 
         binding.nameLl.setOnClickListener {
+            binding.select2Ll.visibility = View.GONE
             if (binding.selectLl.visibility == View.VISIBLE) {
                 binding.selectLl.visibility = View.GONE
             } else {
@@ -120,6 +121,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             }
         }
         binding.name2Ll.setOnClickListener {
+            binding.selectLl.visibility = View.GONE
             if (binding.select2Ll.visibility == View.VISIBLE) {
                 binding.select2Ll.visibility = View.GONE
             } else {

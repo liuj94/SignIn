@@ -6,27 +6,27 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:background="@color/white"
-        android:paddingTop="30dp"
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="80dp"
+        android:background="@color/white"
+        android:paddingTop="30dp">
 
         <ImageView
-            android:src="@mipmap/arrowsleft"
-            android:padding="13dp"
             android:id="@+id/goback"
             android:layout_width="60dp"
-            android:layout_height="50dp"/>
+            android:layout_height="50dp"
+            android:padding="13dp"
+            android:src="@mipmap/arrowsleft" />
 
         <TextView
-            android:textStyle="bold"
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="信息审核"
             android:textColor="#333333"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -156,71 +156,103 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="12dp"
                 android:background="@drawable/shape_bg_12"
-              android:layout_margin="12dp"
                 android:orientation="vertical"
+                android:paddingLeft="20dp"
                 android:paddingTop="13dp"
                 android:paddingRight="20dp"
-                android:paddingLeft="20dp"
-                android:paddingBottom="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:paddingBottom="20dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
                     android:text="订单信息"
                     android:textColor="#ff333333"
-                    android:textSize="13sp"
-                    android:layout_marginBottom="2dp"
-                    />
+                    android:textSize="13sp" />
+
                 <TextView
                     android:id="@+id/name"
-                    android:layout_marginTop="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="参会姓名：用户名"
                     android:textColor="#ff6b6b6b"
-                    android:textSize="13sp"
-                    />
+                    android:textSize="13sp" />
+
                 <TextView
                     android:id="@+id/order"
-                    android:layout_marginTop="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="订单编号：1234567890987654320"
                     android:textColor="#ff6b6b6b"
-                    android:textSize="13sp"
-                    />
+                    android:textSize="13sp" />
+
                 <TextView
                     android:id="@+id/playTime"
-                    android:layout_marginTop="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="付款时间：2022/10/28 09:19:10"
                     android:textColor="#ff6b6b6b"
-                    android:textSize="13sp"
-                    />
+                    android:textSize="13sp" />
+
                 <TextView
                     android:id="@+id/playType"
-                    android:layout_marginTop="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="支付方式：微信支付"
                     android:textColor="#ff6b6b6b"
-                    android:textSize="13sp"
-                    />
+                    android:textSize="13sp" />
+
                 <TextView
                     android:id="@+id/reviewTime"
-                    android:layout_marginTop="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="审核时间：2022/10/28 09:19:10"
                     android:textColor="#ff6b6b6b"
-                    android:textSize="13sp"
-                    />
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_marginTop="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/btn1"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_bg_a6a6a6_24"
+                    android:gravity="center"
+                    android:text="审核不通过"
+                    android:textColor="#666666"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/btn2"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_bg_3974f6_24"
+                    android:gravity="center"
+                    android:text="审核通过"
+                    android:textColor="#ffffffff"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

@@ -34,7 +34,7 @@
         android:id="@+id/mZXingView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:qrcv_animTime="2000"
+        app:qrcv_animTime="1000"
         app:qrcv_borderColor="@color/colorPrimaryDark"
         app:qrcv_borderSize="1dp"
         app:qrcv_cornerColor="@color/colorPrimaryDark"
@@ -53,14 +53,14 @@
         app:qrcv_isTipTextBelowRect="false"
         app:qrcv_maskColor="#00000000"
         app:qrcv_qrCodeTipText=""
-        app:qrcv_rectWidth="1000dp"
+        app:qrcv_rectWidth="200dp"
         app:qrcv_scanLineColor="@color/colorPrimaryDark"
         app:qrcv_scanLineMargin="0dp"
         app:qrcv_scanLineSize="0.5dp"
         app:qrcv_tipTextColor="@android:color/white"
         app:qrcv_tipTextSize="12sp"
-        app:qrcv_toolbarHeight="0dp"
-        app:qrcv_topOffset="0dp"
+        app:qrcv_toolbarHeight="56dp"
+        app:qrcv_topOffset="65dp"
         app:qrcv_verticalBias="-1" />
 
     <ImageView

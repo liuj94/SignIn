@@ -48,43 +48,55 @@
                 android:id="@+id/item_ddxx"
                 layout="@layout/item_ddxx" />
 
-            <include
-                android:id="@+id/item_lcxx"
-                layout="@layout/item_lcxx" />
-
-
-            <include
-                android:id="@+id/item_zcbd"
-                layout="@layout/item_zcbd" />
-            <include
-                android:id="@+id/item_rzxx"
-                layout="@layout/item_rzxx" />
-            <include
-                android:id="@+id/item_hcqd"
-                layout="@layout/item_hcqd" />
-            <include
-                android:id="@+id/item_cyxi"
-                layout="@layout/item_cyxi" />
-
-
-
-            <include
-                android:id="@+id/item_fcxx"
-                layout="@layout/item_fcxx" />
-            <!-- 礼品发放-->
-            <include
-                android:id="@+id/item_lpff"
-                layout="@layout/item_lpff" />
-            <TextView
-                android:layout_marginTop="21dp"
-                android:paddingBottom="27dp"
-                android:gravity="center"
+            <LinearLayout
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:id="@+id/infoLl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+               >
+
+
+                <include
+                    android:id="@+id/item_lcxx"
+                    layout="@layout/item_lcxx" />
+
+
+                <include
+                    android:id="@+id/item_zcbd"
+                    layout="@layout/item_zcbd" />
+
+                <include
+                    android:id="@+id/item_rzxx"
+                    layout="@layout/item_rzxx" />
+
+                <include
+                    android:id="@+id/item_hcqd"
+                    layout="@layout/item_hcqd" />
+
+                <include
+                    android:id="@+id/item_cyxi"
+                    layout="@layout/item_cyxi" />
+
+
+                <include
+                    android:id="@+id/item_fcxx"
+                    layout="@layout/item_fcxx" />
+                <!-- 礼品发放-->
+                <include
+                    android:id="@+id/item_lpff"
+                    layout="@layout/item_lpff" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:gravity="center"
+                android:paddingBottom="27dp"
                 android:text="码上互动提供服务"
                 android:textColor="#ff999999"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

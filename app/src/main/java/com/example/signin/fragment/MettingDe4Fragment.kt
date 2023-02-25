@@ -1,26 +1,31 @@
 package com.example.signin.fragment
 
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
+import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
-import com.example.signin.PageRoutes
-import com.example.signin.R
+import com.example.signin.*
+import com.example.signin.adapter.FMeetingDeList3Adapter
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
 import com.example.signin.databinding.FragMeetingde4Binding
 import com.example.signin.adapter.SelectDataAdapter
 import com.example.signin.adapter.SelectMeetingAdapter
-import com.example.signin.bean.SiginData
-import com.example.signin.bean.SiginUpListData
-import com.example.signin.bean.SiginUpListModel
+import com.example.signin.bean.*
+import com.example.signin.net.JsonCallback
 import com.example.signin.net.RequestCallback
+import com.hjq.permissions.OnPermissionCallback
+import com.hjq.permissions.Permission
+import com.hjq.permissions.XXPermissions
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
@@ -41,6 +46,8 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
     }
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
+    private var list: MutableList<MeetingUserData> = ArrayList()
+    private var adapter: FMeetingDeList3Adapter? = null
 
     private var adapterSelect2: SelectDataAdapter? = null
     private var adapterSelect: SelectMeetingAdapter? = null
@@ -51,6 +58,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
     var signUpStatus :String? = ""
     var signUpId: String? = ""
     var nameMobile: String? = ""
+    var type: Int = 0
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
         setStartData()
@@ -64,6 +72,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                 }
                 selectList[position].isMyselect = true
                 signUpId = "" + selectList[position].id
+                type= selectList[position].type
                 binding.nameTv.text = selectList[position].name
                 adapterSelect?.notifyDataSetChanged()
                 binding.selectLl.visibility = View.GONE
@@ -119,10 +128,21 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             }
         }
         binding.srecyclerview2.adapter = adapterSelect2
+
+        binding.recyclerview.layoutManager = LinearLayoutManager(activity)
+        adapter = FMeetingDeList3Adapter().apply {
+            submitList(list)
+            setOnItemClickListener { _, _, position ->
+                com.dylanc.longan.startActivity<MeetingUserDectivity>("id" to list[position].id.toString())
+            }
+        }
+
+        binding.recyclerview.adapter = adapter
         getData()
 
 
         binding.nameLl.setOnClickListener {
+            binding.select2Ll.visibility = View.GONE
             if (binding.selectLl.visibility == View.VISIBLE) {
                 binding.selectLl.visibility = View.GONE
             } else {
@@ -130,6 +150,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             }
         }
         binding.name2Ll.setOnClickListener {
+            binding.selectLl.visibility = View.GONE
             if (binding.select2Ll.visibility == View.VISIBLE) {
                 binding.select2Ll.visibility = View.GONE
             } else {
@@ -149,18 +170,30 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
         }
         binding.sous.setOnClickListener {
-            nameMobile = binding.et.text.toString().trim()
+            if(siginlocationId.isNullOrEmpty()){
+                toast("请选择签到点")
 
+            }else{
+                nameMobile = binding.et.text.toString().trim()
+                getUserList()
+            }
             activity?.hideSoftInput()
         }
         binding.et.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 // 监听到回车键，会执行2次该方法。按下与松开
-                nameMobile = binding.et.text.toString().trim()
-                binding.et.setText(nameMobile)
-                nameMobile?.let {
-                    binding.et.setSelection(it.length)
+                if(siginlocationId.isNullOrEmpty()){
+                    toast("请选择签到点")
+
+                }else{
+                    nameMobile = binding.et.text.toString().trim()
+                    binding.et.setText(nameMobile)
+                    nameMobile?.let {
+                        binding.et.setSelection(it.length)
+                    }
+                    getUserList()
                 }
+
                 activity?.hideSoftInput()
             }
             false
@@ -171,6 +204,56 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             }else{
                 signUpStatus?.let { it1 -> setState(siginlocationId!!, it1) }
             }
+        }
+        binding.shaoma.setOnClickListener {
+            if(siginlocationId.isNullOrEmpty()){
+                toast("请选择签到点")
+
+            }else{
+                activity?.let {
+                    XXPermissions.with(context)
+                        .permission(Permission.CAMERA)
+                        .request(object : OnPermissionCallback {
+
+                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+                                if (!all) {
+                                    toast("获取权限失败")
+                                } else {
+                                    var intent = Intent(it,ScanActivity::class.java)
+                                    startActivityForResult(intent,1000)
+                                }
+
+                            }
+
+                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
+                                toast("获取权限失败")
+
+                            }
+                        })
+
+                }
+            }
+
+
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode==1000){
+            data?.let {
+                var param = it.getStringExtra("QrCodeScanned")
+                Log.d("tagggg","param=="+param)
+                var signUpUser = JSON.parseObject(param, SignUpUser::class.java)
+                var userMeetingId =signUpUser.userMeetingId
+                signUpUser.signUpLocationId = siginlocationId
+                signUpUser.signUpId = signUpId
+                signUpUser.userMeetingId = userMeetingId
+                signUpUser.meetingId = meetingid
+                startActivity<SiginReActivity>("type" to 2, "data" to userMeetingId)
+
+            }
+
         }
     }
     fun setState(id: String, signUpStatu: String){
@@ -249,6 +332,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             selectList.addAll(data.list)
             selectList[0].isMyselect = true
             signUpId = selectList[0].id
+            type = selectList[0].type
             binding.nameTv.text = selectList[0].name
             adapterSelect?.notifyDataSetChanged()
             getList()
@@ -328,5 +412,55 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
 
             })
+    }
+
+    private fun getUserList() {
+        if (nameMobile.isNullOrEmpty()) {
+            list.clear()
+            adapter?.notifyDataSetChanged()
+            binding.recyclerview.visibility = View.GONE
+            binding.kong.visibility = View.GONE
+            return
+        }
+        var url =PageRoutes.Api_meetinguser +meetingid + "&signUpId=" + signUpId+"&signUpLocationId="+siginlocationId
+        if (!nameMobile.isNullOrEmpty()) {
+            url = "$url&nameMobile=$nameMobile"
+        }
+        OkGo.get<MeetingUserModel>(url)
+            .tag(url)
+            .headers("Authorization", kv.getString("token", ""))
+            .execute(object : JsonCallback<MeetingUserModel>(MeetingUserModel::class.java) {
+
+                override fun onSuccess(response: Response<MeetingUserModel>) {
+                    list.clear()
+                    response?.let {
+                        list.addAll(response.body().data)
+                        adapter?.notifyDataSetChanged()
+                        if (!nameMobile.isNullOrEmpty()) {
+                            if(list.size>0){
+                                binding.kong.visibility = View.GONE
+                                binding.recyclerview.visibility = View.VISIBLE
+                            }else{
+                                binding.kong.visibility = View.VISIBLE
+                                binding.recyclerview.visibility = View.GONE
+                            }
+
+                        }else{
+                            binding.kong.visibility = View.GONE
+                            binding.recyclerview.visibility = View.GONE
+                        }
+                    }
+                }
+
+                override fun onError(response: Response<MeetingUserModel>?) {
+                    super.onError(response)
+
+                }
+
+                override fun onFinish() {
+
+                }
+            })
+
     }
 }

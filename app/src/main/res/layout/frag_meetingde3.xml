@@ -255,6 +255,7 @@
                         android:layout_height="0dp"
                         app:layout_constraintHeight_default="wrap"
                         app:layout_constraintHeight_max="250dp"
+                        android:minHeight="100dp"
                         android:background="@drawable/shape_bg_f3f4f8_12"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"/>

@@ -11,11 +11,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="105dp"
+            android:layout_marginTop="100dp"
             android:orientation="vertical"
             android:paddingLeft="16dp"
             android:paddingRight="16dp">
@@ -151,7 +153,26 @@
                     android:layout_height="49dp"
                     android:src="@mipmap/shaomatu"/>
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/kong"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/kong" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="15dp"
+                android:visibility="gone" />
             <RelativeLayout
+                android:id="@+id/thrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout
@@ -268,18 +289,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="280dp"/>
             </RelativeLayout>
-
+<View
+    android:layout_width="match_parent"
+    android:layout_height="30dp"/>
 
 
 
 
         </LinearLayout>
+</androidx.core.widget.NestedScrollView>
         <!--            tools:listitem="@layout/item_feed_back"-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
             <LinearLayout
+                android:background="#F3F4F8"
                 android:paddingRight="10dp"
                 android:gravity="center_vertical|right"
                 android:layout_width="match_parent"
@@ -306,6 +331,7 @@
             </LinearLayout>
            
             <LinearLayout
+                android:background="#F3F4F8"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -315,7 +341,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginRight="16dp"
                     android:background="@drawable/shape_bg_12"
                     android:gravity="center_vertical">
@@ -342,7 +368,7 @@
                     android:id="@+id/name2Ll"
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginRight="16dp"
                     android:background="@drawable/shape_bg_12"
                     android:gravity="center_vertical">
@@ -434,6 +460,7 @@
                         android:layout_height="0dp"
                         app:layout_constraintHeight_default="wrap"
                         app:layout_constraintHeight_max="250dp"
+                        android:minHeight="100dp"
                         android:background="@drawable/shape_bg_f3f4f8_12"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"/>

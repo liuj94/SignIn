@@ -20,8 +20,22 @@ public class TypeModel {
 
      userMeetingType
      user_meeting_type
+
+     getDataType("sys_invoice_status")
+     getDataType("sys_invoice_type")
+     getDataType("transport_type")
+     getDataType("sys_examine_reason")
      */
+    public List<TypeData> sys_invoice_status;
+    public List<TypeData> sys_invoice_type;
+    public List<TypeData> transport_type;
+    public List<TypeData> sys_examine_reason;
+
+
+
     public List<TypeData> sys_zhuce;
+
+
     public List<TypeData> sys_ruzhu;
     public List<TypeData> sys_huichang;
     public List<TypeData> sys_canyin;
@@ -30,7 +44,37 @@ public class TypeModel {
     public List<TypeData> sys_fancheng;
     public List<TypeData> user_meeting_sign_up_status;
     public List<TypeData> user_meeting_type;
+    public List<TypeData> getSys_invoice_status() {
+        return sys_invoice_status;
+    }
 
+    public void setSys_invoice_status(List<TypeData> sys_invoice_status) {
+        this.sys_invoice_status = sys_invoice_status;
+    }
+
+    public List<TypeData> getSys_invoice_type() {
+        return sys_invoice_type;
+    }
+
+    public void setSys_invoice_type(List<TypeData> sys_invoice_type) {
+        this.sys_invoice_type = sys_invoice_type;
+    }
+
+    public List<TypeData> getTransport_type() {
+        return transport_type;
+    }
+
+    public void setTransport_type(List<TypeData> transport_type) {
+        this.transport_type = transport_type;
+    }
+
+    public List<TypeData> getSys_examine_reason() {
+        return sys_examine_reason;
+    }
+
+    public void setSys_examine_reason(List<TypeData> sys_examine_reason) {
+        this.sys_examine_reason = sys_examine_reason;
+    }
     public List<TypeData> getSys_zhuce() {
         return sys_zhuce;
     }

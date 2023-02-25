@@ -38,7 +38,6 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         intent.getStringExtra("params")?.let { params = it }
         binding.recyclerview.layoutManager = LinearLayoutManager(activity)
         adapter = FMeetingDeList3Adapter().apply {
-            setEmptyViewLayout(this@MeetingSiginDectivity, R.layout.layout_emptyview)
             submitList(list)
             setOnItemClickListener { _, _, position ->
                 com.dylanc.longan.startActivity<MeetingUserDectivity>("id" to list[position].id.toString())
@@ -108,6 +107,9 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                                 binding.recyclerview.visibility = View.GONE
                             }
 
+                        }else{
+                            binding.kong.visibility = View.GONE
+                            binding.recyclerview.visibility = View.GONE
                         }
                     }
                 }

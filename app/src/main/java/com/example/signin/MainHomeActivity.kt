@@ -38,6 +38,12 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, MainHomeAVM>()
         getDataType("sys_canyin")
         getDataType("user_meeting_sign_up_status")
         getDataType("user_meeting_type")
+
+        getDataType("sys_invoice_status")
+        getDataType("sys_invoice_type")
+        getDataType("transport_type")
+        getDataType("sys_examine_reason")
+
     }
 
     var homeFragment: HomeMainFragment? = null
@@ -122,6 +128,12 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, MainHomeAVM>()
                         "sys_canyin"->{model.sys_canyin = data}
                         "user_meeting_sign_up_status"->{model.user_meeting_sign_up_status = data}
                         "user_meeting_type"->{model.user_meeting_type = data}
+
+                        "sys_invoice_status"->{model.sys_invoice_status = data}
+                        "sys_invoice_type"->{model.sys_invoice_type = data}
+                        "transport_type"->{model.transport_type = data}
+                        "sys_examine_reason"->{model.sys_examine_reason = data}
+
                     }
                     kv.putString("TypeModel",JSON.toJSONString(model))
                 }

@@ -1,15 +1,40 @@
 package com.example.signin.bean;
 
 public class User {
-    public String avatar;
-    public String phonenumber;
-    public String userName;
+    public String avatar= "";
+    public String phonenumber= "";
+    public String userName= "";
     public String userId;
     public String name;
-    public String mobile;
+    public String mobile= "";
     public String status;
-    public String nickName;
+    public String nickName= "";
     public String userType;
+    public String password = "";
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getName() {
         return name;

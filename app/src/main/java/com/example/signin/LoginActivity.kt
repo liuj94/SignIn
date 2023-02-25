@@ -18,26 +18,7 @@ import com.lzy.okgo.model.Response
 
 
 class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
-//    MaterialDialog(this, BottomSheet(LayoutMode.WRAP_CONTENT)).show {
-//        listItems(items = list, selection = object : ItemListener {
-//            override fun invoke(dialog: MaterialDialog, index: Int, text: CharSequence) {
-//                when (list[index]) {
-//
-//                    "百度地图导航" -> openNavigation(
-//                        ThirdNavigationUtils.BAIDU_MAP_PACKAGE_NAME,
-//                        ThirdNavigationUtils.getNavigationIntentWtihBaidu(navi, this@WebPageActivity)
-//                    )
-//                    "腾讯地图导航" -> openNavigation(
-//                        ThirdNavigationUtils.TENCENT_MAP_PACKAGE_NAME,
-//                        ThirdNavigationUtils.getNavigationIntentWtihTencent(navi)
-//                    )
-//                    "高德地图导航" -> openNavigation(
-//                        ThirdNavigationUtils.AUTONAVI_MAP_PACKAGE_NAME,
-//                        ThirdNavigationUtils.getNavigationIntentWtihGaode(navi)
-//                    )
-//                }
-//            }
-//        })
+
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
     override fun initData() {
@@ -91,6 +72,9 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
 
                                     }else{
 //                                        com.dylanc.longan.startActivity<MainHomeActivity>("id" to liveDataList[position].id)
+
+                                        data.user.name = binding.userName.text.toString().trim()
+                                        data.user.password = binding.password.text.toString().trim()
                                         kv.putString("userData",JSON.toJSONString(data.user))
                                         startActivity<MainHomeActivity>()
                                          finish()

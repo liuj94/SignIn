@@ -1,18 +1,18 @@
 package com.example.signin
 
 
+import android.content.Intent
 import androidx.fragment.app.Fragment
 import com.alibaba.fastjson.JSON
-import com.dylanc.longan.toast
 import com.example.signin.adapter.MainViewPagerAdapter
-
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.bean.SiginUpListData
 import com.example.signin.bean.SiginUpListModel
 import com.example.signin.databinding.ActMeetdaBinding
-import com.example.signin.fragment.*
-
-
+import com.example.signin.fragment.MettingDe1Fragment
+import com.example.signin.fragment.MettingDe2Fragment
+import com.example.signin.fragment.MettingDe3Fragment
+import com.example.signin.fragment.MettingDe4Fragment
 import com.example.signin.mvvm.vm.MainHomeAVM
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
@@ -130,6 +130,8 @@ var meetingName = ""
 
 
     }
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 
 }

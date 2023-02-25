@@ -63,7 +63,7 @@
 
             android:src="@mipmap/kaiguan1" />
         <TextView
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="对讲机"
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/kaiguan1" />
         <TextView
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="设置"
@@ -85,11 +85,12 @@
             />
         <ImageView
             android:id="@+id/sz"
-            android:layout_width="40dp"
-            android:layout_height="30dp"
-            android:src="@mipmap/szl" />
+            android:padding="5dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@mipmap/sz" />
         <TextView
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="签到"
@@ -98,9 +99,10 @@
             />
         <ImageView
             android:id="@+id/qd"
-            android:layout_width="45dp"
+            android:padding="5dp"
+            android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@mipmap/qiandaol" />
+            android:src="@mipmap/qiandao" />
     </LinearLayout>
 
 

@@ -1248,14 +1248,14 @@ public class MeetingUserDeData implements Serializable {
             private String remark;
             private ParamsBeanXX params;
             private int id;
-            private int meetingId;
+            private String meetingId;
             private String businessId;
-            private int pointId;
+            private String pointId;
             private int userId;
             private int status;
             private String createUserId;
-            private int userMeetingId;
-            private int locationId;
+            private String userMeetingId;
+            private String locationId;
             private String signUpName;
             private String signUpLocationName;
             private String pointPersonChargeId;
@@ -1389,11 +1389,11 @@ public class MeetingUserDeData implements Serializable {
                 this.id = id;
             }
 
-            public int getMeetingId() {
+            public String getMeetingId() {
                 return meetingId;
             }
 
-            public void setMeetingId(int meetingId) {
+            public void setMeetingId(String meetingId) {
                 this.meetingId = meetingId;
             }
 
@@ -1405,11 +1405,11 @@ public class MeetingUserDeData implements Serializable {
                 this.businessId = businessId;
             }
 
-            public int getPointId() {
+            public String getPointId() {
                 return pointId;
             }
 
-            public void setPointId(int pointId) {
+            public void setPointId(String pointId) {
                 this.pointId = pointId;
             }
 
@@ -1437,19 +1437,19 @@ public class MeetingUserDeData implements Serializable {
                 this.createUserId = createUserId;
             }
 
-            public int getUserMeetingId() {
+            public String getUserMeetingId() {
                 return userMeetingId;
             }
 
-            public void setUserMeetingId(int userMeetingId) {
+            public void setUserMeetingId(String userMeetingId) {
                 this.userMeetingId = userMeetingId;
             }
 
-            public int getLocationId() {
+            public String getLocationId() {
                 return locationId;
             }
 
-            public void setLocationId(int locationId) {
+            public void setLocationId(String locationId) {
                 this.locationId = locationId;
             }
 
@@ -1656,7 +1656,7 @@ public class MeetingUserDeData implements Serializable {
             private int signUpStatus;
             private String ticketIds;
             private int shockStatus;
-            private int autoStatus;
+            private String autoStatus;
             private String okMsg;
             private String repeatMsg;
             private String failedMsg;
@@ -2007,11 +2007,11 @@ public class MeetingUserDeData implements Serializable {
                 this.shockStatus = shockStatus;
             }
 
-            public int getAutoStatus() {
+            public String getAutoStatus() {
                 return autoStatus;
             }
 
-            public void setAutoStatus(int autoStatus) {
+            public void setAutoStatus(String autoStatus) {
                 this.autoStatus = autoStatus;
             }
 

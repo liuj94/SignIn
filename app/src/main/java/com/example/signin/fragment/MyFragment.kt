@@ -8,11 +8,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.alibaba.fastjson.JSON
 import com.bumptech.glide.Glide
-import com.dylanc.longan.toast
-import com.example.signin.AboutActivity
-import com.example.signin.LoginActivity
-import com.example.signin.PageRoutes
-import com.example.signin.R
+import com.example.signin.*
 import com.example.signin.adapter.IconFristPagerAdapter
 import com.example.signin.adapter.MyCommonNavigatorAdapter2
 import com.example.signin.base.BaseBindingFragment
@@ -54,7 +50,9 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
             binding.name.text = data.nickName
             binding.phone.text = data.phonenumber
         }
-
+        binding.infoll.setOnClickListener {
+            com.dylanc.longan.startActivity<UserSetActivity>()
+        }
         binding.gjgy.setOnClickListener {
             com.dylanc.longan.startActivity<AboutActivity>()
         }

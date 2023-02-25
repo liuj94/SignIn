@@ -1,6 +1,7 @@
 package com.example.signin
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -39,6 +40,9 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
 
     }
     override fun onScanQRCodeSuccess(result: String?) {
+        val intent = Intent()
+            intent.putExtra("QrCodeScanned", result)
+            setResult(111, intent)
 //        if (isCallBack==1) {
 //            val intent = Intent()
 //            intent.putExtra("QrCodeScanned", result)
