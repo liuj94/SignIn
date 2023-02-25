@@ -1,9 +1,11 @@
 package com.example.signin
 
 
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.toast
+import com.example.signin.UnicodeUtil.isChinese
 import com.example.signin.adapter.MainViewPagerAdapter
 
 import com.example.signin.base.BaseBindingActivity
@@ -28,6 +30,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, MainHomeAVM>()
 
 
     override fun initData() {
+
         getFragmentLists()
         getDataType("sys_zhuce")
         getDataType("sys_ruzhu")

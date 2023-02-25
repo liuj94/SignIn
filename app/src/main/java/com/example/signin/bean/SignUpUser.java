@@ -21,8 +21,9 @@ public class SignUpUser implements Serializable {
      */
 
 //1开启 2关闭 自动
-    private String autoStatus;
+    private String autoStatus = "2";
     private String name;
+    private int timeLong = 3;
     private String id;
     private String corporateName;
     private String supplement;
@@ -31,11 +32,19 @@ public class SignUpUser implements Serializable {
     private String meetingName;
     private String signUpId;
     private String signUpLocationId;
-    private String status;
+    private String status = "1";
     private String userMeetingId;
     private String userMeetingTypeName = "";
     public String getAutoStatus() {
         return autoStatus;
+    }
+
+    public int getTimeLong() {
+        return timeLong;
+    }
+
+    public void setTimeLong(int timeLong) {
+        this.timeLong = timeLong;
     }
 
     public void setAutoStatus(String autoStatus) {

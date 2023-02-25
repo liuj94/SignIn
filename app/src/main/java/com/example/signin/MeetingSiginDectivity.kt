@@ -1,5 +1,7 @@
 package com.example.signin
 
+import android.content.Intent
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,10 +16,14 @@ import com.example.signin.bean.MeetingUserData
 
 import com.example.signin.bean.MeetingUserModel
 import com.example.signin.bean.SiginData
+import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActMeetingSigindeBinding
 import com.example.signin.net.JsonCallback
 
 import com.example.signin.net.RequestCallback
+import com.hjq.permissions.OnPermissionCallback
+import com.hjq.permissions.Permission
+import com.hjq.permissions.XXPermissions
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
@@ -26,6 +32,10 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
     var id = ""
+    var signUpId = ""
+    var meetingid = ""
+    var autoStatus = ""
+    var timeLong = 3
     var name = ""
     var signUpStatus = ""
     var nameMobile: String? = ""
@@ -36,6 +46,10 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         intent.getStringExtra("id")?.let { id = it }
         intent.getStringExtra("name")?.let { name = it }
         intent.getStringExtra("params")?.let { params = it }
+        intent.getStringExtra("meetingid")?.let { meetingid = it }
+        intent.getStringExtra("signUpId")?.let { signUpId = it }
+        intent.getStringExtra("autoStatus")?.let { autoStatus = it }
+        intent.getIntExtra("timeLong",3)?.let { timeLong = it }
         binding.recyclerview.layoutManager = LinearLayoutManager(activity)
         adapter = FMeetingDeList3Adapter().apply {
             submitList(list)
@@ -73,6 +87,33 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         }
         binding.moshill.setOnClickListener {
             setState()
+        }
+        binding.shaoma.setOnClickListener {
+           activity?.let {
+                    XXPermissions.with(activity)
+                        .permission(Permission.CAMERA)
+                        .request(object : OnPermissionCallback {
+
+                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+                                if (!all) {
+                                    toast("获取权限失败")
+                                } else {
+                                    var intent = Intent(it,ScanActivity::class.java)
+                                    startActivityForResult(intent,1000)
+                                }
+
+                            }
+
+                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
+                                toast("获取权限失败")
+
+                            }
+                        })
+
+                }
+
+
+
         }
 
     }
@@ -173,7 +214,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     }
     private fun getSiginData() {
         OkGo.get<SiginData>(PageRoutes.Api_meetingSignUpLocationDe +id)
-            .tag(PageRoutes.Api_signdata )
+            .tag(PageRoutes.Api_meetingSignUpLocationDe )
             .headers("Authorization", kv.getString("token", ""))
             .execute(object : RequestCallback<SiginData>() {
                 override fun onSuccessNullData() {
@@ -212,5 +253,28 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
 
             })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode==1000){
+            data?.let {
+                var param = it.getStringExtra("QrCodeScanned")
+                Log.d("tagggg","param=="+param)
+
+                var signUpUser = JSON.parseObject(param, SignUpUser::class.java)
+
+                signUpUser.signUpLocationId = id
+                signUpUser.signUpId = signUpId
+                signUpUser.userMeetingId = signUpUser.id
+                signUpUser.meetingId = signUpUser.meetingId
+                signUpUser.userMeetingTypeName = signUpUser.supplement
+                signUpUser.autoStatus =  autoStatus
+                signUpUser.timeLong =  timeLong
+                startActivity<SiginReActivity>("type" to 2, "data" to signUpUser)
+
+            }
+
+        }
     }
 }

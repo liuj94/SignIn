@@ -148,10 +148,11 @@
 
                 </LinearLayout>
                 <ImageView
+                    android:layout_marginLeft="10dp"
                     android:id="@+id/shaoma"
                     android:layout_width="wrap_content"
-                    android:layout_height="49dp"
-                    android:src="@mipmap/shaomatu"/>
+                    android:layout_height="45dp"
+                    android:src="@mipmap/erweima"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/kong"

@@ -18,6 +18,7 @@ import java.util.HashMap
 class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel>() {
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
     var type: Int = 0
+    var timeLong: Int = 3
     var signUpUser: SignUpUser? = null
     var params = HashMap<String, String>()
     override fun initData() {
@@ -30,10 +31,12 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
             params["signUpLocationId"] = it.signUpLocationId//签到点id
             params["signUpId"] = it.signUpId//签到站id
             params["userMeetingId"] = it.userMeetingId//用户参与会议id
+            params["status"] = "2"//用户参与会议id
             binding.name.text = it.meetingName
-            binding.userName.text = it.name
-            binding.companyName.text = it.corporateName
-            binding.type.text = it.userMeetingTypeName
+            binding.userName.text = encode(it.name)
+            binding.companyName.text = encode(it.corporateName)
+            binding.type.text = encode(it.userMeetingTypeName)
+            timeLong = it.timeLong
         }
 //        1 注册签到2 来程签到3 入住签到4 会场签到5 餐饮签到6 礼品签到7 返程签到
         binding.numEt.visibility = View.INVISIBLE
@@ -56,7 +59,13 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
             7->binding.title.text = "返程签到"
         }
         binding.submit.setOnClickListener {
-            sigin()
+            if(binding.submit.text.contains("返回")){
+                finish()
+            }else{
+                sigin()
+            }
+
+
         }
         timer()
     }
@@ -117,9 +126,9 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
 
 var timer :CountDownTimer?=null
     fun  timer(){
-   var timer   = object : CountDownTimer(1*4000, 1000) {
+    timer   = object : CountDownTimer((timeLong*1000).toLong(), 1000) {
         override fun onTick(millisUntilFinished: Long) {
-            binding.submit.text = "返回（"+millisUntilFinished+"）"
+            binding.submit.text = "返回（"+millisUntilFinished/1000+"）"
         }
 
         /**

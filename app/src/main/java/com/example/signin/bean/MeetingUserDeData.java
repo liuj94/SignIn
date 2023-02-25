@@ -36,7 +36,7 @@ public class MeetingUserDeData implements Serializable {
      * userMeetingTypeName : 媒体
      */
 
-    private int id;
+    private String id;
     private int userId;
     private int meetingId;
     private String name;
@@ -61,11 +61,11 @@ public class MeetingUserDeData implements Serializable {
     private String userMeetingTypeName;
     private List<MeetingSignUpsBean> meetingSignUps;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -1628,8 +1628,8 @@ public class MeetingUserDeData implements Serializable {
             private String endCreateDate;
             private String remark;
             private ParamsBeanXXX params;
-            private int id;
-            private int signUpId;
+            private String id;
+            private String signUpId;
             private String name;
             private int delTf;
             private int personChargeId;
@@ -1645,7 +1645,7 @@ public class MeetingUserDeData implements Serializable {
             private int signUpType;
             private String userMeetingTypes;
             private String leveStatus;
-            private int meetingId;
+            private String meetingId;
             private String loginTimeStatus;
             private String insertUserInfoStatus;
             private int signUpNumStatus;
@@ -1783,19 +1783,19 @@ public class MeetingUserDeData implements Serializable {
                 this.params = params;
             }
 
-            public int getId() {
+            public String getId() {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(String id) {
                 this.id = id;
             }
 
-            public int getSignUpId() {
+            public String getSignUpId() {
                 return signUpId;
             }
 
-            public void setSignUpId(int signUpId) {
+            public void setSignUpId(String signUpId) {
                 this.signUpId = signUpId;
             }
 
@@ -1919,11 +1919,11 @@ public class MeetingUserDeData implements Serializable {
                 this.leveStatus = leveStatus;
             }
 
-            public int getMeetingId() {
+            public String getMeetingId() {
                 return meetingId;
             }
 
-            public void setMeetingId(int meetingId) {
+            public void setMeetingId(String meetingId) {
                 this.meetingId = meetingId;
             }
 

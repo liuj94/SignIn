@@ -137,7 +137,7 @@ android:visibility="gone"
                     android:id="@+id/location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="房间号：1808"
+                    android:text="签到后分配"
                     android:textColor="#ff7d8592"
                     android:textSize="12sp"
                     />

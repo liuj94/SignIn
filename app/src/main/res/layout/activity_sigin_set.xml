@@ -107,7 +107,7 @@
                     android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="(自动)"
+                android:text="(手动)"
                 android:textColor="#ff333333"
                 android:textSize="12sp"
                 />
@@ -174,6 +174,7 @@
             android:textSize="12sp"
             />
         <EditText
+            android:visibility="gone"
             android:maxLength="1000"
             android:id="@+id/time4"
             android:maxLines="1"

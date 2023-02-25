@@ -38,16 +38,16 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
         binding.kg.setOnClickListener {
             if(autoStatus.equals("1")){
                 autoStatus = "2"
-                binding.kg.setImageResource(R.mipmap.kaiguan2)
-                binding.kgtv.text = "(自动)"
-                binding.settime.visibility = View.GONE
+//                binding.kg.setImageResource(R.mipmap.kaiguan2)
+//                binding.kgtv.text = "(自动)"
+//                binding.settime.visibility = View.VISIBLE
                 timeLong = "3"
             }else{
                 autoStatus = "1"
-                binding.kg.setImageResource(R.mipmap.kaiguan1)
-                binding.kgtv.text = "(手动)"
-                binding.settime.visibility = View.VISIBLE
-                setTimeState(binding.time3)
+//                binding.kg.setImageResource(R.mipmap.kaiguan1)
+//                binding.kgtv.text = "(手动)"
+//                binding.settime.visibility = View.GONE
+//                setTimeState(binding.time3)
                 timeState = 3
                 timeLong = "3"
             }
@@ -141,9 +141,9 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
                     binding.repeatMsg.setText( repeatMsg)
 
                     if(autoStatus.equals(1)){
-                        binding.kg.setImageResource(R.mipmap.kaiguan1)
+                        binding.kg.setImageResource(R.mipmap.kaiguan2)
                         binding.kgtv.text = "(手动)"
-                        binding.settime.visibility = View.VISIBLE
+                        binding.settime.visibility = View.GONE
 
                         if(timeLong.equals("1")){
                             setTimeState(binding.time1)
@@ -159,9 +159,9 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
                             setTimeState(binding.time4)
                         }
                     }else{
-                        binding.kg.setImageResource(R.mipmap.kaiguan2)
+                        binding.kg.setImageResource(R.mipmap.kaiguan1)
                         binding.kgtv.text = "(自动)"
-                        binding.settime.visibility = View.GONE
+                        binding.settime.visibility = View.VISIBLE
 
                     }
                     if(shockStatus.equals("1")){
@@ -224,7 +224,7 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
 
                 override fun onSuccess(response: Response<String>?) {
                     super.onSuccess(response)
-
+                    getDate()
                 }
 
                 override fun onError(response: Response<String>) {

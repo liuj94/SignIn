@@ -75,7 +75,11 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
                 setOnItemClickListener { _, _, position ->
                     var params =meetingid + "&signUpId=" + signUpId+"&signUpLocationId="+list[position].id
                     com.dylanc.longan.startActivity<MeetingSiginDectivity>("id" to ""+list[position].id,
-                        "name" to list[position].name,"params" to ""+params)
+                        "name" to list[position].name,"params" to ""+params,
+                        "meetingid" to meetingid,
+                        "autoStatus" to list[position].autoStatus,
+                        "timeLong" to list[position].timeLong,
+                        "signUpId" to signUpId)
                 }
             }
             binding.recyclerview.adapter = adapter

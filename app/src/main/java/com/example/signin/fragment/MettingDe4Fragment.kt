@@ -15,12 +15,12 @@ import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
 import com.example.signin.*
 import com.example.signin.adapter.FMeetingDeList3Adapter
-import com.example.signin.base.BaseBindingFragment
-import com.example.signin.base.BaseViewModel
-import com.example.signin.databinding.FragMeetingde4Binding
 import com.example.signin.adapter.SelectDataAdapter
 import com.example.signin.adapter.SelectMeetingAdapter
+import com.example.signin.base.BaseBindingFragment
+import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.*
+import com.example.signin.databinding.FragMeetingde4Binding
 import com.example.signin.net.JsonCallback
 import com.example.signin.net.RequestCallback
 import com.hjq.permissions.OnPermissionCallback
@@ -29,6 +29,7 @@ import com.hjq.permissions.XXPermissions
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
+import java.io.UnsupportedEncodingException
 
 /**
  *   author : LiuJie
@@ -58,6 +59,8 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
     var signUpStatus :String? = ""
     var signUpId: String? = ""
     var nameMobile: String? = ""
+    var autoStatus: String? = ""
+    var timeLong: Int = 3
     var type: Int = 0
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
@@ -98,6 +101,8 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                         item.isMyselect = false
                     }
                     selectList2[position].isMyselect = true
+                    autoStatus = "" +selectList2[position].autoStatus
+                    timeLong = selectList2[position].timeLong
                     siginlocationId = "" + selectList2[position].id
                     binding.name2Tv.text = selectList2[position].name
                 }
@@ -106,19 +111,22 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                 binding.select2Ll.visibility = View.GONE
 
 
-                binding.time.text = ""+selectList2[position].timeLong+"分钟"
+//                binding.time.text = ""+selectList2[position].timeLong+"分钟"
+//                binding.time.text = ""+selectList2[position].timeLong+"分钟"
                 if(selectList2[position].voiceStatus==2){
                     binding.ztname.text = "当前对讲处于关闭状态"
                     binding.ztname.setTextColor(Color.parseColor("#999999"))
                     binding.thstate.setImageResource(R.mipmap.tonghua1)
                     binding.ztiv.setImageResource(R.drawable.ov_ccc)
+                    binding.roundProgress.progress = 0
                 }else if(selectList2[position].voiceStatus==1){
                     binding.ztname.text = "当前对讲处于开启状态"
                     binding.ztname.setTextColor(Color.parseColor("#3974f6"))
                     binding.thstate.setImageResource(R.mipmap.tonghua3)
                     binding.ztiv.setImageResource(R.drawable.ov_3974f6)
+                    binding.roundProgress.progress = 5000
                 }
-                binding.roundProgress.progress = selectList2[position].timeLong
+
                 binding.roundProgress.maxProgress = 5000
 
 
@@ -244,13 +252,17 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             data?.let {
                 var param = it.getStringExtra("QrCodeScanned")
                 Log.d("tagggg","param=="+param)
+
                 var signUpUser = JSON.parseObject(param, SignUpUser::class.java)
-                var userMeetingId =signUpUser.userMeetingId
+
                 signUpUser.signUpLocationId = siginlocationId
                 signUpUser.signUpId = signUpId
-                signUpUser.userMeetingId = userMeetingId
-                signUpUser.meetingId = meetingid
-                startActivity<SiginReActivity>("type" to 2, "data" to userMeetingId)
+                signUpUser.userMeetingId = signUpUser.id
+                signUpUser.meetingId = signUpUser.meetingId
+                signUpUser.userMeetingTypeName = signUpUser.supplement
+                signUpUser.autoStatus =  autoStatus
+                signUpUser.timeLong =  timeLong
+                startActivity<SiginReActivity>("type" to 2, "data" to signUpUser)
 
             }
 
@@ -333,6 +345,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             selectList[0].isMyselect = true
             signUpId = selectList[0].id
             type = selectList[0].type
+
             binding.nameTv.text = selectList[0].name
             adapterSelect?.notifyDataSetChanged()
             getList()
@@ -463,4 +476,6 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             })
 
     }
+
+
 }

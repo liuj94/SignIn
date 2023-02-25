@@ -227,7 +227,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_marginRight="18dp"
-                            android:src="@mipmap/shaomatu" />
+                            android:src="@mipmap/erweima" />
                     </LinearLayout>
                 </LinearLayout>
 
