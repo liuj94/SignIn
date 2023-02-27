@@ -6,13 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".AboutActivity"
     android:background="#F3F4F8"
+    android:fitsSystemWindows="true"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
     <RelativeLayout
         android:background="@color/white"
-        android:paddingTop="30dp"
+
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="50dp">
         <ImageView
             android:src="@mipmap/arrowsleft"
             android:padding="13dp"

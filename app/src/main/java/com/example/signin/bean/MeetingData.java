@@ -66,6 +66,15 @@ public class MeetingData implements Serializable {
      */
 
     private String searchValue;
+    private String browseCount = "0";
+
+    public String getBrowseCount() {
+        return browseCount;
+    }
+
+    public void setBrowseCount(String browseCount) {
+        this.browseCount = browseCount;
+    }
 
     private String createBy;
     private String createTime;
@@ -101,7 +110,7 @@ public class MeetingData implements Serializable {
     private String sponsor;
     private String totalTicket;
     private String saleTicket;
-    private String todayJoinUserCount;
+    private String todayJoinUserCount = "0";
     private String enterCount = "0";
     private String signUpTotalCount;
     private String payOrderId;

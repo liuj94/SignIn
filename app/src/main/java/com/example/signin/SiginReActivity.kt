@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSON
 import com.dylanc.longan.toast
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
+import com.example.signin.base.StatusBarUtil
 import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActSigninStateBinding
 import com.example.signin.net.RequestCallback
@@ -16,11 +17,19 @@ import java.util.HashMap
 
 
 class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel>() {
+    override fun initTranslucentStatus() {
+        StatusBarUtil.setTranslucentStatus(this, Color.TRANSPARENT)
+        //设置状态栏字体颜色
+        StatusBarUtil.setAndroidNativeLightStatusBar(this,true)
+    }
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
     var type: Int = 0
     var timeLong: Int = 3
     var signUpUser: SignUpUser? = null
     var params = HashMap<String, String>()
+    var failedMsg:String = "签到失败"
+    var okMsg:String = "签到成功"
+    var repeatMsg:String = "重复签到"
     override fun initData() {
         intent.getIntExtra("type", 0)?.let { type = it }
         intent.getSerializableExtra("data")?.let {
@@ -54,7 +63,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
             }
             5->{binding.title.text = "餐饮签到"
                 binding.numEt.visibility = View.VISIBLE
-                binding.numEt.hint = "请输入座位号"}
+                binding.numEt.hint = "请输入桌号"}
             6->binding.title.text = "礼品签到"
             7->binding.title.text = "返程签到"
         }
@@ -95,13 +104,17 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                     super.onMySuccess(data)
                     //1成功 2重复
                     if(data.equals("1")){
-                        binding.stateTv.text = "成功签到"
+                        binding.stateTv.text = okMsg
                         binding.stateTv.setTextColor(Color.parseColor("#3974F6"))
                         binding.stateIv.setImageResource(R.mipmap.qd2)
                     }else if(data.equals("2")){
-                        binding.stateTv.text = "重复签到"
+                        binding.stateTv.text = repeatMsg
                         binding.stateTv.setTextColor(Color.parseColor("#FFC300"))
                         binding.stateIv.setImageResource(R.mipmap.qd3)
+                    }else{
+                        binding.stateTv.text = failedMsg
+                        binding.stateTv.setTextColor(Color.parseColor("#D43030"))
+                        binding.stateIv.setImageResource(R.mipmap.cf_h)
                     }
                     signUpUser?.let {
                         if(it.autoStatus.equals("2")){
@@ -117,6 +130,11 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
 
                 override fun onError(response: Response<String>) {
                     super.onError(response)
+                    mViewModel.isShowLoading.value = false
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
                     mViewModel.isShowLoading.value = false
                 }
 

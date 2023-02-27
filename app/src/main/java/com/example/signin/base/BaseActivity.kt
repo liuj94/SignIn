@@ -39,7 +39,7 @@ abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActi
 
         mViewModel.mContext = this
 
-
+        initProgressDialog()
         initIntentStringExtra()
         initTitle()
         initData()

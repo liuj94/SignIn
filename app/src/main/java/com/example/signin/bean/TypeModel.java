@@ -34,7 +34,15 @@ public class TypeModel {
 
 
     public List<TypeData> sys_zhuce;
+    public List<TypeData> pay_status;
 
+    public List<TypeData> getPay_status() {
+        return pay_status;
+    }
+
+    public void setPay_status(List<TypeData> pay_status) {
+        this.pay_status = pay_status;
+    }
 
     public List<TypeData> sys_ruzhu;
     public List<TypeData> sys_huichang;

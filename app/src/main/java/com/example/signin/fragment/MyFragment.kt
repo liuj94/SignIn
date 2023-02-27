@@ -1,6 +1,7 @@
 package com.example.signin.fragment
 
 
+import add
 import android.os.Build
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -8,6 +9,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.alibaba.fastjson.JSON
 import com.bumptech.glide.Glide
+import com.dylanc.longan.startActivity
+import com.dylanc.longan.toast
 import com.example.signin.*
 import com.example.signin.adapter.IconFristPagerAdapter
 import com.example.signin.adapter.MyCommonNavigatorAdapter2
@@ -21,6 +24,8 @@ import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
+import upFile
+import java.io.File
 import java.util.ArrayList
 
 
@@ -37,21 +42,22 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
     }
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
-
+    var userData: User? = null
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
 
         if (!kv.getString("userData", "").isNullOrEmpty()) {
-            var data = JSON.parseObject(kv.getString("userData", ""), User::class.java)
+            userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
             activity?.let {
-                Glide.with(it).load(PageRoutes.BaseUrl + data.avatar).error(R.drawable.ov_999).into(binding.img)
+                Glide.with(it).load(PageRoutes.BaseUrl + userData?.avatar).error(R.drawable.ov_999)
+                    .into(binding.img)
             }
-            binding.name.text = data.nickName
-            binding.phone.text = data.phonenumber
+            binding.name.text = userData?.nickName
+            binding.phone.text = userData?.phonenumber
         }
         binding.infoll.setOnClickListener {
-            com.dylanc.longan.startActivity<UserSetActivity>()
+           startActivity<UserSetActivity>()
         }
         binding.gjgy.setOnClickListener {
             com.dylanc.longan.startActivity<AboutActivity>()
@@ -87,11 +93,13 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
             }
         }
 
-
         getData()
-
+        binding.img.setOnClickListener {
+            activity?.let { it1 -> takePhotoDialog(it1) { submitUserAvatar(it) } }
+        }
 
     }
+
     private fun initFistToolAdapter(pageIcon: List<MeetingData>) {
 
         val recommends: MutableList<String> = ArrayList()
@@ -101,10 +109,11 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
         }
 
 
-       binding.viewPager.adapter = IconFristPagerAdapter(childFragmentManager, pageIcon)
+        binding.viewPager.adapter = IconFristPagerAdapter(childFragmentManager, pageIcon)
         val commonNavigator = CommonNavigator(activity)
         commonNavigator.isAdjustMode = false
-        commonNavigator.adapter = MyCommonNavigatorAdapter2(activity, recommends, binding.viewPager, 20)
+        commonNavigator.adapter =
+            MyCommonNavigatorAdapter2(activity, recommends, binding.viewPager, 15)
         binding.toolFristMagicIndicator.navigator = commonNavigator
         ViewPagerHelper.bind(binding.toolFristMagicIndicator, binding.viewPager)
         binding.viewPager.pageMargin = 30
@@ -141,6 +150,31 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
 
 
             })
+    }
+
+
+    var avatar = ""
+    fun submitUserAvatar(file: File) {
+        mViewModel.isShowLoading.value = true
+        upFile(file, {
+            avatar = it.fileName
+            add(avatar, userData!!.name,
+                {
+                    userData?.avatar = avatar
+                    kv.putString("userData", JSON.toJSONString(userData))
+                    activity?.let {
+                        Glide.with(it).load(PageRoutes.BaseUrl + avatar).error(R.drawable.ov_999)
+                            .into(binding.img)
+                    }
+                },
+                { mViewModel.isShowLoading.value = false
+                    toast("头像修改失败")},
+                { mViewModel.isShowLoading.value = false })
+        }, {
+            toast("图片上传失败")
+            mViewModel.isShowLoading.value = false
+        }, {})
+
     }
 
 }

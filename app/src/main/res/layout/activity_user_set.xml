@@ -7,13 +7,14 @@
     android:background="#F3F4F8"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".AboutActivity">
+
+    android:fitsSystemWindows="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="50dp"
         android:background="@color/white"
-        android:paddingTop="30dp">
+       >
 
         <ImageView
             android:id="@+id/goback"

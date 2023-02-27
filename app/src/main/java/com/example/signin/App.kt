@@ -10,13 +10,14 @@ import android.os.Build
 class App :  Application() {
     companion object {
         var mApplication: Application? = null
-        var isBack: Boolean = false
+
         open fun getInstance(): Context {
             return mApplication!!
         }
 
     }
-    var fontPath = "fonts/textmedium.ttf"
+
+    var fontPathc = "fonts/zitic.ttf"
     override fun onCreate() {
         super.onCreate()
         mApplication = this
@@ -28,13 +29,14 @@ class App :  Application() {
             closeAndroidPDialog()
         }
 
-        replaceSystemDefaultFont(this, fontPath)
+        replaceSystemDefaultFont(this, fontPathc)
 
     }
     fun replaceSystemDefaultFont(context: Context, fontPath: String) {
 
 //這里我们修改的是MoNOSPACE,是因为我们在主题里给app设置的默认字体就是monospace，设置其他的也可以
-        replaceTypefaceField("MONOSPACE", createTypeface(context, fontPath))
+//        replaceTypefaceField("MONOSPACE", createTypeface(context, fontPath))
+        replaceTypefaceField("MONOSPACE", createTypeface(context, fontPathc))
     }
 
     //通过字体地址创建自定义字体

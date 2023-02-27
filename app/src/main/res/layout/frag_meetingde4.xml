@@ -12,6 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 <androidx.core.widget.NestedScrollView
+
+    android:id="@+id/MyScrollView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
         <LinearLayout
@@ -65,7 +67,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="应签人数"
+                    android:text="已签人数"
                     android:textColor="#ff7d8592"
                     android:textSize="12sp"
                     />
@@ -93,7 +95,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="应签人数"
+                    android:text="本签人数"
                     android:textColor="#ff7d8592"
                     android:textSize="12sp"
                     />
@@ -301,6 +303,7 @@
 </androidx.core.widget.NestedScrollView>
         <!--            tools:listitem="@layout/item_feed_back"-->
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -375,22 +378,38 @@
                     android:gravity="center_vertical">
 
 
-
-
                     <TextView
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:id="@+id/name2Tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="25dp"
+                        android:gravity="center"
                         android:layout_weight="1"
+                        android:paddingLeft="10dp"
                         android:text="选择签到点"
                         android:textColor="#ff333333"
                         android:textSize="15sp" />
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginRight="15dp"
                         android:src="@mipmap/xiajiant" />
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/name2Tv"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="25dp"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="选择签到点"-->
+<!--                        android:textColor="#ff333333"-->
+<!--                        android:textSize="15sp" />-->
+<!--                    <ImageView-->
+<!--                        android:layout_width="20dp"-->
+<!--                        android:layout_height="20dp"-->
+<!--                        android:layout_marginRight="15dp"-->
+<!--                        android:src="@mipmap/xiajiant" />-->
                 </LinearLayout>
             </LinearLayout>
 

@@ -5,7 +5,7 @@ public class User {
     public String phonenumber= "";
     public String userName= "";
     public String userId;
-    public String name;
+    public String name = "";
     public String mobile= "";
     public String status;
     public String nickName= "";

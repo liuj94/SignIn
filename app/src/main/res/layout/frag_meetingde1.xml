@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     android:background="#F3F4F8"
     android:orientation="vertical">
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F3F4F8"
+        >
+    <com.scwang.smartrefresh.layout.header.ClassicsHeader
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -398,7 +408,7 @@
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
 
-
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 
 

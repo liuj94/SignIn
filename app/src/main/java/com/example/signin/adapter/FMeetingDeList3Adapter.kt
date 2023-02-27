@@ -46,7 +46,7 @@ class FMeetingDeList3Adapter : BaseBindingAdapter<MeetingUserData, ListMeetingde
 
                     if (item.userMeetingType.equals(data.dictValue)) {
                         holder.typeTv.text = data.dictLabel
-                        return
+
                     }
                 }
             }

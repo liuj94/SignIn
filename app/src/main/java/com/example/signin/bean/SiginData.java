@@ -146,9 +146,9 @@ public class SiginData implements Serializable {
     private String ticketIds;
     private int shockStatus;
     private int autoStatus;
-    private String okMsg;
-    private String repeatMsg;
-    private String failedMsg;
+    private String failedMsg = "签到失败";
+    private String okMsg = "签到成功";
+    private String repeatMsg = "重复签到";
     private int timeLong;
     private int type;
     private String businessId;

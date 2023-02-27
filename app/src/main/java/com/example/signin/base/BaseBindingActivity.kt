@@ -1,10 +1,13 @@
 package com.example.signin.base
-import android.app.ProgressDialog
+
+import android.graphics.Color
 
 import android.view.View
 import androidx.viewbinding.ViewBinding
+import com.example.signin.ProgressDialog
 
 import com.example.signin.R
+
 
 abstract class BaseBindingActivity<VB : ViewBinding,VM : BaseViewModel> : BaseActivity<VB, VM>() {
     override fun initRootTitleBar() {
@@ -17,7 +20,10 @@ abstract class BaseBindingActivity<VB : ViewBinding,VM : BaseViewModel> : BaseAc
         overridePendingTransition(R.anim.left_in, R.anim.left_out)
     }
     override fun initTranslucentStatus() {
-        StatusBarUtil.setTranslucentStatus(this)
+        StatusBarUtil.setTranslucentStatus(this,Color.WHITE)
+        //设置状态栏字体颜色
+        StatusBarUtil.setAndroidNativeLightStatusBar(this,true)
+
     }
     private var mProgressDialog: ProgressDialog? = null
     override fun initProgressDialog() {

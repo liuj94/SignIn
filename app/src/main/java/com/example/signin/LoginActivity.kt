@@ -1,5 +1,6 @@
 package com.example.signin
 
+import android.graphics.Color
 import android.widget.EditText
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -9,6 +10,7 @@ import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
+import com.example.signin.base.StatusBarUtil
 import com.example.signin.bean.Token
 import com.example.signin.bean.UserInfoData
 import com.example.signin.databinding.ActLoginBinding
@@ -18,11 +20,16 @@ import com.lzy.okgo.model.Response
 
 
 class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
-
+    override fun initTranslucentStatus() {
+        StatusBarUtil.setTranslucentStatus(this, Color.TRANSPARENT)
+        //设置状态栏字体颜色
+        StatusBarUtil.setAndroidNativeLightStatusBar(this,true)
+    }
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
     override fun initData() {
         binding.login.setOnClickListener {
+
             mViewModel.isShowLoading.value = true
             val params = HashMap<String, String>()
             params["username"] = binding.userName.text.toString().trim()

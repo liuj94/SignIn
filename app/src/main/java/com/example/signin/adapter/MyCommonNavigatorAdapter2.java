@@ -61,7 +61,7 @@ public class MyCommonNavigatorAdapter2 extends CommonNavigatorAdapter {
         indicator.setMode(LinePagerIndicator.MODE_EXACTLY);
         indicator.setLineHeight(UIUtil.dip2px(context, 5));
         indicator.setLineWidth(UIUtil.dip2px(context, w));
-        indicator.setRoundRadius(UIUtil.dip2px(context, 2));
+        indicator.setRoundRadius(UIUtil.dip2px(context, 8));
 
         indicator.setStartInterpolator(new AccelerateInterpolator());
         indicator.setEndInterpolator(new DecelerateInterpolator(2.0f));

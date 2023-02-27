@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
-import com.dylanc.longan.toast
 import com.example.signin.PageRoutes
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
@@ -27,7 +26,7 @@ import com.lzy.okgo.model.Response
  */
 class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewModel>() {
     companion object {
-        fun newInstance(meetingid: String,meetingName: String): MettingDe1Fragment {
+        fun newInstance(meetingid: String, meetingName: String): MettingDe1Fragment {
             val args = Bundle()
             args.putString("meetingid", meetingid)
             args.putString("meetingName", meetingName)
@@ -52,23 +51,28 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
         meetingName = arguments?.getString("meetingName", "")
 
 //            setStatusBarHeight(toolbarView)
-            isVisibleFirst = false
+        isVisibleFirst = false
 
-            binding.recyclerview.layoutManager = LinearLayoutManager(activity)
-            adapter = FMeetingDeListAdapter().apply {
-                submitList(list)
-            }
-            binding.recyclerview.adapter = adapter
-            binding.name.text = meetingName
+        binding.recyclerview.layoutManager = LinearLayoutManager(activity)
+        adapter = FMeetingDeListAdapter().apply {
+            submitList(list)
+        }
+        binding.recyclerview.adapter = adapter
+        binding.name.text = meetingName
+        mViewModel.isShowLoading.value = true
+        getData()
+        getList()
+        binding.refresh.setEnableLoadMore(false)
+        binding.refresh.setOnRefreshListener {
             getData()
-            getList()
-
-
+            refreshData()
+        }
     }
 
     private fun getList() {
-        if(!kv.getString("SiginUpListModel","").isNullOrEmpty()){
-           var data = JSON.parseObject(kv.getString("SiginUpListModel",""), SiginUpListModel::class.java)
+        if (!kv.getString("SiginUpListModel", "").isNullOrEmpty()) {
+            var data =
+                JSON.parseObject(kv.getString("SiginUpListModel", ""), SiginUpListModel::class.java)
             list.clear()
             list.addAll(data.list)
             adapter?.notifyDataSetChanged()
@@ -113,7 +117,7 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
                 override fun onFinish() {
                     super.onFinish()
-
+                    mViewModel.isShowLoading.value = false
                 }
 
 
@@ -137,4 +141,37 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
         }
     }
 
+    private fun refreshData() {
+
+        OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+            .headers("Authorization", kv.getString("token", ""))
+            .execute(object : RequestCallback<List<SiginUpListData>>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
+
+                }
+
+                override fun onMySuccess(data: List<SiginUpListData>) {
+                    super.onMySuccess(data)
+                    var list = SiginUpListModel()
+                    list.list = data
+                    kv.putString("SiginUpListModel", JSON.toJSONString(list))
+                    getList()
+                }
+
+                override fun onError(response: Response<List<SiginUpListData>>) {
+                    super.onError(response)
+
+
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+                    binding.refresh.finishRefresh()
+                }
+
+
+            })
+    }
 }

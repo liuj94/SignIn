@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
@@ -37,7 +36,7 @@ public class StatusBarUtil {
      * 设置状态栏透明
      */
     @TargetApi(19)
-    public static void setTranslucentStatus(Activity activity) {
+    public static void setTranslucentStatus(Activity activity,int color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色
             Window window = activity.getWindow();
@@ -47,7 +46,7 @@ public class StatusBarUtil {
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
             decorView.setSystemUiVisibility(option);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
+            window.setStatusBarColor(color);
             //导航栏颜色也可以正常设置
             //window.setNavigationBarColor(Color.TRANSPARENT);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -58,6 +57,7 @@ public class StatusBarUtil {
             //int flagTranslucentNavigation = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
             //attributes.flags |= flagTranslucentNavigation;
             window.setAttributes(attributes);
+            window.setStatusBarColor(color);
         }
         setStatusBarDarkTheme(activity,true);
     }
@@ -222,5 +222,14 @@ public class StatusBarUtil {
 
         Log.d("getStatuBarHeight","getStatuBarHeight=="+result);
         return result;
+    }
+
+    public static void setAndroidNativeLightStatusBar(Activity activity, boolean dark) {
+        View decor = activity.getWindow().getDecorView();
+        if (dark) {
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        } else {
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        }
     }
 }

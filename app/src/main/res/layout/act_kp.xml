@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3974F6">
+    android:background="#3974F6"
+    android:fitsSystemWindows="true">
 
     <ImageView
         android:layout_width="match_parent"
@@ -18,8 +19,8 @@
         <RelativeLayout
 
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:paddingTop="30dp">
+            android:layout_height="50dp"
+            >
 
             <ImageView
                 android:id="@+id/goback"
@@ -27,14 +28,16 @@
                 android:layout_height="50dp"
                 android:paddingLeft="13dp"
                 android:paddingRight="13dp"
-                android:src="@drawable/md_nav_back" />
+                android:paddingBottom="13dp"
+                android:paddingTop="13dp"
+                android:src="@mipmap/fh" />
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="会场签到"
+                android:text="订单发票"
                 android:textColor="#fff"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -59,10 +62,11 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:background="@mipmap/topbg"
                         android:id="@+id/name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                       android:padding="5dp"
                         android:gravity="center"
                         android:text="签到点名称"
                         android:textColor="#ff3974f6"
@@ -80,7 +84,7 @@
                             android:id="@+id/userName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
+
                             android:text="陈淼淼"
                             android:textColor="#ff333333"
                             android:textSize="27sp" />
@@ -105,6 +109,7 @@
                         android:src="@mipmap/qrcodeopy" />
 
                     <TextView
+                        android:id="@+id/invoiceType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -113,6 +118,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                     android:id="@+id/amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -121,6 +127,7 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="9dp"
@@ -183,17 +190,24 @@
                                 android:orientation="horizontal">
 
                                 <TextView
+
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="发票代码"
                                     android:textColor="#ff4d4d4d"
                                     android:textSize="14sp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                <EditText
+                                    android:windowSoftInputMode="adjustPan"
+                                    android:hint="请输入发票代码"
+                                    android:singleLine="true"
+                                    android:maxLines="1"
+                                    android:background="#fff"
+                                    android:id="@+id/invoiceNumber"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="25dp"
                                     android:layout_marginLeft="20dp"
-                                    android:text="033022100211"
+                                    android:text=""
                                     android:textColor="#ff4d4d4d"
                                     android:textSize="14sp" />
                             </LinearLayout>
@@ -209,15 +223,20 @@
 
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="发票代码"
+                                    android:text="发票号码"
                                     android:textColor="#ff4d4d4d"
                                     android:textSize="14sp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                <EditText
+                                    android:hint="请输入发票号码"
+                                    android:singleLine="true"
+                                    android:maxLines="1"
+                                    android:background="#fff"
+                                    android:id="@+id/invoiceNo"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="25dp"
                                     android:layout_marginLeft="20dp"
-                                    android:text="033022100211"
+                                    android:text=""
                                     android:textColor="#ff4d4d4d"
                                     android:textSize="14sp" />
                             </LinearLayout>

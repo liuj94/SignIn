@@ -13,9 +13,9 @@ class HomeListAdapter: BaseBindingAdapter<MeetingData, ListHomeBinding>() {
         holder.time1.text =  item.createTime
         holder.time2.text =  item.updateTime
         if(item.status.equals("2")){
-            holder.state.text = "进行中"
+            holder.state.text = "报名中"
         }else{
-            holder.state.text = "已过期"
+            holder.state.text = "已结束"
         }
 
     }

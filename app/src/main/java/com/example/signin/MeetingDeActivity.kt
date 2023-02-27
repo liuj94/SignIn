@@ -2,10 +2,13 @@ package com.example.signin
 
 
 import android.content.Intent
+import android.view.View
 import androidx.fragment.app.Fragment
 import com.alibaba.fastjson.JSON
+import com.dylanc.longan.addStatusBarHeightToMarginTop
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
+import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.SiginUpListData
 import com.example.signin.bean.SiginUpListModel
 import com.example.signin.databinding.ActMeetdaBinding
@@ -13,31 +16,46 @@ import com.example.signin.fragment.MettingDe1Fragment
 import com.example.signin.fragment.MettingDe2Fragment
 import com.example.signin.fragment.MettingDe3Fragment
 import com.example.signin.fragment.MettingDe4Fragment
-import com.example.signin.mvvm.vm.MainHomeAVM
+
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 
 
-class MeetingDeActivity : BaseBindingActivity<ActMeetdaBinding, MainHomeAVM>() {
+class MeetingDeActivity : BaseBindingActivity<ActMeetdaBinding, BaseViewModel>() {
 
+//    override fun initTranslucentStatus() {
+//        super.initTranslucentStatus()
+//        immerseStatusBar()
+//
+//    }
 
-    override fun getViewModel(): Class<MainHomeAVM> = MainHomeAVM::class.java
+    override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
 
 var meetingId = ""
 var meetingName = ""
     override fun initData() {
-
+        binding.titlell.addStatusBarHeightToMarginTop()
         intent.getStringExtra("meetingId")?.let {
             meetingId = it
         }
         intent.getStringExtra("meetingName")?.let {
             meetingName = it
         }
+        mViewModel.isShowLoading.value = true
         getData()
+        LiveDataBus.get().with("selectLlVISIBLE", String::class.java)
+            .observeForever {
+                binding.zhez.visibility = View.VISIBLE
+            }
+        LiveDataBus.get().with("selectLlGONE", String::class.java)
+            .observeForever {
+                binding.zhez.visibility = View.GONE
+            }
+        binding.zhez.setOnClickListener {
 
-
+        }
     }
     private fun getData() {
 
@@ -66,7 +84,7 @@ var meetingName = ""
 
                 override fun onFinish() {
                     super.onFinish()
-
+                    mViewModel.isShowLoading.value = false
                 }
 
 

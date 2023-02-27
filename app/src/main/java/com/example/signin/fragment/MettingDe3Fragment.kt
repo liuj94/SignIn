@@ -8,6 +8,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
+import com.example.signin.LiveDataBus
 import com.example.signin.MeetingUserDectivity
 import com.example.signin.PageRoutes
 import com.example.signin.adapter.FMeetingDeList3Adapter
@@ -66,6 +67,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 binding.nameTv.text = siginUpList[position].name
                 adapterSelect?.notifyDataSetChanged()
                 binding.selectLl.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
                 setSelect2Data(siginUpList[position].type)
                 adapter?.setSiginUp2List(siginUp2List)
                 status = ""
@@ -96,6 +98,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
                 adapterSelect2?.notifyDataSetChanged()
                 binding.select2Ll.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
                 getList()
             }
         }
@@ -105,7 +108,8 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         adapter = FMeetingDeList3Adapter().apply {
             submitList(list)
             setOnItemClickListener { _, _, position ->
-                com.dylanc.longan.startActivity<MeetingUserDectivity>("id" to list[position].id.toString())
+                com.dylanc.longan.startActivity<MeetingUserDectivity>("id" to list[position].id.toString(),
+                "showType" to 0)
             }
         }
         binding.recyclerview.adapter = adapter
@@ -116,45 +120,55 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             binding.select2Ll.visibility = View.GONE
             if (binding.selectLl.visibility == View.VISIBLE) {
                 binding.selectLl.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
             } else {
                 binding.selectLl.visibility = View.VISIBLE
+                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
             }
         }
         binding.name2Ll.setOnClickListener {
             binding.selectLl.visibility = View.GONE
             if (binding.select2Ll.visibility == View.VISIBLE) {
                 binding.select2Ll.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
             } else {
                 binding.select2Ll.visibility = View.VISIBLE
+                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
             }
 
         }
         binding.select2Ll.setOnClickListener {
             if (binding.select2Ll.visibility == View.VISIBLE) {
                 binding.select2Ll.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
             }
         }
         binding.selectLl.setOnClickListener {
             if (binding.selectLl.visibility == View.VISIBLE) {
                 binding.selectLl.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
             }
 
         }
         binding.sous.setOnClickListener {
-
+            pageNum = 1
+            list.clear()
             getList()
             activity?.hideSoftInput()
         }
         binding.et.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 // 监听到回车键，会执行2次该方法。按下与松开
+                if(event.action == KeyEvent.ACTION_UP){
                 nameMobile = binding.et.text.toString().trim()
                 binding.et.setText(nameMobile)
                 nameMobile?.let {
                     binding.et.setSelection(it.length)
                 }
+                pageNum = 1
+                list.clear()
                 getList()
-                activity?.hideSoftInput()
+                activity?.hideSoftInput()}
             }
             false
         })

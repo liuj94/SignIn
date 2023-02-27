@@ -12,10 +12,10 @@
     android:orientation="vertical"
     android:background="#F3F4F8">
     <RelativeLayout
+        android:id="@+id/titlell"
         android:background="@color/white"
-        android:paddingTop="30dp"
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="50dp">
         <ImageView
             android:src="@mipmap/arrowsleft"
             android:padding="13dp"
@@ -38,7 +38,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
     <RadioGroup
         android:id="@+id/mRg"
         android:layout_width="match_parent"
@@ -47,11 +49,10 @@
         android:checkedButton="@id/mMainHomeRb"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mViewPager">
+      >
 
         <RadioButton
-android:checked="true"
+            android:checked="true"
             android:id="@+id/mRb1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -116,6 +117,15 @@ android:checked="true"
             android:textSize="10dp" />
 
     </RadioGroup>
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/zhez"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#60000000"
+        android:visibility="gone"/>
+</RelativeLayout>
+
 
 
 </LinearLayout><!--</layout>-->

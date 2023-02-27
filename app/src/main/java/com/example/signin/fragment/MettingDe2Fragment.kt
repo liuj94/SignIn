@@ -7,7 +7,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
-import com.dylanc.longan.toast
+import com.example.signin.LiveDataBus
 import com.example.signin.MeetingSiginDectivity
 import com.example.signin.PageRoutes
 import com.example.signin.base.BaseBindingFragment
@@ -64,6 +64,7 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
                     binding.nameTv.text = selectList[position].name
                     adapterSelect?.notifyDataSetChanged()
                     binding.selectLl.visibility = View.GONE
+                    LiveDataBus.get().with("selectLlGONE").postValue("1")
                     getList()
                 }
             }
@@ -73,13 +74,18 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
             adapter = FMeetingDeList2Adapter().apply {
                 submitList(list)
                 setOnItemClickListener { _, _, position ->
-                    var params =meetingid + "&signUpId=" + signUpId+"&signUpLocationId="+list[position].id
+                    var params =meetingid + "&signUpId=" + list[position].signUpId+"&signUpLocationId="+list[position].id
                     com.dylanc.longan.startActivity<MeetingSiginDectivity>("id" to ""+list[position].id,
-                        "name" to list[position].name,"params" to ""+params,
-                        "meetingid" to meetingid,
-                        "autoStatus" to list[position].autoStatus,
+                        "name" to ""+list[position].name,"params" to ""+params,
+                        "meetingid" to ""+meetingid,
+                        "autoStatus" to ""+list[position].autoStatus,
                         "timeLong" to list[position].timeLong,
-                        "signUpId" to signUpId)
+                        "showType" to list[position].type,
+                        "okMsg" to ""+list[position].okMsg,
+                        "failedMsg" to ""+list[position].failedMsg,
+                        "repeatMsg" to ""+list[position].repeatMsg,
+                        "signUpId" to ""+list[position].signUpId)
+
                 }
             }
             binding.recyclerview.adapter = adapter
@@ -87,14 +93,17 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
 
             binding.nameLl.setOnClickListener {
                 if(binding.selectLl.visibility == View.VISIBLE){
+                    LiveDataBus.get().with("selectLlGONE").postValue("1")
                     binding.selectLl.visibility = View.GONE
                 }else{
+                    LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
                     binding.selectLl.visibility = View.VISIBLE
                 }
             }
             binding.selectLl.setOnClickListener {
 
                 if(binding.selectLl.visibility == View.VISIBLE){
+                    LiveDataBus.get().with("selectLlGONE").postValue("1")
                     binding.selectLl.visibility = View.GONE
                 }
 
@@ -102,6 +111,10 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
 
         getData()
         getList()
+        binding.refresh.setEnableLoadMore(false)
+        binding.refresh.setOnRefreshListener {
+            getList()
+        }
     }
 
     private fun getList() {
@@ -130,7 +143,7 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
 
                 override fun onFinish() {
                     super.onFinish()
-
+                    binding.refresh.finishRefresh()
                 }
 
 

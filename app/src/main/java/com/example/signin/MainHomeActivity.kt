@@ -1,14 +1,14 @@
 package com.example.signin
 
 
-import android.util.Log
 import androidx.fragment.app.Fragment
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.toast
-import com.example.signin.UnicodeUtil.isChinese
+
 import com.example.signin.adapter.MainViewPagerAdapter
 
 import com.example.signin.base.BaseBindingActivity
+import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.TypeData
 import com.example.signin.bean.TypeModel
 import com.example.signin.databinding.ActivityMainBinding
@@ -16,16 +16,15 @@ import com.example.signin.fragment.HomeMainFragment
 import com.example.signin.fragment.MyFragment
 
 
-import com.example.signin.mvvm.vm.MainHomeAVM
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 
 
-class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, MainHomeAVM>() {
+class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>() {
 
 
-    override fun getViewModel(): Class<MainHomeAVM> = MainHomeAVM::class.java
+    override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
 
 
@@ -46,6 +45,8 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, MainHomeAVM>()
         getDataType("sys_invoice_type")
         getDataType("transport_type")
         getDataType("sys_examine_reason")
+
+        getDataType("pay_status")
 
     }
 
@@ -137,6 +138,8 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, MainHomeAVM>()
                         "transport_type"->{model.transport_type = data}
                         "sys_examine_reason"->{model.sys_examine_reason = data}
 
+                        "pay_status"->{model.pay_status = data}
+
                     }
                     kv.putString("TypeModel",JSON.toJSONString(model))
                 }
@@ -155,6 +158,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, MainHomeAVM>()
 
 
             })
+
     }
 
 

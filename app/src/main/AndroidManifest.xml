@@ -20,9 +20,16 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-    <uses-permission
-        android:name="android.permission.RECORD_AUDIO"
-        tools:node="remove" />
+
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <!-- 对于 Android 12.0 及以上设备，还需要添加如下权限： -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"  />
+
 
     <meta-data
         android:name="android.webkit.WebView.EnableSafeBrowing"
@@ -39,27 +46,32 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
         tools:replace="android:theme"
         android:theme="@style/AppTheme"
         tools:targetApi="31">
 
         <activity
+            android:name=".SiginReAutoActivity"
+            android:exported="false" />
+        <activity
             android:name=".UserSetActivity"
             android:exported="false" />
         <activity
             android:name=".ExamineKPActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity
             android:name=".ExamineActivity"
             android:exported="false" />
         <activity
             android:name=".SiginReActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity
             android:name=".ScanActivity"
             android:exported="false" />
@@ -71,16 +83,19 @@
             android:exported="false" />
         <activity
             android:name=".SigninSetActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity
             android:name=".AboutActivity"
             android:exported="false" />
         <activity
             android:name=".MeetingDeActivity"
-            android:exported="false"/>
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name=".MainHomeActivity"
-            android:exported="false"/>
+            android:exported="false"
+            />
 
         <activity
             android:name=".SplashActivity"

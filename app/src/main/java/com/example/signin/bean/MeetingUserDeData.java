@@ -37,6 +37,33 @@ public class MeetingUserDeData implements Serializable {
      */
 
     private String id;
+    private String personChargeName;
+
+    public String getPersonChargeName() {
+        return personChargeName;
+    }
+
+    public void setPersonChargeName(String personChargeName) {
+        this.personChargeName = personChargeName;
+    }
+
+    public String getPersonChargeMobile() {
+        return personChargeMobile;
+    }
+
+    public void setPersonChargeMobile(String personChargeMobile) {
+        this.personChargeMobile = personChargeMobile;
+    }
+
+    public String getMeetingSignUpLocation() {
+        return meetingSignUpLocation;
+    }
+
+    public void setMeetingSignUpLocation(String meetingSignUpLocation) {
+        this.meetingSignUpLocation = meetingSignUpLocation;
+    }
+
+    private String personChargeMobile;
     private int userId;
     private int meetingId;
     private String name;
@@ -316,9 +343,11 @@ public class MeetingUserDeData implements Serializable {
         private String meetingName;
         private int ticketId;
         private String ticketName;
-        private String amount;
-        private String payType;
-        private String payStatus;
+        private String userName = "";
+        private String corporateName = "";
+        private String amount = "0";
+        private String payType = "0";
+        private String payStatus = "0";
         private String payParam;
         private String payTime;
         private String payExpireTime;
@@ -337,6 +366,22 @@ public class MeetingUserDeData implements Serializable {
         private String meetingPayId;
         private String name;
         private String mobile;
+
+        public String getCorporateName() {
+            return corporateName;
+        }
+
+        public void setCorporateName(String corporateName) {
+            this.corporateName = corporateName;
+        }
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
 
         public String getSearchValue() {
             return searchValue;

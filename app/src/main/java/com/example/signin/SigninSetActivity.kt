@@ -1,6 +1,8 @@
 package com.example.signin
 
 import android.graphics.Color
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
 import com.alibaba.fastjson.JSON
@@ -23,6 +25,7 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
     override fun initData() {
+        mViewModel.isShowLoading.value = true
         intent.getStringExtra("id")?.let {
             id = it
         }
@@ -101,6 +104,62 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
 
             setState()
         }
+
+        binding.okMsg.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+                if(!okMsg.equals(s.toString().trim())){
+                    okMsg = s.toString().trim()
+                    setState()
+                }
+            }
+
+        })
+        binding.repeatMsg.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if(!repeatMsg.equals(s.toString().trim())){
+                    repeatMsg = s.toString().trim()
+                    setState()
+                }
+
+            }
+
+        })
+        binding.failedMsg.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+                if(!failedMsg.equals(s.toString().trim())){
+                    failedMsg = s.toString().trim()
+                    setState()
+                }
+            }
+
+        })
+
         getDate()
     }
 
@@ -137,14 +196,22 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
                     timeLong = ""+data.timeLong
 
                     binding.failedMsg.setText(failedMsg)
+                    binding.failedMsg.setSelection(failedMsg.length)
                     binding.okMsg.setText( okMsg)
+                    binding.okMsg.setSelection(okMsg.length)
                     binding.repeatMsg.setText( repeatMsg)
+                    binding.repeatMsg.setSelection(repeatMsg.length)
 
                     if(autoStatus.equals(1)){
                         binding.kg.setImageResource(R.mipmap.kaiguan2)
                         binding.kgtv.text = "(手动)"
                         binding.settime.visibility = View.GONE
 
+
+                    }else{
+                        binding.kg.setImageResource(R.mipmap.kaiguan1)
+                        binding.kgtv.text = "(自动)"
+                        binding.settime.visibility = View.VISIBLE
                         if(timeLong.equals("1")){
                             setTimeState(binding.time1)
                             timeState = 1
@@ -158,11 +225,6 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
                             timeState = 4
                             setTimeState(binding.time4)
                         }
-                    }else{
-                        binding.kg.setImageResource(R.mipmap.kaiguan1)
-                        binding.kgtv.text = "(自动)"
-                        binding.settime.visibility = View.VISIBLE
-
                     }
                     if(shockStatus.equals("1")){
                         binding.kg2.setImageResource(R.mipmap.kaiguan1)
@@ -184,7 +246,7 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
 
                 override fun onFinish() {
                     super.onFinish()
-
+                    mViewModel.isShowLoading.value = false
                 }
 
 
@@ -209,6 +271,7 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
         val params = HashMap<String, String>()
         params["id"] = id
         params["autoStatus"] = autoStatus
+        params["voiceStatus"] = voiceStatus
         params["timeLong"] = timeLong
         params["shockStatus"] = shockStatus
         params["repeatMsg"] = repeatMsg

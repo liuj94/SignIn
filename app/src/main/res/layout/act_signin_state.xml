@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3974F6">
+    android:background="#3974F6"
+    android:fitsSystemWindows="true">
 
     <ImageView
         android:layout_width="match_parent"
@@ -18,8 +19,7 @@
         <RelativeLayout
 
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:paddingTop="30dp">
+            android:layout_height="50dp">
 
             <ImageView
                 android:id="@+id/goback"
@@ -27,7 +27,9 @@
                 android:layout_height="50dp"
                 android:paddingLeft="13dp"
                 android:paddingRight="13dp"
-                android:src="@drawable/md_nav_back" />
+                android:paddingBottom="13dp"
+                android:paddingTop="13dp"
+                android:src="@mipmap/fh" />
 
             <TextView
                 android:id="@+id/title"
@@ -60,11 +62,12 @@
             android:orientation="vertical">
 
             <TextView
-                android:textStyle="bold"
+
                 android:id="@+id/name"
+                android:background="@mipmap/topbg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:padding="5dp"
                 android:gravity="center"
                 android:text="签到点名称"
                 android:textColor="#ff3974f6"
@@ -78,10 +81,12 @@
                 android:layout_margin="15dp" />
 
             <TextView
+
                 android:id="@+id/stateTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="签到"
+                android:maxLines="1"
                 android:textColor="#3974F6"
                 android:textSize="48sp" />
 

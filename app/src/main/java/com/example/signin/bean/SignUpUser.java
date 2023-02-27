@@ -35,6 +35,19 @@ public class SignUpUser implements Serializable {
     private String status = "1";
     private String userMeetingId;
     private String userMeetingTypeName = "";
+    private String failedMsg = "签到失败";
+    private String okMsg = "签到成功";
+    private String repeatMsg = "重复签到";
+    private String success = "";
+
+    public String getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(String success) {
+        this.success = success;
+    }
+
     public String getAutoStatus() {
         return autoStatus;
     }
@@ -45,6 +58,30 @@ public class SignUpUser implements Serializable {
 
     public void setTimeLong(int timeLong) {
         this.timeLong = timeLong;
+    }
+
+    public String getFailedMsg() {
+        return failedMsg;
+    }
+
+    public void setFailedMsg(String failedMsg) {
+        this.failedMsg = failedMsg;
+    }
+
+    public String getOkMsg() {
+        return okMsg;
+    }
+
+    public void setOkMsg(String okMsg) {
+        this.okMsg = okMsg;
+    }
+
+    public String getRepeatMsg() {
+        return repeatMsg;
+    }
+
+    public void setRepeatMsg(String repeatMsg) {
+        this.repeatMsg = repeatMsg;
     }
 
     public void setAutoStatus(String autoStatus) {

@@ -7,7 +7,6 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.activity
-import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
 import com.example.signin.adapter.FMeetingDeList3Adapter
 import com.example.signin.base.BaseBindingActivity
@@ -27,6 +26,7 @@ import com.hjq.permissions.XXPermissions
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
+import sigin
 
 class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, BaseViewModel>() {
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
@@ -36,6 +36,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     var meetingid = ""
     var autoStatus = ""
     var timeLong = 3
+    var showType = 0
     var name = ""
     var signUpStatus = ""
     var nameMobile: String? = ""
@@ -43,18 +44,25 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     private var list: MutableList<MeetingUserData> = ArrayList()
     private var adapter: FMeetingDeList3Adapter? = null
     override fun initData() {
+        mViewModel.isShowLoading.value = true
         intent.getStringExtra("id")?.let { id = it }
-        intent.getStringExtra("name")?.let { name = it }
+        intent.getStringExtra("name")?.let { name = it
+            binding.name.text = it}
         intent.getStringExtra("params")?.let { params = it }
         intent.getStringExtra("meetingid")?.let { meetingid = it }
         intent.getStringExtra("signUpId")?.let { signUpId = it }
         intent.getStringExtra("autoStatus")?.let { autoStatus = it }
+        intent.getStringExtra("okMsg")?.let { okMsg = it }
+        intent.getStringExtra("failedMsg")?.let { failedMsg = it }
+        intent.getStringExtra("repeatMsg")?.let { repeatMsg = it }
         intent.getIntExtra("timeLong",3)?.let { timeLong = it }
+        intent.getIntExtra("showType",0)?.let { showType = it }
         binding.recyclerview.layoutManager = LinearLayoutManager(activity)
         adapter = FMeetingDeList3Adapter().apply {
             submitList(list)
             setOnItemClickListener { _, _, position ->
-                com.dylanc.longan.startActivity<MeetingUserDectivity>("id" to list[position].id.toString())
+                com.dylanc.longan.startActivity<MeetingUserDectivity>("id" to list[position].id.toString(),
+                    "showType" to showType)
             }
         }
 
@@ -68,6 +76,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         binding.et.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 // 监听到回车键，会执行2次该方法。按下与松开
+                if(event.action == KeyEvent.ACTION_UP){
                 nameMobile = binding.et.text.toString().trim()
                 binding.et.setText(nameMobile)
                 nameMobile?.let {
@@ -76,14 +85,35 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
 
                 getList()
-                activity?.hideSoftInput()
+                activity?.hideSoftInput()}
             }
             false
         })
 
         getSiginData()
         binding.sm.setOnClickListener {
-            startActivity<ScanActivity>()
+            activity?.let {
+                XXPermissions.with(activity)
+                    .permission(Permission.CAMERA)
+                    .request(object : OnPermissionCallback {
+
+                        override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+                            if (!all) {
+                                toast("获取权限失败")
+                            } else {
+                                var intent = Intent(it,ScanActivity::class.java)
+                                startActivityForResult(intent,1000)
+                            }
+
+                        }
+
+                        override fun onDenied(permissions: MutableList<String>, never: Boolean) {
+                            toast("获取权限失败")
+
+                        }
+                    })
+
+            }
         }
         binding.moshill.setOnClickListener {
             setState()
@@ -248,13 +278,15 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
                 override fun onFinish() {
                     super.onFinish()
-
+                    mViewModel.isShowLoading.value = false
                 }
 
 
             })
     }
-
+    var failedMsg:String = "签到失败"
+    var okMsg:String = "签到成功"
+    var repeatMsg:String = "重复签到"
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode==1000){
@@ -271,7 +303,35 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 signUpUser.userMeetingTypeName = signUpUser.supplement
                 signUpUser.autoStatus =  autoStatus
                 signUpUser.timeLong =  timeLong
-                startActivity<SiginReActivity>("type" to 2, "data" to signUpUser)
+                signUpUser.okMsg = okMsg
+                signUpUser.failedMsg = failedMsg
+                signUpUser.repeatMsg = repeatMsg
+                if(autoStatus.equals("2")){
+                    if(showType==3){
+                        com.dylanc.longan.startActivity<SiginReActivity>(
+                            "type" to showType,
+                            "data" to signUpUser
+                        )
+                    }else{
+                    var params = java.util.HashMap<String, String>()
+                    params["meetingId"] = signUpUser.meetingId//会议id
+                    params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
+                    params["signUpId"] = signUpUser.signUpId//签到站id
+                    params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
+                    params["status"] = "2"//用户参与会议id
+                    sigin(JSON.toJSONString(params),{success->
+                        signUpUser.success = success
+                        com.dylanc.longan.startActivity<SiginReAutoActivity>(
+                            "type" to showType,
+                            "data" to signUpUser
+                        )
+                    },{},{})}
+                }else{
+                    com.dylanc.longan.startActivity<SiginReActivity>(
+                        "type" to showType,
+                        "data" to signUpUser
+                    )
+                }
 
             }
 

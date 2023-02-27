@@ -25,7 +25,7 @@
 <LinearLayout
     android:layout_marginTop="10dp"
     android:padding="8dp"
-    android:background="@drawable/shape_bg_3974f6_fff_17"
+    android:background="@drawable/shape_bg_43cf7c_fff_12"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -161,7 +161,7 @@
 
     <LinearLayout
         android:id="@+id/name2Ll"
-        android:layout_width="120dp"
+        android:layout_width="100dp"
         android:layout_height="45dp"
         android:layout_marginTop="15dp"
         android:layout_marginRight="16dp"
@@ -172,17 +172,20 @@
 
 
         <TextView
+            android:ellipsize="end"
+            android:maxLines="1"
             android:id="@+id/name2Tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
+            android:gravity="center"
             android:layout_weight="1"
+            android:paddingLeft="5dp"
             android:text="筛选"
             android:textColor="#ff333333"
             android:textSize="15sp" />
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:layout_marginRight="15dp"
             android:src="@mipmap/xiajiant" />
     </LinearLayout>

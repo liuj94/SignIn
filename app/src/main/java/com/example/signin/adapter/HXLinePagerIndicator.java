@@ -17,7 +17,7 @@ public class HXLinePagerIndicator extends LinePagerIndicatorEx {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        LinearGradient lg = new LinearGradient(getLineRect().left, getLineRect().top, getLineRect().right, getLineRect().bottom, new int[]{0xFF52dac2, 0xFF4ec4dd}, null, LinearGradient.TileMode.CLAMP);
+        LinearGradient lg = new LinearGradient(getLineRect().left, getLineRect().top, getLineRect().right, getLineRect().bottom, new int[]{0xFF3974F6, 0xFF3974F6}, null, LinearGradient.TileMode.CLAMP);
         getPaint().setShader(lg);
         canvas.drawRoundRect(getLineRect(), getRoundRadius(), getRoundRadius(), getPaint());
     }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/root">
     <LinearLayout
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
@@ -25,7 +26,7 @@
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="姓名名"
+                    android:text=""
                     android:textStyle="bold"
                     android:textColor="#ff1a1a1a"
                     android:textSize="19sp"
@@ -37,7 +38,7 @@
                     android:layout_marginBottom="2dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="公司名称公司名称"
+                    android:text=""
                     android:textColor="#ff1a1a1a"
                     android:textSize="12sp"
                     />
@@ -47,7 +48,7 @@
                     android:id="@+id/zhengjiangType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="证件类型"
+                    android:text=""
                     android:textColor="#ff1a1a1a"
                     android:textSize="12sp"
                     />
@@ -72,7 +73,7 @@
                 android:id="@+id/jiedaidName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="接待员：马师傅"
+                android:text="接待员："
                 android:textColor="#ff333333"
                 android:textSize="12sp"
                 android:textStyle="bold"

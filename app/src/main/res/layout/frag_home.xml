@@ -7,9 +7,9 @@
     android:background="#F3F4F8">
     <RelativeLayout
         android:background="@color/white"
-        android:paddingTop="30dp"
+
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="50dp">
 
         <TextView
             android:id="@+id/title"
@@ -63,7 +63,7 @@ android:paddingTop="10dp"
                 android:id="@+id/btnTv2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="进行中"
+                android:text="报名中"
                 android:textColor="#5B5B5B"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -87,7 +87,7 @@ android:paddingTop="10dp"
                 android:id="@+id/btnTv3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="已过期"
+                android:text="已结束"
                 android:textColor="#5B5B5B"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -105,26 +105,65 @@ android:paddingTop="10dp"
             android:layout_height="1dp"
             android:layout_weight="1"/>
         <LinearLayout
+            android:id="@+id/soubtn"
            android:layout_marginBottom="10dp"
-            android:layout_width="85dp"
-            android:layout_height="35dp"
+            android:layout_width="80dp"
+            android:layout_height="32dp"
             android:gravity="center"
-            android:background="@drawable/shape_bg_3974f6_fff_17">
+            android:background="@drawable/shape_bg_f3f4f8_17">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/shousuo"/>
+                android:src="@mipmap/sousb"/>
+
             <TextView
-                android:layout_marginLeft="9dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
                 android:text="搜索"
-                android:textColor="#ff8b8b8b"
-                android:textSize="15sp"
-                />
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
-
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/sousll"
+       android:layout_marginTop="13dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="8dp"
+        android:background="@drawable/shape_bg_43cf7c_fff_12"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+        <EditText
+            android:singleLine="true"
+            android:id="@+id/et"
+            android:paddingLeft="10dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="会议名称"
+            android:textColor="#ff7d8592"
+            android:textSize="15sp"
+            android:maxLines="1"
+            android:imeOptions="actionSearch"
+            />
+        <View
+            android:layout_marginRight="5dp"
+            android:layout_width="1dp"
+            android:layout_height="15dp"
+            android:background="#EBEEFC" />
+        <ImageView
+            android:id="@+id/sous"
+            android:padding="11dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@mipmap/shousuo"/>
+    </LinearLayout>
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
@@ -154,8 +193,8 @@ android:paddingTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@color/white"
 
             tools:ignore="MissingClass" />

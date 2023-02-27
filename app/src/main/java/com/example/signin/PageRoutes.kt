@@ -10,7 +10,7 @@ interface PageRoutes {
 
         //登录
         val Api_login = "$BaseUrlApi/login"
-        val Api_editUser = "$BaseUrlApi/system/user"
+        val Api_editUser = "$BaseUrlApi/manager/system/user"
         val Api_getUserInfo = "$BaseUrlApi/getInfo"
         //appStatus	-1,全部;1,进行中;2,过期
         val Api_meetingList = "$BaseUrlApi/manager/meeting/list?"
@@ -66,6 +66,14 @@ interface PageRoutes {
 
 //        val Api_sigin = "$BaseUrlApi/manager/meeting/order/{id}"
         val Api_order = "$BaseUrlApi/manager/meeting/order/"
+
+
+        val Api_upload = "$BaseUrlApi/common/upload"
+
+        val Api_billfinish = "$BaseUrlApi/manager/meeting/order/bill/finish"
+//        val Api_bill = "$BaseUrlApi/manager/meeting/order/bill/{orderId}"
+        val Api_bill = "$BaseUrlApi/manager/meeting/order/bill/"
+
 
 
 

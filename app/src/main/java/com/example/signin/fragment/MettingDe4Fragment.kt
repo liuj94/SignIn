@@ -29,7 +29,7 @@ import com.hjq.permissions.XXPermissions
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
-import java.io.UnsupportedEncodingException
+import sigin
 
 /**
  *   author : LiuJie
@@ -62,6 +62,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
     var autoStatus: String? = ""
     var timeLong: Int = 3
     var type: Int = 0
+
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
         setStartData()
@@ -79,6 +80,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                 binding.nameTv.text = selectList[position].name
                 adapterSelect?.notifyDataSetChanged()
                 binding.selectLl.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
                 setStartData()
                 getList()
             }
@@ -102,6 +104,9 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                     }
                     selectList2[position].isMyselect = true
                     autoStatus = "" +selectList2[position].autoStatus
+                     okMsg = selectList2[position].okMsg
+                     failedMsg = selectList2[position].failedMsg
+                     repeatMsg = selectList2[position].repeatMsg
                     timeLong = selectList2[position].timeLong
                     siginlocationId = "" + selectList2[position].id
                     binding.name2Tv.text = selectList2[position].name
@@ -109,7 +114,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
                 adapterSelect2?.notifyDataSetChanged()
                 binding.select2Ll.visibility = View.GONE
-
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
 
 //                binding.time.text = ""+selectList2[position].timeLong+"分钟"
 //                binding.time.text = ""+selectList2[position].timeLong+"分钟"
@@ -141,7 +146,8 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         adapter = FMeetingDeList3Adapter().apply {
             submitList(list)
             setOnItemClickListener { _, _, position ->
-                com.dylanc.longan.startActivity<MeetingUserDectivity>("id" to list[position].id.toString())
+                com.dylanc.longan.startActivity<MeetingUserDectivity>("id" to list[position].id.toString(),
+                    "showType" to type)
             }
         }
 
@@ -153,27 +159,33 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             binding.select2Ll.visibility = View.GONE
             if (binding.selectLl.visibility == View.VISIBLE) {
                 binding.selectLl.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
             } else {
                 binding.selectLl.visibility = View.VISIBLE
+                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
             }
         }
         binding.name2Ll.setOnClickListener {
             binding.selectLl.visibility = View.GONE
             if (binding.select2Ll.visibility == View.VISIBLE) {
                 binding.select2Ll.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
             } else {
                 binding.select2Ll.visibility = View.VISIBLE
+                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
             }
 
         }
         binding.select2Ll.setOnClickListener {
             if (binding.select2Ll.visibility == View.VISIBLE) {
                 binding.select2Ll.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
             }
         }
         binding.selectLl.setOnClickListener {
             if (binding.selectLl.visibility == View.VISIBLE) {
                 binding.selectLl.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
             }
 
         }
@@ -190,6 +202,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         binding.et.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 // 监听到回车键，会执行2次该方法。按下与松开
+                if(event.action == KeyEvent.ACTION_UP){
                 if(siginlocationId.isNullOrEmpty()){
                     toast("请选择签到点")
 
@@ -202,7 +215,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                     getUserList()
                 }
 
-                activity?.hideSoftInput()
+                activity?.hideSoftInput()}
             }
             false
         })
@@ -244,8 +257,12 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
 
         }
-    }
 
+
+    }
+    var failedMsg:String = "签到失败"
+    var okMsg:String = "签到成功"
+    var repeatMsg:String = "重复签到"
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode==1000){
@@ -262,7 +279,30 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                 signUpUser.userMeetingTypeName = signUpUser.supplement
                 signUpUser.autoStatus =  autoStatus
                 signUpUser.timeLong =  timeLong
-                startActivity<SiginReActivity>("type" to 2, "data" to signUpUser)
+                signUpUser.okMsg = okMsg
+                signUpUser.failedMsg = failedMsg
+                signUpUser.repeatMsg = repeatMsg
+
+                if(autoStatus.equals("2")){
+                    if(type==3){
+                        startActivity<SiginReActivity>("type" to type, "data" to signUpUser)
+                    }else{
+                        var params = java.util.HashMap<String, String>()
+                        params["meetingId"] = signUpUser.meetingId//会议id
+                        params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
+                        params["signUpId"] = signUpUser.signUpId//签到站id
+                        params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
+                        params["status"] = "2"//用户参与会议id
+                        sigin(JSON.toJSONString(params),{success->
+                            signUpUser.success = success
+                            startActivity<SiginReAutoActivity>("type" to type, "data" to signUpUser)
+                        },{},{})
+                    }
+
+                }else{
+                    startActivity<SiginReActivity>("type" to type, "data" to signUpUser)
+                }
+
 
             }
 
@@ -433,6 +473,8 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             adapter?.notifyDataSetChanged()
             binding.recyclerview.visibility = View.GONE
             binding.kong.visibility = View.GONE
+            binding.thrl.visibility = View.VISIBLE
+
             return
         }
         var url =PageRoutes.Api_meetinguser +meetingid + "&signUpId=" + signUpId+"&signUpLocationId="+siginlocationId
@@ -450,6 +492,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                         list.addAll(response.body().data)
                         adapter?.notifyDataSetChanged()
                         if (!nameMobile.isNullOrEmpty()) {
+                            binding.thrl.visibility = View.GONE
                             if(list.size>0){
                                 binding.kong.visibility = View.GONE
                                 binding.recyclerview.visibility = View.VISIBLE
@@ -461,6 +504,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                         }else{
                             binding.kong.visibility = View.GONE
                             binding.recyclerview.visibility = View.GONE
+                            binding.thrl.visibility = View.VISIBLE
                         }
                     }
                 }
