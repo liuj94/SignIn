@@ -62,10 +62,12 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
     var autoStatus: String? = ""
     var timeLong: Int = 3
     var type: Int = 0
-
+    var userData: User? = null
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
+        userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
         setStartData()
+
         meetingid = arguments?.getString("meetingid", "")
         binding.srecyclerview.layoutManager = LinearLayoutManager(activity)
         adapterSelect = SelectMeetingAdapter().apply {
@@ -118,6 +120,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
 //                binding.time.text = ""+selectList2[position].timeLong+"分钟"
 //                binding.time.text = ""+selectList2[position].timeLong+"分钟"
+
                 if(selectList2[position].voiceStatus==2){
                     binding.ztname.text = "当前对讲处于关闭状态"
                     binding.ztname.setTextColor(Color.parseColor("#999999"))
@@ -137,7 +140,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
 
 
-                getSiginData()
+//                getSiginData()
             }
         }
         binding.srecyclerview2.adapter = adapterSelect2
@@ -374,6 +377,14 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         binding.thstate.setImageResource(R.mipmap.tonghua1)
         binding.roundProgress.progress = 0
         binding.roundProgress.maxProgress = 5000
+        userData?.let {
+            if (it.userType.equals("00")){
+                binding.ztname.text = "当前对讲处于开启状态"
+                binding.ztiv.setImageResource(R.drawable.ov_3974f6)
+                binding.thstate.setImageResource(R.mipmap.tonghua3)
+            }
+        }
+
     }
 
     private fun getData() {
@@ -406,7 +417,40 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                     selectList2.clear()
                     selectList2.addAll(data)
                     adapterSelect2?.notifyDataSetChanged()
+                    if (selectList2.size>0){
+                        selectList2[0].isMyselect = true
+                        autoStatus = "" +selectList2[0].autoStatus
+                        okMsg = selectList2[0].okMsg
+                        failedMsg = selectList2[0].failedMsg
+                        repeatMsg = selectList2[0].repeatMsg
+                        timeLong = selectList2[0].timeLong
+                        siginlocationId = "" + selectList2[0].id
+                        binding.name2Tv.text = selectList2[0].name
 
+                        userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
+                        if(selectList2[0].voiceStatus==2){
+                            binding.ztname.text = "当前对讲处于关闭状态"
+                            binding.ztname.setTextColor(Color.parseColor("#999999"))
+                            binding.thstate.setImageResource(R.mipmap.tonghua1)
+                            binding.ztiv.setImageResource(R.drawable.ov_ccc)
+                            binding.roundProgress.progress = 0
+                        }else if(selectList2[0].voiceStatus==1){
+                            binding.ztname.text = "当前对讲处于开启状态"
+                            binding.ztname.setTextColor(Color.parseColor("#3974f6"))
+                            binding.thstate.setImageResource(R.mipmap.tonghua3)
+                            binding.ztiv.setImageResource(R.drawable.ov_3974f6)
+                            binding.roundProgress.progress = 5000
+                        }
+                        binding.roundProgress.maxProgress = 5000
+                        userData?.let {
+                            if (it.userType.equals("00")){
+                                binding.ztname.text = "当前对讲处于开启状态"
+                                binding.ztiv.setImageResource(R.drawable.ov_3974f6)
+                                binding.thstate.setImageResource(R.mipmap.tonghua3)
+                            }
+                        }
+                    }
+//                    getSiginData()
 
                 }
 
@@ -423,49 +467,49 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
             })
     }
-    private fun getSiginData() {
-        OkGo.get<SiginData>(PageRoutes.Api_meetingSignUpLocationDe +  siginlocationId)
-            .tag(PageRoutes.Api_meetingSignUpLocationDe )
-            .headers("Authorization", kv.getString("token", ""))
-            .execute(object : RequestCallback<SiginData>() {
-                override fun onSuccessNullData() {
-                    super.onSuccessNullData()
-
-                }
-
-                override fun onMySuccess(data: SiginData) {
-                    super.onMySuccess(data)
-                    binding.num1.text  =""+ data.beUserCount
-                    binding.num2.text  = ""+data.signUpCount
-                    binding.num3.text  = ""+data.localSignUpCount
-//                    binding.num1.text  = data.signUpNeedCount
-//                    binding.num2.text  = data.signUpCount
-//                    binding.num3.text  = data.meetingSignUpCount
-                    //01 签入模式 02 签入签出模式
-                    signUpStatus = data.addressStatus
-                   if(data.addressStatus == "1"){
-                       binding.moshitv.text = "签入模式"
-                       binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
-                   }else{
-                       binding.moshitv.text = "签出模式"
-                       binding.moshiiv.setImageResource(R.mipmap.kaiguank)
-                   }
-
-                }
-
-                override fun onError(response: Response<SiginData>) {
-                    super.onError(response)
-
-                }
-
-                override fun onFinish() {
-                    super.onFinish()
-
-                }
-
-
-            })
-    }
+//    private fun getSiginData() {
+//        OkGo.get<SiginData>(PageRoutes.Api_meetingSignUpLocationDe +  siginlocationId)
+//            .tag(PageRoutes.Api_meetingSignUpLocationDe )
+//            .headers("Authorization", kv.getString("token", ""))
+//            .execute(object : RequestCallback<SiginData>() {
+//                override fun onSuccessNullData() {
+//                    super.onSuccessNullData()
+//
+//                }
+//
+//                override fun onMySuccess(data: SiginData) {
+//                    super.onMySuccess(data)
+//                    binding.num1.text  =""+ data.beUserCount
+//                    binding.num2.text  = ""+data.signUpCount
+//                    binding.num3.text  = ""+data.localSignUpCount
+////                    binding.num1.text  = data.signUpNeedCount
+////                    binding.num2.text  = data.signUpCount
+////                    binding.num3.text  = data.meetingSignUpCount
+//                    //01 签入模式 02 签入签出模式
+//                    signUpStatus = data.addressStatus
+//                   if(data.addressStatus == "1"){
+//                       binding.moshitv.text = "签入模式"
+//                       binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
+//                   }else{
+//                       binding.moshitv.text = "签出模式"
+//                       binding.moshiiv.setImageResource(R.mipmap.kaiguank)
+//                   }
+//
+//                }
+//
+//                override fun onError(response: Response<SiginData>) {
+//                    super.onError(response)
+//
+//                }
+//
+//                override fun onFinish() {
+//                    super.onFinish()
+//
+//                }
+//
+//
+//            })
+//    }
 
     private fun getUserList() {
         if (nameMobile.isNullOrEmpty()) {

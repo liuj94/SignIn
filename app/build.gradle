@@ -104,7 +104,11 @@ dependencies {
     implementation 'top.zibin:Luban:1.1.8'
     implementation 'com.github.HuanTanSheng:EasyPhotos:3.1.5'
 
-
+    def agora_sdk_version = "4.1.1"
+    // case 1: full single lib with voice only
+    implementation "io.agora.rtc:voice-sdk:${agora_sdk_version}"
+    implementation "com.squareup.okhttp3:okhttp:4.10.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.10.0"
 
 
 }

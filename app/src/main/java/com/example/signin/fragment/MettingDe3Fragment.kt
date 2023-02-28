@@ -72,6 +72,8 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 adapter?.setSiginUp2List(siginUp2List)
                 status = ""
                 binding.name2Tv.text = "筛选"
+                pageNum = 1
+                list.clear()
                 getList()
             }
         }
@@ -81,24 +83,39 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         adapterSelect2 = SelectTypeDataAdapter().apply {
             submitList(siginUp2List)
             setOnItemClickListener { _, _, position ->
-                if (siginUp2List[position].isMyselect) {
-                    for (item in siginUp2List) {
-                        item.isMyselect = false
-                    }
-                    status = ""
-                    binding.name2Tv.text = "筛选"
-                } else {
-                    for (item in siginUp2List) {
-                        item.isMyselect = false
-                    }
-                    siginUp2List[position].isMyselect = true
-                    status = "" + siginUp2List[position].dictValue
-                    binding.name2Tv.text = siginUp2List[position].dictLabel
+                for (item in siginUp2List) {
+                    item.isMyselect = false
                 }
+                siginUp2List[position].isMyselect = true
+                if(siginUp2List[position].dictValue.equals("-1")){
+
+                    status = ""
+//                    binding.name2Tv.text = "筛选"
+                }else{
+                    status = "" + siginUp2List[position].dictValue
+
+                }
+                binding.name2Tv.text = siginUp2List[position].dictLabel
+//                if (siginUp2List[position].isMyselect) {
+//                    for (item in siginUp2List) {
+//                        item.isMyselect = false
+//                    }
+//                    status = ""
+//                    binding.name2Tv.text = "筛选"
+//                } else {
+//                    for (item in siginUp2List) {
+//                        item.isMyselect = false
+//                    }
+//                    siginUp2List[position].isMyselect = true
+//                    status = "" + siginUp2List[position].dictValue
+//                    binding.name2Tv.text = siginUp2List[position].dictLabel
+//                }
 
                 adapterSelect2?.notifyDataSetChanged()
                 binding.select2Ll.visibility = View.GONE
                 LiveDataBus.get().with("selectLlGONE").postValue("1")
+                pageNum = 1
+                list.clear()
                 getList()
             }
         }
@@ -243,6 +260,8 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 siginUpList.addAll(data.list)
                 adapterSelect?.notifyDataSetChanged()
                 setSelect2Data(data.list[0].type)
+                pageNum = 1
+                list.clear()
                 getList()
             }
 
@@ -256,6 +275,10 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         if (!kv.getString("TypeModel", "").isNullOrEmpty()) {
             model = JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
             siginUp2List.clear()
+            var all:TypeData=TypeData()
+            all.dictLabel = "全部"
+            all.dictValue = "-1"
+            siginUp2List.add(all)
             when (type) {
                 1 -> {
                     siginUp2List.addAll(model.sys_zhuce)
