@@ -40,7 +40,7 @@ class UserSetActivity : BaseBindingActivity<ActivityUserSetBinding, BaseViewMode
         upFile(file, {
             avatar = it.fileName
             add(avatar,
-                userData!!.name,
+
                 {
                     userData?.avatar = avatar
                     kv.putString("userData", JSON.toJSONString(userData))
@@ -48,6 +48,7 @@ class UserSetActivity : BaseBindingActivity<ActivityUserSetBinding, BaseViewMode
                         Glide.with(it).load(PageRoutes.BaseUrl + avatar).error(R.drawable.ov_999)
                             .into(binding.img)
                     }
+                    LiveDataBus.get().with("Avatar").postValue("1")
                 },
                 { mViewModel.isShowLoading.value = false
                     toast("头像修改失败")},

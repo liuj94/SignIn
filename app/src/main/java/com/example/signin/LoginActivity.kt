@@ -12,7 +12,7 @@ import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.base.StatusBarUtil
 import com.example.signin.bean.Token
-import com.example.signin.bean.UserInfoData
+import com.example.signin.bean.User
 import com.example.signin.databinding.ActLoginBinding
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
@@ -48,19 +48,19 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                         super.onMySuccess(data)
                         kv.putString("token",data.token)
 
-                        OkGo.get<UserInfoData>(PageRoutes.Api_getUserInfo)
+                        OkGo.get<User>(PageRoutes.Api_getUserInfo)
                             .tag(PageRoutes.Api_getUserInfo)
                             .headers("Authorization",data.token)
-                            .execute(object : RequestCallback<UserInfoData>() {
+                            .execute(object : RequestCallback<User>() {
                                 override fun onSuccessNullData() {
                                     super.onSuccessNullData()
 
                                 }
 
-                                override fun onMySuccess(data: UserInfoData) {
+                                override fun onMySuccess(data: User) {
                                     super.onMySuccess(data)
 
-                                    if(data.user.userName.isNullOrEmpty()||data.user.phonenumber.isNullOrEmpty()){
+                                    if(data.userName.isNullOrEmpty()||data.phonenumber.isNullOrEmpty()){
                                         MaterialDialog(this@LoginActivity).show {
                                           customView(	//自定义弹窗
                                                 viewRes = R.layout.tc_user_add,//自定义文件
@@ -70,7 +70,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                                             ).apply {
                                               findViewById<TextView>(R.id.add).setOnClickListener {
                                                   add(findViewById<EditText>(R.id.phone).text.toString().trim(),
-                                                      findViewById<EditText>(R.id.userName).text.toString().trim(),JSON.toJSONString(data.user))
+                                                      findViewById<EditText>(R.id.userName).text.toString().trim(),JSON.toJSONString(data))
                                               }
                                           }
 
@@ -80,9 +80,9 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                                     }else{
 //                                        com.dylanc.longan.startActivity<MainHomeActivity>("id" to liveDataList[position].id)
 
-                                        data.user.name = binding.userName.text.toString().trim()
-                                        data.user.password = binding.password.text.toString().trim()
-                                        kv.putString("userData",JSON.toJSONString(data.user))
+                                        data.name = binding.userName.text.toString().trim()
+                                        data.password = binding.password.text.toString().trim()
+                                        kv.putString("userData",JSON.toJSONString(data))
                                         startActivity<MainHomeActivity>()
                                          finish()
 

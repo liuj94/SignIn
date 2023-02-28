@@ -38,10 +38,10 @@ class BannerFragment : BaseBindingFragment<ItemBannnerBinding, BaseViewModel>() 
         var data = JSON.parseObject(adListDataString, MeetingData::class.java)
 //    //totalAmount enterCount totalSignUpCount
         binding.name.text = data.name
-        binding.num1.text = ""+data.browseCount
-        binding.num2.text = ""+data.totalSignUpCount
+        binding.num1.text = ""+data.fanglenLiang
+        binding.num2.text = ""+data.renShu
 //        binding.num2.text = ""+data.userMeetingCount
-        binding.num3.text = ""+data.totalAmount
+        binding.num3.text = ""+data.amount
 
 
     }

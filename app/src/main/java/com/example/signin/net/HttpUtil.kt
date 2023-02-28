@@ -1,8 +1,6 @@
 import com.alibaba.fastjson.JSON
 import com.example.signin.PageRoutes
-import com.example.signin.bean.TypeData
-import com.example.signin.bean.TypeModel
-import com.example.signin.bean.UploadData
+import com.example.signin.bean.*
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
@@ -16,14 +14,16 @@ import java.util.HashMap
 inline fun <reified T> String.toBeanList(): List<T> = JSON.parseArray(this, T::class.java)
 inline fun <reified T> String.toBean(): T = JSON.parseObject(this, T::class.java)
 
-fun upFile(file: File,
+fun upFile(
+    file: File,
     success: ((data: UploadData) -> Unit)? = null,
     error: (() -> Unit)? = null,
-    finish: (() -> Unit)? = null) {
+    finish: (() -> Unit)? = null
+) {
 
     OkGo.post<UploadData>(PageRoutes.Api_upload)
         .tag(PageRoutes.Api_upload)
-        .params("file",file)
+        .params("file", file)
 //        .isMultipart(true)
 //            .headers("Content-Type", "application/x-www-form-urlencoded")
         .execute(object : RequestCallback<UploadData>() {
@@ -47,18 +47,19 @@ fun upFile(file: File,
             }
         })
 }
-fun add( avatar:String,
-         userName:String,
-         success: (() -> Unit)? = null,
-         error: (() -> Unit)? = null,
-         finish: (() -> Unit)? = null){
+
+fun add(
+    avatar: String,
+    success: (() -> Unit)? = null,
+    error: (() -> Unit)? = null,
+    finish: (() -> Unit)? = null
+) {
     val params = HashMap<String, String>()
     params["avatar"] = avatar
-    params["userName"] = userName
     OkGo.put<String>(PageRoutes.Api_editUser)
         .tag(PageRoutes.Api_editUser)
         .upJson(JSON.toJSONString(params))
-        .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token",""))
+        .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token", ""))
         .execute(object : RequestCallback<String>() {
 
 
@@ -87,16 +88,17 @@ fun add( avatar:String,
         })
 }
 
- fun sigin(
-    params:String,
+fun sigin(
+    params: String,
     success: ((String) -> Unit)? = null,
-                  error: (() -> Unit)? = null,
-                  finish: (() -> Unit)? = null) {
+    error: (() -> Unit)? = null,
+    finish: (() -> Unit)? = null
+) {
 
     OkGo.post<String>(PageRoutes.Api_sigin)
         .tag(PageRoutes.Api_sigin)
         .upJson(params)
-        .headers("Authorization",MMKV.mmkvWithID("MyDataMMKV").getString("token",""))
+        .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token", ""))
         .execute(object : RequestCallback<String>() {
 
             override fun onMySuccess(data: String) {
@@ -113,49 +115,80 @@ fun add( avatar:String,
 
             override fun onFinish() {
                 super.onFinish()
-               finish?.invoke()
+                finish?.invoke()
             }
 
 
         })
 }
 
-fun getDataType(type : String){
+fun getDataType(type: String, success: (() -> Unit)? = null) {
 
-    OkGo.get<List<TypeData>>(PageRoutes.Api_datatype+type)
+    OkGo.get<List<TypeData>>(PageRoutes.Api_datatype + type)
         .tag(PageRoutes.Api_datatype)
         .execute(object : RequestCallback<List<TypeData>>() {
             override fun onMySuccess(data: List<TypeData>?) {
                 super.onMySuccess(data)
                 var model: TypeModel
                 var kv = MMKV.mmkvWithID("MyDataMMKV")
-                var d = kv.getString("TypeModel","")
-                if(kv.getString("TypeModel","").isNullOrEmpty()){
+                var d = kv.getString("TypeModel", "")
+                if (kv.getString("TypeModel", "").isNullOrEmpty()) {
                     model = TypeModel()
-                }else{
-                    model = JSON.parseObject(kv.getString("TypeModel",""), TypeModel::class.java)
+                } else {
+                    model = JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
                 }
-                when (type){
-                    "sys_zhuce"->{ model.sys_zhuce = data }
-                    "sys_ruzhu"->{model.sys_ruzhu = data}
-                    "sys_huichang"->{model.sys_huichang = data}
-                    "sys_laicheng"->{model.sys_laicheng = data}
-                    "sys_liping"->{model.sys_liping = data}
-                    "sys_fancheng"->{model.sys_fancheng = data}
-                    "sys_canyin"->{model.sys_canyin = data}
-                    "user_meeting_sign_up_status"->{model.user_meeting_sign_up_status = data}
-                    "user_meeting_type"->{model.user_meeting_type = data}
+                when (type) {
+                    "sys_zhuce" -> {
+                        model.sys_zhuce = data
+                    }
+                    "sys_ruzhu" -> {
+                        model.sys_ruzhu = data
+                    }
+                    "sys_huichang" -> {
+                        model.sys_huichang = data
+                    }
+                    "sys_laicheng" -> {
+                        model.sys_laicheng = data
+                    }
+                    "sys_liping" -> {
+                        model.sys_liping = data
+                    }
+                    "sys_fancheng" -> {
+                        model.sys_fancheng = data
+                    }
+                    "sys_canyin" -> {
+                        model.sys_canyin = data
+                    }
+                    "user_meeting_sign_up_status" -> {
+                        model.user_meeting_sign_up_status = data
+                    }
+                    "user_meeting_type" -> {
+                        model.user_meeting_type = data
+                    }
 
-                    "sys_invoice_status"->{model.sys_invoice_status = data}
-                    "sys_invoice_type"->{model.sys_invoice_type = data}
-                    "transport_type"->{model.transport_type = data}
-                    "sys_examine_reason"->{model.sys_examine_reason = data}
+                    "sys_invoice_status" -> {
+                        model.sys_invoice_status = data
+                    }
+                    "sys_invoice_type" -> {
+                        model.sys_invoice_type = data
+                    }
+                    "transport_type" -> {
+                        model.transport_type = data
+                    }
+                    "sys_examine_reason" -> {
+                        model.sys_examine_reason = data
+                    }
 
-                    "pay_status"->{model.pay_status = data}
-                    "user_type"->{model.user_type = data}
+                    "pay_status" -> {
+                        model.pay_status = data
+                    }
+                    "user_type" -> {
+                        model.user_type = data
+                    }
 
                 }
-                kv.putString("TypeModel",JSON.toJSONString(model))
+                kv.putString("TypeModel", JSON.toJSONString(model))
+                success?.invoke()
             }
 
 
@@ -173,4 +206,32 @@ fun getDataType(type : String){
 
         })
 
+
+
+}
+fun getUserInfo(success: (() -> Unit)? = null) {
+    OkGo.get<User>(PageRoutes.Api_getUserInfo)
+        .tag(PageRoutes.Api_getUserInfo)
+        .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token", ""))
+        .execute(object : RequestCallback<User>() {
+            override fun onSuccessNullData() {
+                super.onSuccessNullData()
+
+            }
+
+            override fun onMySuccess(data: User) {
+                super.onMySuccess(data)
+                MMKV.mmkvWithID("MyDataMMKV")
+                    .putString("userData", JSON.toJSONString(data))
+                success?.invoke()
+            }
+
+
+            override fun onFinish() {
+                super.onFinish()
+
+            }
+
+
+        })
 }

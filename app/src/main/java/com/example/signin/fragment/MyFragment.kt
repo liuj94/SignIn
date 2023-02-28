@@ -24,6 +24,8 @@ import com.example.signin.databinding.FragMyBinding
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
+import getDataType
+import getUserInfo
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import upFile
@@ -49,40 +51,11 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
 
-        if (!kv.getString("userData", "").isNullOrEmpty()) {
-            userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
-            activity?.let {
-                Glide.with(it).load(PageRoutes.BaseUrl + userData?.avatar).error(R.drawable.ov_999)
-                    .into(binding.img)
-            }
-            binding.name.text = userData?.nickName
-            binding.phone.text = userData?.phonenumber
+        setUserData()
 
-
-        }
-        if(!kv.getString("TypeModel", "").isNullOrEmpty()){
-            var model =
-                JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
-
-            for (item in model.user_type){
-                if(userData?.userType.equals(item.dictValue)){
-                    binding.type.text = item.dictValue
-                }
-            }
-//            //            00系统用户01举办方用户02分享商用户03小程序主账号04会议账号05站点账号06签到账号
-//            when(userData?.userType){
-//                "00"->{binding.type.text = "系统用户"}
-//                "01"->{binding.type.text = "举办方用户"}
-//                "02"->{binding.type.text = "分享商用户"}
-//                "03"->{binding.type.text = "主账号"}
-//                "04"->{binding.type.text = "会议账号"}
-//                "05"->{binding.type.text = "站点账号"}
-//                "06"->{binding.type.text = "签到账号"}
-//            }
-        }
 
         binding.infoll.setOnClickListener {
-           startActivity<UserSetActivity>()
+            startActivity<UserSetActivity>()
         }
         binding.gjgy.setOnClickListener {
             com.dylanc.longan.startActivity<AboutActivity>()
@@ -122,7 +95,69 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
         binding.img.setOnClickListener {
             activity?.let { it1 -> takePhotoDialog(it1) { submitUserAvatar(it) } }
         }
+        LiveDataBus.get().with("Avatar", String::class.java)
+            .observeForever {
+                userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
+                activity?.let {
+                    Glide.with(it).load(PageRoutes.BaseUrl + userData?.avatar)
+                        .error(R.drawable.ov_999)
+                        .into(binding.img)
+                }
+            }
+        binding.refresh.setOnRefreshListener {
+            getUserInfo {
+                setUserData()
+            }
+            getData()
+        }
+        binding.refresh.setEnableLoadMore(false)
+    }
 
+    private fun setUserData() {
+        if (!kv.getString("userData", "").isNullOrEmpty()) {
+            userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
+            activity?.let {
+                Glide.with(it).load(PageRoutes.BaseUrl + userData?.avatar).error(R.drawable.ov_999)
+                    .into(binding.img)
+            }
+            binding.name.text = userData?.nickName
+            binding.phone.text = userData?.phonenumber
+
+
+        }
+        if (!kv.getString("TypeModel", "").isNullOrEmpty()) {
+            var model =
+                JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
+            if (model.user_type != null && model.user_type.size > 0) {
+                for (item in model.user_type) {
+                    if (userData?.userType.equals(item.dictValue)) {
+                        binding.type.text = item.dictLabel
+                    }
+                }
+            }
+
+//00系统用户01举办方用户02分享商用户03小程序主账号04会议账号05站点账号06签到账号
+//            when(userData?.userType){
+//                "00"->{binding.type.text = "系统用户"}
+//                "01"->{binding.type.text = "举办方用户"}
+//                "02"->{binding.type.text = "分享商用户"}
+//                "03"->{binding.type.text = "主账号"}
+//                "04"->{binding.type.text = "会议账号"}
+//                "05"->{binding.type.text = "站点账号"}
+//                "06"->{binding.type.text = "签到账号"}
+//            }
+        } else {
+            getDataType("user_type") {
+                var model =
+                    JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
+
+                for (item in model.user_type) {
+                    if (userData?.userType.equals(item.dictValue)) {
+                        binding.type.text = item.dictLabel
+                    }
+                }
+            }
+        }
     }
 
     private fun initFistToolAdapter(pageIcon: List<MeetingData>) {
@@ -132,7 +167,7 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
         for (data in pageIcon) {
             recommends.add("")
         }
-        if(pageIcon.size>0){
+        if (pageIcon.size > 0) {
             binding.banner.visibility = View.VISIBLE
             binding.viewPager.adapter = IconFristPagerAdapter(childFragmentManager, pageIcon)
             val commonNavigator = CommonNavigator(activity)
@@ -142,10 +177,9 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
             binding.toolFristMagicIndicator.navigator = commonNavigator
             ViewPagerHelper.bind(binding.toolFristMagicIndicator, binding.viewPager)
             binding.viewPager.pageMargin = 30
-        }else{
+        } else {
             binding.banner.visibility = View.GONE
         }
-
 
 
     }
@@ -176,6 +210,7 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
 
                 override fun onFinish() {
                     super.onFinish()
+                    binding.refresh.finishRefresh()
 
                 }
 
@@ -189,7 +224,7 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
         mViewModel.isShowLoading.value = true
         upFile(file, {
             avatar = it.fileName
-            add(avatar, userData!!.name,
+            add(avatar,
                 {
                     userData?.avatar = avatar
                     kv.putString("userData", JSON.toJSONString(userData))
@@ -198,8 +233,10 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
                             .into(binding.img)
                     }
                 },
-                { mViewModel.isShowLoading.value = false
-                    toast("头像修改失败")},
+                {
+                    mViewModel.isShowLoading.value = false
+                    toast("头像修改失败")
+                },
                 { mViewModel.isShowLoading.value = false })
         }, {
             toast("图片上传失败")

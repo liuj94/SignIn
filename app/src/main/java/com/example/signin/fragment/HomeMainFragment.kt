@@ -54,14 +54,13 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
     override fun initData() {
 
         binding.soubtn.setOnClickListener {
-            if(binding.sousll.visibility==View.VISIBLE){
+            if (binding.sousll.visibility == View.VISIBLE) {
                 binding.sousll.visibility = View.GONE
                 binding.et.setText("")
                 meetingName = ""
                 pageNum = 1
-                list.clear()
                 getData()
-            }else{
+            } else {
                 binding.sousll.visibility = View.VISIBLE
             }
 
@@ -75,7 +74,7 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
         binding.et.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 // 监听到回车键，会执行2次该方法。按下与松开
-                if(event.action == KeyEvent.ACTION_UP){
+                if (event.action == KeyEvent.ACTION_UP) {
                     meetingName = binding.et.text.toString().trim()
                     binding.et.setText(meetingName)
                     meetingName?.let {
@@ -155,10 +154,11 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
 
     private fun getData() {
         mViewModel.isShowLoading.value = true
-        var url = PageRoutes.Api_meetingList + "pageNum=" + pageNum + "&pageSize=10&name="+meetingName
+        var url =
+            PageRoutes.Api_meetingList + "pageNum=" + pageNum + "&pageSize=10&name=" + meetingName
         if (state != -1) {
             url =
-                PageRoutes.Api_meetingList + "status=" + state + "&pageNum=" + pageNum + "&pageSize=10&name="+meetingName
+                PageRoutes.Api_meetingList + "status=" + state + "&pageNum=" + pageNum + "&pageSize=10&name=" + meetingName
         }
 
         OkGo.get<List<MeetingData>>(url)
@@ -172,7 +172,9 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
 
                 override fun onMySuccess(data: List<MeetingData>) {
                     super.onMySuccess(data)
-
+                    if (pageNum == 1) {
+                        list.clear()
+                    }
                     list.addAll(data)
                     adapter?.notifyDataSetChanged()
                     if (list.size <= 0) {

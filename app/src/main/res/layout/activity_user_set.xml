@@ -142,7 +142,7 @@
                     android:textColor="#ff474747"
                     android:textSize="14sp" />
 
-                <ImageView
+                <com.example.signin.view.ImageViewPlus
                     android:id="@+id/img"
                     android:layout_width="28dp"
                     android:layout_height="28dp"

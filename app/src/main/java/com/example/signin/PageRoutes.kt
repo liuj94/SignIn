@@ -11,7 +11,8 @@ interface PageRoutes {
         //登录
         val Api_login = "$BaseUrlApi/login"
         val Api_editUser = "$BaseUrlApi/manager/system/user"
-        val Api_getUserInfo = "$BaseUrlApi/getInfo"
+//        val Api_getUserInfo = "$BaseUrlApi/getInfo"
+        val Api_getUserInfo = "$BaseUrlApi/manager/system/user/getInfo"
         //appStatus	-1,全部;1,进行中;2,过期
         val Api_meetingList = "$BaseUrlApi/manager/meeting/list?"
 

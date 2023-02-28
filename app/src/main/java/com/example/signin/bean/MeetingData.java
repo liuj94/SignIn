@@ -66,6 +66,34 @@ public class MeetingData implements Serializable {
      */
 
     private String searchValue;
+    private String fanglenLiang = "0";
+    private String renShu = "0";
+    private String amount = "0";
+
+    public String getFanglenLiang() {
+        return fanglenLiang;
+    }
+
+    public void setFanglenLiang(String fanglenLiang) {
+        this.fanglenLiang = fanglenLiang;
+    }
+
+    public String getRenShu() {
+        return renShu;
+    }
+
+    public void setRenShu(String renShu) {
+        this.renShu = renShu;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
     private String browseCount = "0";
 
     public String getBrowseCount() {

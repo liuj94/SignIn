@@ -21,6 +21,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </RelativeLayout>
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F3F4F8"
+        >
+    <com.scwang.smartrefresh.layout.header.ClassicsHeader
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <LinearLayout
         android:layout_margin="15dp"
         android:orientation="vertical"
@@ -33,7 +42,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <ImageView
+            <com.example.signin.view.ImageViewPlus
                 android:id="@+id/img"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
@@ -196,5 +205,5 @@ android:id="@+id/gjtc"
         </LinearLayout>
 
     </LinearLayout>
-
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </LinearLayout>
