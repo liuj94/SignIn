@@ -202,7 +202,7 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
                     binding.repeatMsg.setText( repeatMsg)
                     binding.repeatMsg.setSelection(repeatMsg.length)
 
-                    if(autoStatus.equals(1)){
+                    if(autoStatus.equals("1")){
                         binding.kg.setImageResource(R.mipmap.kaiguan2)
                         binding.kgtv.text = "(手动)"
                         binding.settime.visibility = View.GONE
