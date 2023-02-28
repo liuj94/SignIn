@@ -2,23 +2,18 @@ package com.example.signin
 
 
 import androidx.fragment.app.Fragment
-import com.alibaba.fastjson.JSON
 import com.dylanc.longan.toast
 
 import com.example.signin.adapter.MainViewPagerAdapter
 
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
-import com.example.signin.bean.TypeData
-import com.example.signin.bean.TypeModel
 import com.example.signin.databinding.ActivityMainBinding
 import com.example.signin.fragment.HomeMainFragment
 import com.example.signin.fragment.MyFragment
 
 
-import com.example.signin.net.RequestCallback
-import com.lzy.okgo.OkGo
-import com.lzy.okgo.model.Response
+import getDataType
 
 
 class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>() {
@@ -47,6 +42,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
         getDataType("sys_examine_reason")
 
         getDataType("pay_status")
+        getDataType("user_type")
 
     }
 
@@ -58,7 +54,6 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
         fragmentLists.add(homeFragment!!)
         myFragment = MyFragment()
         fragmentLists.add(myFragment!!)
-
         initAdapter(fragmentLists)
 
     }
@@ -70,22 +65,16 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
         binding.mViewPager.offscreenPageLimit = 4
         initListener()
 
-
-
     }
 
     override fun initListener() {
         binding.mMainBottomRg.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.mMainHomeRb -> {
-
                     binding.mViewPager?.currentItem = 0
-
                 }
                 R.id.mMainMineRb -> {
                     binding.mViewPager?.currentItem = 1
-
-
                 }
 
 
@@ -108,58 +97,59 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
         }
     }
 
-    fun getDataType(type : String){
-
-        OkGo.get<List<TypeData>>(PageRoutes.Api_datatype+type)
-            .tag(PageRoutes.Api_datatype)
-            .execute(object : RequestCallback<List<TypeData>>() {
-                override fun onMySuccess(data: List<TypeData>?) {
-                    super.onMySuccess(data)
-                    var model:TypeModel
-                   var d = kv.getString("TypeModel","")
-                    if(kv.getString("TypeModel","").isNullOrEmpty()){
-                        model = TypeModel()
-                    }else{
-                        model = JSON.parseObject(kv.getString("TypeModel",""), TypeModel::class.java)
-                    }
-                    when (type){
-                        "sys_zhuce"->{ model.sys_zhuce = data }
-                        "sys_ruzhu"->{model.sys_ruzhu = data}
-                        "sys_huichang"->{model.sys_huichang = data}
-                        "sys_laicheng"->{model.sys_laicheng = data}
-                        "sys_liping"->{model.sys_liping = data}
-                        "sys_fancheng"->{model.sys_fancheng = data}
-                        "sys_canyin"->{model.sys_canyin = data}
-                        "user_meeting_sign_up_status"->{model.user_meeting_sign_up_status = data}
-                        "user_meeting_type"->{model.user_meeting_type = data}
-
-                        "sys_invoice_status"->{model.sys_invoice_status = data}
-                        "sys_invoice_type"->{model.sys_invoice_type = data}
-                        "transport_type"->{model.transport_type = data}
-                        "sys_examine_reason"->{model.sys_examine_reason = data}
-
-                        "pay_status"->{model.pay_status = data}
-
-                    }
-                    kv.putString("TypeModel",JSON.toJSONString(model))
-                }
-
-
-                override fun onError(response: Response<List<TypeData>>) {
-                    super.onError(response)
-
-                    mViewModel.isShowLoading.value = false
-                }
-
-                override fun onFinish() {
-                    super.onFinish()
-
-                }
-
-
-            })
-
-    }
+//    fun getDataType(type : String){
+//
+//        OkGo.get<List<TypeData>>(PageRoutes.Api_datatype+type)
+//            .tag(PageRoutes.Api_datatype)
+//            .execute(object : RequestCallback<List<TypeData>>() {
+//                override fun onMySuccess(data: List<TypeData>?) {
+//                    super.onMySuccess(data)
+//                    var model:TypeModel
+//                   var d = kv.getString("TypeModel","")
+//                    if(kv.getString("TypeModel","").isNullOrEmpty()){
+//                        model = TypeModel()
+//                    }else{
+//                        model = JSON.parseObject(kv.getString("TypeModel",""), TypeModel::class.java)
+//                    }
+//                    when (type){
+//                        "sys_zhuce"->{ model.sys_zhuce = data }
+//                        "sys_ruzhu"->{model.sys_ruzhu = data}
+//                        "sys_huichang"->{model.sys_huichang = data}
+//                        "sys_laicheng"->{model.sys_laicheng = data}
+//                        "sys_liping"->{model.sys_liping = data}
+//                        "sys_fancheng"->{model.sys_fancheng = data}
+//                        "sys_canyin"->{model.sys_canyin = data}
+//                        "user_meeting_sign_up_status"->{model.user_meeting_sign_up_status = data}
+//                        "user_meeting_type"->{model.user_meeting_type = data}
+//
+//                        "sys_invoice_status"->{model.sys_invoice_status = data}
+//                        "sys_invoice_type"->{model.sys_invoice_type = data}
+//                        "transport_type"->{model.transport_type = data}
+//                        "sys_examine_reason"->{model.sys_examine_reason = data}
+//
+//                        "pay_status"->{model.pay_status = data}
+//                        "user_type"->{model.user_type = data}
+//
+//                    }
+//                    kv.putString("TypeModel",JSON.toJSONString(model))
+//                }
+//
+//
+//                override fun onError(response: Response<List<TypeData>>) {
+//                    super.onError(response)
+//
+//                    mViewModel.isShowLoading.value = false
+//                }
+//
+//                override fun onFinish() {
+//                    super.onFinish()
+//
+//                }
+//
+//
+//            })
+//
+//    }
 
 
 

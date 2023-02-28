@@ -1,5 +1,7 @@
 import com.alibaba.fastjson.JSON
 import com.example.signin.PageRoutes
+import com.example.signin.bean.TypeData
+import com.example.signin.bean.TypeModel
 import com.example.signin.bean.UploadData
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
@@ -116,4 +118,59 @@ fun add( avatar:String,
 
 
         })
+}
+
+fun getDataType(type : String){
+
+    OkGo.get<List<TypeData>>(PageRoutes.Api_datatype+type)
+        .tag(PageRoutes.Api_datatype)
+        .execute(object : RequestCallback<List<TypeData>>() {
+            override fun onMySuccess(data: List<TypeData>?) {
+                super.onMySuccess(data)
+                var model: TypeModel
+                var kv = MMKV.mmkvWithID("MyDataMMKV")
+                var d = kv.getString("TypeModel","")
+                if(kv.getString("TypeModel","").isNullOrEmpty()){
+                    model = TypeModel()
+                }else{
+                    model = JSON.parseObject(kv.getString("TypeModel",""), TypeModel::class.java)
+                }
+                when (type){
+                    "sys_zhuce"->{ model.sys_zhuce = data }
+                    "sys_ruzhu"->{model.sys_ruzhu = data}
+                    "sys_huichang"->{model.sys_huichang = data}
+                    "sys_laicheng"->{model.sys_laicheng = data}
+                    "sys_liping"->{model.sys_liping = data}
+                    "sys_fancheng"->{model.sys_fancheng = data}
+                    "sys_canyin"->{model.sys_canyin = data}
+                    "user_meeting_sign_up_status"->{model.user_meeting_sign_up_status = data}
+                    "user_meeting_type"->{model.user_meeting_type = data}
+
+                    "sys_invoice_status"->{model.sys_invoice_status = data}
+                    "sys_invoice_type"->{model.sys_invoice_type = data}
+                    "transport_type"->{model.transport_type = data}
+                    "sys_examine_reason"->{model.sys_examine_reason = data}
+
+                    "pay_status"->{model.pay_status = data}
+                    "user_type"->{model.user_type = data}
+
+                }
+                kv.putString("TypeModel",JSON.toJSONString(model))
+            }
+
+
+            override fun onError(response: Response<List<TypeData>>) {
+                super.onError(response)
+
+
+            }
+
+            override fun onFinish() {
+                super.onFinish()
+
+            }
+
+
+        })
+
 }

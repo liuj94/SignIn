@@ -18,6 +18,7 @@ import com.example.signin.adapter.MyCommonNavigatorAdapter2
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.MeetingData
+import com.example.signin.bean.TypeModel
 import com.example.signin.bean.User
 import com.example.signin.databinding.FragMyBinding
 import com.example.signin.net.RequestCallback
@@ -56,18 +57,30 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
             }
             binding.name.text = userData?.nickName
             binding.phone.text = userData?.phonenumber
-//            00系统用户01举办方用户02分享商用户03小程序主账号04会议账号05站点账号06签到账号
-            when(userData?.userType){
-                "00"->{binding.type.text = "系统用户"}
-                "01"->{binding.type.text = "举办方用户"}
-                "02"->{binding.type.text = "分享商用户"}
-                "03"->{binding.type.text = "主账号"}
-                "04"->{binding.type.text = "会议账号"}
-                "05"->{binding.type.text = "站点账号"}
-                "06"->{binding.type.text = "签到账号"}
-            }
+
 
         }
+        if(!kv.getString("TypeModel", "").isNullOrEmpty()){
+            var model =
+                JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
+
+            for (item in model.user_type){
+                if(userData?.userType.equals(item.dictValue)){
+                    binding.type.text = item.dictValue
+                }
+            }
+//            //            00系统用户01举办方用户02分享商用户03小程序主账号04会议账号05站点账号06签到账号
+//            when(userData?.userType){
+//                "00"->{binding.type.text = "系统用户"}
+//                "01"->{binding.type.text = "举办方用户"}
+//                "02"->{binding.type.text = "分享商用户"}
+//                "03"->{binding.type.text = "主账号"}
+//                "04"->{binding.type.text = "会议账号"}
+//                "05"->{binding.type.text = "站点账号"}
+//                "06"->{binding.type.text = "签到账号"}
+//            }
+        }
+
         binding.infoll.setOnClickListener {
            startActivity<UserSetActivity>()
         }

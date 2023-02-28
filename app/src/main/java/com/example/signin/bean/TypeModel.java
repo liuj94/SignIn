@@ -35,6 +35,15 @@ public class TypeModel {
 
     public List<TypeData> sys_zhuce;
     public List<TypeData> pay_status;
+    public List<TypeData> user_type;
+
+    public List<TypeData> getUser_type() {
+        return user_type;
+    }
+
+    public void setUser_type(List<TypeData> user_type) {
+        this.user_type = user_type;
+    }
 
     public List<TypeData> getPay_status() {
         return pay_status;
