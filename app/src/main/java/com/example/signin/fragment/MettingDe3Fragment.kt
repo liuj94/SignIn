@@ -169,6 +169,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         }
         binding.sous.setOnClickListener {
             pageNum = 1
+            nameMobile = binding.et.text.toString().trim()
             list.clear()
             getList()
             activity?.hideSoftInput()

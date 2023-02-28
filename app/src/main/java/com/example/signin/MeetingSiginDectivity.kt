@@ -70,6 +70,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         binding.sous.setOnClickListener {
             nameMobile = binding.et.text.toString().trim()
             binding.et.setText(nameMobile)
+            list.clear()
             getList()
             activity?.hideSoftInput()
         }
@@ -82,8 +83,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 nameMobile?.let {
                     binding.et.setSelection(it.length)
                 }
-
-
+                    list.clear()
                 getList()
                 activity?.hideSoftInput()}
             }
