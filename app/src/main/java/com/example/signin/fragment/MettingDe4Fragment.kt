@@ -378,7 +378,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         binding.roundProgress.progress = 0
         binding.roundProgress.maxProgress = 5000
         userData?.let {
-            if (it.userType.equals("00")){
+            if (it.userType.equals("03")){
                 binding.ztname.text = "当前对讲处于开启状态"
                 binding.ztiv.setImageResource(R.drawable.ov_3974f6)
                 binding.thstate.setImageResource(R.mipmap.tonghua3)
@@ -443,7 +443,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                         }
                         binding.roundProgress.maxProgress = 5000
                         userData?.let {
-                            if (it.userType.equals("00")){
+                            if (it.userType.equals("03")){
                                 binding.ztname.text = "当前对讲处于开启状态"
                                 binding.ztiv.setImageResource(R.drawable.ov_3974f6)
                                 binding.thstate.setImageResource(R.mipmap.tonghua3)

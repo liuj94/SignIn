@@ -3,6 +3,7 @@ package com.example.signin.fragment
 
 import add
 import android.os.Build
+import android.view.View
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import com.afollestad.materialdialogs.MaterialDialog
@@ -55,6 +56,17 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
             }
             binding.name.text = userData?.nickName
             binding.phone.text = userData?.phonenumber
+//            00系统用户01举办方用户02分享商用户03小程序主账号04会议账号05站点账号06签到账号
+            when(userData?.userType){
+                "00"->{binding.type.text = "系统用户"}
+                "01"->{binding.type.text = "举办方用户"}
+                "02"->{binding.type.text = "分享商用户"}
+                "03"->{binding.type.text = "主账号"}
+                "04"->{binding.type.text = "会议账号"}
+                "05"->{binding.type.text = "站点账号"}
+                "06"->{binding.type.text = "签到账号"}
+            }
+
         }
         binding.infoll.setOnClickListener {
            startActivity<UserSetActivity>()
@@ -107,16 +119,22 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
         for (data in pageIcon) {
             recommends.add("")
         }
+        if(pageIcon.size>0){
+            binding.banner.visibility = View.VISIBLE
+            binding.viewPager.adapter = IconFristPagerAdapter(childFragmentManager, pageIcon)
+            val commonNavigator = CommonNavigator(activity)
+            commonNavigator.isAdjustMode = false
+            commonNavigator.adapter =
+                MyCommonNavigatorAdapter2(activity, recommends, binding.viewPager, 15)
+            binding.toolFristMagicIndicator.navigator = commonNavigator
+            ViewPagerHelper.bind(binding.toolFristMagicIndicator, binding.viewPager)
+            binding.viewPager.pageMargin = 30
+        }else{
+            binding.banner.visibility = View.GONE
+        }
 
 
-        binding.viewPager.adapter = IconFristPagerAdapter(childFragmentManager, pageIcon)
-        val commonNavigator = CommonNavigator(activity)
-        commonNavigator.isAdjustMode = false
-        commonNavigator.adapter =
-            MyCommonNavigatorAdapter2(activity, recommends, binding.viewPager, 15)
-        binding.toolFristMagicIndicator.navigator = commonNavigator
-        ViewPagerHelper.bind(binding.toolFristMagicIndicator, binding.viewPager)
-        binding.viewPager.pageMargin = 30
+
     }
 
 

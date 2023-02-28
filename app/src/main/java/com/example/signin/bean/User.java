@@ -9,7 +9,7 @@ public class User {
     public String mobile= "";
     public String status;
     public String nickName= "";
-    //(00系统用户)n01举办方用户02分享商用户03小程序主账号04会议账号05站点账号06签到账号
+    //00系统用户01举办方用户02分享商用户03小程序主账号04会议账号05站点账号06签到账号
     public String userType = "00";
     public String password = "";
     public String deptName = "";
