@@ -27,7 +27,7 @@ public class SignUpUser implements Serializable {
     private String id;
     private String corporateName;
     private String supplement;
-    private String location;
+    private String location = "";
     private String meetingId;
     private String meetingName;
     private String signUpId;

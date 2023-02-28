@@ -1,7 +1,7 @@
 package com.example.signin.base
 
 import android.app.Activity
-import android.app.ProgressDialog
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +13,7 @@ import androidx.viewbinding.ViewBinding
 import com.dylanc.mmkv.MMKVOwner
 import com.dylanc.viewbinding.base.FragmentBinding
 import com.dylanc.viewbinding.base.FragmentBindingDelegate
+import com.example.signin.ProgressDialog
 import com.example.signin.obtainViewModel
 import com.tencent.mmkv.MMKV
 
@@ -34,8 +35,29 @@ abstract class BaseBindingFragment<VB : ViewBinding,T : BaseViewModel> : Fragmen
         super.onViewCreated(view, savedInstanceState)
          mProgressDialog = ProgressDialog(requireActivity())
         mViewModel.mContext = requireActivity()
+        initProgressDialog()
         initData()
         initListener()
+    }
+    fun initProgressDialog() {
+
+
+        mViewModel.isShowLoadingLiveData().observe(this) {
+            if (it) {
+                showLoading()
+            } else {
+                hideLoading()
+            }
+        }
+    }
+    fun showLoading() {
+        if (mProgressDialog?.isShowing == false)
+            mProgressDialog?.show()
+    }
+
+    fun hideLoading() {
+        if (mProgressDialog?.isShowing == true)
+            mProgressDialog?.dismiss()
     }
     abstract fun initData()
     fun initListener(){}

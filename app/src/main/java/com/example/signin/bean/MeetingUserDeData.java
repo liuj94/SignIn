@@ -37,7 +37,7 @@ public class MeetingUserDeData implements Serializable {
      */
 
     private String id;
-    private String personChargeName;
+    private String personChargeName = "";
 
     public String getPersonChargeName() {
         return personChargeName;
@@ -63,29 +63,29 @@ public class MeetingUserDeData implements Serializable {
         this.meetingSignUpLocation = meetingSignUpLocation;
     }
 
-    private String personChargeMobile;
+    private String personChargeMobile = "";
     private int userId;
     private int meetingId;
-    private String name;
-    private String mobile;
-    private String avatar;
-    private String corporateName;
+    private String name= "";
+    private String mobile = "";
+    private String avatar= "";
+    private String corporateName= "";
     private int orderId;
-    private String originatingTrip;
+    private String originatingTrip= "";
     private UserMeetingTrip backTrackingTrip;
-    private String userMeetingAccommodation;
-    private String meetingSignUpLocation;
-    private String userSignUpLogDTOS;
+    private String userMeetingAccommodation= "";
+    private String meetingSignUpLocation= "";
+    private String userSignUpLogDTOS= "";
     private UserOrderBean userOrder;
-    private String startTime;
+    private String startTime= "";
     private int travelStatus;
     private int backTravelStatus;
     private int lodgingStatus;
     private int userMeetingType;
     private UserMeetingTrip userMeetingTrip;
-    private String backUserMeetingTrip;
+    private String backUserMeetingTrip= "";
     private UserMeetingGift userMeetingGift;
-    private String userMeetingTypeName;
+    private String userMeetingTypeName= "";
     private List<MeetingSignUpsBean> meetingSignUps;
 
     public String getId() {

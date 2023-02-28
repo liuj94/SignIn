@@ -98,12 +98,20 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             if (state_huichang.status.equals("1")) {
                 gotoSigin(state_huichang,4)
 //                startActivity<SiginReActivity>("type" to 4, "data" to state_huichang)
+            }else{
+                if(state_huichang.location.equals("")){
+                    gotoSigin(state_huichang,4)
+                }
             }
         }
         binding.itemCyxi.zcBtn.setOnClickListener {
             if (state_chanyin.status.equals("1")) {
                 gotoSigin(state_chanyin,5)
 //                startActivity<SiginReActivity>("type" to 5, "data" to state_chanyin)
+            }else{
+                if(state_chanyin.location.equals("")){
+                    gotoSigin(state_chanyin,5)
+                }
             }
         }
         binding.itemFcxx.lcBtn.setOnClickListener {
@@ -386,7 +394,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemRzxx.ddBtn
                         )
                         for (list in model.sys_ruzhu) {
-                            if (list.dictValue.equals(item.userMeetingSignUp.status)) {
+                            if (list.dictValue.equals("" +item.userMeetingSignUp.status)) {
                                 state_ruzhu.status = list.dictValue
                                 if (list.dictValue.equals("1")) {
                                     binding.itemRzxx.location.text =
@@ -413,6 +421,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     item.meetingSignUpLocation.location?.let {
                         binding.itemRzxx.location.text =
                             "房间号：" + item.meetingSignUpLocation.location
+                        state_ruzhu.location = item.meetingSignUpLocation.location
                     }
 
                     binding.itemRzxx.day.text = "" + daydiff(
@@ -444,7 +453,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemHcqd.zcBtn
                         )
                         for (list in model.sys_huichang) {
-                            if (list.dictValue.equals(item.userMeetingSignUp.status)) {
+                            if (list.dictValue.equals("" +item.userMeetingSignUp.status)) {
                                 state_huichang.status = list.dictValue
                                 if (list.dictValue.equals("1")) {
                                     binding.itemHcqd.location.text =
@@ -477,6 +486,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     item.meetingSignUpLocation.location?.let {
                         binding.itemHcqd.location.text =
                             "座位号：" + item.meetingSignUpLocation.location
+                        state_huichang.location = item.meetingSignUpLocation.location
                     }
 
                     //                                binding.itemHcqd.location.text = "请到"+item.meetingSignUpLocation.location+"号桌"
@@ -500,7 +510,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemCyxi.zcBtn
                         )
                         for (list in model.sys_canyin) {
-                            if (list.dictValue.equals(item.userMeetingSignUp.status)) {
+                            if (list.dictValue.equals("" +item.userMeetingSignUp.status)) {
                                 state_chanyin.status = list.dictValue
                                 if (list.dictValue.equals("1")) {
                                     binding.itemCyxi.location.text =
@@ -532,6 +542,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     item.meetingSignUpLocation.location?.let {
                         binding.itemCyxi.location.text =
                             "请到" + it + "号桌"
+                        state_chanyin.location = item.meetingSignUpLocation.location
                     }
                     state_chanyin.meetingId = item.meetingSignUpLocation.meetingId
                     state_chanyin.signUpId = item.meetingSignUpLocation.signUpId
