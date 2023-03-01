@@ -22,6 +22,7 @@ public class SignUpUser implements Serializable {
 
 //1开启 2关闭 自动
     private String autoStatus = "2";
+    private String voiceStatus = "2";
     private String name;
     private int timeLong = 3;
     private String id;
@@ -39,6 +40,14 @@ public class SignUpUser implements Serializable {
     private String okMsg = "签到成功";
     private String repeatMsg = "重复签到";
     private String success = "";
+
+    public String getVoiceStatus() {
+        return voiceStatus;
+    }
+
+    public void setVoiceStatus(String voiceStatus) {
+        this.voiceStatus = voiceStatus;
+    }
 
     public String getSuccess() {
         return success;

@@ -84,14 +84,17 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
             timeState = 4
         }
         binding.kg1.setOnClickListener {
-            if(voiceStatus.equals("2")){
-                voiceStatus = "1"
+
+            if(speechStatus.equals("2")){
+                speechStatus = "1"
                 binding.kg1.setImageResource(R.mipmap.kaiguan1)
+                binding.yuying.visibility = View.VISIBLE
             }else{
-                voiceStatus = "2"
+                speechStatus = "2"
                 binding.kg1.setImageResource(R.mipmap.kaiguan2)
+                binding.yuying.visibility = View.GONE
             }
-            setState()
+            setState(false)
         }
         binding.kg2.setOnClickListener {
             if(shockStatus.equals("2")){
@@ -174,7 +177,7 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
 
     var timeLong:String = "3"
     var timeState:Int = 1
-    var voiceStatus:String = "2"
+    var speechStatus:String = "2"
 
     fun getDate(){
 
@@ -191,7 +194,7 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
                     autoStatus = ""+data.autoStatus
                     //shockStatus	1开启 2关闭 震动
                     shockStatus = ""+data.shockStatus
-                    voiceStatus =  ""+data.voiceStatus
+                    speechStatus =  ""+data.speechStatus
 
                     timeLong = ""+data.timeLong
 
@@ -231,10 +234,12 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
                     }else{
                         binding.kg2.setImageResource(R.mipmap.kaiguan2)
                     }
-                    if(voiceStatus.equals("1")){
+                    if(speechStatus.equals("1")){
                         binding.kg1.setImageResource(R.mipmap.kaiguan1)
+                        binding.yuying.visibility = View.VISIBLE
                     }else{
                         binding.kg1.setImageResource(R.mipmap.kaiguan2)
+                        binding.yuying.visibility = View.GONE
                     }
                 }
 
@@ -266,12 +271,12 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
         tv.setTextColor(Color.parseColor("#ffffff"))
         tv.setBackgroundResource(R.drawable.shape_bg_3974f6_17)
     }
-    fun setState(){
+    fun setState(re:Boolean?=true){
 
         val params = HashMap<String, String>()
         params["id"] = id
         params["autoStatus"] = autoStatus
-        params["voiceStatus"] = voiceStatus
+        params["speechStatus"] = speechStatus
         params["timeLong"] = timeLong
         params["shockStatus"] = shockStatus
         params["repeatMsg"] = repeatMsg
@@ -287,7 +292,15 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
 
                 override fun onSuccess(response: Response<String>?) {
                     super.onSuccess(response)
-                    getDate()
+                    re?.let {
+                        if (it){
+                            getDate()
+                        }
+                    }
+                    if(re==null){
+                        getDate()
+                    }
+
                 }
 
                 override fun onError(response: Response<String>) {

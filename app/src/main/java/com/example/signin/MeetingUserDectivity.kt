@@ -334,14 +334,14 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             item.meetingSignUpLocation.startTime
                         ) + "-" + getDateStr("HH:mm", item.meetingSignUpLocation.endTime)
                     }
-                    state_zhuche.meetingId = item.meetingSignUpLocation.meetingId
-                    state_zhuche.signUpId = item.meetingSignUpLocation.signUpId
-                    state_zhuche.signUpLocationId = item.meetingSignUpLocation.id
+//                    state_zhuche.meetingId = item.meetingSignUpLocation.meetingId
+//                    state_zhuche.signUpId = item.meetingSignUpLocation.signUpId
+//                    state_zhuche.signUpLocationId = item.meetingSignUpLocation.id
                     state_zhuche.userMeetingId = data.id
-                    state_zhuche.failedMsg = item.meetingSignUpLocation.failedMsg
-                    state_zhuche.okMsg = item.meetingSignUpLocation.okMsg
-                    state_zhuche.repeatMsg = item.meetingSignUpLocation.repeatMsg
-
+//                    state_zhuche.failedMsg = item.meetingSignUpLocation.failedMsg
+//                    state_zhuche.okMsg = item.meetingSignUpLocation.okMsg
+//                    state_zhuche.repeatMsg = item.meetingSignUpLocation.repeatMsg
+                    eData(state_zhuche,item.meetingSignUpLocation)
 
                 }
                 6 -> {
@@ -373,14 +373,14 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         item.meetingSignUpLocation.startTime
                     ) + "-" + getDateStr("HH:mm", item.meetingSignUpLocation.endTime)
 
-                    state_liwu.meetingId = item.meetingSignUpLocation.meetingId
-                    state_liwu.signUpId = item.meetingSignUpLocation.signUpId
-                    state_liwu.signUpLocationId = item.meetingSignUpLocation.id
+//                    state_liwu.meetingId = item.meetingSignUpLocation.meetingId
+//                    state_liwu.signUpId = item.meetingSignUpLocation.signUpId
+//                    state_liwu.signUpLocationId = item.meetingSignUpLocation.id
                     state_liwu.userMeetingId = data.id
-                    state_liwu.failedMsg = item.meetingSignUpLocation.failedMsg
-                    state_liwu.okMsg = item.meetingSignUpLocation.okMsg
-                    state_liwu.repeatMsg = item.meetingSignUpLocation.repeatMsg
-
+//                    state_liwu.failedMsg = item.meetingSignUpLocation.failedMsg
+//                    state_liwu.okMsg = item.meetingSignUpLocation.okMsg
+//                    state_liwu.repeatMsg = item.meetingSignUpLocation.repeatMsg
+                    eData(state_liwu,item.meetingSignUpLocation)
                 }
                 3 -> {
                     //入住签到
@@ -429,13 +429,14 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         item.meetingSignUpLocation.endTime
                     ) + "天"
 
-                    state_ruzhu.meetingId = item.meetingSignUpLocation.meetingId
-                    state_ruzhu.signUpId = item.meetingSignUpLocation.signUpId
-                    state_ruzhu.signUpLocationId = item.meetingSignUpLocation.id
+//                    state_ruzhu.meetingId = item.meetingSignUpLocation.meetingId
+//                    state_ruzhu.signUpId = item.meetingSignUpLocation.signUpId
+//                    state_ruzhu.signUpLocationId = item.meetingSignUpLocation.id
                     state_ruzhu.userMeetingId = data.id
-                    state_ruzhu.failedMsg = item.meetingSignUpLocation.failedMsg
-                    state_ruzhu.okMsg = item.meetingSignUpLocation.okMsg
-                    state_ruzhu.repeatMsg = item.meetingSignUpLocation.repeatMsg
+//                    state_ruzhu.failedMsg = item.meetingSignUpLocation.failedMsg
+//                    state_ruzhu.okMsg = item.meetingSignUpLocation.okMsg
+//                    state_ruzhu.repeatMsg = item.meetingSignUpLocation.repeatMsg
+                    eData(state_ruzhu,item.meetingSignUpLocation)
 
                 }
                 4 -> {
@@ -491,13 +492,14 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
                     //                                binding.itemHcqd.location.text = "请到"+item.meetingSignUpLocation.location+"号桌"
 
-                    state_huichang.meetingId = item.meetingSignUpLocation.meetingId
-                    state_huichang.signUpId = item.meetingSignUpLocation.signUpId
-                    state_huichang.signUpLocationId = item.meetingSignUpLocation.id
+//                    state_huichang.meetingId = item.meetingSignUpLocation.meetingId
+//                    state_huichang.signUpId = item.meetingSignUpLocation.signUpId
+//                    state_huichang.signUpLocationId = item.meetingSignUpLocation.id
                     state_huichang.userMeetingId = data.id
-                    state_huichang.failedMsg = item.meetingSignUpLocation.failedMsg
-                    state_huichang.okMsg = item.meetingSignUpLocation.okMsg
-                    state_huichang.repeatMsg = item.meetingSignUpLocation.repeatMsg
+//                    state_huichang.failedMsg = item.meetingSignUpLocation.failedMsg
+//                    state_huichang.okMsg = item.meetingSignUpLocation.okMsg
+//                    state_huichang.repeatMsg = item.meetingSignUpLocation.repeatMsg
+                    eData(state_huichang,item.meetingSignUpLocation)
 
                 }
                 5 -> {
@@ -544,13 +546,14 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             "请到" + it + "号桌"
                         state_chanyin.location = item.meetingSignUpLocation.location
                     }
-                    state_chanyin.meetingId = item.meetingSignUpLocation.meetingId
-                    state_chanyin.signUpId = item.meetingSignUpLocation.signUpId
-                    state_chanyin.signUpLocationId = item.meetingSignUpLocation.id
+//                    state_chanyin.meetingId = item.meetingSignUpLocation.meetingId
+//                    state_chanyin.signUpId = item.meetingSignUpLocation.signUpId
+//                    state_chanyin.signUpLocationId = item.meetingSignUpLocation.id
                     state_chanyin.userMeetingId = data.id
-                    state_chanyin.failedMsg = item.meetingSignUpLocation.failedMsg
-                    state_chanyin.okMsg = item.meetingSignUpLocation.okMsg
-                    state_chanyin.repeatMsg = item.meetingSignUpLocation.repeatMsg
+//                    state_chanyin.failedMsg = item.meetingSignUpLocation.failedMsg
+//                    state_chanyin.okMsg = item.meetingSignUpLocation.okMsg
+//                    state_chanyin.repeatMsg = item.meetingSignUpLocation.repeatMsg
+                    eData(state_chanyin,item.meetingSignUpLocation)
 
                 }
                 7 -> {
@@ -603,13 +606,14 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         }
 
 
-                        state_fancheng.meetingId = item.meetingSignUpLocation.meetingId
-                        state_fancheng.signUpId = item.meetingSignUpLocation.signUpId
-                        state_fancheng.signUpLocationId = item.meetingSignUpLocation.id
+//                        state_fancheng.meetingId = item.meetingSignUpLocation.meetingId
+//                        state_fancheng.signUpId = item.meetingSignUpLocation.signUpId
+//                        state_fancheng.signUpLocationId = item.meetingSignUpLocation.id
                         state_fancheng.userMeetingId = data.id
-                        state_fancheng.failedMsg = item.meetingSignUpLocation.failedMsg
-                        state_fancheng.okMsg = item.meetingSignUpLocation.okMsg
-                        state_fancheng.repeatMsg = item.meetingSignUpLocation.repeatMsg
+//                        state_fancheng.failedMsg = item.meetingSignUpLocation.failedMsg
+//                        state_fancheng.okMsg = item.meetingSignUpLocation.okMsg
+//                        state_fancheng.repeatMsg = item.meetingSignUpLocation.repeatMsg
+                        eData(state_fancheng,item.meetingSignUpLocation)
                     }
                 }
                 2 -> {
@@ -663,13 +667,14 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
                             }
                         }
-                        state_laicheng.meetingId = item.meetingSignUpLocation.meetingId
-                        state_laicheng.signUpId = item.meetingSignUpLocation.signUpId
-                        state_laicheng.signUpLocationId = item.meetingSignUpLocation.id
+//                        state_laicheng.meetingId = item.meetingSignUpLocation.meetingId
+//                        state_laicheng.signUpId = item.meetingSignUpLocation.signUpId
+//                        state_laicheng.signUpLocationId = item.meetingSignUpLocation.id
                         state_laicheng.userMeetingId = data.id
-                        state_laicheng.failedMsg = item.meetingSignUpLocation.failedMsg
-                        state_laicheng.okMsg = item.meetingSignUpLocation.okMsg
-                        state_laicheng.repeatMsg = item.meetingSignUpLocation.repeatMsg
+//                        state_laicheng.failedMsg = item.meetingSignUpLocation.failedMsg
+//                        state_laicheng.okMsg = item.meetingSignUpLocation.okMsg
+//                        state_laicheng.repeatMsg = item.meetingSignUpLocation.repeatMsg
+                        eData(state_laicheng,item.meetingSignUpLocation)
                     }
                 }
             }
@@ -748,5 +753,15 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         aCalendar.time = oDate
         val day2 = aCalendar[Calendar.DAY_OF_YEAR]
         return day2 - day1
+    }
+
+    fun eData(d1:SignUpUser,d2: MeetingUserDeData.MeetingSignUpsBean.MeetingSignUpLocationBean){
+        d1.meetingId = d2.meetingId
+        d1.signUpId = d2.signUpId
+        d1.signUpLocationId = d2.id
+        d1.failedMsg = d2.failedMsg
+        d1.okMsg = d2.okMsg
+        d1.repeatMsg = d2.repeatMsg
+        d1.voiceStatus = d2.speechStatus
     }
 }

@@ -1683,6 +1683,7 @@ public class MeetingUserDeData implements Serializable {
             private int status;
             private int voiceStatus;
             private String location = "";
+            private String speechStatus = "";
             private String startTime;
             private String endTime;
             private String address = "";
@@ -1715,6 +1716,14 @@ public class MeetingUserDeData implements Serializable {
             private String personChargeUsername;
             private String userType;
             private String userId;
+
+            public String getSpeechStatus() {
+                return speechStatus;
+            }
+
+            public void setSpeechStatus(String speechStatus) {
+                this.speechStatus = speechStatus;
+            }
 
             public String getSearchValue() {
                 return searchValue;

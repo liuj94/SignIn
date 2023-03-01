@@ -55,6 +55,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         intent.getStringExtra("okMsg")?.let { okMsg = it }
         intent.getStringExtra("failedMsg")?.let { failedMsg = it }
         intent.getStringExtra("repeatMsg")?.let { repeatMsg = it }
+        intent.getStringExtra("voiceStatus")?.let { voiceStatus = it }
         intent.getIntExtra("timeLong",3)?.let { timeLong = it }
         intent.getIntExtra("showType",0)?.let { showType = it }
         binding.recyclerview.layoutManager = LinearLayoutManager(activity)
@@ -69,7 +70,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         binding.recyclerview.adapter = adapter
         binding.sous.setOnClickListener {
             nameMobile = binding.et.text.toString().trim()
-            binding.et.setText(nameMobile)
+//            binding.et.setText(nameMobile)
             list.clear()
             getList()
             activity?.hideSoftInput()
@@ -287,6 +288,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     var failedMsg:String = "签到失败"
     var okMsg:String = "签到成功"
     var repeatMsg:String = "重复签到"
+    var voiceStatus:String = "2"
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode==1000){
@@ -306,6 +308,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 signUpUser.okMsg = okMsg
                 signUpUser.failedMsg = failedMsg
                 signUpUser.repeatMsg = repeatMsg
+                signUpUser.voiceStatus = voiceStatus
                 if(autoStatus.equals("2")){
                     if(showType==3){
                         com.dylanc.longan.startActivity<SiginReActivity>(

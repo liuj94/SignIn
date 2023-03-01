@@ -109,6 +109,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                      okMsg = selectList2[position].okMsg
                      failedMsg = selectList2[position].failedMsg
                      repeatMsg = selectList2[position].repeatMsg
+                    voiceStatus = selectList2[position].speechStatus
                     timeLong = selectList2[position].timeLong
                     siginlocationId = "" + selectList2[position].id
                     binding.name2Tv.text = selectList2[position].name
@@ -266,6 +267,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
     var failedMsg:String = "签到失败"
     var okMsg:String = "签到成功"
     var repeatMsg:String = "重复签到"
+    var voiceStatus:String = "2"
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode==1000){
@@ -285,6 +287,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                 signUpUser.okMsg = okMsg
                 signUpUser.failedMsg = failedMsg
                 signUpUser.repeatMsg = repeatMsg
+                signUpUser.voiceStatus = voiceStatus
 
                 if(autoStatus.equals("2")){
                     if(type==3){
@@ -423,6 +426,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                         okMsg = selectList2[0].okMsg
                         failedMsg = selectList2[0].failedMsg
                         repeatMsg = selectList2[0].repeatMsg
+                        voiceStatus = selectList2[0].speechStatus
                         timeLong = selectList2[0].timeLong
                         siginlocationId = "" + selectList2[0].id
                         binding.name2Tv.text = selectList2[0].name
@@ -445,8 +449,10 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                         userData?.let {
                             if (it.userType.equals("03")){
                                 binding.ztname.text = "当前对讲处于开启状态"
+                                binding.ztname.setTextColor(Color.parseColor("#3974f6"))
                                 binding.ztiv.setImageResource(R.drawable.ov_3974f6)
                                 binding.thstate.setImageResource(R.mipmap.tonghua3)
+                                binding.roundProgress.progress = 5000
                             }
                         }
                     }

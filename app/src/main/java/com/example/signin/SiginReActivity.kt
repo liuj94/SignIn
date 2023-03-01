@@ -30,6 +30,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
     var failedMsg:String = "签到失败"
     var okMsg:String = "签到成功"
     var repeatMsg:String = "重复签到"
+    var voiceStatus:String = "2"
     override fun initData() {
         intent.getIntExtra("type", 0)?.let { type = it }
         intent.getSerializableExtra("data")?.let {
@@ -46,6 +47,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
             binding.companyName.text = encode(it.corporateName)
             binding.type.text = encode(it.userMeetingTypeName)
             timeLong = it.timeLong
+            voiceStatus = it.voiceStatus
         }
 //        1 注册签到2 来程签到3 入住签到4 会场签到5 餐饮签到6 礼品签到7 返程签到
         binding.numEt.visibility = View.INVISIBLE
@@ -84,7 +86,9 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
             if (binding.numEt.text.toString().trim().equals("")) {
                 if (type == 3) {
                     toast("请输入房号")
-                } else {
+                } else if (type == 5) {
+                    toast("请输入桌号")
+                }else{
                     toast("请输入座位号")
                 }
 
@@ -123,7 +127,11 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                         } else {
                             binding.submit.text = "返回"
                         }
+                        if(it.voiceStatus.equals("1")){
+                            LiveDataBus.get().with("voiceStatus").postValue("1")
+                        }
                     }
+
 
 
                 }

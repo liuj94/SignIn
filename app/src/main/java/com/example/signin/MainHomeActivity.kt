@@ -22,7 +22,6 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
 
-
     override fun initData() {
 
         getFragmentLists()
@@ -43,7 +42,10 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
         getDataType("pay_status")
         getDataType("user_type")
-
+        LiveDataBus.get().with("voiceStatus", String::class.java)
+            .observeForever {
+             //语音播报
+            }
     }
 
     var homeFragment: HomeMainFragment? = null
@@ -82,9 +84,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
         }
 
 
-
     }
-
 
 
     private var exitTime: Long = 0
@@ -150,7 +150,6 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 //            })
 //
 //    }
-
 
 
 }

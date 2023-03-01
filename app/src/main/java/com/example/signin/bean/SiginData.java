@@ -125,6 +125,7 @@ public class SiginData implements Serializable {
     private String personChargeMobile;
     private int status;
     private int voiceStatus;
+    private String speechStatus = "2";
     private String location;
     private String startTime;
     private String endTime;
@@ -160,6 +161,14 @@ public class SiginData implements Serializable {
     private String personChargeUsername;
     private String userType;
     private String userId;
+
+    public String getSpeechStatus() {
+        return speechStatus;
+    }
+
+    public void setSpeechStatus(String speechStatus) {
+        this.speechStatus = speechStatus;
+    }
 
     public String getBeUserCount() {
         return beUserCount;

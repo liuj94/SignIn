@@ -79,6 +79,7 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
                         "name" to ""+list[position].name,"params" to ""+params,
                         "meetingid" to ""+meetingid,
                         "autoStatus" to ""+list[position].autoStatus,
+                        "voiceStatus" to ""+list[position].speechStatus,
                         "timeLong" to list[position].timeLong,
                         "showType" to list[position].type,
                         "okMsg" to ""+list[position].okMsg,
