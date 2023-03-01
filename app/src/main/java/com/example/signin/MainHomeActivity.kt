@@ -1,18 +1,15 @@
 package com.example.signin
 
 
+import android.media.MediaPlayer
 import androidx.fragment.app.Fragment
 import com.dylanc.longan.toast
-
 import com.example.signin.adapter.MainViewPagerAdapter
-
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.databinding.ActivityMainBinding
 import com.example.signin.fragment.HomeMainFragment
 import com.example.signin.fragment.MyFragment
-
-
 import getDataType
 
 
@@ -20,7 +17,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
-
+var  mRingPlayer :MediaPlayer? = null
 
     override fun initData() {
 
@@ -44,7 +41,22 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
         getDataType("user_type")
         LiveDataBus.get().with("voiceStatus", String::class.java)
             .observeForever {
+                if (mRingPlayer != null){
+                    mRingPlayer?.stop();
+                    mRingPlayer?.release();
+                    mRingPlayer = null;
+                }
              //语音播报
+                if(it.equals("1")){
+
+                    mRingPlayer = MediaPlayer.create(this, R.raw.cg);
+                    mRingPlayer?.start();
+
+                }else{
+                    mRingPlayer = MediaPlayer.create(this, R.raw.cf);
+                    mRingPlayer?.start();
+                }
+
             }
     }
 

@@ -88,11 +88,11 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
             if(speechStatus.equals("2")){
                 speechStatus = "1"
                 binding.kg1.setImageResource(R.mipmap.kaiguan1)
-                binding.yuying.visibility = View.VISIBLE
+//                binding.yuying.visibility = View.VISIBLE
             }else{
                 speechStatus = "2"
                 binding.kg1.setImageResource(R.mipmap.kaiguan2)
-                binding.yuying.visibility = View.GONE
+//                binding.yuying.visibility = View.GONE
             }
             setState(false)
         }
@@ -236,10 +236,10 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
                     }
                     if(speechStatus.equals("1")){
                         binding.kg1.setImageResource(R.mipmap.kaiguan1)
-                        binding.yuying.visibility = View.VISIBLE
+//                        binding.yuying.visibility = View.VISIBLE
                     }else{
                         binding.kg1.setImageResource(R.mipmap.kaiguan2)
-                        binding.yuying.visibility = View.GONE
+//                        binding.yuying.visibility = View.GONE
                     }
                 }
 

@@ -231,7 +231,7 @@
                     android:src="@mipmap/kaiguan1" />
             </LinearLayout>
             <LinearLayout
-                android:id="@+id/yuying"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -253,6 +253,7 @@
                         android:textSize="12sp"
                         />
                     <EditText
+                        android:editable="false"
                         android:id="@+id/okMsg"
                         android:singleLine="true"
                         android:layout_marginLeft="10dp"
@@ -285,6 +286,7 @@
                         android:textSize="12sp"
                         />
                     <EditText
+                        android:editable="false"
                         android:id="@+id/failedMsg"
                         android:singleLine="true"
                         android:layout_marginLeft="10dp"
@@ -317,6 +319,7 @@
                         android:textSize="12sp"
                         />
                     <EditText
+                        android:editable="false"
                         android:id="@+id/repeatMsg"
                         android:singleLine="true"
                         android:layout_marginLeft="10dp"
