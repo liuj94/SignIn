@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.os.Bundle
 
 import android.view.MotionEvent
+import android.view.WindowManager
 
 import android.view.inputmethod.InputMethodManager
 
@@ -36,7 +37,7 @@ abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActi
         startPendingTransition()
         initTranslucentStatus()
         setContentViewWithBinding()
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         mViewModel.mContext = this
 
         initProgressDialog()

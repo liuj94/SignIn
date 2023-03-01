@@ -36,31 +36,31 @@ public class UserMeetingTrip implements Serializable {
      * userMeetingId : 0
      */
 
-    private String beginCreateDate;
-    private String beginCreateTime;
-    private String createBy;
-    private String createTime;
-    private String dateFormat;
+    private String beginCreateDate= "";
+    private String beginCreateTime= "";
+    private String createBy= "";
+    private String createTime= "";
+    private String dateFormat= "";
     private int dateType;
     private String endAddress="";
     private String endCity="";
-    private String endCreateDate;
-    private String endCreateTime;
-    private String endDate;
-    private String endTime;
-    private String groupBy;
+    private String endCreateDate= "";
+    private String endCreateTime= "";
+    private String endDate= "";
+    private String endTime= "";
+    private String groupBy= "";
     private int id;
     private String remark="";
-    private String searchValue;
+    private String searchValue= "";
     private int signUpId;
     private String startAddress="";
     private String startCity="";
-    private String startDate;
-    private String startTime;
-    private String transport;
+    private String startDate= "";
+    private String startTime= "";
+    private String transport= "";
     private int type;
-    private String updateBy;
-    private String updateTime;
+    private String updateBy= "";
+    private String updateTime= "";
     private int userId;
     private int userMeetingId;
 

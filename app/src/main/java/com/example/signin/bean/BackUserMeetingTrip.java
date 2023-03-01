@@ -40,34 +40,34 @@ public class BackUserMeetingTrip implements Serializable {
      * signUpId : null
      */
 
-    private String searchValue;
-    private String createBy;
-    private String createTime;
-    private String updateBy;
-    private String groupBy;
-    private String dateFormat;
-    private String dateType;
-    private String updateTime;
-    private String beginCreateTime;
-    private String endCreateTime;
-    private String beginCreateDate;
-    private String endCreateDate;
+    private String searchValue = "";
+    private String createBy= "";
+    private String createTime= "";
+    private String updateBy= "";
+    private String groupBy= "";
+    private String dateFormat= "";
+    private String dateType= "";
+    private String updateTime= "";
+    private String beginCreateTime= "";
+    private String endCreateTime= "";
+    private String beginCreateDate= "";
+    private String endCreateDate= "";
     private String remark="";
 
     private int id;
     private int userId;
     private int userMeetingId;
     private int type;
-    private String startTime;
-    private String endTime;
-    private String startDate;
-    private String endDate;
+    private String startTime= "";
+    private String endTime= "";
+    private String startDate= "";
+    private String endDate= "";
     private String startCity="";
     private String startAddress="";
     private String endCity="";
     private String endAddress ="";
-    private String transport;
-    private String signUpId;
+    private String transport= "";
+    private String signUpId= "";
 
     public String getSearchValue() {
         return searchValue;

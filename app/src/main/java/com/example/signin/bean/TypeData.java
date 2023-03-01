@@ -5,8 +5,8 @@ public class TypeData {
 //            "dictValue": "0",
 //            "dictType": "user_meeting_sign_up_status",
     public boolean myselect;
-    public String dictLabel;
-    public String dictValue;
+    public String dictLabel= "";;
+    public String dictValue= "";;
     public String dictType;
 
     public boolean isMyselect() {

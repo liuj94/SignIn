@@ -36,27 +36,27 @@ public class UserMeetingGift implements Serializable {
      * userMeetingId : 0
      */
 
-    private String beginCreateDate;
-    private String beginCreateTime;
+    private String beginCreateDate= "";
+    private String beginCreateTime= "";
     private int businessId;
-    private String businessName;
-    private String createBy;
-    private String createTime;
-    private String dateFormat;
+    private String businessName= "";
+    private String createBy= "";
+    private String createTime= "";
+    private String dateFormat= "";
     private int dateType;
-    private String endCreateDate;
-    private String endCreateTime;
-    private String giftName;
-    private String groupBy;
+    private String endCreateDate= "";
+    private String endCreateTime= "";
+    private String giftName= "";
+    private String groupBy= "";
     private int id;
     private int meetingId;
-    private String meetingName;
+    private String meetingName= "";
     private int orderId;
-    private String remark;
-    private String searchValue;
+    private String remark= "";
+    private String searchValue= "";
     private int status;
-    private String updateBy;
-    private String updateTime;
+    private String updateBy= "";
+    private String updateTime= "";
     private int userId;
     private int userMeetingId;
 

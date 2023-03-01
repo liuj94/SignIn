@@ -4,7 +4,7 @@ import java.util.List;
 
 public class MeetingUserModel {
 
-    private String message;
+    private String message= "";
     private String msg;
     private int total;
     private List<MeetingUserData> data;

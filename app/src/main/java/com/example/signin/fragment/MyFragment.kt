@@ -53,7 +53,9 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
 
         setUserData()
 
-
+        binding.set.setOnClickListener {
+            startActivity<SetActivity>()
+        }
         binding.infoll.setOnClickListener {
             startActivity<UserSetActivity>()
         }

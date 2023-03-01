@@ -10,8 +10,8 @@ public class UploadData implements Serializable {
      * url :
      */
 
-    private String fileName;
-    private String url;
+    private String fileName= "";;
+    private String url= "";;
 
     public String getFileName() {
         return fileName;

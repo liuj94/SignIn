@@ -23,18 +23,18 @@ public class SignUpUser implements Serializable {
 //1开启 2关闭 自动
     private String autoStatus = "2";
     private String voiceStatus = "2";
-    private String name;
+    private String name= "";
     private int timeLong = 3;
-    private String id;
-    private String corporateName;
-    private String supplement;
+    private String id= "";
+    private String corporateName = "";
+    private String supplement= "";
     private String location = "";
-    private String meetingId;
-    private String meetingName;
-    private String signUpId;
-    private String signUpLocationId;
+    private String meetingId= "";
+    private String meetingName= "";
+    private String signUpId= "";
+    private String signUpLocationId= "";
     private String status = "1";
-    private String userMeetingId;
+    private String userMeetingId= "";
     private String userMeetingTypeName = "";
     private String failedMsg = "签到失败";
     private String okMsg = "签到成功";

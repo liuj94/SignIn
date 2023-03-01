@@ -1,7 +1,7 @@
 package com.example.signin.bean;
 
 public class Token {
-   String  token;
+   String  token= "";
 
     public String getToken() {
         return token;

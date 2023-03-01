@@ -1,11 +1,9 @@
 package com.example.signin.base
 
 import android.graphics.Color
-
 import android.view.View
 import androidx.viewbinding.ViewBinding
 import com.example.signin.ProgressDialog
-
 import com.example.signin.R
 
 
@@ -57,4 +55,6 @@ abstract class BaseBindingActivity<VB : ViewBinding,VM : BaseViewModel> : BaseAc
         if (mProgressDialog?.isShowing == true)
             mProgressDialog?.dismiss()
     }
+
+
 }

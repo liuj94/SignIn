@@ -21,6 +21,7 @@ var  mRingPlayer :MediaPlayer? = null
 
     override fun initData() {
 
+
         getFragmentLists()
         getDataType("sys_zhuce")
         getDataType("sys_ruzhu")

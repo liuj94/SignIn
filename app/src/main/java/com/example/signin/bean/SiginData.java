@@ -64,11 +64,11 @@ public class SiginData implements Serializable {
      * userId : null
      */
 
-    private String searchValue;
-    private String meetingSignUpCount;
-    private String modelType;
+    private String searchValue= "";
+    private String meetingSignUpCount= "";
+    private String modelType= "";
 
-    private String signUpNeedCount;
+    private String signUpNeedCount= "";
     private boolean isMyselect;
 
     public String getMeetingSignUpCount() {
@@ -103,48 +103,48 @@ public class SiginData implements Serializable {
         isMyselect = myselect;
     }
 
-    private String createBy;
-    private String createTime;
-    private String updateBy;
-    private String groupBy;
-    private String dateFormat;
-    private String dateType;
-    private String updateTime;
-    private String beginCreateTime;
-    private String endCreateTime;
-    private String beginCreateDate;
-    private String endCreateDate;
-    private String remark;
+    private String createBy= "";
+    private String createTime= "";
+    private String updateBy= "";
+    private String groupBy= "";
+    private String dateFormat= "";
+    private String dateType= "";
+    private String updateTime= "";
+    private String beginCreateTime= "";
+    private String endCreateTime= "";
+    private String beginCreateDate= "";
+    private String endCreateDate= "";
+    private String remark= "";
 
     private int id;
     private int signUpId;
-    private String name;
+    private String name= "";
     private int delTf;
     private int personChargeId;
-    private String personChargeName;
-    private String personChargeMobile;
+    private String personChargeName= "";
+    private String personChargeMobile= "";
     private int status;
     private int voiceStatus;
     private String speechStatus = "2";
-    private String location;
-    private String startTime;
-    private String endTime;
-    private String address;
-    private String addressStatus;
+    private String location= "";
+    private String startTime= "";
+    private String endTime= "";
+    private String address= "";
+    private String addressStatus= "";
     private int signUpType;
-    private String userMeetingTypes;
-    private String leveStatus;
+    private String userMeetingTypes= "";
+    private String leveStatus= "";
     private int meetingId;
-    private String loginTimeStatus;
-    private String insertUserInfoStatus;
+    private String loginTimeStatus= "";
+    private String insertUserInfoStatus= "";
     private int signUpNumStatus;
     private int signUpNum;
-    private String useAllStatus;
+    private String useAllStatus= "";
     private int totalUserCount;
     private int currentUserCount;
     private int localSignUpCount;
     private int signUpStatus;
-    private String ticketIds;
+    private String ticketIds= "";
     private int shockStatus;
     private int autoStatus;
     private String failedMsg = "签到失败";
@@ -152,15 +152,15 @@ public class SiginData implements Serializable {
     private String repeatMsg = "重复签到";
     private int timeLong;
     private int type;
-    private String businessId;
-    private String percent;
+    private String businessId= "";
+    private String percent= "";
     private String signUpCount = "0";
     private String beUserCount= "0";
-    private String levelCount;
-    private String siteName;
-    private String personChargeUsername;
-    private String userType;
-    private String userId;
+    private String levelCount= "";
+    private String siteName= "";
+    private String personChargeUsername= "";
+    private String userType= "";
+    private String userId= "";
 
     public String getSpeechStatus() {
         return speechStatus;

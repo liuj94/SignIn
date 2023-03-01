@@ -6,13 +6,10 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
 import com.alibaba.fastjson.JSON
-import com.bumptech.glide.Glide
-import com.dylanc.longan.activity
 import com.dylanc.longan.toast
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.SiginData
-import com.example.signin.bean.User
 import com.example.signin.databinding.ActivitySiginSetBinding
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
@@ -30,14 +27,14 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
             id = it
         }
 
-        if (!kv.getString("userData", "").isNullOrEmpty()) {
-            var data = JSON.parseObject(kv.getString("userData", ""), User::class.java)
-            activity?.let {
-                Glide.with(it).load(PageRoutes.BaseUrl + data.avatar).error(R.drawable.ov_ccc).into(binding.img)
-            }
-            binding.name.text = data.nickName
-            binding.phone.text = data.phonenumber
-        }
+//        if (!kv.getString("userData", "").isNullOrEmpty()) {
+//            var data = JSON.parseObject(kv.getString("userData", ""), User::class.java)
+//            activity?.let {
+//                Glide.with(it).load(PageRoutes.BaseUrl + data.avatar).error(R.drawable.ov_ccc).into(binding.img)
+//            }
+//            binding.name.text = data.bame
+//            binding.password.text = data.phonenumber
+//        }
         binding.kg.setOnClickListener {
             if(autoStatus.equals("1")){
                 autoStatus = "2"
@@ -187,6 +184,8 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
             .execute(object : RequestCallback<SiginData>() {
                 override fun onMySuccess(data: SiginData) {
                     super.onMySuccess(data)
+                    binding.name.text = data.name
+                    binding.password.text = data.personChargeUsername
                     failedMsg = ""+data.failedMsg
                     okMsg = ""+data.okMsg
                     repeatMsg = ""+data.repeatMsg
