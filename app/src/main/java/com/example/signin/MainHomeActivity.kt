@@ -68,6 +68,7 @@ var  mRingPlayer :MediaPlayer? = null
         homeFragment = HomeMainFragment()
         fragmentLists.add(homeFragment!!)
         myFragment = MyFragment()
+//        fragmentLists.add(JoinChannelAudio())
         fragmentLists.add(myFragment!!)
         initAdapter(fragmentLists)
 

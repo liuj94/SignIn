@@ -1,7 +1,9 @@
 package com.example.signin.fragment
 
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -10,13 +12,16 @@ import android.view.KeyEvent
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.alibaba.fastjson.JSON
+import com.dylanc.longan.mainThread
 import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
 import com.example.signin.*
 import com.example.signin.adapter.FMeetingDeList3Adapter
 import com.example.signin.adapter.SelectDataAdapter
 import com.example.signin.adapter.SelectMeetingAdapter
+import com.example.signin.agora.TokenUtils
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.*
@@ -29,6 +34,9 @@ import com.hjq.permissions.XXPermissions
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
+import io.agora.rtc2.ChannelMediaOptions
+import io.agora.rtc2.IRtcEngineEventHandler
+import io.agora.rtc2.RtcEngine
 import sigin
 
 /**
@@ -45,6 +53,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             return fragment
         }
     }
+
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
     private var list: MutableList<MeetingUserData> = ArrayList()
@@ -54,21 +63,23 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
     private var adapterSelect: SelectMeetingAdapter? = null
     private var selectList2: MutableList<SiginData> = ArrayList()
     private var selectList: MutableList<SiginUpListData> = ArrayList()
-    var meetingid :String? = ""
-    var siginlocationId :String? = ""
-    var signUpStatus :String? = ""
+    var meetingid: String? = ""
+    var siginlocationId: String? = ""
+    var signUpStatus: String? = ""
     var signUpId: String? = ""
     var nameMobile: String? = ""
     var autoStatus: String? = ""
     var timeLong: Int = 3
     var type: Int = 0
     var userData: User? = null
+
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
         userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
         setStartData()
 
-        meetingid = arguments?.getString("meetingid", "")
+        meetingid = arguments?.getString("meetingid", "meeting1")
+        CHANNEL = "meeting" + meetingid
         binding.srecyclerview.layoutManager = LinearLayoutManager(activity)
         adapterSelect = SelectMeetingAdapter().apply {
             submitList(selectList)
@@ -78,7 +89,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                 }
                 selectList[position].isMyselect = true
                 signUpId = "" + selectList[position].id
-                type= selectList[position].type
+                type = selectList[position].type
                 binding.nameTv.text = selectList[position].name
                 adapterSelect?.notifyDataSetChanged()
                 binding.selectLl.visibility = View.GONE
@@ -105,10 +116,10 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                         item.isMyselect = false
                     }
                     selectList2[position].isMyselect = true
-                    autoStatus = "" +selectList2[position].autoStatus
-                     okMsg = selectList2[position].okMsg
-                     failedMsg = selectList2[position].failedMsg
-                     repeatMsg = selectList2[position].repeatMsg
+                    autoStatus = "" + selectList2[position].autoStatus
+                    okMsg = selectList2[position].okMsg
+                    failedMsg = selectList2[position].failedMsg
+                    repeatMsg = selectList2[position].repeatMsg
                     voiceStatus = selectList2[position].speechStatus
                     timeLong = selectList2[position].timeLong
                     siginlocationId = "" + selectList2[position].id
@@ -122,13 +133,13 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 //                binding.time.text = ""+selectList2[position].timeLong+"分钟"
 //                binding.time.text = ""+selectList2[position].timeLong+"分钟"
 
-                if(selectList2[position].voiceStatus==2){
+                if (selectList2[position].voiceStatus == 2) {
                     binding.ztname.text = "当前对讲处于关闭状态"
                     binding.ztname.setTextColor(Color.parseColor("#999999"))
                     binding.thstate.setImageResource(R.mipmap.tonghua1)
                     binding.ztiv.setImageResource(R.drawable.ov_ccc)
                     binding.roundProgress.progress = 0
-                }else if(selectList2[position].voiceStatus==1){
+                } else if (selectList2[position].voiceStatus == 1) {
                     binding.ztname.text = "当前对讲处于开启状态"
                     binding.ztname.setTextColor(Color.parseColor("#3974f6"))
                     binding.thstate.setImageResource(R.mipmap.tonghua3)
@@ -137,8 +148,6 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                 }
 
                 binding.roundProgress.maxProgress = 5000
-
-
 
 
 //                getSiginData()
@@ -150,8 +159,10 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         adapter = FMeetingDeList3Adapter().apply {
             submitList(list)
             setOnItemClickListener { _, _, position ->
-                com.dylanc.longan.startActivity<MeetingUserDectivity>("id" to list[position].id.toString(),
-                    "showType" to type)
+                com.dylanc.longan.startActivity<MeetingUserDectivity>(
+                    "id" to list[position].id.toString(),
+                    "showType" to type
+                )
             }
         }
 
@@ -194,10 +205,10 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
         }
         binding.sous.setOnClickListener {
-            if(siginlocationId.isNullOrEmpty()){
+            if (siginlocationId.isNullOrEmpty()) {
                 toast("请选择签到点")
 
-            }else{
+            } else {
                 nameMobile = binding.et.text.toString().trim()
                 getUserList()
             }
@@ -206,35 +217,36 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         binding.et.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 // 监听到回车键，会执行2次该方法。按下与松开
-                if(event.action == KeyEvent.ACTION_UP){
-                if(siginlocationId.isNullOrEmpty()){
-                    toast("请选择签到点")
+                if (event.action == KeyEvent.ACTION_UP) {
+                    if (siginlocationId.isNullOrEmpty()) {
+                        toast("请选择签到点")
 
-                }else{
-                    nameMobile = binding.et.text.toString().trim()
-                    binding.et.setText(nameMobile)
-                    nameMobile?.let {
-                        binding.et.setSelection(it.length)
+                    } else {
+                        nameMobile = binding.et.text.toString().trim()
+                        binding.et.setText(nameMobile)
+                        nameMobile?.let {
+                            binding.et.setSelection(it.length)
+                        }
+                        getUserList()
                     }
-                    getUserList()
-                }
 
-                activity?.hideSoftInput()}
+                    activity?.hideSoftInput()
+                }
             }
             false
         })
         binding.moshiiv.setOnClickListener {
-            if(siginlocationId.isNullOrEmpty()){
+            if (siginlocationId.isNullOrEmpty()) {
                 toast("请选择签到点")
-            }else{
+            } else {
                 signUpStatus?.let { it1 -> setState(siginlocationId!!, it1) }
             }
         }
         binding.shaoma.setOnClickListener {
-            if(siginlocationId.isNullOrEmpty()){
+            if (siginlocationId.isNullOrEmpty()) {
                 toast("请选择签到点")
 
-            }else{
+            } else {
                 activity?.let {
                     XXPermissions.with(context)
                         .permission(Permission.CAMERA)
@@ -244,13 +256,16 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                                 if (!all) {
                                     toast("获取权限失败")
                                 } else {
-                                    var intent = Intent(it,ScanActivity::class.java)
-                                    startActivityForResult(intent,1000)
+                                    var intent = Intent(it, ScanActivity::class.java)
+                                    startActivityForResult(intent, 1000)
                                 }
 
                             }
 
-                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
+                            override fun onDenied(
+                                permissions: MutableList<String>,
+                                never: Boolean
+                            ) {
                                 toast("获取权限失败")
 
                             }
@@ -263,17 +278,169 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         }
 
 
+        binding.thstate.setOnClickListener {
+            OnResultManager.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                200
+            ) { requestCode: Int, _: Array<String>, grantResults: IntArray ->
+                if (requestCode == 200 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    userData?.let {
+                        if (it.userType.equals("03")) {
+                            voice()
+                        } else {
+                            if (selectList2.size > 0) {
+                                if (selectList2[0].voiceStatus == 1) {
+                                    //对讲开启
+                                    voice()
+
+                                }
+                            }
+
+                        }
+                    }
+                } else {
+                    activity?.let { it1 ->
+                        MaterialDialog(it1).show {
+                            title(text = "提示")
+                            message(text = "无语音权限，无法使用通话功能")
+                            positiveButton(text = "确定") {
+
+                            }
+
+                        }
+                    }
+                }
+            }
+
+        }
+
+
     }
-    var failedMsg:String = "签到失败"
-    var okMsg:String = "签到成功"
-    var repeatMsg:String = "重复签到"
-    var voiceStatus:String = "2"
+
+    private fun voice() {
+        if (voiceState == 0) {
+
+            initializeAndJoinChannel()
+        } else {
+            mRtcEngine?.leaveChannel()
+            RtcEngine.destroy()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("taggg", "onDestroy")
+        mRtcEngine?.leaveChannel()
+        RtcEngine.destroy()
+        mRtcEngine = null
+    }
+
+
+    // 填写频道名称。
+    private var CHANNEL = ""
+
+    private var mRtcEngine: RtcEngine? = null
+    private val mRtcEventHandler = object : IRtcEngineEventHandler() {
+        //        onJoinChannelSuccess
+        override fun onJoinChannelSuccess(channel: String?, uid: Int, elapsed: Int) {
+            super.onJoinChannelSuccess(channel, uid, elapsed)
+            Log.i(
+                "IRtcEngineEventHandler",
+                String.format("onJoinChannelSuccess channel %s uid %d", channel, uid)
+            )
+            mainThread {
+                voiceState = 1
+                binding.ztname.text = "当前对讲处于通话状态"
+                binding.ztname.setTextColor(Color.parseColor("#43cf7c"))
+                binding.ztiv.setImageResource(R.drawable.ov_ff43cf7c)
+                binding.thstate.setImageResource(R.mipmap.tonghua2)
+            }
+
+        }
+
+        override fun onLeaveChannel(stats: RtcStats?) {
+            super.onLeaveChannel(stats)
+            Log.i(
+                "IRtcEngineEventHandler",
+                String.format("onLeaveChannel ", stats)
+            )
+            if(mRtcEngine!=null){
+                try {
+                    mainThread {
+                        voiceState = 0
+                        try {
+                            binding?.let {
+                                it.ztname.text = "当前对讲处于开启状态"
+                                it.ztname.setTextColor(Color.parseColor("#3974f6"))
+                                it.ztiv.setImageResource(R.drawable.ov_3974f6)
+                                it.thstate.setImageResource(R.mipmap.tonghua3)
+                            } }catch (e:Exception){
+                            Log.i(
+                                "IRtcEngineEventHandler",
+                                String.format("onLeaveChannel ", stats)
+                            )
+                        }
+                    }
+
+                }catch (e:Exception){
+                    Log.i(
+                        "IRtcEngineEventHandler",
+                        String.format("onLeaveChannel ", stats)
+                    )
+                }
+            }
+
+        }
+
+
+        override fun onError(err: Int) {
+            super.onError(err)
+            Log.i(
+                "IRtcEngineEventHandler",
+                String.format("onError", err)
+            )
+        }
+    }
+
+    var option = ChannelMediaOptions()
+
+    private fun initializeAndJoinChannel() {
+
+        activity?.let {
+            mRtcEngine = TokenUtils.initializeAndJoinChannel(it, mRtcEventHandler)
+        }
+
+//        TokenUtils.OnTokenGenCallback<String> onGetToken
+        TokenUtils.gen(requireContext(), CHANNEL, 0, object :
+            TokenUtils.OnTokenGenCallback<String> {
+            override fun onTokenGen(ret: String?) {
+                option.autoSubscribeAudio = true
+                option.autoSubscribeVideo = true
+                if (ret != null) {
+                    mRtcEngine?.joinChannel(ret, CHANNEL, 0, option)
+                }
+
+
+            }
+
+        })
+
+
+    }
+
+    //0未通话 1加入房间
+    var voiceState = 0
+    var failedMsg: String = "签到失败"
+    var okMsg: String = "签到成功"
+    var repeatMsg: String = "重复签到"
+    var voiceStatus: String = "2"
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode==1000){
+        if (requestCode == 1000) {
             data?.let {
                 var param = it.getStringExtra("QrCodeScanned")
-                Log.d("tagggg","param=="+param)
+                Log.d("tagggg", "param==" + param)
 
                 var signUpUser = JSON.parseObject(param, SignUpUser::class.java)
 
@@ -282,30 +449,30 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                 signUpUser.userMeetingId = signUpUser.id
                 signUpUser.meetingId = signUpUser.meetingId
                 signUpUser.userMeetingTypeName = signUpUser.supplement
-                signUpUser.autoStatus =  autoStatus
-                signUpUser.timeLong =  timeLong
+                signUpUser.autoStatus = autoStatus
+                signUpUser.timeLong = timeLong
                 signUpUser.okMsg = okMsg
                 signUpUser.failedMsg = failedMsg
                 signUpUser.repeatMsg = repeatMsg
                 signUpUser.voiceStatus = voiceStatus
 
-                if(autoStatus.equals("2")){
-                    if(type==3){
+                if (autoStatus.equals("2")) {
+                    if (type == 3) {
                         startActivity<SiginReActivity>("type" to type, "data" to signUpUser)
-                    }else{
+                    } else {
                         var params = java.util.HashMap<String, String>()
                         params["meetingId"] = signUpUser.meetingId//会议id
                         params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
                         params["signUpId"] = signUpUser.signUpId//签到站id
                         params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
                         params["status"] = "2"//用户参与会议id
-                        sigin(JSON.toJSONString(params),{success->
+                        sigin(JSON.toJSONString(params), { success ->
                             signUpUser.success = success
                             startActivity<SiginReAutoActivity>("type" to type, "data" to signUpUser)
-                        },{},{})
+                        }, {}, {})
                     }
 
-                }else{
+                } else {
                     startActivity<SiginReActivity>("type" to type, "data" to signUpUser)
                 }
 
@@ -314,14 +481,15 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
         }
     }
-    fun setState(id: String, signUpStatu: String){
+
+    fun setState(id: String, signUpStatu: String) {
 //        {id: 66, status: 1, voiceStatus: 1}
         val params = HashMap<String, String>()
         params["id"] = id
-        if(signUpStatu=="1"){
+        if (signUpStatu == "1") {
 
             params["signUpStatus"] = "2"
-        }else{
+        } else {
 
             params["signUpStatus"] = "1"
         }
@@ -331,21 +499,21 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         OkGo.put<String>(PageRoutes.Api_ed_meetingSignUpLocation)
             .tag(PageRoutes.Api_ed_meetingSignUpLocation)
             .upJson(JSON.toJSONString(params))
-            .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token",""))
+            .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token", ""))
             .execute(object : RequestCallback<String>() {
 
                 override fun onSuccess(response: Response<String>?) {
                     super.onSuccess(response)
-                    if(signUpStatu=="1"){
+                    if (signUpStatu == "1") {
                         signUpStatus = "2"
-                    }else{
+                    } else {
                         signUpStatus = "1"
                     }
 
-                    if(signUpStatus == "1"){
+                    if (signUpStatus == "1") {
                         binding.moshitv.text = "签入模式"
                         binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
-                    }else{
+                    } else {
                         binding.moshitv.text = "签出模式"
                         binding.moshiiv.setImageResource(R.mipmap.kaiguank)
                     }
@@ -364,6 +532,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
             })
     }
+
     private fun setStartData() {
         siginlocationId = ""
         binding.name2Tv.text = "选择签到点"
@@ -381,7 +550,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         binding.roundProgress.progress = 0
         binding.roundProgress.maxProgress = 5000
         userData?.let {
-            if (it.userType.equals("03")){
+            if (it.userType.equals("03")) {
                 binding.ztname.text = "当前对讲处于开启状态"
                 binding.ztiv.setImageResource(R.drawable.ov_3974f6)
                 binding.thstate.setImageResource(R.mipmap.tonghua3)
@@ -391,8 +560,9 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
     }
 
     private fun getData() {
-        if(!kv.getString("SiginUpListModel","").isNullOrEmpty()){
-            var data = JSON.parseObject(kv.getString("SiginUpListModel",""), SiginUpListModel::class.java)
+        if (!kv.getString("SiginUpListModel", "").isNullOrEmpty()) {
+            var data =
+                JSON.parseObject(kv.getString("SiginUpListModel", ""), SiginUpListModel::class.java)
             selectList.clear()
 
             selectList.addAll(data.list)
@@ -405,9 +575,10 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             getList()
         }
     }
+
     private fun getList() {
         OkGo.get<List<SiginData>>(PageRoutes.Api_meetingSignUpLocation + meetingid + "&signUpId=" + signUpId)
-            .tag(PageRoutes.Api_meetingSignUpLocation + meetingid+2)
+            .tag(PageRoutes.Api_meetingSignUpLocation + meetingid + 2)
             .headers("Authorization", kv.getString("token", ""))
             .execute(object : RequestCallback<List<SiginData>>() {
                 override fun onSuccessNullData() {
@@ -420,9 +591,9 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                     selectList2.clear()
                     selectList2.addAll(data)
                     adapterSelect2?.notifyDataSetChanged()
-                    if (selectList2.size>0){
+                    if (selectList2.size > 0) {
                         selectList2[0].isMyselect = true
-                        autoStatus = "" +selectList2[0].autoStatus
+                        autoStatus = "" + selectList2[0].autoStatus
                         okMsg = selectList2[0].okMsg
                         failedMsg = selectList2[0].failedMsg
                         repeatMsg = selectList2[0].repeatMsg
@@ -432,13 +603,13 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                         binding.name2Tv.text = selectList2[0].name
 
                         userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
-                        if(selectList2[0].voiceStatus==2){
+                        if (selectList2[0].voiceStatus == 2) {
                             binding.ztname.text = "当前对讲处于关闭状态"
                             binding.ztname.setTextColor(Color.parseColor("#999999"))
                             binding.thstate.setImageResource(R.mipmap.tonghua1)
                             binding.ztiv.setImageResource(R.drawable.ov_ccc)
                             binding.roundProgress.progress = 0
-                        }else if(selectList2[0].voiceStatus==1){
+                        } else if (selectList2[0].voiceStatus == 1) {
                             binding.ztname.text = "当前对讲处于开启状态"
                             binding.ztname.setTextColor(Color.parseColor("#3974f6"))
                             binding.thstate.setImageResource(R.mipmap.tonghua3)
@@ -447,7 +618,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                         }
                         binding.roundProgress.maxProgress = 5000
                         userData?.let {
-                            if (it.userType.equals("03")){
+                            if (it.userType.equals("03")) {
                                 binding.ztname.text = "当前对讲处于开启状态"
                                 binding.ztname.setTextColor(Color.parseColor("#3974f6"))
                                 binding.ztiv.setImageResource(R.drawable.ov_3974f6)
@@ -527,7 +698,8 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
             return
         }
-        var url =PageRoutes.Api_meetinguser +meetingid + "&signUpId=" + signUpId+"&signUpLocationId="+siginlocationId
+        var url =
+            PageRoutes.Api_meetinguser + meetingid + "&signUpId=" + signUpId + "&signUpLocationId=" + siginlocationId
         if (!nameMobile.isNullOrEmpty()) {
             url = "$url&nameMobile=$nameMobile"
         }
@@ -543,15 +715,15 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                         adapter?.notifyDataSetChanged()
                         if (!nameMobile.isNullOrEmpty()) {
                             binding.thrl.visibility = View.GONE
-                            if(list.size>0){
+                            if (list.size > 0) {
                                 binding.kong.visibility = View.GONE
                                 binding.recyclerview.visibility = View.VISIBLE
-                            }else{
+                            } else {
                                 binding.kong.visibility = View.VISIBLE
                                 binding.recyclerview.visibility = View.GONE
                             }
 
-                        }else{
+                        } else {
                             binding.kong.visibility = View.GONE
                             binding.recyclerview.visibility = View.GONE
                             binding.thrl.visibility = View.VISIBLE
