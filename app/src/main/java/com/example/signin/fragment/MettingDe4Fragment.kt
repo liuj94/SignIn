@@ -365,7 +365,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                 "IRtcEngineEventHandler",
                 String.format("onLeaveChannel ", stats)
             )
-            if(mRtcEngine!=null){
+            if (mRtcEngine != null) {
                 try {
                     mainThread {
                         voiceState = 0
@@ -375,7 +375,8 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                                 it.ztname.setTextColor(Color.parseColor("#3974f6"))
                                 it.ztiv.setImageResource(R.drawable.ov_3974f6)
                                 it.thstate.setImageResource(R.mipmap.tonghua3)
-                            } }catch (e:Exception){
+                            }
+                        } catch (e: Exception) {
                             Log.i(
                                 "IRtcEngineEventHandler",
                                 String.format("onLeaveChannel ", stats)
@@ -383,7 +384,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                         }
                     }
 
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     Log.i(
                         "IRtcEngineEventHandler",
                         String.format("onLeaveChannel ", stats)
@@ -410,9 +411,10 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         activity?.let {
             mRtcEngine = TokenUtils.initializeAndJoinChannel(it, mRtcEventHandler)
         }
-
+        var uid = 0
+        uid = userData?.userId as Int
 //        TokenUtils.OnTokenGenCallback<String> onGetToken
-        TokenUtils.gen(requireContext(), CHANNEL, 0, object :
+        TokenUtils.gen(requireContext(), CHANNEL, uid, object :
             TokenUtils.OnTokenGenCallback<String> {
             override fun onTokenGen(ret: String?) {
                 option.autoSubscribeAudio = true

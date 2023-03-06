@@ -4,7 +4,7 @@ public class User {
     public String avatar= "";
     public String phonenumber= "";
     public String userName= "";
-    public String userId;
+    public String userId = "0";
     public String name = "";
     public String mobile= "";
     public String status;

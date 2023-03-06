@@ -21,7 +21,11 @@ import com.example.signin.bean.MeetingData
 import com.example.signin.bean.TypeModel
 import com.example.signin.bean.User
 import com.example.signin.databinding.FragMyBinding
+import com.example.signin.face.FaceActivity
 import com.example.signin.net.RequestCallback
+import com.hjq.permissions.OnPermissionCallback
+import com.hjq.permissions.Permission
+import com.hjq.permissions.XXPermissions
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import getDataType
@@ -61,9 +65,29 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
         }
         binding.gjgy.setOnClickListener {
             com.dylanc.longan.startActivity<AboutActivity>()
+
         }
         binding.gjrlsz.setOnClickListener {
-//            com.dylanc.longan.startActivity<AboutActivity>()
+            XXPermissions.with(activity)
+                .permission(Permission.CAMERA)
+                .permission(Permission.READ_MEDIA_IMAGES)
+                .request(object : OnPermissionCallback {
+
+                    override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+                        if (all) {
+                            com.dylanc.longan.startActivity<FaceActivity>()
+                        } else {
+                            toast("获取手机权限失败")
+                        }
+
+                    }
+
+                    override fun onDenied(permissions: MutableList<String>, never: Boolean) {
+
+
+                    }
+                })
+
         }
         binding.gjzjms.setOnClickListener {
 //            com.dylanc.longan.startActivity<AboutActivity>()
