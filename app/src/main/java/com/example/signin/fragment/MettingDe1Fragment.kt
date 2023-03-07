@@ -95,7 +95,12 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
                     super.onMySuccess(data)
                     binding.num1.text = data.browseCount
                     binding.num2.text = data.userMeetingCount
-                    binding.num3.text = data.totalAmount
+                    if(data.totalAmount.isNullOrEmpty()){
+                        binding.num3.text = "0.00"
+                    }else{
+                        binding.num3.text = data.totalAmount
+                    }
+
                     binding.num4.text = "" + data.todayInsertUserCount
                     binding.num5.text = "" + data.todayBeReviewedCount
                     binding.num6.text = "" + data.leaveCount

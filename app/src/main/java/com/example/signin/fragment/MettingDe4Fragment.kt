@@ -35,6 +35,7 @@ import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
 import io.agora.rtc2.ChannelMediaOptions
+import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import sigin
@@ -78,8 +79,8 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
         setStartData()
 
-        meetingid = arguments?.getString("meetingid", "meeting1")
-        CHANNEL = "meeting" + meetingid
+        meetingid = arguments?.getString("meetingid", "1")
+        CHANNEL = ""+meetingid
         binding.srecyclerview.layoutManager = LinearLayoutManager(activity)
         adapterSelect = SelectMeetingAdapter().apply {
             submitList(selectList)
@@ -314,17 +315,20 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             }
 
         }
-
+        activity?.let {
+            mRtcEngine = TokenUtils.initializeAndJoinChannel(it, mRtcEventHandler)
+        }
 
     }
 
     private fun voice() {
-        if (voiceState == 0) {
 
+        if (voiceState == 0) {
+            mViewModel.isShowLoading.value = true
             initializeAndJoinChannel()
         } else {
             mRtcEngine?.leaveChannel()
-            RtcEngine.destroy()
+
         }
     }
 
@@ -350,6 +354,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                 String.format("onJoinChannelSuccess channel %s uid %d", channel, uid)
             )
             mainThread {
+                mViewModel.isShowLoading.value = false
                 voiceState = 1
                 binding.ztname.text = "当前对讲处于通话状态"
                 binding.ztname.setTextColor(Color.parseColor("#43cf7c"))
@@ -404,21 +409,23 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         }
     }
 
-    var option = ChannelMediaOptions()
+
 
     private fun initializeAndJoinChannel() {
+        /**In the demo, the default is to enter as the anchor. */
+        mRtcEngine?.setClientRole(Constants.CLIENT_ROLE_BROADCASTER)
+        mRtcEngine?.setAudioProfile(0)
+       mRtcEngine?.setAudioScenario(0)
 
-        activity?.let {
-            mRtcEngine = TokenUtils.initializeAndJoinChannel(it, mRtcEventHandler)
-        }
-        var uid = 0
-        uid = userData?.userId as Int
-//        TokenUtils.OnTokenGenCallback<String> onGetToken
-        TokenUtils.gen(requireContext(), CHANNEL, uid, object :
+        mRtcEngine?.setDefaultAudioRoutetoSpeakerphone(true)
+        var option = ChannelMediaOptions()
+        option.autoSubscribeAudio = true
+        option.autoSubscribeVideo = true
+
+        TokenUtils.gen(requireContext(), CHANNEL, 0, object :
             TokenUtils.OnTokenGenCallback<String> {
             override fun onTokenGen(ret: String?) {
-                option.autoSubscribeAudio = true
-                option.autoSubscribeVideo = true
+
                 if (ret != null) {
                     mRtcEngine?.joinChannel(ret, CHANNEL, 0, option)
                 }

@@ -129,6 +129,7 @@ public class TokenUtils {
 
     public static RtcEngine initializeAndJoinChannel(Context context,  IRtcEngineEventHandler iRtcEngineEventHandler){
         RtcEngine engine;
+        try {
         RtcEngineConfig config = new RtcEngineConfig();
 
         config.mContext = context.getApplicationContext();
@@ -138,13 +139,23 @@ public class TokenUtils {
         config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
 
         config.mEventHandler = iRtcEngineEventHandler;
-//        config.mAudioScenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
-//        config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
-        try {
+        config.mAudioScenario = 0;
+        config.mAreaCode = new GlobalSettings().getAreaCode();
+
             engine = RtcEngine.create(config);
+            engine.setParameters("{"
+                    + "\"rtc.report_app_scenario\":"
+                    + "{"
+                    + "\"appScenario\":" + 100 + ","
+                    + "\"serviceType\":" + 11 + ","
+                    + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
+                    + "}"
+                    + "}");
+            engine.setLocalAccessPoint(new GlobalSettings().getPrivateCloudConfig());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
         return engine;
     }
 

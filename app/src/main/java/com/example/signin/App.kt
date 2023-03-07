@@ -6,6 +6,7 @@ import android.app.Application
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Build
+import com.example.signin.agora.GlobalSettings
 
 class App :  Application() {
     companion object {
@@ -14,7 +15,13 @@ class App :  Application() {
         open fun getInstance(): Context {
             return mApplication!!
         }
-
+        private var globalSettings: GlobalSettings? = null
+        open  fun getGlobalSettings(): GlobalSettings? {
+            if (globalSettings == null) {
+                globalSettings = GlobalSettings()
+            }
+            return globalSettings
+        }
     }
 
     var fontPathc = "fonts/zitic.ttf"
@@ -92,7 +99,6 @@ class App :  Application() {
             e.printStackTrace()
         }
     }
-
 
 
 
