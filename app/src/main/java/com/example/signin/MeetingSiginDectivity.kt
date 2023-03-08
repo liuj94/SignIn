@@ -1,6 +1,7 @@
 package com.example.signin
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -122,7 +123,16 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
                             override fun onGranted(permissions: MutableList<String>, all: Boolean) {
                                 if (all) {
-                                    com.dylanc.longan.startActivity<FaceActivity>()
+
+                                    com.dylanc.longan.startActivity<FaceActivity>("id" to id,
+                                        "signUpId" to signUpId,
+                                        "autoStatus" to autoStatus,
+                                        "timeLong" to timeLong,
+                                        "okMsg" to okMsg,
+                                        "repeatMsg" to repeatMsg,
+                                        "failedMsg" to failedMsg,
+                                        "voiceStatus" to voiceStatus,
+                                    )
                                 } else {
                                     toast("获取手机权限失败")
                                 }

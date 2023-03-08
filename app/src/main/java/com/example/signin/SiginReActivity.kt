@@ -128,7 +128,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                             binding.submit.text = "返回"
                         }
                         if(it.voiceStatus.equals("1")){
-                            LiveDataBus.get().with("voiceStatus").postValue("1")
+                            LiveDataBus.get().with("voiceStatus").postValue(data)
                         }
                     }
 

@@ -2,25 +2,34 @@ package com.example.signin
 
 
 import android.media.MediaPlayer
+import android.text.TextUtils
+import android.util.Log
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.alibaba.fastjson.JSON
 import com.dylanc.longan.toast
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
+import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActivityMainBinding
 import com.example.signin.fragment.HomeMainFragment
 import com.example.signin.fragment.MyFragment
+import com.hello.scan.ScanCallBack
+import com.hello.scan.ScanTool
 import getDataType
 
 
-class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>() {
+class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>() , ScanCallBack {
 
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 var  mRingPlayer :MediaPlayer? = null
-
+var scanTool :ScanTool?= null
     override fun initData() {
-
+        scanTool = ScanTool.GET
+        scanTool?.initSerial(this, "/dev/ttyACM0", 115200, this@MainHomeActivity)
+        scanTool?.playSound(true)
 
         getFragmentLists()
         getDataType("sys_zhuce")
@@ -165,5 +174,21 @@ var  mRingPlayer :MediaPlayer? = null
 //
 //    }
 
+    override fun onScanCallBack(data: String?) {
+        if (TextUtils.isEmpty(data)) return
+        Log.e("Hello", "回调数据 == > $data")
+        data?.let {
+            LiveDataBus.get().with("onScanCallBack").postValue(data)
+        }
+    }
 
+    override fun onInitScan(isSuccess: Boolean) {
+        val str = if (isSuccess) "初始化成功" else "初始化失败"
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
 }

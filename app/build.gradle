@@ -37,12 +37,12 @@ android {
             keyAlias "sigin"
             keyPassword "sigin12345"
         }
-//        debug {
-//            storeFile file('E:\\sigin.jks')
-//            storePassword "sigin12345"
-//            keyAlias "sigin"
-//            keyPassword "sigin12345"
-//        }
+        debug {
+            storeFile file('E:\\sigin.jks')
+            storePassword "sigin12345"
+            keyAlias "sigin"
+            keyPassword "sigin12345"
+        }
 
     }
     compileOptions {
@@ -54,7 +54,9 @@ android {
     }
 }
 
+
 dependencies {
+
     implementation fileTree(dir: "libs", include: ["*.jar","*.aar"])
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'

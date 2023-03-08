@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="250dp"
+    android:layout_height="220dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/shape_3974f6_7">
+    <ImageView
+        android:src="@mipmap/qdcwicon"
+        android:layout_width="94dp"
+        android:layout_height="94dp"/>
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="签到失败"
+        android:textStyle="bold"
+        android:textColor="#ffffffff"
+        android:textSize="27sp"
+        />
+</LinearLayout>
