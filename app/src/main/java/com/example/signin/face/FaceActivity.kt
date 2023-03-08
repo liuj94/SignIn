@@ -4,48 +4,75 @@ import android.graphics.Bitmap
 import android.hardware.Camera
 import android.media.FaceDetector
 import android.util.Log
+import com.alibaba.fastjson.JSON
 import com.bifan.detectlib.FaceDetectTextureView
+import com.bumptech.glide.Glide
+import com.dylanc.longan.activity
 import com.dylanc.longan.mainThread
+import com.dylanc.longan.toast
+import com.example.signin.LiveDataBus
+import com.example.signin.PageRoutes
+import com.example.signin.R
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.databinding.ActivityFaceBinding
+import detect
+import upFile
 import java.io.*
 import java.util.*
 import java.util.concurrent.Executors
+import kotlin.collections.ArrayList
 
 class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
-
+    var preFrameList: MutableList<Bitmap> = ArrayList<Bitmap>()
     override fun initData() {
 
-       binding.test.setOnClickListener { startDetect() }
+        binding.test.setOnClickListener { startDetect() }
 
-        binding.faceDetectView.framePreViewListener = object : FaceDetectTextureView.IFramePreViewListener {
-            override fun onFrame(preFrame: Bitmap?): Boolean {
-                //每一帧回调
-                //这个这帧preFrame处理了就是进行了回收，返回true
-                //否则返回false，内部进行回收处理
-                return false
-            }
+        binding.faceDetectView.framePreViewListener =
+            object : FaceDetectTextureView.IFramePreViewListener {
+                override fun onFrame(preFrame: Bitmap?): Boolean {
+                    //每一帧回调
+                    //这个这帧preFrame处理了就是进行了回收，返回true
+                    //否则返回false，内部进行回收处理
+                    return false
+                }
 
-            override fun onFaceFrame(preFrame: Bitmap?, faces: Array<FaceDetector.Face?>): Boolean {
-                //faces是检测出来的人脸参数
-                //检测到人脸的回调,保存人脸图片到本地
-                if (isSavingPic === false) {
-                    isSavingPic = true
-                    preFrame?.let {
+                override fun onFaceFrame(
+                    preFrame: Bitmap?,
+                    faces: Array<FaceDetector.Face?>
+                ): Boolean {
+                    //faces是检测出来的人脸参数
+                    //检测到人脸的回调,保存人脸图片到本地
+                    if (faces.size > 0) {
+                        preFrame?.let {
+                            preFrameList.add(it)
+                        }
+                        if (preFrameList.size > 20) {
+                            if (isSavingPic === false) {
+                                isSavingPic = true
+                                preFrame?.let {
 //                        executorService.submit(SavePicRunnable(it))
-                        executorService.submit {  saveFacePicToLocal(preFrame)
-                            isSavingPic = false }
+                                    executorService.submit {
+                                        saveFacePicToLocal(preFrame)
+                                        isSavingPic = false
+                                        preFrameList.clear()
+                                    }
+                                }
+
+                            }
+                            Log.i("FaceActivity", "当前图片人脸个数：" + faces.size)
+                        }
+
                     }
 
+
+                    //这个这帧preFrame处理了就是进行了回收，返回true
+                    //否则返回false，内部进行回收处理
+                    return true
                 }
-                Log.i("FaceActivity", "当前图片人脸个数：" + faces.size)
-                //这个这帧preFrame处理了就是进行了回收，返回true
-                //否则返回false，内部进行回收处理
-                return true
             }
-        }
         mViewModel.isShowLoading.value = true
         val task: TimerTask = object : TimerTask() {
             override fun run() {
@@ -60,6 +87,7 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
         timer.schedule(task, 1500)
 
     }
+
     private var isSavingPic = false
     private val executorService = Executors.newSingleThreadExecutor()
 
@@ -79,12 +107,14 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
         }
         binding.faceDetectView.startCameraPreview()
     }
+
     fun endDetect() {
         binding.faceDetectView.stopCameraPreview()
         binding.faceDetectView.faceRectView.clearBorder()
     }
+
     private fun saveFacePicToLocal(bitmap: Bitmap) {
-        val picPath =this.externalCacheDir.toString() + File.separator +  "face.jpg"
+        val picPath = this.externalCacheDir.toString() + File.separator + "face.jpg"
 //            File((this.externalCacheDir + File.separator +  "face.jpg"))
 //        val picPath = Environment.getExternalStorageDirectory().toString() + "/face.jpg"
         var fileOutputStream: FileOutputStream? = null
@@ -113,6 +143,19 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
         }
         bitmap.recycle()
         Log.e("FaceActivity", "保存完成,$picPath")
+        //val facePicFile = File(picPath)
+//        upImgFile(File(picPath))
+    }
+    fun upImgFile(file: File) {
+        mViewModel.isShowLoading.value = true
+        upFile(file, {
+            //https://meeting.nbqichen.com:20882/prod-api/profile/upload/2023/03/07/e4030450-557f-4e4a-814e-2bf7e427f837.jpg
+            detect(it.url){}
+        }, {
+            toast("图片上传失败")
+            mViewModel.isShowLoading.value = false
+        }, {})
+
     }
     override fun onDestroy() {
         super.onDestroy()

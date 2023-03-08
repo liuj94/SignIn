@@ -235,3 +235,32 @@ fun getUserInfo(success: (() -> Unit)? = null) {
 
         })
 }
+
+fun detect(img:String,success: (() -> Unit)? = null) {
+    OkGo.get<String>(PageRoutes.Api_detect+img)
+        .tag(PageRoutes.Api_detect)
+//        .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token", ""))
+        .execute(object : RequestCallback<String>() {
+            override fun onSuccessNullData() {
+                super.onSuccessNullData()
+                success?.invoke()
+            }
+
+            override fun onMySuccess(data: String) {
+                super.onMySuccess(data)
+
+                success?.invoke()
+            }
+
+            override fun onError(response: Response<String>?) {
+                super.onError(response)
+            }
+
+            override fun onFinish() {
+                super.onFinish()
+
+            }
+
+
+        })
+}

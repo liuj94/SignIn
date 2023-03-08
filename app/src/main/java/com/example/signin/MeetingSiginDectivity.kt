@@ -17,6 +17,7 @@ import com.example.signin.bean.MeetingUserModel
 import com.example.signin.bean.SiginData
 import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActMeetingSigindeBinding
+import com.example.signin.face.FaceActivity
 import com.example.signin.net.JsonCallback
 
 import com.example.signin.net.RequestCallback
@@ -94,25 +95,66 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         getSiginData()
         binding.sm.setOnClickListener {
             activity?.let {
-                XXPermissions.with(activity)
-                    .permission(Permission.CAMERA)
-                    .request(object : OnPermissionCallback {
+//                XXPermissions.with(activity)
+//                    .permission(Permission.CAMERA)
+//                    .request(object : OnPermissionCallback {
+//
+//                        override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+//                            if (!all) {
+//                                toast("获取权限失败")
+//                            } else {
+//                                var intent = Intent(it,ScanActivity::class.java)
+//                                startActivityForResult(intent,1000)
+//                            }
+//
+//                        }
+//
+//                        override fun onDenied(permissions: MutableList<String>, never: Boolean) {
+//                            toast("获取权限失败")
+//
+//                        }
+//                    })
+                activity?.let {
+                    XXPermissions.with(activity)
+                        .permission(Permission.CAMERA)
+                        .permission(Permission.READ_MEDIA_IMAGES)
+                        .request(object : OnPermissionCallback {
 
-                        override fun onGranted(permissions: MutableList<String>, all: Boolean) {
-                            if (!all) {
-                                toast("获取权限失败")
-                            } else {
-                                var intent = Intent(it,ScanActivity::class.java)
-                                startActivityForResult(intent,1000)
+                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+                                if (all) {
+                                    com.dylanc.longan.startActivity<FaceActivity>()
+                                } else {
+                                    toast("获取手机权限失败")
+                                }
+
                             }
 
-                        }
+                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
 
-                        override fun onDenied(permissions: MutableList<String>, never: Boolean) {
-                            toast("获取权限失败")
 
-                        }
-                    })
+                            }
+                        })
+//                    XXPermissions.with(activity)
+//                        .permission(Permission.CAMERA)
+//                        .request(object : OnPermissionCallback {
+//
+//                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+//                                if (!all) {
+//                                    toast("获取权限失败")
+//                                } else {
+//                                    var intent = Intent(it,ScanActivity::class.java)
+//                                    startActivityForResult(intent,1000)
+//                                }
+//
+//                            }
+//
+//                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
+//                                toast("获取权限失败")
+//
+//                            }
+//                        })
+
+                }
 
             }
         }
@@ -121,25 +163,44 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         }
         binding.shaoma.setOnClickListener {
            activity?.let {
-                    XXPermissions.with(activity)
-                        .permission(Permission.CAMERA)
-                        .request(object : OnPermissionCallback {
+               XXPermissions.with(activity)
+                   .permission(Permission.CAMERA)
+                   .permission(Permission.READ_MEDIA_IMAGES)
+                   .request(object : OnPermissionCallback {
 
-                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
-                                if (!all) {
-                                    toast("获取权限失败")
-                                } else {
-                                    var intent = Intent(it,ScanActivity::class.java)
-                                    startActivityForResult(intent,1000)
-                                }
+                       override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+                           if (all) {
+                               com.dylanc.longan.startActivity<FaceActivity>()
+                           } else {
+                               toast("获取手机权限失败")
+                           }
 
-                            }
+                       }
 
-                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
-                                toast("获取权限失败")
+                       override fun onDenied(permissions: MutableList<String>, never: Boolean) {
 
-                            }
-                        })
+
+                       }
+                   })
+//                    XXPermissions.with(activity)
+//                        .permission(Permission.CAMERA)
+//                        .request(object : OnPermissionCallback {
+//
+//                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+//                                if (!all) {
+//                                    toast("获取权限失败")
+//                                } else {
+//                                    var intent = Intent(it,ScanActivity::class.java)
+//                                    startActivityForResult(intent,1000)
+//                                }
+//
+//                            }
+//
+//                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
+//                                toast("获取权限失败")
+//
+//                            }
+//                        })
 
                 }
 

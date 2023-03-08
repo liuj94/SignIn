@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">码上签到助手</string>
+    <string name="hardreader_recv">接收数据</string>
+    <string name="hardreader_charset">字符集</string>
+    <string name="hardreader_open">打开读头</string>
+    <string name="hardreader_close">关闭读头</string>
+
 </resources>
