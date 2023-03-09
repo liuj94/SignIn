@@ -220,7 +220,7 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
 
                     }
 
-                },{})
+                },{isSavingPic = false})
             },{isSavingPic = false})
         }, {
             toast("图片上传失败")
