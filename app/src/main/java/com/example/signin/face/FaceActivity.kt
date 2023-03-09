@@ -18,6 +18,7 @@ import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActivityFaceBinding
 import detect
+import search
 import sigin
 import upFile
 import java.io.*
@@ -35,12 +36,14 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
     var id = ""
     var signUpId = ""
     var meetingid = ""
+    var signUpLocationId = ""
     var autoStatus = ""
     var timeLong = 3
     override fun initData() {
         intent.getStringExtra("id")?.let { id = it }
         intent.getStringExtra("meetingid")?.let { meetingid = it }
         intent.getStringExtra("signUpId")?.let { signUpId = it }
+        intent.getStringExtra("signUpLocationId")?.let { signUpLocationId = it }
         intent.getStringExtra("autoStatus")?.let { autoStatus = it }
         intent.getStringExtra("okMsg")?.let { okMsg = it }
         intent.getStringExtra("failedMsg")?.let { failedMsg = it }
@@ -64,28 +67,29 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
                 ): Boolean {
                     //faces是检测出来的人脸参数
                     //检测到人脸的回调,保存人脸图片到本地
-                    if (faces.size > 0) {
-                        preFrame?.let {
-                            preFrameList.add(it)
-                        }
-                        if (preFrameList.size > 20) {
-                            if (isSavingPic === false) {
+                    Log.i("FaceActivity", "当前图片人脸个数：" + faces.size)
+                    if (!isSavingPic) {
+                        if (faces.size > 0) {
+                            preFrame?.let {
+                                preFrameList.add(it)
+                            }
+                            if (preFrameList.size > 5) {
+
                                 isSavingPic = true
                                 preFrame?.let {
 //                        executorService.submit(SavePicRunnable(it))
                                     executorService.submit {
                                         saveFacePicToLocal(preFrame)
-                                        isSavingPic = false
                                         preFrameList.clear()
                                     }
                                 }
 
+
+
                             }
-                            Log.i("FaceActivity", "当前图片人脸个数：" + faces.size)
+
                         }
-
                     }
-
 
                     //这个这帧preFrame处理了就是进行了回收，返回true
                     //否则返回false，内部进行回收处理
@@ -104,36 +108,10 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
         }
         val timer = Timer()
         timer.schedule(task, 1500)
-        LiveDataBus.get().with("voiceStatus", String::class.java)
+        LiveDataBus.get().with("onScanCallBack", String::class.java)
             .observeForever {
                 var signUpUser = JSON.parseObject(it, SignUpUser::class.java)
-
-                signUpUser.signUpLocationId = id
-                signUpUser.signUpId = signUpId
-                signUpUser.userMeetingId = signUpUser.id
-                signUpUser.meetingId = signUpUser.meetingId
-                signUpUser.userMeetingTypeName = signUpUser.supplement
-                signUpUser.autoStatus = autoStatus
-                signUpUser.timeLong = timeLong
-                signUpUser.okMsg = okMsg
-                signUpUser.failedMsg = failedMsg
-                signUpUser.repeatMsg = repeatMsg
-                signUpUser.voiceStatus = voiceStatus
-
-                var params = java.util.HashMap<String, String>()
-                params["meetingId"] = signUpUser.meetingId//会议id
-                params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
-                params["signUpId"] = signUpUser.signUpId//签到站id
-                params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
-                params["status"] = "2"//用户参与会议id
-                sigin(JSON.toJSONString(params), { success ->
-                    if (voiceStatus.equals("1")) {
-                        LiveDataBus.get().with("voiceStatus").postValue(success)
-                    }
-                    showToast(success)
-                }, {}, {})
-
-
+                sigin(signUpUser.id)
             }
     }
 
@@ -164,9 +142,9 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
             binding.faceDetectView.initCamera()
             binding.faceDetectView.detectConfig.CameraType = Camera.CameraInfo.CAMERA_FACING_FRONT
             binding.faceDetectView.detectConfig.EnableFaceDetect = true
-            binding.faceDetectView.detectConfig.MinDetectTime = 100
+            binding.faceDetectView.detectConfig.MinDetectTime = 1500
             binding.faceDetectView.detectConfig.Simple = 0.2f //图片检测时的压缩取样率，0~1，越小检测越流畅
-            binding.faceDetectView.detectConfig.MaxDetectTime = 2000 //进入智能休眠检测，以2秒一次的这个速度检测
+            binding.faceDetectView.detectConfig.MaxDetectTime = 3000 //进入智能休眠检测，以2秒一次的这个速度检测
             binding.faceDetectView.detectConfig.EnableIdleSleepOption = true //启用智能休眠检测机制
             binding.faceDetectView.detectConfig.IdleSleepOptionJudgeTime =
                 1000 * 10 //1分钟内没有检测到人脸，进入智能休眠检测
@@ -181,19 +159,19 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
 
     private fun saveFacePicToLocal(bitmap: Bitmap) {
         val picPath = this.externalCacheDir.toString() + File.separator + "face.jpg"
-//            File((this.externalCacheDir + File.separator +  "face.jpg"))
-//        val picPath = Environment.getExternalStorageDirectory().toString() + "/face.jpg"
         var fileOutputStream: FileOutputStream? = null
         val facePicFile = File(picPath)
         try {
             facePicFile.createNewFile()
         } catch (e: IOException) {
+            isSavingPic = false
             Log.e("FaceActivity", "保存失败$e,$picPath")
             e.printStackTrace()
         }
         try {
             fileOutputStream = FileOutputStream(facePicFile)
         } catch (e: FileNotFoundException) {
+            isSavingPic = false
             e.printStackTrace()
         }
         if (fileOutputStream != null) {
@@ -205,24 +183,74 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
             } catch (e: IOException) {
                 e.printStackTrace()
                 Log.e("FaceActivity", e.toString())
+                isSavingPic = false
             }
+        }else{
+            isSavingPic = false
         }
         bitmap.recycle()
         Log.e("FaceActivity", "保存完成,$picPath")
-        //val facePicFile = File(picPath)
-//        upImgFile(File(picPath))
+        try {
+            var faceFile : File= File(picPath)
+            var flag: Boolean = faceFile.exists()
+            if (flag){
+                upImgFile(picPath)
+            }
+        } catch (e: Exception) {
+            isSavingPic = false
+        }
+
+
     }
 
-    fun upImgFile(file: File) {
+    fun upImgFile(picPath: String) {
         mViewModel.isShowLoading.value = true
-        upFile(file, {
-            //https://meeting.nbqichen.com:20882/prod-api/profile/upload/2023/03/07/e4030450-557f-4e4a-814e-2bf7e427f837.jpg
-            detect(it.url) {}
+        upFile(File(picPath), {
+            var urlString = "https://img-blog.csdnimg.cn/20190618124505345.png"
+//            var urlString = it.url
+            detect(urlString,{
+                search(urlString,{
+                    it.result?.let {result->
+                        if(!result.user_list.isNullOrEmpty()){
+                            for (item in result.user_list){
+                                sigin(item.user_id)
+                            }
+                        }
+
+
+                    }
+
+                },{})
+            },{isSavingPic = false})
         }, {
             toast("图片上传失败")
+            isSavingPic = false
             mViewModel.isShowLoading.value = false
-        }, {})
+        }, {
 
+            File(picPath).delete()
+        })
+
+    }
+
+    private fun sigin(userMeetingId:String,) {
+
+        var params = HashMap<String, String>()
+        params["meetingId"] = meetingid//会议id
+        params["signUpLocationId"] = signUpLocationId//签到点id
+        params["signUpId"] =signUpId//签到站id
+        params["userMeetingId"] = userMeetingId//用户参与会议id
+        params["status"] = "2"//用户参与会议id
+        sigin(JSON.toJSONString(params), { success ->
+            if (voiceStatus.equals("1")) {
+                LiveDataBus.get().with("voiceStatus").postValue(success)
+            }
+            showToast(success)
+        }, {
+            showToast("0")
+        }, {
+            isSavingPic = false
+        })
     }
 
     override fun onDestroy() {

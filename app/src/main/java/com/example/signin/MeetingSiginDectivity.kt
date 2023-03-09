@@ -1,7 +1,6 @@
 package com.example.signin
 
 import android.content.Intent
-import android.media.MediaPlayer
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -126,6 +125,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
                                     com.dylanc.longan.startActivity<FaceActivity>("id" to id,
                                         "signUpId" to signUpId,
+                                        "signUpLocationId" to id,
                                         "autoStatus" to autoStatus,
                                         "timeLong" to timeLong,
                                         "okMsg" to okMsg,

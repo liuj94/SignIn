@@ -6,12 +6,10 @@ import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.alibaba.fastjson.JSON
 import com.dylanc.longan.toast
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
-import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActivityMainBinding
 import com.example.signin.fragment.HomeMainFragment
 import com.example.signin.fragment.MyFragment
@@ -185,10 +183,12 @@ var scanTool :ScanTool?= null
     override fun onInitScan(isSuccess: Boolean) {
         val str = if (isSuccess) "初始化成功" else "初始化失败"
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
+        Log.d("onInitScan","str="+str)
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        scanTool?.release()
     }
 }

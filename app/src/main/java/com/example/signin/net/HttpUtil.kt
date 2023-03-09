@@ -236,7 +236,7 @@ fun getUserInfo(success: (() -> Unit)? = null) {
         })
 }
 
-fun detect(img:String,success: (() -> Unit)? = null) {
+fun detect(img:String,success: (() -> Unit)? = null,error: (() -> Unit)? = null) {
     OkGo.get<String>(PageRoutes.Api_detect+img)
         .tag(PageRoutes.Api_detect)
 //        .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token", ""))
@@ -250,10 +250,42 @@ fun detect(img:String,success: (() -> Unit)? = null) {
                 super.onMySuccess(data)
 
                 success?.invoke()
+
             }
 
             override fun onError(response: Response<String>?) {
+//                super.onError(response)
+                error?.invoke()
+            }
+
+            override fun onFinish() {
+                super.onFinish()
+
+            }
+
+
+        })
+}
+
+fun search(img:String,success: ((data: FaceData) -> Unit)? = null,error: (() -> Unit)? = null) {
+    OkGo.get<FaceData>(PageRoutes.Api_search+img)
+        .tag(PageRoutes.Api_search)
+//        .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token", ""))
+        .execute(object : RequestCallback<FaceData>() {
+            override fun onSuccessNullData() {
+                super.onSuccessNullData()
+                error?.invoke()
+            }
+
+            override fun onMySuccess(data: FaceData) {
+                super.onMySuccess(data)
+
+                success?.invoke(data)
+            }
+
+            override fun onError(response: Response<FaceData>?) {
                 super.onError(response)
+                error?.invoke()
             }
 
             override fun onFinish() {
