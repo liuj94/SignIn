@@ -1,3 +1,4 @@
+import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.example.signin.PageRoutes
 import com.example.signin.bean.*
@@ -267,10 +268,10 @@ fun detect(img:String,success: (() -> Unit)? = null,error: (() -> Unit)? = null)
         })
 }
 
-fun search(img:String,success: ((data: FaceData) -> Unit)? = null,error: (() -> Unit)? = null) {
+fun search(img:String,success: ((data: FaceData) -> Unit)? = null,error: (() -> Unit)? = null,finish: (() -> Unit)? = null) {
     OkGo.get<FaceData>(PageRoutes.Api_search+img)
         .tag(PageRoutes.Api_search)
-//        .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token", ""))
+
         .execute(object : RequestCallback<FaceData>() {
             override fun onSuccessNullData() {
                 super.onSuccessNullData()
@@ -286,11 +287,12 @@ fun search(img:String,success: ((data: FaceData) -> Unit)? = null,error: (() -> 
             override fun onError(response: Response<FaceData>?) {
                 super.onError(response)
                 error?.invoke()
+
             }
 
             override fun onFinish() {
                 super.onFinish()
-
+                finish?.invoke()
             }
 
 

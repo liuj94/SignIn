@@ -4,6 +4,7 @@
     android:layout_height="220dp"
     android:gravity="center"
     android:orientation="vertical"
+    android:padding="30dp"
     android:background="@drawable/shape_3974f6_7">
     <ImageView
         android:src="@mipmap/qdjgicon"

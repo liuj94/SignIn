@@ -63,6 +63,7 @@ public abstract class RequestCallback<T> extends AbsCallback<T> {
             try {
                 data = JSONObject.parseObject(bodyStr, mType);
             } catch (Exception e) {
+                Log.e("OkGo", "e==,+"+e.getMessage());
                 BaseEJson  d = JSONObject.parseObject(bodyStr, BaseEJson.class);
 //                onErrorBusiness("服务器错误");
                 throw new RequestException(d.getCode(), d.getMsg());

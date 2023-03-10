@@ -125,6 +125,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
                                     com.dylanc.longan.startActivity<FaceActivity>("id" to id,
                                         "signUpId" to signUpId,
+                                        "meetingid" to meetingid,
                                         "signUpLocationId" to id,
                                         "autoStatus" to autoStatus,
                                         "timeLong" to timeLong,

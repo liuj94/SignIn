@@ -68,13 +68,15 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
                     //faces是检测出来的人脸参数
                     //检测到人脸的回调,保存人脸图片到本地
                     Log.i("FaceActivity", "当前图片人脸个数：" + faces.size)
+                    Log.i("FaceActivity", "isSavingPic==：" + isSavingPic)
                     if (!isSavingPic) {
+
                         if (faces.size > 0) {
                             preFrame?.let {
                                 preFrameList.add(it)
                             }
                             if (preFrameList.size > 5) {
-
+                                Log.i("FaceActivity", "preFrameList.size ==：" + preFrameList.size )
                                 isSavingPic = true
                                 preFrame?.let {
 //                        executorService.submit(SavePicRunnable(it))
@@ -142,12 +144,12 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
             binding.faceDetectView.initCamera()
             binding.faceDetectView.detectConfig.CameraType = Camera.CameraInfo.CAMERA_FACING_FRONT
             binding.faceDetectView.detectConfig.EnableFaceDetect = true
-            binding.faceDetectView.detectConfig.MinDetectTime = 1500
+            binding.faceDetectView.detectConfig.MinDetectTime = 1000
             binding.faceDetectView.detectConfig.Simple = 0.2f //图片检测时的压缩取样率，0~1，越小检测越流畅
-            binding.faceDetectView.detectConfig.MaxDetectTime = 3000 //进入智能休眠检测，以2秒一次的这个速度检测
+            binding.faceDetectView.detectConfig.MaxDetectTime = 2000 //进入智能休眠检测，以2秒一次的这个速度检测
             binding.faceDetectView.detectConfig.EnableIdleSleepOption = true //启用智能休眠检测机制
             binding.faceDetectView.detectConfig.IdleSleepOptionJudgeTime =
-                1000 * 10 //1分钟内没有检测到人脸，进入智能休眠检测
+                1000 * 60 //1分钟内没有检测到人脸，进入智能休眠检测
         }
         binding.faceDetectView.startCameraPreview()
     }
@@ -158,6 +160,7 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
     }
 
     private fun saveFacePicToLocal(bitmap: Bitmap) {
+        Log.e("FaceActivity", "saveFacePicToLocal=isSavingPic="+isSavingPic)
         val picPath = this.externalCacheDir.toString() + File.separator + "face.jpg"
         var fileOutputStream: FileOutputStream? = null
         val facePicFile = File(picPath)
@@ -191,13 +194,19 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
         bitmap.recycle()
         Log.e("FaceActivity", "保存完成,$picPath")
         try {
-            var faceFile : File= File(picPath)
-            var flag: Boolean = faceFile.exists()
-            if (flag){
-                upImgFile(picPath)
+            mainThread {
+                var faceFile : File= File(picPath)
+                var flag: Boolean = faceFile.exists()
+                Log.e("FaceActivity", "flag,$flag")
+                if (flag){
+
+                    upImgFile(picPath)
+                }
             }
+
         } catch (e: Exception) {
             isSavingPic = false
+            Log.e("FaceActivity", "Exception,"+e.toString())
         }
 
 
@@ -206,13 +215,20 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
     fun upImgFile(picPath: String) {
         mViewModel.isShowLoading.value = true
         upFile(File(picPath), {
-            var urlString = "https://img-blog.csdnimg.cn/20190618124505345.png"
-//            var urlString = it.url
-            detect(urlString,{
+
+//            var urlString = "https://img-blog.csdnimg.cn/20190618124505345.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2EzMTI4NjMwNjM=,size_16,color_FFFFFF,t_70"
+
+            var urlString = it.url
+//            detect(urlString,{
+//                var urlString = "https://meeting.nbqichen.com:20882/profile/upload/2023/03/09/ac479084-cff7-40a1-a7fe-480e6c8f4523.jpg"
                 search(urlString,{
+
                     it.result?.let {result->
+
                         if(!result.user_list.isNullOrEmpty()){
+
                             for (item in result.user_list){
+
                                 sigin(item.user_id)
                             }
                         }
@@ -220,15 +236,27 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
 
                     }
 
-                },{isSavingPic = false})
-            },{isSavingPic = false})
+                },{isSavingPic = false
+                    },{
+                    mViewModel.isShowLoading.value = false
+                })
+//            },{isSavingPic = false})
         }, {
             toast("图片上传失败")
             isSavingPic = false
             mViewModel.isShowLoading.value = false
         }, {
+            isSavingPic = false
+            try {
+                mainThread {
+                    File(picPath).delete()
+                }
 
-            File(picPath).delete()
+            } catch (e: Exception) {
+
+
+            }
+
         })
 
     }
