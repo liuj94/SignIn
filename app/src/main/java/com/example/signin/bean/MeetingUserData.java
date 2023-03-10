@@ -130,7 +130,7 @@ public class MeetingUserData implements Serializable {
     private int travelMsgStatus;
     private String date= "";
     private String payStatus= "";
-    private int signUpStatus;
+    private int signUpStatus = 0;
     private String userMeetingTrip= "";
     private int printStatus;
     private String registerSignUpTime= "";

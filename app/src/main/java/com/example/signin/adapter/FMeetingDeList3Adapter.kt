@@ -54,27 +54,14 @@ class FMeetingDeList3Adapter : BaseBindingAdapter<MeetingUserData, ListMeetingde
         } else {
             holder.typeTv.visibility = View.GONE
         }
-        if (!item.userMeetingSignUpStatus.isNullOrEmpty()) {
+        var SignUpStatus = ""+item.signUpStatus
+//        if (!item.userMeetingSignUpStatus.isNullOrEmpty()) {
+        if (!SignUpStatus.isNullOrEmpty()) {
 
-            if(!model.user_meeting_sign_up_status.isNullOrEmpty()){
-                for (data in model.user_meeting_sign_up_status){
-                    if(item.userMeetingSignUpStatus.equals(data.dictValue))  {
-                        holder.state.text =  data.dictLabel
-                        if(data.dictValue.equals("2")){
-                            holder.state.setTextColor(Color.parseColor("#43CF7C"))
-                        }else if(item.userMeetingSignUpStatus.equals("1")){
-                            holder.state.setTextColor(Color.parseColor("#FFC300"))
-                        }else{
-                            holder.state.setTextColor(Color.parseColor("#666666"))
-                        }
-                        return
-                    }
-                }
-            }
-//            if (!siginUp2List.isNullOrEmpty()) {
-//                for (data in siginUp2List) {
-//                    if (item.userMeetingSignUpStatus.equals(data.dictValue)) {
-//                        holder.state.text = data.dictLabel
+//            if(!model.user_meeting_sign_up_status.isNullOrEmpty()){
+//                for (data in model.user_meeting_sign_up_status){
+//                    if(item.userMeetingSignUpStatus.equals(data.dictValue))  {
+//                        holder.state.text =  data.dictLabel
 //                        if(data.dictValue.equals("2")){
 //                            holder.state.setTextColor(Color.parseColor("#43CF7C"))
 //                        }else if(item.userMeetingSignUpStatus.equals("1")){
@@ -86,6 +73,22 @@ class FMeetingDeList3Adapter : BaseBindingAdapter<MeetingUserData, ListMeetingde
 //                    }
 //                }
 //            }
+
+            if (!siginUp2List.isNullOrEmpty()) {
+                for (data in siginUp2List) {
+                    if (SignUpStatus.equals(data.dictValue)) {
+                        holder.state.text = data.dictLabel
+                        if(data.dictValue.equals("2")){
+                            holder.state.setTextColor(Color.parseColor("#43CF7C"))
+                        }else if(data.dictValue.equals("1")){
+                            holder.state.setTextColor(Color.parseColor("#FFC300"))
+                        }else{
+                            holder.state.setTextColor(Color.parseColor("#666666"))
+                        }
+                        return
+                    }
+                }
+            }
 
             holder.state.visibility = View.VISIBLE
         } else {

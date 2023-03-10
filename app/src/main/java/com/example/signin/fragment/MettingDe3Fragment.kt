@@ -210,7 +210,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         var url =
             PageRoutes.Api_meetinguser + meetingid + "&orderByColumn=createTime&isAsc=desc&&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
         if (!status.isNullOrEmpty()) {
-            url = "$url&status=$status"
+            url = "$url&signUpStatus=$status"
         }
         if (!nameMobile.isNullOrEmpty()) {
             url = "$url&nameMobile=$nameMobile"
@@ -304,7 +304,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 }
             }
         }
-        adapterSelect2?.notifyDataSetChanged();
+        adapterSelect2?.notifyDataSetChanged()
         adapter?.setSiginUp2List(siginUp2List)
     }
 

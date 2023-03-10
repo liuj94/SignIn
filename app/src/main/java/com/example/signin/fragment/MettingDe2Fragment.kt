@@ -130,10 +130,13 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
 
                 override fun onMySuccess(data: List<SiginData>) {
                     super.onMySuccess(data)
-                    binding.num.text = "当前签到点（" + data.size + "）"
-                    list.clear()
-                    list.addAll(data)
-                    adapter?.notifyDataSetChanged()
+                    try {
+                        binding.num.text = "当前签到点（" + data.size + "）"
+                        list.clear()
+                        list.addAll(data)
+                        adapter?.notifyDataSetChanged()
+
+                    }catch(e:Exception){}
 
                 }
 

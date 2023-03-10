@@ -4,28 +4,29 @@ package com.example.signin
 import android.media.MediaPlayer
 import android.text.TextUtils
 import android.util.Log
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.dylanc.longan.toast
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.databinding.ActivityMainBinding
+import com.example.signin.face.ScanTool
 import com.example.signin.fragment.HomeMainFragment
 import com.example.signin.fragment.MyFragment
 import com.hello.scan.ScanCallBack
-import com.hello.scan.ScanTool
+
+
 import getDataType
 
 
-class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>() , ScanCallBack {
+class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>() ,ScanCallBack{
 
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 var  mRingPlayer :MediaPlayer? = null
-var scanTool :ScanTool?= null
+var scanTool : ScanTool?= null
     override fun initData() {
-        scanTool = ScanTool.GET
+        scanTool = ScanTool()
         scanTool?.initSerial(this, "/dev/ttyACM0", 115200, this@MainHomeActivity)
         scanTool?.playSound(true)
 
@@ -181,9 +182,9 @@ var scanTool :ScanTool?= null
     }
 
     override fun onInitScan(isSuccess: Boolean) {
-        val str = if (isSuccess) "初始化成功" else "初始化失败"
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
-        Log.d("onInitScan","str="+str)
+//        val str = if (isSuccess) "初始化成功" else "初始化失败"
+//        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
+//        Log.d("FaceActivity","str="+str)
 
     }
 
