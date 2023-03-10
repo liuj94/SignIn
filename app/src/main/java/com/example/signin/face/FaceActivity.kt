@@ -7,17 +7,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.alibaba.fastjson.JSON
 import com.bifan.detectlib.FaceDetectTextureView
 import com.dylanc.longan.mainThread
 import com.dylanc.longan.toast
-import com.example.signin.LiveDataBus
 import com.example.signin.R
+import com.example.signin.SiginReActivity
+import com.example.signin.SiginReAutoActivity
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActivityFaceBinding
-import detect
 import search
 import sigin
 import upFile
@@ -26,7 +27,7 @@ import java.util.*
 import java.util.concurrent.Executors
 
 
-class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
+class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>(), QRCodeView.Delegate {
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
     var preFrameList: MutableList<Bitmap> = ArrayList<Bitmap>()
     var failedMsg: String = "签到失败"
@@ -39,7 +40,10 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
     var signUpLocationId = ""
     var autoStatus = ""
     var timeLong = 3
+    var moshi = 1
+    var showType = 0
     override fun initData() {
+        binding.mZXingView.setDelegate(this)
         intent.getStringExtra("id")?.let { id = it }
         intent.getStringExtra("meetingid")?.let { meetingid = it }
         intent.getStringExtra("signUpId")?.let { signUpId = it }
@@ -50,8 +54,27 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
         intent.getStringExtra("repeatMsg")?.let { repeatMsg = it }
         intent.getStringExtra("voiceStatus")?.let { voiceStatus = it }
         intent.getIntExtra("timeLong", 3)?.let { timeLong = it }
+        intent.getIntExtra("showType", 3)?.let { showType = it }
         binding.test.setOnClickListener { startDetect() }
+        binding.moshi.setOnClickListener {
+            if(moshi==1){
+                moshi = 2
+                binding.moshi.setText("切换人脸模式")
+                binding.mZXingView.startCamera() // 关闭摄像头预览，并且隐藏扫描框
+                binding.mZXingView.visibility = View.VISIBLE
 
+                binding.faceDetectView.stopCameraPreview()
+                binding.faceDetectView.visibility = View.GONE
+            }else{
+                moshi = 1
+                binding.moshi.setText("切换二维码模式")
+                binding.mZXingView.stopCamera() // 关闭摄像头预览，并且隐藏扫描框
+                binding.mZXingView.visibility = View.GONE
+
+                binding.faceDetectView.startCameraPreview()
+                binding.faceDetectView.visibility = View.VISIBLE
+            }
+        }
         binding.faceDetectView.framePreViewListener =
             object : FaceDetectTextureView.IFramePreViewListener {
                 override fun onFrame(preFrame: Bitmap?): Boolean {
@@ -110,11 +133,11 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
         }
         val timer = Timer()
         timer.schedule(task, 1500)
-        LiveDataBus.get().with("onScanCallBack", String::class.java)
-            .observeForever {
-                var signUpUser = JSON.parseObject(it, SignUpUser::class.java)
-                sigin(signUpUser.id)
-            }
+//        LiveDataBus.get().with("onScanCallBack", String::class.java)
+//            .observeForever {
+//                var signUpUser = JSON.parseObject(it, SignUpUser::class.java)
+//                sigin(signUpUser.id)
+//            }
     }
 
     private fun showToast(state: String) {
@@ -226,9 +249,7 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
                     it.result?.let {result->
 
                         if(!result.user_list.isNullOrEmpty()){
-
                             for (item in result.user_list){
-
                                 sigin(item.user_id)
                             }
                         }
@@ -261,28 +282,100 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>() {
 
     }
 
-    private fun sigin(userMeetingId:String,) {
+    private fun sigin(userMeetingId:String,userMeetingTypeName :String?="") {
 
-        var params = HashMap<String, String>()
-        params["meetingId"] = meetingid//会议id
-        params["signUpLocationId"] = signUpLocationId//签到点id
-        params["signUpId"] =signUpId//签到站id
-        params["userMeetingId"] = userMeetingId//用户参与会议id
-        params["status"] = "2"//用户参与会议id
-        sigin(JSON.toJSONString(params), { success ->
-            if (voiceStatus.equals("1")) {
-                LiveDataBus.get().with("voiceStatus").postValue(success)
-            }
-            showToast(success)
-        }, {
-            showToast("0")
-        }, {
-            isSavingPic = false
-        })
+                var signUpUser = SignUpUser()
+                signUpUser.signUpLocationId = signUpLocationId
+                signUpUser.signUpId = signUpId
+                signUpUser.userMeetingId = userMeetingId
+                signUpUser.meetingId = meetingid
+                signUpUser.userMeetingTypeName = userMeetingTypeName
+                signUpUser.autoStatus =  autoStatus
+                signUpUser.timeLong =  timeLong
+                signUpUser.okMsg = okMsg
+                signUpUser.failedMsg = failedMsg
+                signUpUser.repeatMsg = repeatMsg
+                signUpUser.voiceStatus = voiceStatus
+                if(autoStatus.equals("2")){
+                    if(showType==3){
+                        com.dylanc.longan.startActivity<SiginReActivity>(
+                            "type" to showType,
+                            "data" to signUpUser
+                        )
+                    }else{
+                        var params = java.util.HashMap<String, String>()
+                        params["meetingId"] = signUpUser.meetingId//会议id
+                        params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
+                        params["signUpId"] = signUpUser.signUpId//签到站id
+                        params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
+                        params["status"] = "2"//用户参与会议id
+                        sigin(JSON.toJSONString(params),{success->
+                            signUpUser.success = success
+                            com.dylanc.longan.startActivity<SiginReAutoActivity>(
+                                "type" to showType,
+                                "data" to signUpUser
+                            )
+                        },{},{})}
+                }else{
+                    com.dylanc.longan.startActivity<SiginReActivity>(
+                        "type" to showType,
+                        "data" to signUpUser
+                    )
+                }
+
+
+
+
+//        var params = HashMap<String, String>()
+//        params["meetingId"] = meetingid//会议id
+//        params["signUpLocationId"] = signUpLocationId//签到点id
+//        params["signUpId"] =signUpId//签到站id
+//        params["userMeetingId"] = userMeetingId//用户参与会议id
+//        params["status"] = "2"//用户参与会议id
+//        sigin(JSON.toJSONString(params), { success ->
+//            if (voiceStatus.equals("1")) {
+//                LiveDataBus.get().with("voiceStatus").postValue(success)
+//            }
+//            showToast(success)
+//        }, {
+//            showToast("0")
+//        }, {
+//            isSavingPic = false
+//        })
     }
 
     override fun onDestroy() {
         super.onDestroy()
         endDetect()
+        binding.mZXingView.onDestroy()
     }
+    override fun onScanQRCodeSuccess(result: String?) {
+//        result
+        result?.let {
+            var signUpUser = JSON.parseObject(it, SignUpUser::class.java)
+            sigin(signUpUser.id,signUpUser.userMeetingTypeName)
+        }
+
+    }
+
+    override fun onCameraAmbientBrightnessChanged(isDark: Boolean) {
+
+    }
+
+    override fun onScanQRCodeOpenCameraError() {
+        binding.mZXingView.startCamera()
+        binding.mZXingView.startSpotAndShowRect()
+    }
+    override fun onStart() {
+        super.onStart()
+//        binding.mZXingView.startCamera() // 打开后置摄像头开始预览，但是并未开始识别
+
+    }
+
+    override fun onStop() {
+        binding.mZXingView.stopCamera() // 关闭摄像头预览，并且隐藏扫描框
+        super.onStop()
+    }
+
+
 }

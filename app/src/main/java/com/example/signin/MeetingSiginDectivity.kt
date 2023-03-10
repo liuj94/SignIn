@@ -129,6 +129,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                                         "signUpLocationId" to id,
                                         "autoStatus" to autoStatus,
                                         "timeLong" to timeLong,
+                                        "showType" to showType,
                                         "okMsg" to okMsg,
                                         "repeatMsg" to repeatMsg,
                                         "failedMsg" to failedMsg,
@@ -172,52 +173,52 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         binding.moshill.setOnClickListener {
             setState()
         }
-        binding.shaoma.setOnClickListener {
-           activity?.let {
-               XXPermissions.with(activity)
-                   .permission(Permission.CAMERA)
-                   .permission(Permission.READ_MEDIA_IMAGES)
-                   .request(object : OnPermissionCallback {
-
-                       override fun onGranted(permissions: MutableList<String>, all: Boolean) {
-                           if (all) {
-                               com.dylanc.longan.startActivity<FaceActivity>()
-                           } else {
-                               toast("获取手机权限失败")
-                           }
-
-                       }
-
-                       override fun onDenied(permissions: MutableList<String>, never: Boolean) {
-
-
-                       }
-                   })
-//                    XXPermissions.with(activity)
-//                        .permission(Permission.CAMERA)
-//                        .request(object : OnPermissionCallback {
+//        binding.shaoma.setOnClickListener {
+//           activity?.let {
+//               XXPermissions.with(activity)
+//                   .permission(Permission.CAMERA)
+//                   .permission(Permission.READ_MEDIA_IMAGES)
+//                   .request(object : OnPermissionCallback {
 //
-//                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
-//                                if (!all) {
-//                                    toast("获取权限失败")
-//                                } else {
-//                                    var intent = Intent(it,ScanActivity::class.java)
-//                                    startActivityForResult(intent,1000)
-//                                }
+//                       override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+//                           if (all) {
+//                               com.dylanc.longan.startActivity<FaceActivity>()
+//                           } else {
+//                               toast("获取手机权限失败")
+//                           }
 //
-//                            }
+//                       }
 //
-//                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
-//                                toast("获取权限失败")
+//                       override fun onDenied(permissions: MutableList<String>, never: Boolean) {
 //
-//                            }
-//                        })
-
-                }
-
-
-
-        }
+//
+//                       }
+//                   })
+////                    XXPermissions.with(activity)
+////                        .permission(Permission.CAMERA)
+////                        .request(object : OnPermissionCallback {
+////
+////                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+////                                if (!all) {
+////                                    toast("获取权限失败")
+////                                } else {
+////                                    var intent = Intent(it,ScanActivity::class.java)
+////                                    startActivityForResult(intent,1000)
+////                                }
+////
+////                            }
+////
+////                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
+////                                toast("获取权限失败")
+////
+////                            }
+////                        })
+//
+//                }
+//
+//
+//
+//        }
 
     }
     private fun getList() {
