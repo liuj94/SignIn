@@ -386,10 +386,15 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>(), 
     override fun onScanQRCodeSuccess(result: String?) {
 //        result
         result?.let {
-            binding.mZXingView.stopSpot()
-            var signUpUser = JSON.parseObject(it, SignUpUser::class.java)
+
+            try {
+                binding.mZXingView.stopSpot()
+                var signUpUser = JSON.parseObject(it, SignUpUser::class.java)
 //            sigin(signUpUser.id,signUpUser.userMeetingTypeName)
-            sigin("129",signUpUser.userMeetingTypeName)
+                sigin("129",signUpUser.userMeetingTypeName)
+            }catch (e :java.lang.Exception){
+                toast("二维码信息错误")
+            }
         }
 
     }
