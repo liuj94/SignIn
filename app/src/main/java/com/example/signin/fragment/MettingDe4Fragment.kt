@@ -465,7 +465,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                 signUpUser.repeatMsg = repeatMsg
                 signUpUser.voiceStatus = voiceStatus
 
-                if (autoStatus.equals("2")) {
+                if (autoStatus.equals("1")) {
                     if (type == 3) {
                         startActivity<SiginReActivity>("type" to type, "data" to signUpUser)
                     } else {

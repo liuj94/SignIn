@@ -414,7 +414,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 signUpUser.failedMsg = failedMsg
                 signUpUser.repeatMsg = repeatMsg
                 signUpUser.voiceStatus = voiceStatus
-                if(autoStatus.equals("2")){
+                if(autoStatus.equals("1")){
                     if(showType==3){
                         com.dylanc.longan.startActivity<SiginReActivity>(
                             "type" to showType,

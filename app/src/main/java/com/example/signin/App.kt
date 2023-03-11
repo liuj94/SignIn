@@ -7,6 +7,7 @@ import android.content.Context
 import android.graphics.Typeface
 import android.os.Build
 import com.example.signin.agora.GlobalSettings
+import com.tencent.bugly.crashreport.CrashReport
 
 class App :  Application() {
     companion object {
@@ -30,7 +31,7 @@ class App :  Application() {
         mApplication = this
 
         initUtils()
-
+        CrashReport.initCrashReport(this, "361d06bc84", false)
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
             closeAndroidPDialog()

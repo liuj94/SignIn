@@ -13,7 +13,7 @@ android {
         applicationId "com.example.signin"
         minSdk 21
         targetSdk 33
-        versionCode 7
+        versionCode 8
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -115,5 +115,5 @@ dependencies {
 
 //    implementation "io.github.anylifezlb:Face-Verification:3.8.4"
     implementation 'com.github.bifan-wei:FaceDetector:V1.0'
-
+    implementation 'com.tencent.bugly:crashreport:4.1.9'
 }

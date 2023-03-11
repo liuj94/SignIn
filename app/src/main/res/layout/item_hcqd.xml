@@ -88,7 +88,7 @@
                     android:id="@+id/data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="9月27日"
+                    android:text=""
                     android:gravity="center"
                     android:textColor="#ff7d8592"
                     android:textSize="12sp"
@@ -98,7 +98,7 @@
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="14:00 - 16:00"
+                    android:text=""
                     android:textColor="#ff030303"
                     android:textSize="19sp"
                     />
@@ -112,7 +112,7 @@
                         android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="签到点地点"
+                        android:text="签到点:"
                         android:textColor="#ff7d8592"
                         android:textSize="12sp"
                         />

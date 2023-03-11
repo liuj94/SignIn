@@ -124,7 +124,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                         binding.stateIv.setImageResource(R.mipmap.cf_h)
                     }
                     signUpUser?.let {
-                        if(it.autoStatus.equals("2")){
+                        if(it.autoStatus.equals("1")){
                             binding.submit.text = "返回（3）"
                             timer?.start()
                         } else {

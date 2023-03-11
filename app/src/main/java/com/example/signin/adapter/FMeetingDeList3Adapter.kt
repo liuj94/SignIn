@@ -55,6 +55,7 @@ class FMeetingDeList3Adapter : BaseBindingAdapter<MeetingUserData, ListMeetingde
             holder.typeTv.visibility = View.GONE
         }
         var SignUpStatus = ""+item.signUpStatus
+        holder.state.text = ""
 //        if (!item.userMeetingSignUpStatus.isNullOrEmpty()) {
         if (!SignUpStatus.isNullOrEmpty()) {
 
