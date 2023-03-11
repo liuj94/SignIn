@@ -11,11 +11,8 @@ import com.dylanc.longan.toast
 import com.example.signin.adapter.FMeetingDeList3Adapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
-import com.example.signin.bean.MeetingUserData
+import com.example.signin.bean.*
 
-import com.example.signin.bean.MeetingUserModel
-import com.example.signin.bean.SiginData
-import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActMeetingSigindeBinding
 import com.example.signin.face.FaceActivity
 import com.example.signin.net.JsonCallback
@@ -67,8 +64,9 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                     "showType" to showType)
             }
         }
-
+        setSelect2Data(showType)
         binding.recyclerview.adapter = adapter
+
         binding.sous.setOnClickListener {
             nameMobile = binding.et.text.toString().trim()
 //            binding.et.setText(nameMobile)
@@ -220,6 +218,40 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 //
 //        }
 
+    }
+    private var siginUp2List: MutableList<TypeData> = ArrayList()
+    private fun setSelect2Data(type: Int) {
+        //1 注册签到2 来程签到3 入住签到4 会场签到5 餐饮签到6 礼品签到7 返程签到
+        var model: TypeModel
+        if (!kv.getString("TypeModel", "").isNullOrEmpty()) {
+            model = JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
+            siginUp2List.clear()
+            when (type) {
+                1 -> {
+                    siginUp2List.addAll(model.sys_zhuce)
+                }
+                2 -> {
+                    siginUp2List.addAll(model.sys_laicheng)
+                }
+                3 -> {
+                    siginUp2List.addAll(model.sys_ruzhu)
+                }
+                4 -> {
+                    siginUp2List.addAll(model.sys_huichang)
+                }
+                5 -> {
+                    siginUp2List.addAll(model.sys_canyin)
+                }
+                6 -> {
+                    siginUp2List.addAll(model.sys_liping)
+                }
+                7 -> {
+                    siginUp2List.addAll(model.sys_fancheng)
+                }
+            }
+        }
+
+        adapter?.setSiginUp2List(siginUp2List)
     }
     private fun getList() {
         if (nameMobile.isNullOrEmpty()) {

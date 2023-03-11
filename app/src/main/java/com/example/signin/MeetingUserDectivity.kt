@@ -52,13 +52,27 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             binding.itemLpff.root.visibility = View.GONE
             binding.itemFcxx.root.visibility = View.GONE
             when (showType) {
-                1 -> { binding.itemZcbd.root.visibility = View.VISIBLE}
-                2 -> {binding.itemLcxx.root.visibility = View.VISIBLE}
-                3 -> {binding.itemRzxx.root.visibility = View.VISIBLE}
-                4 -> { binding.itemHcqd.root.visibility = View.VISIBLE}
-                5 -> { binding.itemCyxi.root.visibility = View.VISIBLE}
-                6 -> { binding.itemLpff.root.visibility = View.VISIBLE}
-                7 -> {binding.itemFcxx.root.visibility = View.VISIBLE}
+                1 -> {
+                    binding.itemZcbd.root.visibility = View.VISIBLE
+                }
+                2 -> {
+                    binding.itemLcxx.root.visibility = View.VISIBLE
+                }
+                3 -> {
+                    binding.itemRzxx.root.visibility = View.VISIBLE
+                }
+                4 -> {
+                    binding.itemHcqd.root.visibility = View.VISIBLE
+                }
+                5 -> {
+                    binding.itemCyxi.root.visibility = View.VISIBLE
+                }
+                6 -> {
+                    binding.itemLpff.root.visibility = View.VISIBLE
+                }
+                7 -> {
+                    binding.itemFcxx.root.visibility = View.VISIBLE
+                }
             }
         }
         binding.itemDdxx.ll.setOnClickListener {
@@ -77,14 +91,14 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         }
         binding.itemLcxx.lcBtn.setOnClickListener {
             if (state_laicheng.status.equals("1")) {
-                gotoSigin(state_laicheng,2)
+                gotoSigin(state_laicheng, 2)
 
             }
 
         }
         binding.itemZcbd.zcBtn.setOnClickListener {
             if (state_zhuche.status.equals("1")) {
-                gotoSigin(state_zhuche,1)
+                gotoSigin(state_zhuche, 1)
 //                startActivity<SiginReActivity>("type" to 1, "data" to state_zhuche)
             }
         }
@@ -96,34 +110,36 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         }
         binding.itemHcqd.zcBtn.setOnClickListener {
             if (state_huichang.status.equals("1")) {
-                gotoSigin(state_huichang,4)
+                gotoSigin(state_huichang, 4)
 //                startActivity<SiginReActivity>("type" to 4, "data" to state_huichang)
-            }else{
-                if(state_huichang.location.equals("")){
-                    gotoSigin(state_huichang,4)
-                }
             }
+//            else{
+//                if(state_huichang.location.equals("")){
+//                    gotoSigin(state_huichang,4)
+//                }
+//            }
         }
         binding.itemCyxi.zcBtn.setOnClickListener {
             if (state_chanyin.status.equals("1")) {
-                gotoSigin(state_chanyin,5)
+                gotoSigin(state_chanyin, 5)
 //                startActivity<SiginReActivity>("type" to 5, "data" to state_chanyin)
-            }else{
-                if(state_chanyin.location.equals("")){
-                    gotoSigin(state_chanyin,5)
-                }
             }
+//            else{
+//                if(state_chanyin.location.equals("")){
+//                    gotoSigin(state_chanyin,5)
+//                }
+//            }
         }
         binding.itemFcxx.lcBtn.setOnClickListener {
             if (state_fancheng.status.equals("1")) {
-                gotoSigin(state_fancheng,7)
+                gotoSigin(state_fancheng, 7)
 //                startActivity<SiginReActivity>("type" to 7, "data" to state_fancheng)
             }
         }
 
         binding.itemLpff.lpBtn.setOnClickListener {
             if (state_liwu.status.equals("1")) {
-                gotoSigin(state_liwu,6)
+                gotoSigin(state_liwu, 6)
 //                startActivity<SiginReActivity>("type" to 6, "data" to state_liwu)
             }
         }
@@ -141,7 +157,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         }
     }
 
-    private fun gotoSigin(data: SignUpUser,type :Int) {
+    private fun gotoSigin(data: SignUpUser, type: Int) {
         if (data.equals("2")) {
 
             var params = HashMap<String, String>()
@@ -216,7 +232,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         binding.itemYhxx.name.text = data.name
         binding.itemYhxx.gongshiName.text = data.corporateName
         binding.itemYhxx.zhengjiangType.text = data.userMeetingTypeName
-        binding.itemYhxx.jiedaidName.text = "接待员："+data.personChargeName
+        binding.itemYhxx.jiedaidName.text = "接待员：" + data.personChargeName
         mobile = data.personChargeMobile
         mobile1 = data.mobile
         Glide.with(this@MeetingUserDectivity).load(PageRoutes.BaseUrl + data.avatar)
@@ -312,6 +328,8 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     binding.itemZcbd.ll.visibility = View.VISIBLE
                     setStateColor(model.sys_zhuce, "1", binding.itemZcbd.zcBtn)
 
+                    state_zhuche.userMeetingId = data.id
+
                     item.userMeetingSignUp?.let {
                         state_zhuche.status = "" + item.userMeetingSignUp.status
                         setStateColor(
@@ -321,27 +339,19 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         )
                     }
                     item.meetingSignUpLocation?.let {
+                        state_zhuche.userMeetingId = data.id
+                        eData(state_zhuche, it)
 
-                        state_zhuche.meetingName = item.meetingSignUpLocation.name
-                        state_zhuche.autoStatus = item.meetingSignUpLocation.autoStatus
-                        state_zhuche.timeLong = item.meetingSignUpLocation.timeLong
-                        binding.itemZcbd.name.text = item.meetingSignUpLocation.name
+                        binding.itemZcbd.name.text = it.name
                         binding.itemZcbd.data.text =
-                            getDateStr("MM月dd", item.meetingSignUpLocation.startTime)
-                        binding.itemZcbd.address.text = item.meetingSignUpLocation.address
+                            getDateStr("MM月dd", it.startTime)
+                        binding.itemZcbd.address.text = it.address
                         binding.itemZcbd.time.text = getDateStr(
                             "HH:mm",
-                            item.meetingSignUpLocation.startTime
-                        ) + "-" + getDateStr("HH:mm", item.meetingSignUpLocation.endTime)
+                            it.startTime
+                        ) + "-" + getDateStr("HH:mm", it.endTime)
                     }
-//                    state_zhuche.meetingId = item.meetingSignUpLocation.meetingId
-//                    state_zhuche.signUpId = item.meetingSignUpLocation.signUpId
-//                    state_zhuche.signUpLocationId = item.meetingSignUpLocation.id
-                    state_zhuche.userMeetingId = data.id
-//                    state_zhuche.failedMsg = item.meetingSignUpLocation.failedMsg
-//                    state_zhuche.okMsg = item.meetingSignUpLocation.okMsg
-//                    state_zhuche.repeatMsg = item.meetingSignUpLocation.repeatMsg
-                    eData(state_zhuche,item.meetingSignUpLocation)
+
 
                 }
                 6 -> {
@@ -349,38 +359,31 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     setStateColor(model.sys_liping, "1", binding.itemLpff.lpBtn)
 
                     item.userMeetingSignUp?.let {
-                        state_liwu.status = "" + item.userMeetingSignUp.status
+                        state_liwu.status = "" + it.status
                         setStateColor(
                             model.sys_liping,
-                            "" + item.userMeetingSignUp.status,
+                            "" + it.status,
                             binding.itemLpff.lpBtn
                         )
 
                     }
-                    binding.itemLpff.kong.visibility = View.GONE
-                    binding.itemLpff.ll.visibility = View.VISIBLE
-                    state_liwu.meetingName = item.meetingSignUpLocation.name
-                    state_liwu.autoStatus = item.meetingSignUpLocation.autoStatus
-                    state_liwu.timeLong = item.meetingSignUpLocation.timeLong
-                    binding.itemLpff.name.text = item.meetingSignUpLocation.name
-                    binding.itemLpff.date.text =
-                        getDateStr("MM月dd", item.meetingSignUpLocation.startTime)
-                    binding.itemLpff.address.text = item.meetingSignUpLocation.address
-                    //                                binding.itemLpff.time.text =
-                    //                                    item.meetingSignUpLocation.startTime + item.meetingSignUpLocation.endTime
-                    binding.itemLpff.time.text = getDateStr(
-                        "HH:mm",
-                        item.meetingSignUpLocation.startTime
-                    ) + "-" + getDateStr("HH:mm", item.meetingSignUpLocation.endTime)
-
-//                    state_liwu.meetingId = item.meetingSignUpLocation.meetingId
-//                    state_liwu.signUpId = item.meetingSignUpLocation.signUpId
-//                    state_liwu.signUpLocationId = item.meetingSignUpLocation.id
                     state_liwu.userMeetingId = data.id
-//                    state_liwu.failedMsg = item.meetingSignUpLocation.failedMsg
-//                    state_liwu.okMsg = item.meetingSignUpLocation.okMsg
-//                    state_liwu.repeatMsg = item.meetingSignUpLocation.repeatMsg
-                    eData(state_liwu,item.meetingSignUpLocation)
+                    item.meetingSignUpLocation?.let {
+
+                        eData(state_liwu, it)
+                        binding.itemLpff.kong.visibility = View.GONE
+                        binding.itemLpff.ll.visibility = View.VISIBLE
+                        binding.itemLpff.name.text = it.name
+                        binding.itemLpff.date.text =
+                            getDateStr("MM月dd", it.startTime)
+                        binding.itemLpff.address.text = it.address
+                        binding.itemLpff.time.text = getDateStr(
+                            "HH:mm",
+                            it.startTime
+                        ) + "-" + getDateStr("HH:mm", it.endTime)
+                    }
+
+
                 }
                 3 -> {
                     //入住签到
@@ -394,7 +397,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemRzxx.ddBtn
                         )
                         for (list in model.sys_ruzhu) {
-                            if (list.dictValue.equals("" +item.userMeetingSignUp.status)) {
+                            if (list.dictValue.equals("" + item.userMeetingSignUp.status)) {
                                 state_ruzhu.status = list.dictValue
                                 if (list.dictValue.equals("1")) {
                                     binding.itemRzxx.location.text =
@@ -405,38 +408,32 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     }
                     binding.itemRzxx.kong.visibility = View.GONE
                     binding.itemRzxx.ll.visibility = View.VISIBLE
-                    state_ruzhu.meetingName = item.meetingSignUpLocation.name
-                    state_ruzhu.autoStatus = item.meetingSignUpLocation.autoStatus
-                    state_ruzhu.timeLong = item.meetingSignUpLocation.timeLong
-                    binding.itemRzxx.name.text = item.meetingSignUpLocation.name
-                    binding.itemRzxx.date1.text = getDateStr(
-                        "MM月dd",
-                        item.meetingSignUpLocation.startTime
-                    ).toString()
-                    binding.itemRzxx.date2.text = getDateStr(
-                        "MM月dd",
-                        item.meetingSignUpLocation.endTime
-                    ).toString()
-                    binding.itemRzxx.address.text = item.meetingSignUpLocation.address
-                    item.meetingSignUpLocation.location?.let {
-                        binding.itemRzxx.location.text =
-                            "房间号：" + item.meetingSignUpLocation.location
-                        state_ruzhu.location = item.meetingSignUpLocation.location
+                    item.meetingSignUpLocation?.let {
+                        state_ruzhu.userMeetingId = data.id
+                        eData(state_ruzhu, it)
+                        binding.itemRzxx.name.text = it.name
+                        binding.itemRzxx.date1.text = getDateStr(
+                            "MM月dd",
+                            it.startTime
+                        ).toString()
+                        binding.itemRzxx.date2.text = getDateStr(
+                            "MM月dd",
+                            it.endTime
+                        ).toString()
+                        binding.itemRzxx.address.text = it.address
+                        it.location?.let { location ->
+                            binding.itemRzxx.location.text =
+                                "房间号：" + location
+                        }
+
+                        binding.itemRzxx.day.text = "" + daydiff(
+                            it.startTime,
+                            it.endTime
+                        ) + "天"
+
+
                     }
 
-                    binding.itemRzxx.day.text = "" + daydiff(
-                        item.meetingSignUpLocation.startTime,
-                        item.meetingSignUpLocation.endTime
-                    ) + "天"
-
-//                    state_ruzhu.meetingId = item.meetingSignUpLocation.meetingId
-//                    state_ruzhu.signUpId = item.meetingSignUpLocation.signUpId
-//                    state_ruzhu.signUpLocationId = item.meetingSignUpLocation.id
-                    state_ruzhu.userMeetingId = data.id
-//                    state_ruzhu.failedMsg = item.meetingSignUpLocation.failedMsg
-//                    state_ruzhu.okMsg = item.meetingSignUpLocation.okMsg
-//                    state_ruzhu.repeatMsg = item.meetingSignUpLocation.repeatMsg
-                    eData(state_ruzhu,item.meetingSignUpLocation)
 
                 }
                 4 -> {
@@ -446,15 +443,17 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         "1",
                         binding.itemHcqd.zcBtn
                     )
+                    state_huichang.userMeetingId = data.id
+
                     item.userMeetingSignUp?.let {
 
                         setStateColor(
                             model.sys_huichang,
-                            "" + item.userMeetingSignUp.status,
+                            "" + it.status,
                             binding.itemHcqd.zcBtn
                         )
                         for (list in model.sys_huichang) {
-                            if (list.dictValue.equals("" +item.userMeetingSignUp.status)) {
+                            if (list.dictValue.equals("" + item.userMeetingSignUp.status)) {
                                 state_huichang.status = list.dictValue
                                 if (list.dictValue.equals("1")) {
                                     binding.itemHcqd.location.text =
@@ -463,43 +462,33 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             }
                         }
                     }
-                    binding.itemHcqd.kong.visibility = View.GONE
-                    binding.itemHcqd.ll.visibility = View.VISIBLE
-                    state_huichang.meetingName = item.meetingSignUpLocation.name
-                    state_huichang.autoStatus = item.meetingSignUpLocation.autoStatus
-                    state_huichang.timeLong = item.meetingSignUpLocation.timeLong
-                    binding.itemHcqd.name.text = item.meetingSignUpLocation.name
-                    binding.itemHcqd.data.text = getDateStr(
-                        "MM月dd",
-                        item.meetingSignUpLocation.startTime
-                    ).toString()
-                    //                                binding.itemHcqd.time.text =
-                    //                                    item.meetingSignUpLocation.startTime + item.meetingSignUpLocation.endTime
-                    binding.itemHcqd.time.text = getDateStr(
-                        "HH:mm",
-                        item.meetingSignUpLocation.startTime
-                    ).toString() + "-" + getDateStr(
-                        "HH:mm",
-                        item.meetingSignUpLocation.endTime
-                    ).toString()
+                    item.meetingSignUpLocation?.let {
+                        eData(state_huichang, it)
+                        state_huichang.userMeetingId = data.id
+                        binding.itemHcqd.kong.visibility = View.GONE
+                        binding.itemHcqd.ll.visibility = View.VISIBLE
 
-                    binding.itemHcqd.address.text = item.meetingSignUpLocation.address
-                    item.meetingSignUpLocation.location?.let {
-                        binding.itemHcqd.location.text =
-                            "座位号：" + item.meetingSignUpLocation.location
-                        state_huichang.location = item.meetingSignUpLocation.location
+                        binding.itemHcqd.name.text = it.name
+                        binding.itemHcqd.data.text = getDateStr(
+                            "MM月dd",
+                            it.startTime
+                        )
+                        binding.itemHcqd.time.text = getDateStr(
+                            "HH:mm",
+                            it.startTime
+                        ).toString() + "-" + getDateStr(
+                            "HH:mm",
+                            it.endTime
+                        ).toString()
+
+                        binding.itemHcqd.address.text = it.address
+                        it.location?.let { location ->
+                            binding.itemHcqd.location.text =
+                                "座位号：" + location
+
+                        }
                     }
 
-                    //                                binding.itemHcqd.location.text = "请到"+item.meetingSignUpLocation.location+"号桌"
-
-//                    state_huichang.meetingId = item.meetingSignUpLocation.meetingId
-//                    state_huichang.signUpId = item.meetingSignUpLocation.signUpId
-//                    state_huichang.signUpLocationId = item.meetingSignUpLocation.id
-                    state_huichang.userMeetingId = data.id
-//                    state_huichang.failedMsg = item.meetingSignUpLocation.failedMsg
-//                    state_huichang.okMsg = item.meetingSignUpLocation.okMsg
-//                    state_huichang.repeatMsg = item.meetingSignUpLocation.repeatMsg
-                    eData(state_huichang,item.meetingSignUpLocation)
 
                 }
                 5 -> {
@@ -508,11 +497,11 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     item.userMeetingSignUp?.let {
                         setStateColor(
                             model.sys_canyin,
-                            "" + item.userMeetingSignUp.status,
+                            "" + it.status,
                             binding.itemCyxi.zcBtn
                         )
                         for (list in model.sys_canyin) {
-                            if (list.dictValue.equals("" +item.userMeetingSignUp.status)) {
+                            if (list.dictValue.equals("" + it.status)) {
                                 state_chanyin.status = list.dictValue
                                 if (list.dictValue.equals("1")) {
                                     binding.itemCyxi.location.text =
@@ -523,37 +512,34 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     }
                     binding.itemCyxi.kong.visibility = View.GONE
                     binding.itemCyxi.ll.visibility = View.VISIBLE
-                    state_chanyin.meetingName = item.meetingSignUpLocation.name
-                    state_chanyin.autoStatus = item.meetingSignUpLocation.autoStatus
-                    state_chanyin.timeLong = item.meetingSignUpLocation.timeLong
-                    binding.itemCyxi.name.text = item.meetingSignUpLocation.name
-                    binding.itemCyxi.date.text = getDateStr(
-                        "MM月dd",
-                        item.meetingSignUpLocation.startTime
-                    ).toString()
+                    item.meetingSignUpLocation?.let {
+                        state_chanyin.userMeetingId = data.id
 
-                    binding.itemCyxi.time.text = getDateStr(
-                        "HH:mm",
-                        item.meetingSignUpLocation.startTime
-                    ).toString() + "-" + getDateStr(
-                        "HH:mm",
-                        item.meetingSignUpLocation.endTime
-                    ).toString()
+                        eData(state_chanyin,it)
+                        binding.itemCyxi.name.text = it.name
+                        binding.itemCyxi.date.text = getDateStr(
+                            "MM月dd",
+                            it.startTime
+                        ).toString()
 
-                    binding.itemCyxi.address.text = item.meetingSignUpLocation.address
-                    item.meetingSignUpLocation.location?.let {
-                        binding.itemCyxi.location.text =
-                            "请到" + it + "号桌"
-                        state_chanyin.location = item.meetingSignUpLocation.location
+                        binding.itemCyxi.time.text = getDateStr(
+                            "HH:mm",
+                            it.startTime
+                        ).toString() + "-" + getDateStr(
+                            "HH:mm",
+                            it.endTime
+                        ).toString()
+
+                        binding.itemCyxi.address.text = it.address
+                        it.location?.let {location->
+                            binding.itemCyxi.location.text =
+                                "请到" + it + "号桌"
+                            state_chanyin.location = location
+                        }
+
+
                     }
-//                    state_chanyin.meetingId = item.meetingSignUpLocation.meetingId
-//                    state_chanyin.signUpId = item.meetingSignUpLocation.signUpId
-//                    state_chanyin.signUpLocationId = item.meetingSignUpLocation.id
-                    state_chanyin.userMeetingId = data.id
-//                    state_chanyin.failedMsg = item.meetingSignUpLocation.failedMsg
-//                    state_chanyin.okMsg = item.meetingSignUpLocation.okMsg
-//                    state_chanyin.repeatMsg = item.meetingSignUpLocation.repeatMsg
-                    eData(state_chanyin,item.meetingSignUpLocation)
+
 
                 }
                 7 -> {
@@ -564,19 +550,22 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         binding.itemFcxx.lcBtn
                     )
                     item.userMeetingSignUp?.let {
-                        state_fancheng.status = "" + item.userMeetingSignUp.status
+                        state_fancheng.status = "" + it.status
                         setStateColor(
                             model.sys_fancheng,
-                            "" + item.userMeetingSignUp.status,
+                            "" + it.status,
                             binding.itemFcxx.lcBtn
                         )
                     }
+                    item.meetingSignUpLocation?.let {
+                        state_fancheng.userMeetingId = data.id
+                        eData(state_fancheng, it)
+                    }
+
                     item.backUserMeetingTrip?.let {
                         binding.itemFcxx.kong.visibility = View.GONE
                         binding.itemFcxx.ll.visibility = View.VISIBLE
-                        state_fancheng.meetingName = item.meetingSignUpLocation.name
-                        state_fancheng.autoStatus = item.meetingSignUpLocation.autoStatus
-                        state_fancheng.timeLong = item.meetingSignUpLocation.timeLong
+
                         binding.itemFcxx.name.text = it.remark
                         binding.itemFcxx.lcData1.text =
                             getDateStr("MM月dd", it.startDate).toString()
@@ -606,14 +595,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         }
 
 
-//                        state_fancheng.meetingId = item.meetingSignUpLocation.meetingId
-//                        state_fancheng.signUpId = item.meetingSignUpLocation.signUpId
-//                        state_fancheng.signUpLocationId = item.meetingSignUpLocation.id
-                        state_fancheng.userMeetingId = data.id
-//                        state_fancheng.failedMsg = item.meetingSignUpLocation.failedMsg
-//                        state_fancheng.okMsg = item.meetingSignUpLocation.okMsg
-//                        state_fancheng.repeatMsg = item.meetingSignUpLocation.repeatMsg
-                        eData(state_fancheng,item.meetingSignUpLocation)
+
                     }
                 }
                 2 -> {
@@ -631,15 +613,15 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemLcxx.lcBtn
                         )
                     }
-
-
+                    item.meetingSignUpLocation?.let {
+                        state_laicheng.userMeetingId = data.id
+                        eData(state_laicheng, it)
+                    }
                     item.userMeetingTrip?.let {
                         binding.itemLcxx.kong.visibility = View.GONE
                         binding.itemLcxx.ll.visibility = View.VISIBLE
                         binding.itemLcxx.name.text = it.remark
-                        state_laicheng.meetingName = item.meetingSignUpLocation.name
-                        state_laicheng.autoStatus = item.meetingSignUpLocation.autoStatus
-                        state_laicheng.timeLong = item.meetingSignUpLocation.timeLong
+
                         binding.itemLcxx.lcData1.text =
                             getDateStr("MM月dd", it.startDate).toString()
                         binding.itemLcxx.lcDidian1.text = it.startCity
@@ -667,14 +649,8 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
                             }
                         }
-//                        state_laicheng.meetingId = item.meetingSignUpLocation.meetingId
-//                        state_laicheng.signUpId = item.meetingSignUpLocation.signUpId
-//                        state_laicheng.signUpLocationId = item.meetingSignUpLocation.id
-                        state_laicheng.userMeetingId = data.id
-//                        state_laicheng.failedMsg = item.meetingSignUpLocation.failedMsg
-//                        state_laicheng.okMsg = item.meetingSignUpLocation.okMsg
-//                        state_laicheng.repeatMsg = item.meetingSignUpLocation.repeatMsg
-                        eData(state_laicheng,item.meetingSignUpLocation)
+
+
                     }
                 }
             }
@@ -755,13 +731,27 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         return day2 - day1
     }
 
-    fun eData(d1:SignUpUser,d2: MeetingUserDeData.MeetingSignUpsBean.MeetingSignUpLocationBean){
-        d1.meetingId = d2.meetingId
-        d1.signUpId = d2.signUpId
-        d1.signUpLocationId = d2.id
-        d1.failedMsg = d2.failedMsg
-        d1.okMsg = d2.okMsg
-        d1.repeatMsg = d2.repeatMsg
-        d1.voiceStatus = d2.speechStatus
+    fun eData(d1: SignUpUser, d2: MeetingUserDeData.MeetingSignUpsBean.MeetingSignUpLocationBean) {
+//        d1.meetingId = d2.meetingId
+//        d1.signUpId = d2.signUpId
+//        d1.signUpLocationId = d2.id
+//        d1.meetingName = d2.name
+//        d1.autoStatus = d2.autoStatus
+//        d1.timeLong = d2.timeLong
+//        d1.failedMsg = d2.failedMsg
+//        d1.okMsg = d2.okMsg
+//        d1.repeatMsg = d2.repeatMsg
+        d2.meetingId?.let { d1.meetingId = it }
+        d2.signUpId?.let { d1.signUpId = it }
+        d2.id?.let { d1.signUpLocationId = it }
+        d2.name?.let { d1.meetingName = it }
+        d2.autoStatus?.let { d1.autoStatus = it }
+        d2.timeLong?.let { d1.timeLong = it }
+        d2.failedMsg?.let { d1.failedMsg = it }
+        d2.okMsg?.let { d1.okMsg = it }
+        d2.repeatMsg?.let { d1.repeatMsg = it }
+        d2.speechStatus?.let { d1.voiceStatus = it }
+
+
     }
 }

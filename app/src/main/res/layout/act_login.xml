@@ -89,7 +89,8 @@
                 android:singleLine="true"
                 android:textColor="#ff333333"
                 android:textColorHint="#ff999999"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:text=""/>
 
             <EditText
                 android:id="@+id/password"
@@ -105,7 +106,8 @@
                 android:singleLine="true"
                 android:textColor="#ff333333"
                 android:textColorHint="#ff999999"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:text=""/>
 
             <TextView
                 android:id="@+id/login"

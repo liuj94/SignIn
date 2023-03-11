@@ -75,6 +75,27 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
             timeLong = "3"
             setState()
         }
+        binding.time3.setOnClickListener {
+            binding.time4.setText("" )
+            setTimeState(binding.time3)
+            timeState = 3
+            timeLong = "3"
+            setState()
+        }
+        binding.time5.setOnClickListener {
+            binding.time4.setText("" )
+            setTimeState(binding.time5)
+            timeState = 5
+            timeLong = "5"
+            setState()
+        }
+        binding.time10.setOnClickListener {
+            binding.time4.setText("" )
+            setTimeState(binding.time10)
+            timeState = 10
+            timeLong = "10"
+            setState()
+        }
         binding.time4.setOnClickListener {
             binding.time4.setText("" )
             setTimeState(binding.time4)
@@ -223,6 +244,12 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
                         }else if(timeLong.equals("3")){
                             setTimeState(binding.time3)
                             timeState = 3
+                        }else if(timeLong.equals("5")){
+                            setTimeState(binding.time5)
+                            timeState = 5
+                        }else if(timeLong.equals("10")){
+                            setTimeState(binding.time10)
+                            timeState = 10
                         }else{
                             timeState = 4
                             setTimeState(binding.time4)
@@ -262,10 +289,14 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
         binding.time2.setTextColor(Color.parseColor("#666666"))
         binding.time3.setTextColor(Color.parseColor("#666666"))
         binding.time4.setTextColor(Color.parseColor("#666666"))
+        binding.time5.setTextColor(Color.parseColor("#666666"))
+        binding.time10.setTextColor(Color.parseColor("#666666"))
         binding.time1.setBackgroundResource(R.drawable.shape_bg_9999_fff_17)
         binding.time2.setBackgroundResource(R.drawable.shape_bg_9999_fff_17)
         binding.time3.setBackgroundResource(R.drawable.shape_bg_9999_fff_17)
         binding.time4.setBackgroundResource(R.drawable.shape_bg_9999_fff_17)
+        binding.time5.setBackgroundResource(R.drawable.shape_bg_9999_fff_17)
+        binding.time10.setBackgroundResource(R.drawable.shape_bg_9999_fff_17)
 
         tv.setTextColor(Color.parseColor("#ffffff"))
         tv.setBackgroundResource(R.drawable.shape_bg_3974f6_17)

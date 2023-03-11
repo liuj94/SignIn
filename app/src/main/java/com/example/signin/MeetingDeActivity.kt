@@ -11,6 +11,7 @@ import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.SiginUpListData
 import com.example.signin.bean.SiginUpListModel
+import com.example.signin.bean.User
 import com.example.signin.databinding.ActMeetdaBinding
 import com.example.signin.fragment.MettingDe1Fragment
 import com.example.signin.fragment.MettingDe2Fragment
@@ -93,8 +94,19 @@ var meetingName = ""
 
     fun getFragmentLists() {
         val fragmentLists: MutableList<Fragment> = ArrayList<Fragment>()
+        binding.mRb1.visibility = View.GONE
+        if (!kv.getString("userData", "").isNullOrEmpty()) {
+           var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
+            userData?.let {
+                if (it.userType.equals("01")||it.userType.equals("04")){
+                    binding.mRb1.visibility = View.VISIBLE
+                    fragmentLists.add(MettingDe1Fragment.newInstance(meetingId,meetingName))
+                }
+            }
 
-        fragmentLists.add(MettingDe1Fragment.newInstance(meetingId,meetingName))
+
+        }
+
         fragmentLists.add(MettingDe2Fragment.newInstance(meetingId))
         fragmentLists.add(MettingDe3Fragment.newInstance(meetingId))
         fragmentLists.add(MettingDe4Fragment.newInstance(meetingId))

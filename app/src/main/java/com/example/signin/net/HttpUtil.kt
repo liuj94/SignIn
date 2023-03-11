@@ -1,4 +1,3 @@
-import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.example.signin.PageRoutes
 import com.example.signin.bean.*
@@ -122,8 +121,40 @@ fun sigin(
 
         })
 }
+fun sigin2(
+    params: String,
+    success: ((String) -> Unit)? = null,
+    error: ((String) -> Unit)? = null,
+    finish: (() -> Unit)? = null
+) {
 
-fun getDataType(type: String, success: (() -> Unit)? = null) {
+    OkGo.post<String>(PageRoutes.Api_sigin)
+        .tag(PageRoutes.Api_sigin)
+        .upJson(params)
+        .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token", ""))
+        .execute(object : RequestCallback<String>() {
+
+            override fun onMySuccess(data: String) {
+                super.onMySuccess(data)
+                //1成功 2重复
+                success?.invoke(data)
+
+            }
+
+            override fun onError(response: Response<String>) {
+                super.onError(response)
+                error?.invoke(""+response.exception.message)
+            }
+
+            override fun onFinish() {
+                super.onFinish()
+                finish?.invoke()
+            }
+
+
+        })
+}
+fun getDataType(type: String, finish: (() -> Unit)? = null) {
 
     OkGo.get<List<TypeData>>(PageRoutes.Api_datatype + type)
         .tag(PageRoutes.Api_datatype)
@@ -132,7 +163,6 @@ fun getDataType(type: String, success: (() -> Unit)? = null) {
                 super.onMySuccess(data)
                 var model: TypeModel
                 var kv = MMKV.mmkvWithID("MyDataMMKV")
-                var d = kv.getString("TypeModel", "")
                 if (kv.getString("TypeModel", "").isNullOrEmpty()) {
                     model = TypeModel()
                 } else {
@@ -189,7 +219,7 @@ fun getDataType(type: String, success: (() -> Unit)? = null) {
 
                 }
                 kv.putString("TypeModel", JSON.toJSONString(model))
-                success?.invoke()
+
             }
 
 
@@ -201,7 +231,7 @@ fun getDataType(type: String, success: (() -> Unit)? = null) {
 
             override fun onFinish() {
                 super.onFinish()
-
+                finish?.invoke()
             }
 
 

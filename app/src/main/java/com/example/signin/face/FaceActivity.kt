@@ -6,6 +6,7 @@ import android.media.FaceDetector
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.alibaba.fastjson.JSON
@@ -20,7 +21,8 @@ import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActivityFaceBinding
 import search
-import sigin
+
+import sigin2
 import upFile
 import java.io.*
 import java.util.*
@@ -59,18 +61,19 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>(), 
         binding.moshi.setOnClickListener {
             if(moshi==1){
                 moshi = 2
+                binding.faceDetectView.stopCameraPreview()
+                binding.faceDetectView.visibility = View.GONE
                 binding.moshi.setText("切换人脸模式")
                 binding.mZXingView.startCamera() // 关闭摄像头预览，并且隐藏扫描框
                 binding.mZXingView.visibility = View.VISIBLE
+                binding.mZXingView.startSpot()
 
-                binding.faceDetectView.stopCameraPreview()
-                binding.faceDetectView.visibility = View.GONE
             }else{
                 moshi = 1
                 binding.moshi.setText("切换二维码模式")
                 binding.mZXingView.stopCamera() // 关闭摄像头预览，并且隐藏扫描框
                 binding.mZXingView.visibility = View.GONE
-
+                binding.mZXingView.stopSpot()
                 binding.faceDetectView.startCameraPreview()
                 binding.faceDetectView.visibility = View.VISIBLE
             }
@@ -140,23 +143,41 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>(), 
 //            }
     }
 
-    private fun showToast(state: String) {
+    private fun showToast() {
         var toast = Toast(this)
         var view: View = LayoutInflater.from(this).inflate(R.layout.tost_sb, null)
-        when (state) {
-            "1" -> {
-                view = LayoutInflater.from(this).inflate(R.layout.tost_cg, null)
-            }
-            "2" -> {
-                view = LayoutInflater.from(this).inflate(R.layout.tost_cf, null)
-            }
-        }
+//        when (state) {
+//            "1" -> {
+//                view = LayoutInflater.from(this).inflate(R.layout.tost_cg, null)
+//            }
+//            "2" -> {
+//                view = LayoutInflater.from(this).inflate(R.layout.tost_cf, null)
+//            }
+//        }
         toast.setView(view)
         toast.setDuration(Toast.LENGTH_LONG)
         toast.setGravity(0, 0, 0);
         toast.show();
     }
+    private fun showToast2(string: String) {
+        var toast = Toast(this)
+        var view: View = LayoutInflater.from(this).inflate(R.layout.tost_sb, null)
+        var str = view.findViewById<TextView>(R.id.str)
+        str.setText(string)
+//        when (state) {
+//            "1" -> {
+//                view = LayoutInflater.from(this).inflate(R.layout.tost_cg, null)
+//            }
+//            "2" -> {
+//                view = LayoutInflater.from(this).inflate(R.layout.tost_cf, null)
+//            }
+//        }
 
+        toast.setView(view)
+        toast.setDuration(Toast.LENGTH_LONG)
+        toast.setGravity(0, 0, 0);
+        toast.show();
+    }
     private var isSavingPic = false
     private val executorService = Executors.newSingleThreadExecutor()
 
@@ -251,13 +272,16 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>(), 
                         if(!result.user_list.isNullOrEmpty()){
                             for (item in result.user_list){
                                 sigin(item.user_id)
+//                                sigin("129")
                             }
                         }
 
 
                     }
 
-                },{isSavingPic = false
+                },{
+                    showToast()
+                    isSavingPic = false
                     },{
                     mViewModel.isShowLoading.value = false
                 })
@@ -283,7 +307,6 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>(), 
     }
 
     private fun sigin(userMeetingId:String,userMeetingTypeName :String?="") {
-
                 var signUpUser = SignUpUser()
                 signUpUser.signUpLocationId = signUpLocationId
                 signUpUser.signUpId = signUpId
@@ -302,21 +325,32 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>(), 
                             "type" to showType,
                             "data" to signUpUser
                         )
+                        finish()
                     }else{
-                        var params = java.util.HashMap<String, String>()
+                        var params = HashMap<String, String>()
                         params["meetingId"] = signUpUser.meetingId//会议id
                         params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
                         params["signUpId"] = signUpUser.signUpId//签到站id
                         params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
                         params["status"] = "2"//用户参与会议id
-                        sigin(JSON.toJSONString(params),{success->
+                        sigin2(JSON.toJSONString(params),{success->
                             signUpUser.success = success
+                            finish()
                             com.dylanc.longan.startActivity<SiginReAutoActivity>(
                                 "type" to showType,
                                 "data" to signUpUser
                             )
-                        },{},{})}
+                        },{
+                          showToast2(it)
+                            if(moshi==2){
+                                binding.mZXingView.startSpot()
+                            }
+
+                        },{
+
+                        })}
                 }else{
+                    finish()
                     com.dylanc.longan.startActivity<SiginReActivity>(
                         "type" to showType,
                         "data" to signUpUser
@@ -352,8 +386,10 @@ class FaceActivity : BaseBindingActivity<ActivityFaceBinding, BaseViewModel>(), 
     override fun onScanQRCodeSuccess(result: String?) {
 //        result
         result?.let {
+            binding.mZXingView.stopSpot()
             var signUpUser = JSON.parseObject(it, SignUpUser::class.java)
-            sigin(signUpUser.id,signUpUser.userMeetingTypeName)
+//            sigin(signUpUser.id,signUpUser.userMeetingTypeName)
+            sigin("129",signUpUser.userMeetingTypeName)
         }
 
     }

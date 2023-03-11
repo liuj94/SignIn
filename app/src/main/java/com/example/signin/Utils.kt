@@ -50,26 +50,30 @@ fun startCompres(context:Context,path: String, back: (file: File) -> Unit) {
  * @return 解码后的原始字符串
  */
 
-fun encode(unicode: String): String {
-    if(unicode.contains("\\u")){
-        val builder = StringBuilder()
-        val hex = unicode.split("\\\\u".toRegex()).toTypedArray()
-        for (i in 1 until hex.size) {
-            val data = hex[i].toInt(16)
-            builder.append(data.toChar())
+fun encode(unicode: String? = ""): String {
+    var s:String = ""
+    if(!unicode.isNullOrEmpty()){
+        if(unicode.contains("\\u")){
+            val builder = StringBuilder()
+            val hex = unicode.split("\\\\u".toRegex()).toTypedArray()
+            for (i in 1 until hex.size) {
+                val data = hex[i].toInt(16)
+                builder.append(data.toChar())
+            }
+            return builder.toString()
         }
-        return builder.toString()
-    }
-    if(unicode.contains("%u")){
-        val builder = StringBuilder()
-        val hex = unicode.split("%u".toRegex()).toTypedArray()
-        for (i in 1 until hex.size) {
-            val data = hex[i].toInt(16)
-            builder.append(data.toChar())
+        if(unicode.contains("%u")){
+            val builder = StringBuilder()
+            val hex = unicode.split("%u".toRegex()).toTypedArray()
+            for (i in 1 until hex.size) {
+                val data = hex[i].toInt(16)
+                builder.append(data.toChar())
+            }
+            return builder.toString()
         }
-        return builder.toString()
     }
-    return unicode
+
+    return s
 }
 fun takePhotoDialog(context:Activity,
                     finish: ((file:File) -> Unit)? = null) {

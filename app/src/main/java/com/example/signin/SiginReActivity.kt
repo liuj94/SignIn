@@ -60,12 +60,13 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                 binding.submit.text = "确认入住"
             }
             4->{binding.title.text = "会场签到"
-                binding.numEt.visibility = View.VISIBLE
-                binding.numEt.hint = "请输入座位号"
+//                binding.numEt.visibility = View.VISIBLE
+//                binding.numEt.hint = "请输入座位号"
             }
             5->{binding.title.text = "餐饮签到"
-                binding.numEt.visibility = View.VISIBLE
-                binding.numEt.hint = "请输入桌号"}
+//                binding.numEt.visibility = View.VISIBLE
+//                binding.numEt.hint = "请输入桌号"
+            }
             6->binding.title.text = "礼品签到"
             7->binding.title.text = "返程签到"
         }
@@ -82,15 +83,17 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
     }
 
     private fun sigin() {
-        if (type == 3 || type == 4 || type == 5) {
+//        if (type == 3 || type == 4 || type == 5) {
+        if (type == 3 ) {
             if (binding.numEt.text.toString().trim().equals("")) {
                 if (type == 3) {
                     toast("请输入房号")
-                } else if (type == 5) {
-                    toast("请输入桌号")
-                }else{
-                    toast("请输入座位号")
                 }
+//                else if (type == 5) {
+//                    toast("请输入桌号")
+//                }else{
+//                    toast("请输入座位号")
+//                }
 
                 return
             }

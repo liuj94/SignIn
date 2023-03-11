@@ -11,10 +11,11 @@
         android:layout_width="94dp"
         android:layout_height="94dp"/>
     <TextView
+        android:id="@+id/str"
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="签到失败"
+        android:text="人脸查找失败"
         android:textStyle="bold"
         android:textColor="#ffffffff"
         android:textSize="27sp"
