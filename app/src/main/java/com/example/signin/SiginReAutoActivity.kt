@@ -39,13 +39,14 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             params["signUpId"] = it.signUpId//签到站id
             params["userMeetingId"] = it.userMeetingId//用户参与会议id
             params["status"] = "2"//用户参与会议id
-            binding.name.text = it.meetingName
-            binding.userName.text = encode(it.name)
-            binding.companyName.text = encode(it.corporateName)
-            binding.type.text = encode(it.userMeetingTypeName)
-            timeLong = it.timeLong
-            success = it.success
-            voiceStatus= it.voiceStatus
+            it.meetingName?.let { binding.name.text = it }
+            it.name?.let { name-> binding.userName.text = encode(name) }
+            it.corporateName?.let {companyName-> binding.companyName.text = encode(companyName) }
+            it.userMeetingTypeName?.let {userMeetingTypeName->binding.type.text = encode(userMeetingTypeName)  }
+            it.timeLong?.let {t-> timeLong=t }
+            it.success?.let {t-> success=t }
+            it.voiceStatus?.let {t-> voiceStatus=t }
+
         }
 //        1 注册签到2 来程签到3 入住签到4 会场签到5 餐饮签到6 礼品签到7 返程签到
         binding.numEt.visibility = View.INVISIBLE

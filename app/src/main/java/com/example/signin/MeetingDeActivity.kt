@@ -36,6 +36,7 @@ class MeetingDeActivity : BaseBindingActivity<ActMeetdaBinding, BaseViewModel>()
 
 var meetingId = ""
 var meetingName = ""
+var businessId = ""
     override fun initData() {
         binding.titlell.addStatusBarHeightToMarginTop()
         intent.getStringExtra("meetingId")?.let {
@@ -43,6 +44,9 @@ var meetingName = ""
         }
         intent.getStringExtra("meetingName")?.let {
             meetingName = it
+        }
+        intent.getStringExtra("businessId")?.let {
+            businessId = it
         }
         mViewModel.isShowLoading.value = true
         getData()
@@ -66,7 +70,7 @@ var meetingName = ""
             .execute(object : RequestCallback<List<SiginUpListData>>() {
                 override fun onSuccessNullData() {
                     super.onSuccessNullData()
-                    getFragmentLists()
+
                 }
 
                 override fun onMySuccess(data: List<SiginUpListData>) {
@@ -74,18 +78,19 @@ var meetingName = ""
                    var list = SiginUpListModel()
                     list.list = data
                     kv.putString("SiginUpListModel", JSON.toJSONString(list))
-                    getFragmentLists()
+
                 }
 
                 override fun onError(response: Response<List<SiginUpListData>>) {
                     super.onError(response)
 
-                    getFragmentLists()
+
                 }
 
                 override fun onFinish() {
                     super.onFinish()
                     mViewModel.isShowLoading.value = false
+                    getFragmentLists()
                 }
 
 
@@ -95,34 +100,46 @@ var meetingName = ""
     fun getFragmentLists() {
         val fragmentLists: MutableList<Fragment> = ArrayList<Fragment>()
         binding.mRb1.visibility = View.GONE
+        fragmentLists.add(MettingDe1Fragment.newInstance(meetingId,meetingName))
+        fragmentLists.add(MettingDe2Fragment.newInstance(meetingId))
+        fragmentLists.add(MettingDe3Fragment.newInstance(meetingId))
+        fragmentLists.add(MettingDe4Fragment.newInstance(meetingId,businessId))
         if (!kv.getString("userData", "").isNullOrEmpty()) {
            var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
             userData?.let {
                 if (it.userType.equals("01")||it.userType.equals("04")){
+//                if (it.userType.equals("00")||it.userType.equals("00")){
                     binding.mRb1.visibility = View.VISIBLE
-                    fragmentLists.add(MettingDe1Fragment.newInstance(meetingId,meetingName))
+                    initAdapter(fragmentLists,0)
+                }else{
+                    initAdapter(fragmentLists,1)
                 }
+
+
             }
 
 
         }
 
-        fragmentLists.add(MettingDe2Fragment.newInstance(meetingId))
-        fragmentLists.add(MettingDe3Fragment.newInstance(meetingId))
-        fragmentLists.add(MettingDe4Fragment.newInstance(meetingId))
 
-        initAdapter(fragmentLists)
+
 
     }
 
 
-    private fun initAdapter(fragments: MutableList<Fragment>) {
+    private fun initAdapter(fragments: MutableList<Fragment>,index:Int) {
         val mAdapter = MainViewPagerAdapter(supportFragmentManager, fragments)
         binding.mViewPager.adapter = mAdapter
         binding.mViewPager.offscreenPageLimit = 4
         initListener()
-
-
+        binding.mViewPager.currentItem = index
+        if(index==0){
+            binding.title.text = "数据统计"
+            binding.mRb1.isChecked = true
+        }else{
+            binding.title.text = "选签到点"
+            binding.mRb2.isChecked = true
+        }
 
     }
 

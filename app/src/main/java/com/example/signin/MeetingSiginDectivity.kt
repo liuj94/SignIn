@@ -14,7 +14,6 @@ import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.*
 
 import com.example.signin.databinding.ActMeetingSigindeBinding
-import com.example.signin.face.FaceActivity
 import com.example.signin.net.JsonCallback
 
 import com.example.signin.net.RequestCallback
@@ -113,56 +112,56 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 //                        }
 //                    })
                 activity?.let {
-                    XXPermissions.with(activity)
-                        .permission(Permission.CAMERA)
-                        .permission(Permission.READ_MEDIA_IMAGES)
-                        .request(object : OnPermissionCallback {
-
-                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
-                                if (all) {
-
-                                    com.dylanc.longan.startActivity<FaceActivity>("id" to id,
-                                        "signUpId" to signUpId,
-                                        "meetingid" to meetingid,
-                                        "signUpLocationId" to id,
-                                        "autoStatus" to autoStatus,
-                                        "timeLong" to timeLong,
-                                        "showType" to showType,
-                                        "okMsg" to okMsg,
-                                        "repeatMsg" to repeatMsg,
-                                        "failedMsg" to failedMsg,
-                                        "voiceStatus" to voiceStatus,
-                                    )
-                                } else {
-                                    toast("获取手机权限失败")
-                                }
-
-                            }
-
-                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
-
-
-                            }
-                        })
 //                    XXPermissions.with(activity)
 //                        .permission(Permission.CAMERA)
+//                        .permission(Permission.READ_MEDIA_IMAGES)
 //                        .request(object : OnPermissionCallback {
 //
 //                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
-//                                if (!all) {
-//                                    toast("获取权限失败")
+//                                if (all) {
+//
+//                                    com.dylanc.longan.startActivity<FaceActivity>("id" to id,
+//                                        "signUpId" to signUpId,
+//                                        "meetingid" to meetingid,
+//                                        "signUpLocationId" to id,
+//                                        "autoStatus" to autoStatus,
+//                                        "timeLong" to timeLong,
+//                                        "showType" to showType,
+//                                        "okMsg" to okMsg,
+//                                        "repeatMsg" to repeatMsg,
+//                                        "failedMsg" to failedMsg,
+//                                        "voiceStatus" to voiceStatus,
+//                                    )
 //                                } else {
-//                                    var intent = Intent(it,ScanActivity::class.java)
-//                                    startActivityForResult(intent,1000)
+//                                    toast("获取手机权限失败")
 //                                }
 //
 //                            }
 //
 //                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
-//                                toast("获取权限失败")
+//
 //
 //                            }
 //                        })
+                    XXPermissions.with(activity)
+                        .permission(Permission.CAMERA)
+                        .request(object : OnPermissionCallback {
+
+                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+                                if (!all) {
+                                    toast("获取权限失败")
+                                } else {
+                                    var intent = Intent(it,ScanActivity::class.java)
+                                    startActivityForResult(intent,1000)
+                                }
+
+                            }
+
+                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
+                                toast("获取权限失败")
+
+                            }
+                        })
 
                 }
 
@@ -171,52 +170,34 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         binding.moshill.setOnClickListener {
             setState()
         }
-//        binding.shaoma.setOnClickListener {
-//           activity?.let {
-//               XXPermissions.with(activity)
-//                   .permission(Permission.CAMERA)
-//                   .permission(Permission.READ_MEDIA_IMAGES)
-//                   .request(object : OnPermissionCallback {
-//
-//                       override fun onGranted(permissions: MutableList<String>, all: Boolean) {
-//                           if (all) {
-//                               com.dylanc.longan.startActivity<FaceActivity>()
-//                           } else {
-//                               toast("获取手机权限失败")
-//                           }
-//
-//                       }
-//
-//                       override fun onDenied(permissions: MutableList<String>, never: Boolean) {
-//
-//
-//                       }
-//                   })
-////                    XXPermissions.with(activity)
-////                        .permission(Permission.CAMERA)
-////                        .request(object : OnPermissionCallback {
-////
-////                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
-////                                if (!all) {
-////                                    toast("获取权限失败")
-////                                } else {
-////                                    var intent = Intent(it,ScanActivity::class.java)
-////                                    startActivityForResult(intent,1000)
-////                                }
-////
-////                            }
-////
-////                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
-////                                toast("获取权限失败")
-////
-////                            }
-////                        })
-//
-//                }
-//
-//
-//
-//        }
+        binding.shaoma.setOnClickListener {
+           activity?.let {
+
+                    XXPermissions.with(activity)
+                        .permission(Permission.CAMERA)
+                        .request(object : OnPermissionCallback {
+
+                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+                                if (!all) {
+                                    toast("获取权限失败")
+                                } else {
+                                    var intent = Intent(it,ScanActivity::class.java)
+                                    startActivityForResult(intent,1000)
+                                }
+
+                            }
+
+                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
+                                toast("获取权限失败")
+
+                            }
+                        })
+
+                }
+
+
+
+        }
 
     }
     private var siginUp2List: MutableList<TypeData> = ArrayList()

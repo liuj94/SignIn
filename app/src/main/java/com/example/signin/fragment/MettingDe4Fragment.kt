@@ -46,9 +46,10 @@ import sigin
  */
 class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewModel>() {
     companion object {
-        fun newInstance(meetingid: String): MettingDe4Fragment {
+        fun newInstance(meetingid: String,businessId: String): MettingDe4Fragment {
             val args = Bundle()
             args.putString("meetingid", meetingid)
+            args.putString("businessId", businessId)
             val fragment = MettingDe4Fragment()
             fragment.arguments = args
             return fragment
@@ -65,6 +66,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
     private var selectList2: MutableList<SiginData> = ArrayList()
     private var selectList: MutableList<SiginUpListData> = ArrayList()
     var meetingid: String? = ""
+    var businessId: String? = ""
     var siginlocationId: String? = ""
     var signUpStatus: String? = ""
     var signUpId: String? = ""
@@ -80,6 +82,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         setStartData()
 
         meetingid = arguments?.getString("meetingid", "1")
+        businessId = arguments?.getString("businessId", "1")
         CHANNEL = ""+meetingid
         binding.srecyclerview.layoutManager = LinearLayoutManager(activity)
         adapterSelect = SelectMeetingAdapter().apply {
@@ -287,7 +290,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             ) { requestCode: Int, _: Array<String>, grantResults: IntArray ->
                 if (requestCode == 200 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     userData?.let {
-                        if (it.userType.equals("03")) {
+                        if (it.userType.equals("01")||it.userType.equals("04")) {
                             voice()
                         } else {
                             if (selectList2.size > 0) {
@@ -318,7 +321,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         activity?.let {
             mRtcEngine = TokenUtils.initializeAndJoinChannel(it, mRtcEventHandler)
         }
-
+        getSiginData()
     }
 
     private fun voice() {
@@ -559,7 +562,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         binding.roundProgress.progress = 0
         binding.roundProgress.maxProgress = 5000
         userData?.let {
-            if (it.userType.equals("03")) {
+            if (it.userType.equals("01")||it.userType.equals("04")) {
                 binding.ztname.text = "当前对讲处于开启状态"
                 binding.ztiv.setImageResource(R.drawable.ov_3974f6)
                 binding.thstate.setImageResource(R.mipmap.tonghua3)
@@ -627,7 +630,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                         }
                         binding.roundProgress.maxProgress = 5000
                         userData?.let {
-                            if (it.userType.equals("03")) {
+                            if (it.userType.equals("01")||it.userType.equals("04")) {
                                 binding.ztname.text = "当前对讲处于开启状态"
                                 binding.ztname.setTextColor(Color.parseColor("#3974f6"))
                                 binding.ztiv.setImageResource(R.drawable.ov_3974f6)
@@ -653,49 +656,35 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
             })
     }
-//    private fun getSiginData() {
-//        OkGo.get<SiginData>(PageRoutes.Api_meetingSignUpLocationDe +  siginlocationId)
-//            .tag(PageRoutes.Api_meetingSignUpLocationDe )
-//            .headers("Authorization", kv.getString("token", ""))
-//            .execute(object : RequestCallback<SiginData>() {
-//                override fun onSuccessNullData() {
-//                    super.onSuccessNullData()
-//
-//                }
-//
-//                override fun onMySuccess(data: SiginData) {
-//                    super.onMySuccess(data)
-//                    binding.num1.text  =""+ data.beUserCount
-//                    binding.num2.text  = ""+data.signUpCount
-//                    binding.num3.text  = ""+data.localSignUpCount
-////                    binding.num1.text  = data.signUpNeedCount
-////                    binding.num2.text  = data.signUpCount
-////                    binding.num3.text  = data.meetingSignUpCount
-//                    //01 签入模式 02 签入签出模式
-//                    signUpStatus = data.addressStatus
-//                   if(data.addressStatus == "1"){
-//                       binding.moshitv.text = "签入模式"
-//                       binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
-//                   }else{
-//                       binding.moshitv.text = "签出模式"
-//                       binding.moshiiv.setImageResource(R.mipmap.kaiguank)
-//                   }
-//
-//                }
-//
-//                override fun onError(response: Response<SiginData>) {
-//                    super.onError(response)
-//
-//                }
-//
-//                override fun onFinish() {
-//                    super.onFinish()
-//
-//                }
-//
-//
-//            })
-//    }
+    private fun getSiginData() {
+        OkGo.get<Balance>(PageRoutes.Api_balance +  businessId)
+            .tag(PageRoutes.Api_balance )
+            .headers("Authorization", kv.getString("token", ""))
+            .execute(object : RequestCallback<Balance>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
+
+                }
+
+                override fun onMySuccess(data: Balance) {
+                    super.onMySuccess(data)
+
+
+                }
+
+                override fun onError(response: Response<Balance>) {
+                    super.onError(response)
+
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+
+                }
+
+
+            })
+    }
 
     private fun getUserList() {
         if (nameMobile.isNullOrEmpty()) {

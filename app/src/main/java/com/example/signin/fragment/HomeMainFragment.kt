@@ -132,7 +132,8 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
                 setEmptyViewLayout(requireActivity(), R.layout.layout_emptyview)
                 startActivity<MeetingDeActivity>(
                     "meetingId" to "" + list[position].id,
-                    "meetingName" to "" + list[position].name
+                    "meetingName" to "" + list[position].name,
+                    "businessId" to "" + list[position].businessId
                 )
             }
         }

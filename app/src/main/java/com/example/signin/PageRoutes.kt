@@ -77,6 +77,7 @@ interface PageRoutes {
 
         val Api_detect = "$BaseUrlApi/common/baidu/aip/detect?img="
         val Api_search = "$BaseUrlApi/common/baidu/aip/search?img="
+        val Api_balance = "$BaseUrlApi/manager/business/current/balance?aBusinessId="
 
         val baiduToken = "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=Va5yQRHlA4Fq5eR3LT0vuXV4&client_secret=0rDSjzQ20XUj5itV6WRtznPQSzr5pVw2&"
 

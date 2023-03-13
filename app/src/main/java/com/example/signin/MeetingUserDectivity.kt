@@ -229,6 +229,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
     var mobile1 = ""
     var mobile2 = ""
     var mobile3 = ""
+
     @SuppressLint("SetTextI18n")
     private fun setDate(data: MeetingUserDeData) {
         binding.itemYhxx.name.text = data.name
@@ -320,7 +321,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
         }
 
-
+        if (data.userOrder == null) {
+            binding.itemDdxx.root.visibility = View.GONE
+            binding.infoLl.visibility = View.VISIBLE
+        }
         for (item in data.meetingSignUps) {
             when (item.type) {
                 1 -> {
@@ -343,122 +347,127 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         item.meetingSignUpLocation?.let {
                             state_zhuche.userMeetingId = data.id
                             eData(state_zhuche, it)
-                            it.name?.let {name-> binding.itemZcbd.name.text = name }
-                            it.startTime?.let {startTime-> binding.itemZcbd.data.text =
-                                getDateStr("MM月dd", startTime)
-                                it.endTime?.let {endTime->
+                            it.name?.let { name -> binding.itemZcbd.name.text = name }
+                            it.startTime?.let { startTime ->
+                                binding.itemZcbd.data.text =
+                                    getDateStr("MM月dd", startTime)
+                                it.endTime?.let { endTime ->
                                     binding.itemZcbd.time.text = getDateStr(
                                         "HH:mm",
                                         startTime
                                     ) + "-" + getDateStr("HH:mm", endTime)
                                 }
                             }
-                            it.address?.let {address->binding.itemZcbd.address.text = address  }
+                            it.address?.let { address -> binding.itemZcbd.address.text = address }
 
 
                         }
-                    }catch (e : java.lang.Exception){
+                    } catch (e: java.lang.Exception) {
 
                     }
 
                 }
                 6 -> {
-                    try{
-                    //礼品发放
-                    setStateColor(model.sys_liping, "1", binding.itemLpff.lpBtn)
+                    try {
+                        //礼品发放
+                        setStateColor(model.sys_liping, "1", binding.itemLpff.lpBtn)
 
-                    item.userMeetingSignUp?.let {
-                        state_liwu.status = "" + it.status
-                        setStateColor(
-                            model.sys_liping,
-                            "" + it.status,
-                            binding.itemLpff.lpBtn
-                        )
-
-                    }
-                    state_liwu.userMeetingId = data.id
-                    item.meetingSignUpLocation?.let {
-
-                        eData(state_liwu, it)
-                        binding.itemLpff.kong.visibility = View.GONE
-                        binding.itemLpff.ll.visibility = View.VISIBLE
-                        it.name?.let {name-> binding.itemLpff.name.text = name }
-                        it.startTime?.let {startTime-> binding.itemLpff.date.text = getDateStr("MM月dd", startTime)
-                            it.endTime?.let {endTime ->
-                                binding.itemLpff.time.text = getDateStr(
-                                    "HH:mm",
-                                    startTime
-                                ) + "-" + getDateStr("HH:mm", endTime)
-                            }
+                        item.userMeetingSignUp?.let {
+                            state_liwu.status = "" + it.status
+                            setStateColor(
+                                model.sys_liping,
+                                "" + it.status,
+                                binding.itemLpff.lpBtn
+                            )
 
                         }
-                        it.address?.let {address-> binding.itemLpff.address.text = address}
+                        state_liwu.userMeetingId = data.id
+                        item.meetingSignUpLocation?.let {
 
+                            eData(state_liwu, it)
+                            binding.itemLpff.kong.visibility = View.GONE
+                            binding.itemLpff.ll.visibility = View.VISIBLE
+                            it.name?.let { name -> binding.itemLpff.name.text = name }
+                            it.startTime?.let { startTime ->
+                                binding.itemLpff.date.text = getDateStr("MM月dd", startTime)
+                                it.endTime?.let { endTime ->
+                                    binding.itemLpff.time.text = getDateStr(
+                                        "HH:mm",
+                                        startTime
+                                    ) + "-" + getDateStr("HH:mm", endTime)
+                                }
+
+                            }
+                            it.address?.let { address -> binding.itemLpff.address.text = address }
+
+
+                        }
+                    } catch (e: java.lang.Exception) {
 
                     }
-                }catch (e : java.lang.Exception){
-
-            }
 
                 }
                 3 -> {
-                    try{
-                    //入住签到
-                    setStateColor(model.sys_ruzhu, "1", binding.itemRzxx.ddBtn)
+                    try {
+                        //入住签到
+                        setStateColor(model.sys_ruzhu, "1", binding.itemRzxx.ddBtn)
 
-                    item.userMeetingSignUp?.let {
+                        item.userMeetingSignUp?.let {
 
-                        setStateColor(
-                            model.sys_ruzhu,
-                            "" + it.status,
-                            binding.itemRzxx.ddBtn
-                        )
-                        for (list in model.sys_ruzhu) {
-                            if (list.dictValue.equals("" + it.status)) {
-                                state_ruzhu.status = list.dictValue
-                                if (list.dictValue.equals("1")) {
-                                    binding.itemRzxx.location.text =
-                                        "签到后分配"
+                            setStateColor(
+                                model.sys_ruzhu,
+                                "" + it.status,
+                                binding.itemRzxx.ddBtn
+                            )
+                            for (list in model.sys_ruzhu) {
+                                if (list.dictValue.equals("" + it.status)) {
+                                    state_ruzhu.status = list.dictValue
+                                    if (list.dictValue.equals("1")) {
+                                        binding.itemRzxx.location.text =
+                                            "签到后分配"
+                                    }
                                 }
                             }
                         }
+                        binding.itemRzxx.kong.visibility = View.GONE
+                        binding.itemRzxx.ll.visibility = View.VISIBLE
+                        item.meetingSignUpLocation?.let {
+                            state_ruzhu.userMeetingId = data.id
+                            eData(state_ruzhu, it)
+                            it.name?.let { name ->
+                                binding.itemRzxx.name.text = name
+                            }
+
+                            it.startTime?.let { startTime ->
+                                binding.itemRzxx.date1.text = getDateStr(
+                                    "MM月dd",
+                                    startTime
+                                ).toString()
+                                it.endTime?.let { endTime ->
+                                    binding.itemRzxx.day.text = "" + daydiff(
+                                        startTime,
+                                        endTime
+                                    ) + "天"
+                                }
+                            }
+                            it.endTime?.let { endTime ->
+                                binding.itemRzxx.date2.text = getDateStr(
+                                    "MM月dd",
+                                    endTime
+                                ).toString()
+                            }
+                            it.address?.let { address -> binding.itemRzxx.address.text = address }
+
+                            it.location?.let { location ->
+                                binding.itemRzxx.location.text =
+                                    "房间号：" + location
+                            }
+
+
+                        }
+                    } catch (e: java.lang.Exception) {
+
                     }
-                    binding.itemRzxx.kong.visibility = View.GONE
-                    binding.itemRzxx.ll.visibility = View.VISIBLE
-                    item.meetingSignUpLocation?.let {
-                        state_ruzhu.userMeetingId = data.id
-                        eData(state_ruzhu, it)
-                        it.name?.let {name->
-                            binding.itemRzxx.name.text = name
-                        }
-
-                        it.startTime?.let {startTime-> binding.itemRzxx.date1.text = getDateStr(
-                            "MM月dd",
-                            startTime
-                        ).toString()
-                            it.endTime?.let {endTime-> binding.itemRzxx.day.text = "" + daydiff(
-                                startTime,
-                                endTime
-                            ) + "天"}
-                        }
-                        it.endTime?.let {endTime-> binding.itemRzxx.date2.text = getDateStr(
-                            "MM月dd",
-                            endTime
-                        ).toString() }
-                        it.address?.let {address-> binding.itemRzxx.address.text = address }
-
-                        it.location?.let { location ->
-                            binding.itemRzxx.location.text =
-                                "房间号：" + location
-                        }
-
-
-
-
-                    }
-                }catch (e : java.lang.Exception){
-
-            }
 
                 }
                 4 -> {
@@ -493,7 +502,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemHcqd.kong.visibility = View.GONE
                             binding.itemHcqd.ll.visibility = View.VISIBLE
 
-                            binding.itemHcqd.name.text = ""+it.name
+                            binding.itemHcqd.name.text = "" + it.name
                             binding.itemHcqd.data.text = getDateStr(
                                 "MM月dd",
                                 it.startTime
@@ -515,184 +524,192 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         }
 
 
-                    }catch (e : java.lang.Exception){
+                    } catch (e: java.lang.Exception) {
 
                     }
                     //会场签到
 
                 }
                 5 -> {
-                    try{
-                    //餐饮签到
-                    setStateColor(model.sys_canyin, "1", binding.itemCyxi.zcBtn)
-                    item.userMeetingSignUp?.let {
-                        setStateColor(
-                            model.sys_canyin,
-                            "" + it.status,
-                            binding.itemCyxi.zcBtn
-                        )
-                        for (list in model.sys_canyin) {
-                            if (list.dictValue.equals("" + it.status)) {
-                                state_chanyin.status = list.dictValue
-                                if (list.dictValue.equals("1")) {
-                                    binding.itemCyxi.location.text =
-                                        "签到后分配"
+                    try {
+                        //餐饮签到
+                        setStateColor(model.sys_canyin, "1", binding.itemCyxi.zcBtn)
+                        item.userMeetingSignUp?.let {
+                            setStateColor(
+                                model.sys_canyin,
+                                "" + it.status,
+                                binding.itemCyxi.zcBtn
+                            )
+                            for (list in model.sys_canyin) {
+                                if (list.dictValue.equals("" + it.status)) {
+                                    state_chanyin.status = list.dictValue
+                                    if (list.dictValue.equals("1")) {
+                                        binding.itemCyxi.location.text =
+                                            "签到后分配"
+                                    }
                                 }
                             }
                         }
-                    }
-                    binding.itemCyxi.kong.visibility = View.GONE
-                    binding.itemCyxi.ll.visibility = View.VISIBLE
-                    item.meetingSignUpLocation?.let {
-                        state_chanyin.userMeetingId = data.id
+                        binding.itemCyxi.kong.visibility = View.GONE
+                        binding.itemCyxi.ll.visibility = View.VISIBLE
+                        item.meetingSignUpLocation?.let {
+                            state_chanyin.userMeetingId = data.id
 
-                        eData(state_chanyin,it)
-                        binding.itemCyxi.name.text = it.name
-                        binding.itemCyxi.date.text = getDateStr(
-                            "MM月dd",
-                            it.startTime
-                        ).toString()
+                            eData(state_chanyin, it)
+                            it.name?.let { name -> binding.itemCyxi.name.text = name }
+                            it.startTime?.let { startTime ->
+                                binding.itemCyxi.date.text = getDateStr(
+                                    "MM月dd",
+                                    startTime
+                                ).toString()
+                                it.endTime?.let { endTime ->
+                                    binding.itemCyxi.time.text = getDateStr(
+                                        "HH:mm",
+                                        startTime
+                                    ).toString() + "-" + getDateStr(
+                                        "HH:mm",
+                                        endTime
+                                    ).toString()
+                                }
 
-                        binding.itemCyxi.time.text = getDateStr(
-                            "HH:mm",
-                            it.startTime
-                        ).toString() + "-" + getDateStr(
-                            "HH:mm",
-                            it.endTime
-                        ).toString()
+                            }
 
-                        binding.itemCyxi.address.text = it.address
-                        it.location?.let {location->
-                            binding.itemCyxi.location.text =
-                                "请到" + it + "号桌"
-                            state_chanyin.location = location
+                            it.address?.let { address ->
+                                binding.itemCyxi.address.text = address
+                            }
+
+
+
+                            it.location?.let { location ->
+                                binding.itemCyxi.location.text =
+                                    "请到" + it + "号桌"
+                                state_chanyin.location = location
+                            }
+
+
                         }
-
-
-                    }
-                    }catch (e : java.lang.Exception){
+                    } catch (e: java.lang.Exception) {
 
                     }
 
                 }
                 7 -> {
-                    try{
-                    //返程签到
-                    setStateColor(
-                        model.sys_fancheng,
-                        "1",
-                        binding.itemFcxx.lcBtn
-                    )
-                    item.userMeetingSignUp?.let {
-                        state_fancheng.status = "" + it.status
+                    try {
+                        //返程签到
                         setStateColor(
                             model.sys_fancheng,
-                            "" + it.status,
+                            "1",
                             binding.itemFcxx.lcBtn
                         )
-                    }
-                    item.meetingSignUpLocation?.let {
-                        state_fancheng.userMeetingId = data.id
-                        eData(state_fancheng, it)
-                    }
-
-                    item.backUserMeetingTrip?.let {
-                        binding.itemFcxx.kong.visibility = View.GONE
-                        binding.itemFcxx.ll.visibility = View.VISIBLE
-
-                        binding.itemFcxx.name.text = it.remark
-                        binding.itemFcxx.lcData1.text =
-                            getDateStr("MM月dd", it.startDate).toString()
-                        binding.itemFcxx.lcDidian1.text = it.startCity
-                        binding.itemFcxx.lcJichang1.text = it.startAddress
-                        binding.itemFcxx.lcData2.text =
-                            getDateStr("MM月dd", it.endDate).toString()
-                        binding.itemFcxx.lcDidian2.text = it.endCity
-                        binding.itemFcxx.lcJichang1.text = it.endAddress
-                        binding.itemFcxx.jiedai.text = "接待员：：" + item.personChargeName
-                        mobile3 = item.personChargeMobile
-                        binding.itemFcxx.time.text = getDateStr(
-                            "HH:mm",
-                            it.startTime
-                        ).toString() + "-" + getDateStr("HH:mm", it.endTime).toString()
-                        //personChargeMobile status
-
-                        for (item in model.transport_type) {
-                            if (it.transport.equals(item.dictValue)) {
-                                if (item.dictValue.equals("03")) {
-                                    binding.itemFcxx.icon.setImageResource(R.mipmap.laichengxingxi)
-                                } else {
-                                    binding.itemFcxx.icon.setImageResource(R.mipmap.hc)
-                                }
-
-                            }
+                        item.userMeetingSignUp?.let {
+                            state_fancheng.status = "" + it.status
+                            setStateColor(
+                                model.sys_fancheng,
+                                "" + it.status,
+                                binding.itemFcxx.lcBtn
+                            )
+                        }
+                        item.meetingSignUpLocation?.let {
+                            state_fancheng.userMeetingId = data.id
+                            eData(state_fancheng, it)
                         }
 
+                        item.backUserMeetingTrip?.let {
+                            binding.itemFcxx.kong.visibility = View.GONE
+                            binding.itemFcxx.ll.visibility = View.VISIBLE
 
+                            binding.itemFcxx.name.text = it.remark
+                            binding.itemFcxx.lcData1.text =
+                                getDateStr("MM月dd", it.startDate).toString()
+                            binding.itemFcxx.lcDidian1.text = it.startCity
+                            binding.itemFcxx.lcJichang1.text = it.startAddress
+                            binding.itemFcxx.lcData2.text =
+                                getDateStr("MM月dd", it.endDate).toString()
+                            binding.itemFcxx.lcDidian2.text = it.endCity
+                            binding.itemFcxx.lcJichang1.text = it.endAddress
+                            binding.itemFcxx.jiedai.text = "接待员：：" + item.personChargeName
+                            mobile3 = item.personChargeMobile
+                            binding.itemFcxx.time.text = getDateStr(
+                                "HH:mm",
+                                it.startTime
+                            ).toString() + "-" + getDateStr("HH:mm", it.endTime).toString()
+                            //personChargeMobile status
+
+                            for (item in model.transport_type) {
+                                if (it.transport.equals(item.dictValue)) {
+                                    if (item.dictValue.equals("03")) {
+                                        binding.itemFcxx.icon.setImageResource(R.mipmap.laichengxingxi)
+                                    } else {
+                                        binding.itemFcxx.icon.setImageResource(R.mipmap.hc)
+                                    }
+
+                                }
+                            }
+
+
+                        }
+                    } catch (e: java.lang.Exception) {
 
                     }
-                }catch (e : java.lang.Exception){
-
-            }
                 }
                 2 -> {
-                try{
-                    setStateColor(
-                        model.sys_laicheng,
-                        "1",
-                        binding.itemLcxx.lcBtn
-                    )
-                    //来程签到
-                    item.userMeetingSignUp?.let {
-                        state_laicheng.status = "" + item.userMeetingSignUp.status
+                    try {
                         setStateColor(
                             model.sys_laicheng,
-                            "" + item.userMeetingSignUp.status,
+                            "1",
                             binding.itemLcxx.lcBtn
                         )
-                    }
-                    item.meetingSignUpLocation?.let {
-                        state_laicheng.userMeetingId = data.id
-                        eData(state_laicheng, it)
-                    }
-                    item.userMeetingTrip?.let {
-                        binding.itemLcxx.kong.visibility = View.GONE
-                        binding.itemLcxx.ll.visibility = View.VISIBLE
-                        binding.itemLcxx.name.text = it.remark
-
-                        binding.itemLcxx.lcData1.text =
-                            getDateStr("MM月dd", it.startDate).toString()
-                        binding.itemLcxx.lcDidian1.text = it.startCity
-                        binding.itemLcxx.lcJichang1.text = it.startAddress
-                        binding.itemLcxx.lcData2.text =
-                            getDateStr("MM月dd", it.endDate).toString()
-                        binding.itemLcxx.lcDidian2.text = it.endCity
-                        binding.itemLcxx.lcJichang1.text = it.endAddress
-                        binding.itemLcxx.jiedai.text = "接待员：" + item.personChargeName
-                        mobile2 = item.personChargeMobile
-                        binding.itemLcxx.time.text = getDateStr(
-                            "HH:mm",
-                            it.startTime
-                        ).toString() + "-" + getDateStr("HH:mm", it.endTime).toString()
-
-                        //personChargeMobile status
-
-                        for (item in model.transport_type) {
-                            if (it.transport.equals(item.dictValue)) {
-                                if (item.dictValue.equals("03")) {
-                                    binding.itemLcxx.icon.setImageResource(R.mipmap.laichengxingxi)
-                                } else {
-                                    binding.itemLcxx.icon.setImageResource(R.mipmap.hc)
-                                }
-
-                            }
+                        //来程签到
+                        item.userMeetingSignUp?.let {
+                            state_laicheng.status = "" + item.userMeetingSignUp.status
+                            setStateColor(
+                                model.sys_laicheng,
+                                "" + item.userMeetingSignUp.status,
+                                binding.itemLcxx.lcBtn
+                            )
                         }
+                        item.meetingSignUpLocation?.let {
+                            state_laicheng.userMeetingId = data.id
+                            eData(state_laicheng, it)
+                        }
+                        item.userMeetingTrip?.let {
+                            binding.itemLcxx.kong.visibility = View.GONE
+                            binding.itemLcxx.ll.visibility = View.VISIBLE
+                            binding.itemLcxx.name.text = it.remark
 
+                            binding.itemLcxx.lcData1.text =
+                                getDateStr("MM月dd", it.startDate).toString()
+                            binding.itemLcxx.lcDidian1.text = it.startCity
+                            binding.itemLcxx.lcJichang1.text = it.startAddress
+                            binding.itemLcxx.lcData2.text =
+                                getDateStr("MM月dd", it.endDate).toString()
+                            binding.itemLcxx.lcDidian2.text = it.endCity
+                            binding.itemLcxx.lcJichang1.text = it.endAddress
+                            binding.itemLcxx.jiedai.text = "接待员：" + item.personChargeName
+                            mobile2 = item.personChargeMobile
+                            binding.itemLcxx.time.text = getDateStr(
+                                "HH:mm",
+                                it.startTime
+                            ).toString() + "-" + getDateStr("HH:mm", it.endTime).toString()
+
+                            //personChargeMobile status
+
+                            for (item in model.transport_type) {
+                                if (it.transport.equals(item.dictValue)) {
+                                    if (item.dictValue.equals("03")) {
+                                        binding.itemLcxx.icon.setImageResource(R.mipmap.laichengxingxi)
+                                    } else {
+                                        binding.itemLcxx.icon.setImageResource(R.mipmap.hc)
+                                    }
+
+                                }
+                            }
+
+
+                        }
+                    } catch (e: java.lang.Exception) {
 
                     }
-            }catch (e : java.lang.Exception){
-
-            }
                 }
             }
         }
@@ -723,7 +740,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
 
     fun getDateStr(format: String, dateStr: String): String {
-        if(format.isNullOrEmpty()||dateStr.isNullOrEmpty()){
+        if (format.isNullOrEmpty() || dateStr.isNullOrEmpty()) {
             return ""
         }
         var date = parseServerTime(dateStr)
@@ -750,7 +767,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
     }
 
     fun parseTime(serverTime: String): String {
-        if(serverTime.isNullOrEmpty()){
+        if (serverTime.isNullOrEmpty()) {
             return ""
         }
         var format = "yyyy-MM-dd HH:mm:ss"
@@ -768,7 +785,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
     }
 
     fun daydiff(fDateString: String, oDateString: String): Int {
-        if(fDateString.isNullOrEmpty()||oDateString.isNullOrEmpty()){
+        if (fDateString.isNullOrEmpty() || oDateString.isNullOrEmpty()) {
             return 0
         }
         val fDate = parseServerTime(fDateString)

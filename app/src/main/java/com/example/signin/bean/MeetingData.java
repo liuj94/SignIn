@@ -121,7 +121,7 @@ public class MeetingData implements Serializable {
     private int meetingId;
     private String name= "";
     private String status= "";
-    private int businessId;
+    private String businessId = "";
     private String startTime= "";
     private String endTime= "";
     private String address= "";
@@ -298,11 +298,11 @@ public class MeetingData implements Serializable {
         this.status = status;
     }
 
-    public int getBusinessId() {
+    public String getBusinessId() {
         return businessId;
     }
 
-    public void setBusinessId(int businessId) {
+    public void setBusinessId(String businessId) {
         this.businessId = businessId;
     }
 

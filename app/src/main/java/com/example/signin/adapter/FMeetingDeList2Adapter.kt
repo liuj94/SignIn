@@ -1,6 +1,7 @@
-package com.example.signin.mvvm.ui.adapter
+package com.example.signin.adapter
 
 
+import android.widget.Toast
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
@@ -10,6 +11,7 @@ import com.example.signin.SigninSetActivity
 
 import com.example.signin.base.BaseBindingAdapter
 import com.example.signin.bean.SiginData
+import com.example.signin.bean.User
 import com.example.signin.databinding.ListMeetingde2Binding
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
@@ -61,15 +63,30 @@ class FMeetingDeList2Adapter: BaseBindingAdapter<SiginData, ListMeetingde2Bindin
             setState(item.id,status,item.voiceStatus,item)
         }
         holder.kg2.setOnClickListener {
+            if (!kv.getString("userData", "").isNullOrEmpty()) {
+                var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
+                userData?.let {
+                    if (it.userType.equals("01")||it.userType.equals("04")){
+                        var voiceStatus = 1
 
-            var voiceStatus = 1
+                        if(item.voiceStatus==1){
+                            voiceStatus = 2
+                        }else{
+                            voiceStatus = 1
+                        }
+                        setState(item.id,item.status,voiceStatus,item)
 
-            if(item.voiceStatus==1){
-                voiceStatus = 2
-            }else{
-                voiceStatus = 1
+                    }else{
+                        Toast.makeText(context, "账号没有修改权限", Toast.LENGTH_SHORT).show()
+
+                    }
+
+
+                }
+
+
             }
-            setState(item.id,item.status,voiceStatus,item)
+
         }
         holder.sz.setOnClickListener {
            startActivity<SigninSetActivity>("id" to ""+item.id)
@@ -77,6 +94,7 @@ class FMeetingDeList2Adapter: BaseBindingAdapter<SiginData, ListMeetingde2Bindin
         holder.qd.setOnClickListener {
 
         }
+
     }
 
 

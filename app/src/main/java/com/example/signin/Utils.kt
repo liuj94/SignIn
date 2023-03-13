@@ -51,7 +51,7 @@ fun startCompres(context:Context,path: String, back: (file: File) -> Unit) {
  */
 
 fun encode(unicode: String? = ""): String {
-    var s:String = ""
+    var s:String = ""+unicode
     if(!unicode.isNullOrEmpty()){
         if(unicode.contains("\\u")){
             val builder = StringBuilder()

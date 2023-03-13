@@ -15,7 +15,7 @@ import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.SiginData
 import com.example.signin.bean.SiginUpListData
 import com.example.signin.databinding.FragMeetingde2Binding
-import com.example.signin.mvvm.ui.adapter.FMeetingDeList2Adapter
+import com.example.signin.adapter.FMeetingDeList2Adapter
 import com.example.signin.adapter.SelectMeetingAdapter
 import com.example.signin.bean.SiginUpListModel
 import com.example.signin.net.RequestCallback
