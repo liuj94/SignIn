@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
 import com.alibaba.fastjson.JSON
-import com.dylanc.longan.toast
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.SiginData
@@ -272,7 +271,7 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
 
                 override fun onError(response: Response<SiginData>) {
                     super.onError(response)
-                    toast("")
+
                 }
 
                 override fun onFinish() {
@@ -335,7 +334,7 @@ class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewM
 
                 override fun onError(response: Response<String>) {
                     super.onError(response)
-                    toast("")
+
                 }
 
                 override fun onFinish() {

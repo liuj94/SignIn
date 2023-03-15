@@ -290,18 +290,27 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             ) { requestCode: Int, _: Array<String>, grantResults: IntArray ->
                 if (requestCode == 200 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     userData?.let {
-                        if (it.userType.equals("01")||it.userType.equals("04")) {
-                            voice()
-                        } else {
-                            if (selectList2.size > 0) {
-                                if (selectList2[0].voiceStatus == 1) {
-                                    //对讲开启
-                                    voice()
+//                        if(talkTime>0){
+                            if (it.userType.equals("01")||it.userType.equals("04")) {
+                                voice()
+                            } else {
+                                if (selectList2.size > 0) {
+                                    if (selectList2[0].voiceStatus == 1) {
+                                        //对讲开启
+                                        voice()
+
+                                    } else {
+
+                                    }
+                                } else {
 
                                 }
-                            }
 
-                        }
+                            }
+//                        }else{
+//                            toast("当前暂无通话时长")
+//                        }
+
                     }
                 } else {
                     activity?.let { it1 ->
@@ -321,7 +330,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         activity?.let {
             mRtcEngine = TokenUtils.initializeAndJoinChannel(it, mRtcEventHandler)
         }
-        getSiginData()
+//        getSiginData()
     }
 
     private fun voice() {
@@ -373,6 +382,18 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                 "IRtcEngineEventHandler",
                 String.format("onLeaveChannel ", stats)
             )
+            Log.i(
+                "IRtcEngineEventHandler",
+                String.format("onLeaveChannel totalDuration=", stats?.totalDuration)
+            )
+            stats?.let {
+                val params = HashMap<String, Any>()
+                params["meetingId"] =""+ meetingid
+                params["time"] =  it.totalDuration*1000
+                LiveDataBus.get().with("voiceTime").postValue(JSON.toJSONString(params))
+            }
+
+
             if (mRtcEngine != null) {
                 try {
                     mainThread {
@@ -639,7 +660,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                             }
                         }
                     }
-//                    getSiginData()
+
 
                 }
 
@@ -650,12 +671,13 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
                 override fun onFinish() {
                     super.onFinish()
-
+                    getSiginData()
                 }
 
 
             })
     }
+    var talkTime = 0
     private fun getSiginData() {
         OkGo.get<Balance>(PageRoutes.Api_balance +  businessId)
             .tag(PageRoutes.Api_balance )
@@ -668,6 +690,16 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
                 override fun onMySuccess(data: Balance) {
                     super.onMySuccess(data)
+                    talkTime = data.talkTime
+//                    binding.roundProgress.progress = (data.talkTime/1000)/60
+                    binding.roundProgress.progress = 100
+                    binding.roundProgress.maxProgress = 100
+//                    binding.roundProgress.maxProgress = (data.talkTime/1000)/60
+                    if(data.talkTime>60000){
+                        binding.time.text = ""+(data.talkTime/1000)/60 + "分钟"
+                    }else{
+                        binding.time.text = ""+(data.talkTime/1000) + "秒"
+                    }
 
 
                 }

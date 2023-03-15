@@ -61,6 +61,28 @@ class FMeetingDeList2Adapter: BaseBindingAdapter<SiginData, ListMeetingde2Bindin
                 status = 2
             }
             setState(item.id,status,item.voiceStatus,item)
+//            if (!kv.getString("userData", "").isNullOrEmpty()) {
+//                var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
+//                userData?.let {
+//                    if (it.userType.equals("01")||it.userType.equals("04")){
+//                        var status = 1
+//
+//                        if(item.status==1){
+//                            status = 2
+//                        }
+//                        setState(item.id,status,item.voiceStatus,item)
+//
+//                    }else{
+//                        Toast.makeText(context, "账号没有修改权限", Toast.LENGTH_SHORT).show()
+//
+//                    }
+//
+//
+//                }
+//
+//
+//            }
+
         }
         holder.kg2.setOnClickListener {
             if (!kv.getString("userData", "").isNullOrEmpty()) {

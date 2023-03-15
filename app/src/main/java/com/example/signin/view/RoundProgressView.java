@@ -74,7 +74,11 @@ public class RoundProgressView extends View {
         //构造圆环的外围矩形
         RectF rectF = new RectF(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
         //计算显示的进度
-        int progressAngle = (progress * 360) / maxProgress;
+        int progressAngle = 0;
+        if(maxProgress!=0){
+            progressAngle = (progress * 360) / maxProgress;
+        }
+
         //画出进度，注意这里的270表示从圆环的最顶部开始画，如果270替换为0，则是从圆环的右端开始画
         canvas.drawArc(rectF, 270, progressAngle, false, progressPaint);
     }

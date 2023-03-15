@@ -3,6 +3,7 @@ package com.example.signin
 
 import android.media.MediaPlayer
 import androidx.fragment.app.Fragment
+import com.alibaba.fastjson.JSON
 import com.dylanc.longan.toast
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
@@ -10,6 +11,10 @@ import com.example.signin.base.BaseViewModel
 import com.example.signin.databinding.ActivityMainBinding
 import com.example.signin.fragment.HomeMainFragment
 import com.example.signin.fragment.MyFragment
+import com.example.signin.net.RequestCallback
+import com.lzy.okgo.OkGo
+import com.lzy.okgo.model.Response
+import com.tencent.mmkv.MMKV
 
 
 import getDataType
@@ -80,6 +85,12 @@ var  mRingPlayer :MediaPlayer? = null
                 }
 
             }
+        LiveDataBus.get().with("voiceTime", String::class.java)
+            .observeForever {
+                setState(it)
+
+            }
+
     }
 
     var homeFragment: HomeMainFragment? = null
@@ -133,7 +144,35 @@ var  mRingPlayer :MediaPlayer? = null
     }
 
 
+    fun setState(params:String){
 
+
+        JSON.toJSONString(params)
+        OkGo.post<String>(PageRoutes.Api_voice)
+            .tag(PageRoutes.Api_voice)
+            .upJson(params)
+            .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV")
+                .getString("token",""))
+            .execute(object : RequestCallback<String>() {
+
+                override fun onSuccess(response: Response<String>?) {
+                    super.onSuccess(response)
+
+                }
+
+                override fun onError(response: Response<String>) {
+                    super.onError(response)
+
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+
+                }
+
+
+            })
+    }
 
 
     override fun onDestroy() {
