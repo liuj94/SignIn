@@ -20,6 +20,7 @@ import androidx.viewbinding.ViewBinding
 import com.dylanc.mmkv.MMKVOwner
 import com.dylanc.viewbinding.base.ActivityBinding
 import com.dylanc.viewbinding.base.ActivityBindingDelegate
+import com.example.signin.AppManager
 import com.tencent.mmkv.MMKV
 
 abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActivity(),
@@ -39,7 +40,7 @@ abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActi
         setContentViewWithBinding()
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         mViewModel.mContext = this
-
+        AppManager.getAppManager().addActivity(this)
         initProgressDialog()
         initIntentStringExtra()
         initTitle()

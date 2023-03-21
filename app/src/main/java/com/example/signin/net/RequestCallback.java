@@ -1,6 +1,7 @@
 package com.example.signin.net;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -9,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.signin.App;
 import com.example.signin.AppManager;
 import com.example.signin.LoginActivity;
+import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.request.base.Request;
 
@@ -78,6 +80,9 @@ public abstract class RequestCallback<T> extends AbsCallback<T> {
             }
             else {
 //                onErrorBusiness(data.getMessage());
+                if(response.code()==200){
+                    throw new RequestException(data.getCode(), data.getMsg());
+                }
                 throw new RequestException(response.code(), data.getMsg());
             }
         } else {
@@ -130,8 +135,12 @@ public abstract class RequestCallback<T> extends AbsCallback<T> {
         if (response.getException() instanceof RequestException) {
 
             if (((RequestException) response.getException()).getStatusCode() == 401) {
-                Toast.makeText(App.Companion.getInstance(),"登录过期",Toast.LENGTH_SHORT).show();
-                AppManager.getAppManager().startActivity(LoginActivity.class);
+//                Toast.makeText(App.Companion.getInstance(),"登录过期",Toast.LENGTH_SHORT).show();
+              Intent intent =  new Intent(AppManager.getAppManager().getTopActivity(),LoginActivity.class);
+                intent.putExtra("msg",((RequestException) response.getException()).getMsg());
+//                AppManager.getAppManager().startActivity(LoginActivity.class);
+                AppManager.getAppManager().startActivity(intent);
+                OkGo.getInstance().cancelAll();
                 return;
             }
 
@@ -146,6 +155,8 @@ public abstract class RequestCallback<T> extends AbsCallback<T> {
             //toast(response.getException().getMessage());
 //            Toast.makeText(FLApplication.Companion.getInstance(),response.getException().getMessage(),Toast.LENGTH_SHORT).show();
 //            onErrorBusiness("服务器错误");
+            Toast.makeText(App.Companion.getInstance(),"服务器错误",Toast.LENGTH_SHORT).show();
+
         }
 
     }

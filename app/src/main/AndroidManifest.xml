@@ -127,6 +127,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:launchMode="singleTop"
             android:name=".LoginActivity"
             android:exported="false" />
 

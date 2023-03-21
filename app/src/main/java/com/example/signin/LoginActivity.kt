@@ -28,12 +28,20 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
     override fun initData() {
+        kv.remove("token")
+        kv.remove("userData")
+       var msg = intent.getStringExtra("msg")
+        if (!msg.isNullOrEmpty()){
+            toast(msg)
+        }
         binding.login.setOnClickListener {
 
             mViewModel.isShowLoading.value = true
             val params = HashMap<String, String>()
             params["username"] = binding.userName.text.toString().trim()
             params["password"] = binding.password.text.toString().trim()
+            //source=app
+            params["source"] = "app"
 
             OkGo.post<Token>(PageRoutes.Api_login)
                 .tag(PageRoutes.Api_login)
