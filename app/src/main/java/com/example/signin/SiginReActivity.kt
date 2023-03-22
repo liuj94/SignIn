@@ -42,7 +42,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
             params["signUpId"] = it.signUpId//签到站id
             params["userMeetingId"] = it.userMeetingId//用户参与会议id
             params["status"] = "2"//用户参与会议id
-            it.meetingName?.let { binding.name.text = it }
+            it.meetingName?.let {meetingName-> binding.name.text = meetingName }
             it.name?.let { name-> binding.userName.text = encode(name) }
             it.corporateName?.let {companyName-> binding.companyName.text = encode(companyName) }
             it.userMeetingTypeName?.let {userMeetingTypeName->binding.type.text = encode(userMeetingTypeName)  }

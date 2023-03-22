@@ -111,13 +111,18 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
             }
 
         getData()
-        getList()
+//        getList()
         binding.refresh.setEnableLoadMore(false)
         binding.refresh.setOnRefreshListener {
             getList()
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+//        binding.refresh.autoRefresh()
+        getList()
+    }
     private fun getList() {
         OkGo.get<List<SiginData>>(PageRoutes.Api_meetingSignUpLocation + meetingid + "&signUpId=" + signUpId)
             .tag(PageRoutes.Api_meetingSignUpLocation + meetingid+2)

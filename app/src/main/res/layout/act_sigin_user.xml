@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#F3F4F8"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+    <!--<androidx.core.widget.NestedScrollView-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:fillViewport="true">-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        >
+
+        <ImageView
+            android:id="@+id/goback"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:padding="13dp"
+            android:src="@mipmap/arrowsleft" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="签到"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="15dp"
+                    android:background="#ff3974f6" />
+                <TextView
+                    android:id="@+id/num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="搜索名单（）"
+                    android:textColor="#ff333333"
+                    android:textSize="16sp" />
+
+
+
+            </LinearLayout>
+<!--            <com.scwang.smartrefresh.layout.SmartRefreshLayout-->
+<!--                android:id="@+id/refresh"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="#F3F4F8"-->
+<!--                >-->
+<!--                <com.scwang.smartrefresh.layout.header.ClassicsHeader-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"/>-->
+
+<!--                <LinearLayout-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent">-->
+<!--                    <LinearLayout-->
+<!--                        android:visibility="gone"-->
+<!--                        android:id="@+id/kong"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent">-->
+<!--                        <ImageView-->
+<!--                            android:src="@mipmap/kong"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"/>-->
+<!--                    </LinearLayout>-->
+<!--                    <androidx.recyclerview.widget.RecyclerView-->
+<!--                        android:id="@+id/recyclerview"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+
+<!--                        android:layout_marginTop="15dp"-->
+<!--                        tools:listitem="@layout/list_meetingde3"-->
+
+<!--                        tools:ignore="MissingClass"/>-->
+<!--                </LinearLayout>-->
+<!--                <com.scwang.smartrefresh.layout.footer.ClassicsFooter-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    />-->
+<!--                &lt;!&ndash;            tools:listitem="@layout/item_feed_back"&ndash;&gt;-->
+<!--            </com.scwang.smartrefresh.layout.SmartRefreshLayout>-->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/kong"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:src="@mipmap/kong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:layout_marginTop="15dp"
+                    tools:listitem="@layout/list_meetingde3"
+
+                    tools:ignore="MissingClass"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <!--            tools:listitem="@layout/item_feed_back"-->
+
+
+    <!--</androidx.core.widget.NestedScrollView>-->
+</LinearLayout>

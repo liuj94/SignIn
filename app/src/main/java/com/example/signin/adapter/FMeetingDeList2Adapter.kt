@@ -5,9 +5,7 @@ import android.widget.Toast
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
-import com.example.signin.PageRoutes
-import com.example.signin.R
-import com.example.signin.SigninSetActivity
+import com.example.signin.*
 
 import com.example.signin.base.BaseBindingAdapter
 import com.example.signin.bean.SiginData
@@ -113,9 +111,9 @@ class FMeetingDeList2Adapter: BaseBindingAdapter<SiginData, ListMeetingde2Bindin
         holder.sz.setOnClickListener {
            startActivity<SigninSetActivity>("id" to ""+item.id)
         }
-        holder.qd.setOnClickListener {
-
-        }
+//        holder.qd.setOnClickListener {
+//
+//        }
 
     }
 

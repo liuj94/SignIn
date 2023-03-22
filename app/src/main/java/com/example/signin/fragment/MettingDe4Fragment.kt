@@ -2,21 +2,17 @@ package com.example.signin.fragment
 
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.mainThread
-import com.dylanc.longan.startActivity
-import com.dylanc.longan.toast
 import com.example.signin.*
 import com.example.signin.adapter.FMeetingDeList3Adapter
 import com.example.signin.adapter.SelectDataAdapter
@@ -28,17 +24,12 @@ import com.example.signin.bean.*
 import com.example.signin.databinding.FragMeetingde4Binding
 import com.example.signin.net.JsonCallback
 import com.example.signin.net.RequestCallback
-import com.hjq.permissions.OnPermissionCallback
-import com.hjq.permissions.Permission
-import com.hjq.permissions.XXPermissions
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
-import com.tencent.mmkv.MMKV
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
-import sigin
 
 /**
  *   author : LiuJie
@@ -174,112 +165,112 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         getData()
 
 
-        binding.nameLl.setOnClickListener {
-            binding.select2Ll.visibility = View.GONE
-            if (binding.selectLl.visibility == View.VISIBLE) {
-                binding.selectLl.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
-            } else {
-                binding.selectLl.visibility = View.VISIBLE
-                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
-            }
-        }
-        binding.name2Ll.setOnClickListener {
-            binding.selectLl.visibility = View.GONE
-            if (binding.select2Ll.visibility == View.VISIBLE) {
-                binding.select2Ll.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
-            } else {
-                binding.select2Ll.visibility = View.VISIBLE
-                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
-            }
-
-        }
-        binding.select2Ll.setOnClickListener {
-            if (binding.select2Ll.visibility == View.VISIBLE) {
-                binding.select2Ll.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
-            }
-        }
-        binding.selectLl.setOnClickListener {
-            if (binding.selectLl.visibility == View.VISIBLE) {
-                binding.selectLl.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
-            }
-
-        }
-        binding.sous.setOnClickListener {
-            if (siginlocationId.isNullOrEmpty()) {
-                toast("请选择签到点")
-
-            } else {
-                nameMobile = binding.et.text.toString().trim()
-                getUserList()
-            }
-            activity?.hideSoftInput()
-        }
-        binding.et.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                // 监听到回车键，会执行2次该方法。按下与松开
-                if (event.action == KeyEvent.ACTION_UP) {
-                    if (siginlocationId.isNullOrEmpty()) {
-                        toast("请选择签到点")
-
-                    } else {
-                        nameMobile = binding.et.text.toString().trim()
-                        binding.et.setText(nameMobile)
-                        nameMobile?.let {
-                            binding.et.setSelection(it.length)
-                        }
-                        getUserList()
-                    }
-
-                    activity?.hideSoftInput()
-                }
-            }
-            false
-        })
-        binding.moshiiv.setOnClickListener {
-            if (siginlocationId.isNullOrEmpty()) {
-                toast("请选择签到点")
-            } else {
-                signUpStatus?.let { it1 -> setState(siginlocationId!!, it1) }
-            }
-        }
-        binding.shaoma.setOnClickListener {
-            if (siginlocationId.isNullOrEmpty()) {
-                toast("请选择签到点")
-
-            } else {
-                activity?.let {
-                    XXPermissions.with(context)
-                        .permission(Permission.CAMERA)
-                        .request(object : OnPermissionCallback {
-
-                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
-                                if (!all) {
-                                    toast("获取权限失败")
-                                } else {
-                                    var intent = Intent(it, ScanActivity::class.java)
-                                    startActivityForResult(intent, 1000)
-                                }
-
-                            }
-
-                            override fun onDenied(
-                                permissions: MutableList<String>,
-                                never: Boolean
-                            ) {
-                                toast("获取权限失败")
-
-                            }
-                        })
-
-                }
-            }
-
-
-        }
+//        binding.nameLl.setOnClickListener {
+//            binding.select2Ll.visibility = View.GONE
+//            if (binding.selectLl.visibility == View.VISIBLE) {
+//                binding.selectLl.visibility = View.GONE
+//                LiveDataBus.get().with("selectLlGONE").postValue("1")
+//            } else {
+//                binding.selectLl.visibility = View.VISIBLE
+//                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
+//            }
+//        }
+//        binding.name2Ll.setOnClickListener {
+//            binding.selectLl.visibility = View.GONE
+//            if (binding.select2Ll.visibility == View.VISIBLE) {
+//                binding.select2Ll.visibility = View.GONE
+//                LiveDataBus.get().with("selectLlGONE").postValue("1")
+//            } else {
+//                binding.select2Ll.visibility = View.VISIBLE
+//                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
+//            }
+//
+//        }
+//        binding.select2Ll.setOnClickListener {
+//            if (binding.select2Ll.visibility == View.VISIBLE) {
+//                binding.select2Ll.visibility = View.GONE
+//                LiveDataBus.get().with("selectLlGONE").postValue("1")
+//            }
+//        }
+//        binding.selectLl.setOnClickListener {
+//            if (binding.selectLl.visibility == View.VISIBLE) {
+//                binding.selectLl.visibility = View.GONE
+//                LiveDataBus.get().with("selectLlGONE").postValue("1")
+//            }
+//
+//        }
+//        binding.sous.setOnClickListener {
+//            if (siginlocationId.isNullOrEmpty()) {
+//                toast("请选择签到点")
+//
+//            } else {
+//                nameMobile = binding.et.text.toString().trim()
+//                getUserList()
+//            }
+//            activity?.hideSoftInput()
+//        }
+//        binding.et.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+//            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+//                // 监听到回车键，会执行2次该方法。按下与松开
+//                if (event.action == KeyEvent.ACTION_UP) {
+//                    if (siginlocationId.isNullOrEmpty()) {
+//                        toast("请选择签到点")
+//
+//                    } else {
+//                        nameMobile = binding.et.text.toString().trim()
+//                        binding.et.setText(nameMobile)
+//                        nameMobile?.let {
+//                            binding.et.setSelection(it.length)
+//                        }
+//                        getUserList()
+//                    }
+//
+//                    activity?.hideSoftInput()
+//                }
+//            }
+//            false
+//        })
+//        binding.moshiiv.setOnClickListener {
+//            if (siginlocationId.isNullOrEmpty()) {
+//                toast("请选择签到点")
+//            } else {
+//                signUpStatus?.let { it1 -> setState(siginlocationId!!, it1) }
+//            }
+//        }
+//        binding.shaoma.setOnClickListener {
+//            if (siginlocationId.isNullOrEmpty()) {
+//                toast("请选择签到点")
+//
+//            } else {
+//                activity?.let {
+//                    XXPermissions.with(context)
+//                        .permission(Permission.CAMERA)
+//                        .request(object : OnPermissionCallback {
+//
+//                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+//                                if (!all) {
+//                                    toast("获取权限失败")
+//                                } else {
+//                                    var intent = Intent(it, ScanActivity::class.java)
+//                                    startActivityForResult(intent, 1000)
+//                                }
+//
+//                            }
+//
+//                            override fun onDenied(
+//                                permissions: MutableList<String>,
+//                                never: Boolean
+//                            ) {
+//                                toast("获取权限失败")
+//
+//                            }
+//                        })
+//
+//                }
+//            }
+//
+//
+//        }
 
 
         binding.thstate.setOnClickListener {
@@ -468,103 +459,103 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
     var okMsg: String = "签到成功"
     var repeatMsg: String = "重复签到"
     var voiceStatus: String = "2"
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1000) {
-            data?.let {
-                var param = it.getStringExtra("QrCodeScanned")
-                Log.d("tagggg", "param==" + param)
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+////        if (requestCode == 1000) {
+////            data?.let {
+////                var param = it.getStringExtra("QrCodeScanned")
+////                Log.d("tagggg", "param==" + param)
+////
+////                var signUpUser = JSON.parseObject(param, SignUpUser::class.java)
+////
+////                signUpUser.signUpLocationId = siginlocationId
+////                signUpUser.signUpId = signUpId
+////                signUpUser.userMeetingId = signUpUser.id
+////                signUpUser.meetingId = signUpUser.meetingId
+////                signUpUser.userMeetingTypeName = signUpUser.supplement
+////                signUpUser.autoStatus = autoStatus
+////                signUpUser.timeLong = timeLong
+////                signUpUser.okMsg = okMsg
+////                signUpUser.failedMsg = failedMsg
+////                signUpUser.repeatMsg = repeatMsg
+////                signUpUser.voiceStatus = voiceStatus
+////
+////                if (autoStatus.equals("1")) {
+////                    if (type == 3) {
+////                        startActivity<SiginReActivity>("type" to type, "data" to signUpUser)
+////                    } else {
+////                        var params = java.util.HashMap<String, String>()
+////                        params["meetingId"] = signUpUser.meetingId//会议id
+////                        params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
+////                        params["signUpId"] = signUpUser.signUpId//签到站id
+////                        params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
+////                        params["status"] = "2"//用户参与会议id
+////                        sigin(JSON.toJSONString(params), { success ->
+////                            signUpUser.success = success
+////                            startActivity<SiginReAutoActivity>("type" to type, "data" to signUpUser)
+////                        }, {}, {})
+////                    }
+////
+////                } else {
+////                    startActivity<SiginReActivity>("type" to type, "data" to signUpUser)
+////                }
+////
+////
+////            }
+////
+////        }
+//    }
 
-                var signUpUser = JSON.parseObject(param, SignUpUser::class.java)
-
-                signUpUser.signUpLocationId = siginlocationId
-                signUpUser.signUpId = signUpId
-                signUpUser.userMeetingId = signUpUser.id
-                signUpUser.meetingId = signUpUser.meetingId
-                signUpUser.userMeetingTypeName = signUpUser.supplement
-                signUpUser.autoStatus = autoStatus
-                signUpUser.timeLong = timeLong
-                signUpUser.okMsg = okMsg
-                signUpUser.failedMsg = failedMsg
-                signUpUser.repeatMsg = repeatMsg
-                signUpUser.voiceStatus = voiceStatus
-
-                if (autoStatus.equals("1")) {
-                    if (type == 3) {
-                        startActivity<SiginReActivity>("type" to type, "data" to signUpUser)
-                    } else {
-                        var params = java.util.HashMap<String, String>()
-                        params["meetingId"] = signUpUser.meetingId//会议id
-                        params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
-                        params["signUpId"] = signUpUser.signUpId//签到站id
-                        params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
-                        params["status"] = "2"//用户参与会议id
-                        sigin(JSON.toJSONString(params), { success ->
-                            signUpUser.success = success
-                            startActivity<SiginReAutoActivity>("type" to type, "data" to signUpUser)
-                        }, {}, {})
-                    }
-
-                } else {
-                    startActivity<SiginReActivity>("type" to type, "data" to signUpUser)
-                }
-
-
-            }
-
-        }
-    }
-
-    fun setState(id: String, signUpStatu: String) {
-//        {id: 66, status: 1, voiceStatus: 1}
-        val params = HashMap<String, String>()
-        params["id"] = id
-        if (signUpStatu == "1") {
-
-            params["signUpStatus"] = "2"
-        } else {
-
-            params["signUpStatus"] = "1"
-        }
-
-
-
-        OkGo.put<String>(PageRoutes.Api_ed_meetingSignUpLocation)
-            .tag(PageRoutes.Api_ed_meetingSignUpLocation)
-            .upJson(JSON.toJSONString(params))
-            .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token", ""))
-            .execute(object : RequestCallback<String>() {
-
-                override fun onSuccess(response: Response<String>?) {
-                    super.onSuccess(response)
-                    if (signUpStatu == "1") {
-                        signUpStatus = "2"
-                    } else {
-                        signUpStatus = "1"
-                    }
-
-                    if (signUpStatus == "1") {
-                        binding.moshitv.text = "签入模式"
-                        binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
-                    } else {
-                        binding.moshitv.text = "签出模式"
-                        binding.moshiiv.setImageResource(R.mipmap.kaiguank)
-                    }
-                }
-
-                override fun onError(response: Response<String>) {
-                    super.onError(response)
-
-                }
-
-                override fun onFinish() {
-                    super.onFinish()
-
-                }
-
-
-            })
-    }
+//    fun setState(id: String, signUpStatu: String) {
+////        {id: 66, status: 1, voiceStatus: 1}
+//        val params = HashMap<String, String>()
+//        params["id"] = id
+//        if (signUpStatu == "1") {
+//
+//            params["signUpStatus"] = "2"
+//        } else {
+//
+//            params["signUpStatus"] = "1"
+//        }
+//
+//
+//
+//        OkGo.put<String>(PageRoutes.Api_ed_meetingSignUpLocation)
+//            .tag(PageRoutes.Api_ed_meetingSignUpLocation)
+//            .upJson(JSON.toJSONString(params))
+//            .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token", ""))
+//            .execute(object : RequestCallback<String>() {
+//
+//                override fun onSuccess(response: Response<String>?) {
+//                    super.onSuccess(response)
+//                    if (signUpStatu == "1") {
+//                        signUpStatus = "2"
+//                    } else {
+//                        signUpStatus = "1"
+//                    }
+//
+//                    if (signUpStatus == "1") {
+//                        binding.moshitv.text = "签入模式"
+//                        binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
+//                    } else {
+//                        binding.moshitv.text = "签出模式"
+//                        binding.moshiiv.setImageResource(R.mipmap.kaiguank)
+//                    }
+//                }
+//
+//                override fun onError(response: Response<String>) {
+//                    super.onError(response)
+//
+//                }
+//
+//                override fun onFinish() {
+//                    super.onFinish()
+//
+//                }
+//
+//
+//            })
+//    }
 
     private fun setStartData() {
         siginlocationId = ""

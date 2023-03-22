@@ -1,7 +1,6 @@
 package com.example.signin
 
 import android.content.Intent
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +22,6 @@ import com.hjq.permissions.XXPermissions
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
-import sigin
 
 class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, BaseViewModel>() {
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
@@ -38,6 +36,10 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     var signUpStatus = ""
     var nameMobile: String? = ""
     var params: String? = ""
+    var failedMsg:String = "签到失败"
+    var okMsg:String = "签到成功"
+    var repeatMsg:String = "重复签到"
+    var voiceStatus:String = "2"
     private var list: MutableList<MeetingUserData> = ArrayList()
     private var adapter: FMeetingDeList3Adapter? = null
     override fun initData() {
@@ -69,80 +71,43 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         binding.sous.setOnClickListener {
             nameMobile = binding.et.text.toString().trim()
 //            binding.et.setText(nameMobile)
-            list.clear()
-            getList()
+//            list.clear()
+//            getList()
             activity?.hideSoftInput()
+            var url =PageRoutes.Api_meetinguser +params
+            if (!nameMobile.isNullOrEmpty()) {
+                url = "$url&nameMobile=$nameMobile"
+            }
+            com.dylanc.longan.startActivity<SiginUserActivity>("url" to url, "showType" to showType,"name" to name)
         }
         binding.et.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 // 监听到回车键，会执行2次该方法。按下与松开
                 if(event.action == KeyEvent.ACTION_UP){
                 nameMobile = binding.et.text.toString().trim()
-                binding.et.setText(nameMobile)
-                nameMobile?.let {
-                    binding.et.setSelection(it.length)
+//                binding.et.setText(nameMobile)
+//                nameMobile?.let {
+//                    binding.et.setSelection(it.length)
+//                }
+//                    list.clear()
+//                getList()
+                activity?.hideSoftInput()
+                    var url =PageRoutes.Api_meetinguser +params
+                    if (!nameMobile.isNullOrEmpty()) {
+                        url = "$url&nameMobile=$nameMobile"
+                    }
+                    com.dylanc.longan.startActivity<SiginUserActivity>("url" to url, "showType" to showType,"name" to name)
                 }
-                    list.clear()
-                getList()
-                activity?.hideSoftInput()}
             }
             false
         })
+        setState()
 
-        getSiginData()
         binding.sm.setOnClickListener {
             activity?.let {
-//                XXPermissions.with(activity)
-//                    .permission(Permission.CAMERA)
-//                    .request(object : OnPermissionCallback {
-//
-//                        override fun onGranted(permissions: MutableList<String>, all: Boolean) {
-//                            if (!all) {
-//                                toast("获取权限失败")
-//                            } else {
-//                                var intent = Intent(it,ScanActivity::class.java)
-//                                startActivityForResult(intent,1000)
-//                            }
-//
-//                        }
-//
-//                        override fun onDenied(permissions: MutableList<String>, never: Boolean) {
-//                            toast("获取权限失败")
-//
-//                        }
-//                    })
+
                 activity?.let {
-//                    XXPermissions.with(activity)
-//                        .permission(Permission.CAMERA)
-//                        .permission(Permission.READ_MEDIA_IMAGES)
-//                        .request(object : OnPermissionCallback {
-//
-//                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
-//                                if (all) {
-//
-//                                    com.dylanc.longan.startActivity<FaceActivity>("id" to id,
-//                                        "signUpId" to signUpId,
-//                                        "meetingid" to meetingid,
-//                                        "signUpLocationId" to id,
-//                                        "autoStatus" to autoStatus,
-//                                        "timeLong" to timeLong,
-//                                        "showType" to showType,
-//                                        "okMsg" to okMsg,
-//                                        "repeatMsg" to repeatMsg,
-//                                        "failedMsg" to failedMsg,
-//                                        "voiceStatus" to voiceStatus,
-//                                    )
-//                                } else {
-//                                    toast("获取手机权限失败")
-//                                }
-//
-//                            }
-//
-//                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
-//
-//
-//                            }
-//                        })
+
                     XXPermissions.with(activity)
                         .permission(Permission.CAMERA)
                         .request(object : OnPermissionCallback {
@@ -181,8 +146,20 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                                 if (!all) {
                                     toast("获取权限失败")
                                 } else {
-                                    var intent = Intent(it,ScanActivity::class.java)
-                                    startActivityForResult(intent,1000)
+                                    com.dylanc.longan.startActivity<ScanActivity>("id" to id,
+                                        "name" to ""+name,
+                                        "params" to ""+params,
+                                        "meetingid" to ""+meetingid,
+                                        "autoStatus" to ""+autoStatus,
+                                        "voiceStatus" to ""+voiceStatus,
+                                        "timeLong" to timeLong,
+                                        "showType" to showType,
+                                        "okMsg" to ""+okMsg,
+                                        "failedMsg" to ""+failedMsg,
+                                        "repeatMsg" to ""+repeatMsg,
+                                        "signUpId" to ""+signUpId)
+//                                    var intent = Intent(it,ScanActivity::class.java)
+//                                    startActivityForResult(intent,1000)
                                 }
 
                             }
@@ -283,7 +260,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             })
 
     }
-    var addressStatus = "1"
+    var addressStatus = "2"
     fun setState(){
 
         val params = HashMap<String, String>()
@@ -307,13 +284,14 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
                 override fun onSuccess(response: Response<String>?) {
                     super.onSuccess(response)
-                    if(addressStatus == "1"){
-                        binding.moshitv.text = "签入模式"
-                        binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
-                    }else{
-                        binding.moshitv.text = "签出模式"
-                        binding.moshiiv.setImageResource(R.mipmap.kaiguank)
-                    }
+//                    if(addressStatus == "1"){
+//                        binding.moshitv.text = "签入模式"
+//                        binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
+//                    }else{
+//                        binding.moshitv.text = "签出模式"
+//                        binding.moshiiv.setImageResource(R.mipmap.kaiguank)
+//                    }
+
                 }
 
                 override fun onError(response: Response<String>) {
@@ -323,7 +301,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
                 override fun onFinish() {
                     super.onFinish()
-
+                    getSiginData()
                 }
 
 
@@ -349,11 +327,14 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                     if(data.modelType == "1"){
                         addressStatus = "1"
                         binding.moshitv.text = "签入模式"
-                        binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
+                        binding.moshiiv.setImageResource(R.mipmap.kaiguank)
+
                     }else{
                         addressStatus = "2"
-                        binding.moshitv.text = "签出模式"
-                        binding.moshiiv.setImageResource(R.mipmap.kaiguank)
+//                        binding.moshitv.text = "签出模式"
+                        binding.moshitv.text = "签入模式"
+                        binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
+
                     }
 
                 }
@@ -371,59 +352,57 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
             })
     }
-    var failedMsg:String = "签到失败"
-    var okMsg:String = "签到成功"
-    var repeatMsg:String = "重复签到"
-    var voiceStatus:String = "2"
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode==1000){
-            data?.let {
-                var param = it.getStringExtra("QrCodeScanned")
-                Log.d("tagggg","param=="+param)
 
-                var signUpUser = JSON.parseObject(param, SignUpUser::class.java)
-
-                signUpUser.signUpLocationId = id
-                signUpUser.signUpId = signUpId
-                signUpUser.userMeetingId = signUpUser.id
-                signUpUser.meetingId = signUpUser.meetingId
-                signUpUser.userMeetingTypeName = signUpUser.supplement
-                signUpUser.autoStatus =  autoStatus
-                signUpUser.timeLong =  timeLong
-                signUpUser.okMsg = okMsg
-                signUpUser.failedMsg = failedMsg
-                signUpUser.repeatMsg = repeatMsg
-                signUpUser.voiceStatus = voiceStatus
-                if(autoStatus.equals("1")){
-                    if(showType==3){
-                        com.dylanc.longan.startActivity<SiginReActivity>(
-                            "type" to showType,
-                            "data" to signUpUser
-                        )
-                    }else{
-                    var params = java.util.HashMap<String, String>()
-                    params["meetingId"] = signUpUser.meetingId//会议id
-                    params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
-                    params["signUpId"] = signUpUser.signUpId//签到站id
-                    params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
-                    params["status"] = "2"//用户参与会议id
-                    sigin(JSON.toJSONString(params),{success->
-                        signUpUser.success = success
-                        com.dylanc.longan.startActivity<SiginReAutoActivity>(
-                            "type" to showType,
-                            "data" to signUpUser
-                        )
-                    },{},{})}
-                }else{
-                    com.dylanc.longan.startActivity<SiginReActivity>(
-                        "type" to showType,
-                        "data" to signUpUser
-                    )
-                }
-
-            }
-
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if(requestCode==1000){
+//            data?.let {
+//                var param = it.getStringExtra("QrCodeScanned")
+//                Log.d("tagggg","param=="+param)
+//
+//                var signUpUser = JSON.parseObject(param, SignUpUser::class.java)
+//
+//                signUpUser.signUpLocationId = id
+//                signUpUser.meetingName = name
+//                signUpUser.signUpId = signUpId
+//                signUpUser.userMeetingId = signUpUser.id
+//                signUpUser.meetingId = signUpUser.meetingId
+//                signUpUser.userMeetingTypeName = signUpUser.supplement
+//                signUpUser.autoStatus =  autoStatus
+//                signUpUser.timeLong =  timeLong
+//                signUpUser.okMsg = okMsg
+//                signUpUser.failedMsg = failedMsg
+//                signUpUser.repeatMsg = repeatMsg
+//                signUpUser.voiceStatus = voiceStatus
+//                if(autoStatus.equals("1")){
+//                    if(showType==3){
+//                        com.dylanc.longan.startActivity<SiginReActivity>(
+//                            "type" to showType,
+//                            "data" to signUpUser
+//                        )
+//                    }else{
+//                    var params = java.util.HashMap<String, String>()
+//                    params["meetingId"] = signUpUser.meetingId//会议id
+//                    params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
+//                    params["signUpId"] = signUpUser.signUpId//签到站id
+//                    params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
+//                    params["status"] = "2"//用户参与会议id
+//                    sigin(JSON.toJSONString(params),{success->
+//                        signUpUser.success = success
+//                        com.dylanc.longan.startActivity<SiginReAutoActivity>(
+//                            "type" to showType,
+//                            "data" to signUpUser
+//                        )
+//                    },{},{})}
+//                }else{
+//                    com.dylanc.longan.startActivity<SiginReActivity>(
+//                        "type" to showType,
+//                        "data" to signUpUser
+//                    )
+//                }
+//
+//            }
+//
+//        }
+//    }
 }

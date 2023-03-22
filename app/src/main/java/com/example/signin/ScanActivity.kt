@@ -1,22 +1,47 @@
 package com.example.signin
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.alibaba.fastjson.JSON
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
+import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActScanBinding
+import sigin
 
 class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCodeView.Delegate{
 
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
-
-
+    var id = ""
+    var signUpId = ""
+    var meetingid = ""
+    var autoStatus = ""
+    var timeLong = 3
+    var showType = 0
+    var name = ""
+    var signUpStatus = ""
+    var nameMobile: String? = ""
+    var params: String? = ""
+    var failedMsg:String = "签到失败"
+    var okMsg:String = "签到成功"
+    var repeatMsg:String = "重复签到"
+    var voiceStatus:String = "2"
     override fun initData() {
-
+        intent.getStringExtra("id")?.let { id = it }
+        intent.getStringExtra("name")?.let { name = it }
+        intent.getStringExtra("params")?.let { params = it }
+        intent.getStringExtra("meetingid")?.let { meetingid = it }
+        intent.getStringExtra("signUpId")?.let { signUpId = it }
+        intent.getStringExtra("autoStatus")?.let { autoStatus = it }
+        intent.getStringExtra("okMsg")?.let { okMsg = it }
+        intent.getStringExtra("failedMsg")?.let { failedMsg = it }
+        intent.getStringExtra("repeatMsg")?.let { repeatMsg = it }
+        intent.getStringExtra("voiceStatus")?.let { voiceStatus = it }
+        intent.getIntExtra("timeLong",3)?.let { timeLong = it }
+        intent.getIntExtra("showType",0)?.let { showType = it }
         binding.mZXingView.setDelegate(this)
         OnResultManager.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 200) { requestCode: Int, _: Array<String>, grantResults: IntArray ->
             if (requestCode == 200 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -40,9 +65,9 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
 
     }
     override fun onScanQRCodeSuccess(result: String?) {
-        val intent = Intent()
-            intent.putExtra("QrCodeScanned", result)
-            setResult(111, intent)
+//        val intent = Intent()
+//            intent.putExtra("QrCodeScanned", result)
+//            setResult(111, intent)
 //        if (isCallBack==1) {
 //            val intent = Intent()
 //            intent.putExtra("QrCodeScanned", result)
@@ -50,7 +75,50 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
 //        } else {
 //            AppManager.getAppManager().startScanResultWeb(PageRoutes.SCAN, result)
 //        }
-        finish()
+//        finish()
+        result?.let {param->
+            var signUpUser = JSON.parseObject(param, SignUpUser::class.java)
+
+            signUpUser.signUpLocationId = id
+            signUpUser.meetingName = name
+            signUpUser.signUpId = signUpId
+            signUpUser.userMeetingId = signUpUser.id
+            signUpUser.meetingId = signUpUser.meetingId
+            signUpUser.userMeetingTypeName = signUpUser.supplement
+            signUpUser.autoStatus =  autoStatus
+            signUpUser.timeLong =  timeLong
+            signUpUser.okMsg = okMsg
+            signUpUser.failedMsg = failedMsg
+            signUpUser.repeatMsg = repeatMsg
+            signUpUser.voiceStatus = voiceStatus
+            if(autoStatus.equals("1")){
+                if(showType==3){
+                    com.dylanc.longan.startActivity<SiginReActivity>(
+                        "type" to showType,
+                        "data" to signUpUser
+                    )
+                }else{
+                    var params = java.util.HashMap<String, String>()
+                    params["meetingId"] = signUpUser.meetingId//会议id
+                    params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
+                    params["signUpId"] = signUpUser.signUpId//签到站id
+                    params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
+                    params["status"] = "2"//用户参与会议id
+                    sigin(JSON.toJSONString(params),{ success->
+                        signUpUser.success = success
+                        com.dylanc.longan.startActivity<SiginReAutoActivity>(
+                            "type" to showType,
+                            "data" to signUpUser
+                        )
+                    },{},{})}
+            }else{
+                com.dylanc.longan.startActivity<SiginReActivity>(
+                    "type" to showType,
+                    "data" to signUpUser
+                )
+            }
+        }
+
     }
 
     override fun onCameraAmbientBrightnessChanged(isDark: Boolean) {
@@ -63,8 +131,13 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
     }
     override fun onStart() {
         super.onStart()
-        binding.mZXingView.startCamera() // 打开后置摄像头开始预览，但是并未开始识别
 
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mZXingView.startCamera() // 打开后置摄像头开始预览，但是并未开始识别
     }
 
     override fun onStop() {
