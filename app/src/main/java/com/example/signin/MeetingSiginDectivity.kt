@@ -1,6 +1,6 @@
 package com.example.signin
 
-import android.content.Intent
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,7 +46,8 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         mViewModel.isShowLoading.value = true
         intent.getStringExtra("id")?.let { id = it }
         intent.getStringExtra("name")?.let { name = it
-            binding.name.text = it}
+            binding.name.text = it
+            Log.d("mZXingView","name=="+name)}
         intent.getStringExtra("params")?.let { params = it }
         intent.getStringExtra("meetingid")?.let { meetingid = it }
         intent.getStringExtra("signUpId")?.let { signUpId = it }
@@ -106,29 +107,37 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         binding.sm.setOnClickListener {
             activity?.let {
 
-                activity?.let {
+                XXPermissions.with(activity)
+                    .permission(Permission.CAMERA)
+                    .request(object : OnPermissionCallback {
 
-                    XXPermissions.with(activity)
-                        .permission(Permission.CAMERA)
-                        .request(object : OnPermissionCallback {
-
-                            override fun onGranted(permissions: MutableList<String>, all: Boolean) {
-                                if (!all) {
-                                    toast("获取权限失败")
-                                } else {
-                                    var intent = Intent(it,ScanActivity::class.java)
-                                    startActivityForResult(intent,1000)
-                                }
-
-                            }
-
-                            override fun onDenied(permissions: MutableList<String>, never: Boolean) {
+                        override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+                            if (!all) {
                                 toast("获取权限失败")
-
+                            } else {
+                                com.dylanc.longan.startActivity<ScanActivity>("id" to id,
+                                    "name" to ""+name,
+                                    "params" to ""+params,
+                                    "meetingid" to ""+meetingid,
+                                    "autoStatus" to ""+autoStatus,
+                                    "voiceStatus" to ""+voiceStatus,
+                                    "timeLong" to timeLong,
+                                    "showType" to showType,
+                                    "okMsg" to ""+okMsg,
+                                    "failedMsg" to ""+failedMsg,
+                                    "repeatMsg" to ""+repeatMsg,
+                                    "signUpId" to ""+signUpId)
+//                                    var intent = Intent(it,ScanActivity::class.java)
+//                                    startActivityForResult(intent,1000)
                             }
-                        })
 
-                }
+                        }
+
+                        override fun onDenied(permissions: MutableList<String>, never: Boolean) {
+                            toast("获取权限失败")
+
+                        }
+                    })
 
             }
         }
@@ -267,10 +276,12 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         params["id"] = id
         if(addressStatus.equals("1")){
             addressStatus = "2"
-            params["addressStatus"] = "2"
+//            params["addressStatus"] = "2"
+            params["signUpStatus"] = "2"
         }else{
             addressStatus = "1"
-            params["addressStatus"] = "1"
+//            params["addressStatus"] = "1"
+            params["signUpStatus"] = "1"
         }
 
 
@@ -323,14 +334,12 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                     binding.num2.text  = ""+data.signUpCount
                     binding.num3.text  = ""+data.localSignUpCount
                     //01 签入模式 02 签入签出模式
-                    signUpStatus = data.addressStatus
-                    if(data.modelType == "1"){
-                        addressStatus = "1"
+                    signUpStatus = ""+data.signUpStatus
+                    if(signUpStatus == "1"){
                         binding.moshitv.text = "签入模式"
                         binding.moshiiv.setImageResource(R.mipmap.kaiguank)
 
                     }else{
-                        addressStatus = "2"
 //                        binding.moshitv.text = "签出模式"
                         binding.moshitv.text = "签入模式"
                         binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)

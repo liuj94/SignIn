@@ -1,7 +1,6 @@
 package com.example.signin
 
-import android.Manifest
-import android.content.pm.PackageManager
+import android.util.Log
 import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.alibaba.fastjson.JSON
@@ -43,15 +42,7 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
         intent.getIntExtra("timeLong",3)?.let { timeLong = it }
         intent.getIntExtra("showType",0)?.let { showType = it }
         binding.mZXingView.setDelegate(this)
-        OnResultManager.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 200) { requestCode: Int, _: Array<String>, grantResults: IntArray ->
-            if (requestCode == 200 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                initScan()
-//                Log.e("QRCode", "startSpotAndShowRect=")
-                binding.mZXingView.startSpotAndShowRect() // 显示扫描框，并开始识别
-            } else {
-                showPermission()
-            }
-        }
+        Log.d("mZXingView","name=="+name)
     }
     private fun showPermission() {
         MaterialDialog(this).show {
@@ -131,17 +122,18 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
     }
     override fun onStart() {
         super.onStart()
-
+        binding.mZXingView.startCamera() // 打开后置摄像头开始预览，但是并未开始识别
 
     }
 
     override fun onResume() {
         super.onResume()
-        binding.mZXingView.startCamera() // 打开后置摄像头开始预览，但是并未开始识别
+        binding.mZXingView.startSpotAndShowRect() // 显示扫描框，并开始识别
     }
 
     override fun onStop() {
-        binding.mZXingView.stopCamera() // 关闭摄像头预览，并且隐藏扫描框
+        binding.mZXingView.stopSpotAndHiddenRect()
+
         super.onStop()
     }
 

@@ -25,7 +25,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 var  mRingPlayer :MediaPlayer? = null
-
+    var isMainHome = true
     override fun initData() {
 
         getFragmentLists()
@@ -73,16 +73,19 @@ var  mRingPlayer :MediaPlayer? = null
                     mRingPlayer?.release();
                     mRingPlayer = null;
                 }
-             //语音播报
-                if(it.equals("1")){
+                if(!isMainHome){
+                    //语音播报
+                    if(it.equals("1")){
 
-                    mRingPlayer = MediaPlayer.create(this, R.raw.cg);
-                    mRingPlayer?.start();
+                        mRingPlayer = MediaPlayer.create(this, R.raw.cg);
+                        mRingPlayer?.start();
 
-                }else{
-                    mRingPlayer = MediaPlayer.create(this, R.raw.cf);
-                    mRingPlayer?.start();
+                    }else{
+                        mRingPlayer = MediaPlayer.create(this, R.raw.cf);
+                        mRingPlayer?.start();
+                    }
                 }
+
 
             }
         LiveDataBus.get().with("voiceTime", String::class.java)
@@ -93,6 +96,10 @@ var  mRingPlayer :MediaPlayer? = null
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        isMainHome = false
+    }
     var homeFragment: HomeMainFragment? = null
     var myFragment: MyFragment? = null
     fun getFragmentLists() {
