@@ -131,7 +131,23 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                             binding.submit.text = "返回"
                         }
                         if(it.voiceStatus.equals("1")){
-                            LiveDataBus.get().with("voiceStatus").postValue(data)
+                            if(data.equals("1")){
+                                binding.stateTv.text = okMsg
+                                binding.stateTv.setTextColor(Color.parseColor("#3974F6"))
+                                binding.stateIv.setImageResource(R.mipmap.qd2)
+                                LiveDataBus.get().with("voiceStatus").postValue(okMsg)
+                            }else if(data.equals("2")){
+                                binding.stateTv.text = repeatMsg
+                                binding.stateTv.setTextColor(Color.parseColor("#FFC300"))
+                                binding.stateIv.setImageResource(R.mipmap.qd3)
+                                LiveDataBus.get().with("voiceStatus").postValue(repeatMsg)
+                            }else{
+                                binding.stateTv.text = failedMsg
+                                binding.stateTv.setTextColor(Color.parseColor("#D43030"))
+                                binding.stateIv.setImageResource(R.mipmap.cf_h)
+                                LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
+                            }
+
                         }
                     }
 

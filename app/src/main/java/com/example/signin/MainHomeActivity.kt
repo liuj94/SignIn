@@ -18,6 +18,7 @@ import com.tencent.mmkv.MMKV
 
 
 import getDataType
+import kotlin.collections.ArrayList
 
 
 class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>() {
@@ -27,7 +28,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 var  mRingPlayer :MediaPlayer? = null
     var isMainHome = true
     override fun initData() {
-
+        SpeechUtils.getInstance(this@MainHomeActivity)
         getFragmentLists()
 
         getDataType("sys_zhuce"){
@@ -68,24 +69,25 @@ var  mRingPlayer :MediaPlayer? = null
 
         LiveDataBus.get().with("voiceStatus", String::class.java)
             .observeForever {
-                if (mRingPlayer != null){
-                    mRingPlayer?.stop();
-                    mRingPlayer?.release();
-                    mRingPlayer = null;
-                }
-                if(!isMainHome){
-                    //语音播报
-                    if(it.equals("1")){
+//                if (mRingPlayer != null){
+//                    mRingPlayer?.stop();
+//                    mRingPlayer?.release();
+//                    mRingPlayer = null;
+//                }
+//                if(!isMainHome){
+//                    //语音播报
+//                    if(it.equals("1")){
+//
+//                        mRingPlayer = MediaPlayer.create(this, R.raw.cg);
+//                        mRingPlayer?.start();
+//
+//                    }else{
+//                        mRingPlayer = MediaPlayer.create(this, R.raw.cf);
+//                        mRingPlayer?.start();
+//                    }
+//                }
 
-                        mRingPlayer = MediaPlayer.create(this, R.raw.cg);
-                        mRingPlayer?.start();
-
-                    }else{
-                        mRingPlayer = MediaPlayer.create(this, R.raw.cf);
-                        mRingPlayer?.start();
-                    }
-                }
-
+                SpeechUtils.getInstance(this@MainHomeActivity).speakText(it);
 
             }
         LiveDataBus.get().with("voiceTime", String::class.java)
@@ -182,8 +184,9 @@ var  mRingPlayer :MediaPlayer? = null
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
 
-    }
+
+
+
+
 }

@@ -76,14 +76,14 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
         timer()
         if (success.equals("1")) {
             if(voiceStatus.equals("1")){
-                LiveDataBus.get().with("voiceStatus").postValue("1")
+                LiveDataBus.get().with("voiceStatus").postValue(okMsg)
             }
             binding.stateTv.text = okMsg
             binding.stateTv.setTextColor(Color.parseColor("#3974F6"))
             binding.stateIv.setImageResource(R.mipmap.qd2)
         } else if (success.equals("2")) {
             if(voiceStatus.equals("1")){
-                LiveDataBus.get().with("voiceStatus").postValue("2")
+                LiveDataBus.get().with("voiceStatus").postValue(repeatMsg)
             }
             binding.stateTv.text = repeatMsg
             binding.stateTv.setTextColor(Color.parseColor("#FFC300"))
@@ -92,6 +92,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             binding.stateTv.text = failedMsg
             binding.stateTv.setTextColor(Color.parseColor("#D43030"))
             binding.stateIv.setImageResource(R.mipmap.cf_h)
+            LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
         }
         binding.submit.text = "返回（"+timeLong+"）"
         timer?.start()
