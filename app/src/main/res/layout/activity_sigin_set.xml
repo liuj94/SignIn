@@ -378,7 +378,7 @@
                         />
                     <EditText
                         android:editable="false"
-                        android:id="@+id/failedMsg"
+                        android:id="@+id/repeatMsg"
                         android:singleLine="true"
                         android:layout_marginLeft="10dp"
                         android:layout_weight="1"
@@ -411,7 +411,7 @@
                         />
                     <EditText
                         android:editable="false"
-                        android:id="@+id/repeatMsg"
+                        android:id="@+id/failedMsg"
                         android:singleLine="true"
                         android:layout_marginLeft="10dp"
                         android:layout_weight="1"
