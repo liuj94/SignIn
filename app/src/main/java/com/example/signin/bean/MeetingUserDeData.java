@@ -321,6 +321,7 @@ public class MeetingUserDeData implements Serializable {
          */
 
         private String searchValue= "";
+        private String supplement= "";
         private String createBy= "";
         private String createTime= "";
         private String updateBy= "";
@@ -366,6 +367,14 @@ public class MeetingUserDeData implements Serializable {
         private String meetingPayId;
         private String name;
         private String mobile;
+
+        public String getSupplement() {
+            return supplement;
+        }
+
+        public void setSupplement(String corporateNamsupplemente) {
+            this.supplement = supplement;
+        }
 
         public String getCorporateName() {
             return corporateName;

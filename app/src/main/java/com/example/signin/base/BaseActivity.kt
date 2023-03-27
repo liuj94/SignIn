@@ -49,6 +49,10 @@ abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActi
         initRootTitleBar()
     }
 
+    override fun onDestroy() {
+        AppManager.getAppManager().removeActivity(this)
+        super.onDestroy()
+    }
 
     abstract fun initData()
     open fun initListener() {}

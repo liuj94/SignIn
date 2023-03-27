@@ -29,7 +29,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
     var id = ""
     var showType = 0
     var state_dingdan = "1"
-    var order: MeetingUserDeData.UserOrderBean? = null
+    var order: MeetingUserDeData.UserOrderBean = MeetingUserDeData.UserOrderBean()
     var failRemark = ""
     var state_laicheng: SignUpUser = SignUpUser()
     var state_zhuche: SignUpUser = SignUpUser()
@@ -276,8 +276,9 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         binding.itemDdxx.ll.visibility = View.GONE
         data.userOrder?.let {
             order = it
-            order?.userName = data.name
-            order?.corporateName = data.corporateName
+            order.supplement = data.userMeetingTypeName
+            order.userName = data.name
+            order.corporateName = data.corporateName
             binding.itemDdxx.kong.visibility = View.GONE
             binding.itemDdxx.ll.visibility = View.VISIBLE
             binding.itemDdxx.ddName.text = it.ticketName

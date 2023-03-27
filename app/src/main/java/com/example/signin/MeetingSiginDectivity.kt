@@ -340,8 +340,8 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                         binding.moshiiv.setImageResource(R.mipmap.kaiguank)
 
                     }else{
-//                        binding.moshitv.text = "签出模式"
-                        binding.moshitv.text = "签入模式"
+                        binding.moshitv.text = "签出模式"
+//                        binding.moshitv.text = "签入模式"
                         binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
 
                     }
