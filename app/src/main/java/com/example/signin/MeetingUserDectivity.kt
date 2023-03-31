@@ -151,7 +151,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             takePhone(mobile2)
         }
         binding.itemYhxx.call1.setOnClickListener {
-            takePhone(mobile)
+            if(!mobile.isNullOrEmpty()){
+                takePhone(mobile)
+            }
+
         }
         binding.itemYhxx.call.setOnClickListener {
             takePhone(mobile1)
@@ -235,8 +238,19 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         binding.itemYhxx.name.text = data.name
         binding.itemYhxx.gongshiName.text = data.corporateName
         binding.itemYhxx.zhengjiangType.text = data.userMeetingTypeName
-        binding.itemYhxx.jiedaidName.text = "接待员：" + data.personChargeName
-        mobile = data.personChargeMobile
+
+        binding.itemYhxx.jiedaidName.visibility = View.GONE
+        binding.itemYhxx.call1.visibility = View.GONE
+        data.jiedai?.let {
+            it.selectCheckboxParam?.let {param->
+                binding.itemYhxx.jiedaidName.text = "接待员：" + param.boxValue
+                mobile = param.mobile
+                binding.itemYhxx.jiedaidName.visibility = View.VISIBLE
+                binding.itemYhxx.call1.visibility = View.VISIBLE
+            }
+
+        }
+
         mobile1 = data.mobile
         Glide.with(this@MeetingUserDectivity).load(PageRoutes.BaseUrl + data.avatar)
             .error(R.mipmap.touxiang).into(binding.itemYhxx.tx)
@@ -410,62 +424,70 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
                 3 -> {
                     try {
-                        //入住签到
-                        setStateColor(model.sys_ruzhu, "1", binding.itemRzxx.ddBtn)
+                        binding.itemRzxx.kong.visibility = View.VISIBLE
+                        binding.itemRzxx.ll.visibility = View.GONE
+                        item.userMeetingAccommodation?.let {userMeetingAccommodation->
+                            binding.itemRzxx.kong.visibility = View.GONE
+                            binding.itemRzxx.ll.visibility = View.VISIBLE
+                            //入住签到
+                            setStateColor(model.sys_ruzhu, "1", binding.itemRzxx.ddBtn)
 
-                        item.userMeetingSignUp?.let {
+                            item.userMeetingSignUp?.let {
 
-                            setStateColor(
-                                model.sys_ruzhu,
-                                "" + it.status,
-                                binding.itemRzxx.ddBtn
-                            )
-                            for (list in model.sys_ruzhu) {
-                                if (list.dictValue.equals("" + it.status)) {
-                                    state_ruzhu.status = list.dictValue
-                                    if (list.dictValue.equals("1")) {
-                                        binding.itemRzxx.location.text =
-                                            "签到后分配"
+                                setStateColor(
+                                    model.sys_ruzhu,
+                                    "" + it.status,
+                                    binding.itemRzxx.ddBtn
+                                )
+                                for (list in model.sys_ruzhu) {
+                                    if (list.dictValue.equals("" + it.status)) {
+                                        state_ruzhu.status = list.dictValue
+                                        if (list.dictValue.equals("1")) {
+                                            binding.itemRzxx.location.text =
+                                                "签到后分配"
+                                        }
                                     }
                                 }
                             }
-                        }
-                        binding.itemRzxx.kong.visibility = View.GONE
-                        binding.itemRzxx.ll.visibility = View.VISIBLE
-                        item.meetingSignUpLocation?.let {
-                            state_ruzhu.userMeetingId = data.id
-                            eData(state_ruzhu, it)
-                            it.name?.let { name ->
-                                binding.itemRzxx.name.text = name
+                            binding.itemRzxx.kong.visibility = View.GONE
+                            binding.itemRzxx.ll.visibility = View.VISIBLE
+                            item.meetingSignUpLocation?.let {
+                                state_ruzhu.userMeetingId = data.id
+                                eData(state_ruzhu, it)
+                                it.name?.let { name ->
+                                    binding.itemRzxx.name.text = name
+                                }
+
                             }
 
-                            it.startTime?.let { startTime ->
+
+                            userMeetingAccommodation.startTime?.let { startTime ->
                                 binding.itemRzxx.date1.text = getDateStr(
                                     "MM月dd",
                                     startTime
                                 ).toString()
-                                it.endTime?.let { endTime ->
+                                userMeetingAccommodation.endTime?.let { endTime ->
                                     binding.itemRzxx.day.text = "" + daydiff(
                                         startTime,
                                         endTime
                                     ) + "天"
                                 }
                             }
-                            it.endTime?.let { endTime ->
+                            userMeetingAccommodation.endTime?.let { endTime ->
                                 binding.itemRzxx.date2.text = getDateStr(
                                     "MM月dd",
                                     endTime
                                 ).toString()
                             }
-                            it.address?.let { address -> binding.itemRzxx.address.text = address }
+                            userMeetingAccommodation.accommodation?.let { address -> binding.itemRzxx.address.text = address }
 
-                            it.location?.let { location ->
+                            userMeetingAccommodation.roomNo?.let { location ->
                                 binding.itemRzxx.location.text =
                                     "房间号：" + location
                             }
 
-
                         }
+
                     } catch (e: java.lang.Exception) {
 
                     }
@@ -628,8 +650,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                                 getDateStr("MM月dd", it.endDate).toString()
                             binding.itemFcxx.lcDidian2.text = it.endCity
                             binding.itemFcxx.lcJichang1.text = it.endAddress
-                            binding.itemFcxx.jiedai.text = "接待员：：" + item.personChargeName
-                            mobile3 = item.personChargeMobile
+
                             binding.itemFcxx.time.text = getDateStr(
                                 "HH:mm",
                                 it.startTime
@@ -649,6 +670,18 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
 
                         }
+                        binding.itemFcxx.jiedai.visibility = View.GONE
+                        binding.itemFcxx.call1.visibility = View.GONE
+                        data.backSiji?.let {
+                            it.selectCheckboxParam?.let {param->
+                                binding.itemFcxx.jiedai.text = "司机：" + param.boxValue
+                                mobile3 = param.mobile
+                                binding.itemFcxx.jiedai.visibility = View.VISIBLE
+                                binding.itemFcxx.call1.visibility = View.VISIBLE
+                            }
+
+                        }
+
                     } catch (e: java.lang.Exception) {
 
                     }
@@ -686,8 +719,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                                 getDateStr("MM月dd", it.endDate).toString()
                             binding.itemLcxx.lcDidian2.text = it.endCity
                             binding.itemLcxx.lcJichang1.text = it.endAddress
-                            binding.itemLcxx.jiedai.text = "接待员：" + item.personChargeName
-                            mobile2 = item.personChargeMobile
+
                             binding.itemLcxx.time.text = getDateStr(
                                 "HH:mm",
                                 it.startTime
@@ -706,6 +738,18 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                                 }
                             }
 
+
+                        }
+
+                        binding.itemFcxx.jiedai.visibility = View.GONE
+                        binding.itemFcxx.call1.visibility = View.GONE
+                        data.tripSiji?.let {
+                            it.selectCheckboxParam?.let {param->
+                                binding.itemLcxx.jiedai.text = "司机：" + param.boxValue
+                                mobile2 = param.mobile
+                                binding.itemLcxx.jiedai.visibility = View.VISIBLE
+                                binding.itemLcxx.call1.visibility = View.VISIBLE
+                            }
 
                         }
                     } catch (e: java.lang.Exception) {
@@ -796,7 +840,11 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         val day1 = aCalendar[Calendar.DAY_OF_YEAR]
         aCalendar.time = oDate
         val day2 = aCalendar[Calendar.DAY_OF_YEAR]
-        return day2 - day1
+        var numdata = day2 - day1
+        if(numdata<1){
+            numdata = 1
+        }
+        return numdata
     }
 
     fun eData(d1: SignUpUser, d2: MeetingUserDeData.MeetingSignUpsBean.MeetingSignUpLocationBean) {

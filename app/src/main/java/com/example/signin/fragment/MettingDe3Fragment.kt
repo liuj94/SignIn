@@ -208,9 +208,11 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             return
         }
         var url =
-            PageRoutes.Api_meetinguser + meetingid + "&orderByColumn=createTime&isAsc=desc&&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
+//            PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&orderByColumn=createTime&isAsc=desc&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
+            PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
         if (!status.isNullOrEmpty()) {
-            url = "$url&signUpStatus=$status"
+//            url = "$url&signUpStatus=$status"
+            url = "$url&status=$status"
         }
         if (!nameMobile.isNullOrEmpty()) {
             url = "$url&nameMobile=$nameMobile"
@@ -222,17 +224,20 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
                 override fun onSuccess(response: Response<MeetingUserModel>) {
 
-                    response?.let {
-                        list.addAll(response.body().data)
-                        adapter?.notifyDataSetChanged()
-                        binding.num.text = "名单列表（" + response.body().total + "）"
-                        if (pageNum == 1 && list.size <= 0) {
-                            binding.recyclerview.visibility = View.GONE
-                            binding.kong.visibility = View.VISIBLE
-                        } else {
-                            binding.recyclerview.visibility = View.VISIBLE
-                            binding.kong.visibility = View.GONE
+                    response.body()?.let {
+                        response.body().data?.let {
+                            list.addAll(response.body().data)
+                            adapter?.notifyDataSetChanged()
+                            binding.num.text = "名单列表（" + response.body().total + "）"
+                            if (pageNum == 1 && list.size <= 0) {
+                                binding.recyclerview.visibility = View.GONE
+                                binding.kong.visibility = View.VISIBLE
+                            } else {
+                                binding.recyclerview.visibility = View.VISIBLE
+                                binding.kong.visibility = View.GONE
+                            }
                         }
+
                     }
                 }
 

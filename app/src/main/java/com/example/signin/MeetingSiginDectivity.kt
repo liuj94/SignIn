@@ -1,6 +1,5 @@
 package com.example.signin
 
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,7 +46,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         intent.getStringExtra("id")?.let { id = it }
         intent.getStringExtra("name")?.let { name = it
             binding.name.text = it
-            Log.d("mZXingView","name=="+name)}
+            }
         intent.getStringExtra("params")?.let { params = it }
         intent.getStringExtra("meetingid")?.let { meetingid = it }
         intent.getStringExtra("signUpId")?.let { signUpId = it }
@@ -75,7 +74,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 //            list.clear()
 //            getList()
             activity?.hideSoftInput()
-            var url =PageRoutes.Api_meetinguser +params
+            var url =PageRoutes.Api_meeting_sign_up_data_list +params
             if (!nameMobile.isNullOrEmpty()) {
                 url = "$url&nameMobile=$nameMobile"
             }
@@ -93,7 +92,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 //                    list.clear()
 //                getList()
                 activity?.hideSoftInput()
-                    var url =PageRoutes.Api_meetinguser +params
+                    var url =PageRoutes.Api_meeting_sign_up_data_list +params
                     if (!nameMobile.isNullOrEmpty()) {
                         url = "$url&nameMobile=$nameMobile"
                     }
@@ -228,7 +227,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             binding.kong.visibility = View.GONE
             return
         }
-        var url =PageRoutes.Api_meetinguser +params
+        var url =PageRoutes.Api_meeting_sign_up_data_list +params
         if (!nameMobile.isNullOrEmpty()) {
             url = "$url&nameMobile=$nameMobile"
         }
@@ -269,7 +268,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             })
 
     }
-    var addressStatus = "2"
+    var addressStatus = "1"
     fun setState(){
 
         val params = HashMap<String, String>()
@@ -334,14 +333,14 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                     binding.num2.text  = ""+data.signUpCount
                     binding.num3.text  = ""+data.localSignUpCount
                     //01 签入模式 02 签入签出模式
+//                    signUpStatus	签到模式 1签出模式 2签入模式
                     signUpStatus = ""+data.signUpStatus
-                    if(signUpStatus == "1"){
+                    if(signUpStatus == "2"){
                         binding.moshitv.text = "签入模式"
                         binding.moshiiv.setImageResource(R.mipmap.kaiguank)
 
                     }else{
                         binding.moshitv.text = "签出模式"
-//                        binding.moshitv.text = "签入模式"
                         binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
 
                     }

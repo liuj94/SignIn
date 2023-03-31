@@ -38,6 +38,33 @@ public class MeetingUserDeData implements Serializable {
 
     private String id= "";
     private String personChargeName = "";
+    private BackSiji backSiji ;
+    private TripSiji tripSiji ;
+    private Jiedai jiedai ;
+
+    public BackSiji getBackSiji() {
+        return backSiji;
+    }
+
+    public void setBackSiji(BackSiji backSiji) {
+        this.backSiji = backSiji;
+    }
+
+    public TripSiji getTripSiji() {
+        return tripSiji;
+    }
+
+    public void setTripSiji(TripSiji tripSiji) {
+        this.tripSiji = tripSiji;
+    }
+
+    public Jiedai getJiedai() {
+        return jiedai;
+    }
+
+    public void setJiedai(Jiedai jiedai) {
+        this.jiedai = jiedai;
+    }
 
     public String getPersonChargeName() {
         return personChargeName;
@@ -815,7 +842,7 @@ public class MeetingUserDeData implements Serializable {
         private String beginCreateDate= "";
         private String endCreateDate= "";
         private String remark= "";
-        private ParamsBeanX params;
+        private UserMeetingAccommodation userMeetingAccommodation;
         private int id;
         private String name= "";
         private int type;
@@ -844,7 +871,7 @@ public class MeetingUserDeData implements Serializable {
         private UserMeetingSignUpBean userMeetingSignUp;
         private UserMeetingTrip userMeetingTrip;
         private BackUserMeetingTrip backUserMeetingTrip;
-        private String userMeetingAccommodation= "";
+
         private MeetingSignUpLocationBean meetingSignUpLocation;
         private String userType= "";
         private String userId= "";
@@ -956,13 +983,7 @@ public class MeetingUserDeData implements Serializable {
             this.remark = remark;
         }
 
-        public ParamsBeanX getParams() {
-            return params;
-        }
 
-        public void setParams(ParamsBeanX params) {
-            this.params = params;
-        }
 
         public int getId() {
             return id;
@@ -1188,11 +1209,11 @@ public class MeetingUserDeData implements Serializable {
             this.backUserMeetingTrip = backUserMeetingTrip;
         }
 
-        public String getUserMeetingAccommodation() {
+        public UserMeetingAccommodation getUserMeetingAccommodation() {
             return userMeetingAccommodation;
         }
 
-        public void setUserMeetingAccommodation(String userMeetingAccommodation) {
+        public void setUserMeetingAccommodation(UserMeetingAccommodation userMeetingAccommodation) {
             this.userMeetingAccommodation = userMeetingAccommodation;
         }
 

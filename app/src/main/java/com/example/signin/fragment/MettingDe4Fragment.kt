@@ -22,7 +22,6 @@ import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.*
 import com.example.signin.databinding.FragMeetingde4Binding
-import com.example.signin.net.JsonCallback
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
@@ -709,60 +708,60 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             })
     }
 
-    private fun getUserList() {
-        if (nameMobile.isNullOrEmpty()) {
-            list.clear()
-            adapter?.notifyDataSetChanged()
-            binding.recyclerview.visibility = View.GONE
-            binding.kong.visibility = View.GONE
-            binding.thrl.visibility = View.VISIBLE
-
-            return
-        }
-        var url =
-            PageRoutes.Api_meetinguser + meetingid + "&signUpId=" + signUpId + "&signUpLocationId=" + siginlocationId
-        if (!nameMobile.isNullOrEmpty()) {
-            url = "$url&nameMobile=$nameMobile"
-        }
-        OkGo.get<MeetingUserModel>(url)
-            .tag(url)
-            .headers("Authorization", kv.getString("token", ""))
-            .execute(object : JsonCallback<MeetingUserModel>(MeetingUserModel::class.java) {
-
-                override fun onSuccess(response: Response<MeetingUserModel>) {
-                    list.clear()
-                    response?.let {
-                        list.addAll(response.body().data)
-                        adapter?.notifyDataSetChanged()
-                        if (!nameMobile.isNullOrEmpty()) {
-                            binding.thrl.visibility = View.GONE
-                            if (list.size > 0) {
-                                binding.kong.visibility = View.GONE
-                                binding.recyclerview.visibility = View.VISIBLE
-                            } else {
-                                binding.kong.visibility = View.VISIBLE
-                                binding.recyclerview.visibility = View.GONE
-                            }
-
-                        } else {
-                            binding.kong.visibility = View.GONE
-                            binding.recyclerview.visibility = View.GONE
-                            binding.thrl.visibility = View.VISIBLE
-                        }
-                    }
-                }
-
-                override fun onError(response: Response<MeetingUserModel>?) {
-                    super.onError(response)
-
-                }
-
-                override fun onFinish() {
-
-                }
-            })
-
-    }
+//    private fun getUserList() {
+//        if (nameMobile.isNullOrEmpty()) {
+//            list.clear()
+//            adapter?.notifyDataSetChanged()
+//            binding.recyclerview.visibility = View.GONE
+//            binding.kong.visibility = View.GONE
+//            binding.thrl.visibility = View.VISIBLE
+//
+//            return
+//        }
+//        var url =
+//            PageRoutes.Api_meetinguser + meetingid + "&signUpId=" + signUpId + "&signUpLocationId=" + siginlocationId
+//        if (!nameMobile.isNullOrEmpty()) {
+//            url = "$url&nameMobile=$nameMobile"
+//        }
+//        OkGo.get<MeetingUserModel>(url)
+//            .tag(url)
+//            .headers("Authorization", kv.getString("token", ""))
+//            .execute(object : JsonCallback<MeetingUserModel>(MeetingUserModel::class.java) {
+//
+//                override fun onSuccess(response: Response<MeetingUserModel>) {
+//                    list.clear()
+//                    response?.let {
+//                        list.addAll(response.body().data)
+//                        adapter?.notifyDataSetChanged()
+//                        if (!nameMobile.isNullOrEmpty()) {
+//                            binding.thrl.visibility = View.GONE
+//                            if (list.size > 0) {
+//                                binding.kong.visibility = View.GONE
+//                                binding.recyclerview.visibility = View.VISIBLE
+//                            } else {
+//                                binding.kong.visibility = View.VISIBLE
+//                                binding.recyclerview.visibility = View.GONE
+//                            }
+//
+//                        } else {
+//                            binding.kong.visibility = View.GONE
+//                            binding.recyclerview.visibility = View.GONE
+//                            binding.thrl.visibility = View.VISIBLE
+//                        }
+//                    }
+//                }
+//
+//                override fun onError(response: Response<MeetingUserModel>?) {
+//                    super.onError(response)
+//
+//                }
+//
+//                override fun onFinish() {
+//
+//                }
+//            })
+//
+//    }
 
 
 }
