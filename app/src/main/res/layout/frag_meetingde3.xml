@@ -137,7 +137,7 @@
         android:layout_height="45dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="15dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="8dp"
         android:background="@drawable/shape_bg_12"
         android:gravity="center_vertical">
 
@@ -147,21 +147,48 @@
             android:id="@+id/nameTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="15dp"
             android:layout_weight="1"
             android:text="全部签到点"
             android:textColor="#ff333333"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginRight="15dp"
             android:src="@mipmap/xiajiant" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_weight="1"
+        android:id="@+id/qddLl"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/shape_bg_12"
+        android:gravity="center_vertical">
 
+
+
+        <TextView
+            android:id="@+id/qddTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="1"
+            android:text="全部签到点"
+            android:textColor="#ff333333"
+            android:textSize="13sp" />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/xiajiant" />
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/name2Ll"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="45dp"
         android:layout_marginTop="15dp"
         android:layout_marginRight="16dp"
@@ -182,7 +209,7 @@
             android:paddingLeft="5dp"
             android:text="筛选"
             android:textColor="#ff333333"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
         <ImageView
             android:layout_width="15dp"
             android:layout_height="15dp"
@@ -231,6 +258,48 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <View
                     android:id="@+id/dj"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/selectLl3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#60000000"
+                android:visibility="gone">
+
+                <!--                <androidx.recyclerview.widget.RecyclerView-->
+                <!--                    android:id="@+id/srecyclerview"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="300dp"-->
+                <!--                    android:background="@drawable/shape_bg_f3f4f8_12"-->
+
+                <!--                    android:paddingLeft="20dp"-->
+                <!--                    android:paddingRight="20dp" />-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/view_constraintLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/srecyclerview3"
+                        android:layout_width="match_parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintHeight_default="wrap"
+                        app:layout_constraintHeight_max="350dp"
+                        android:background="@drawable/shape_bg_f3f4f8_12"
+
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    android:id="@+id/dj3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
             </LinearLayout>

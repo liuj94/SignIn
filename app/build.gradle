@@ -13,7 +13,7 @@ android {
         applicationId "com.example.signin"
         minSdk 21
         targetSdk 33
-        versionCode 16
+        versionCode 17
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -37,12 +37,12 @@ android {
             keyAlias "sigin"
             keyPassword "sigin12345"
         }
-        debug {
-            storeFile file('E:\\sigin.jks')
-            storePassword "sigin12345"
-            keyAlias "sigin"
-            keyPassword "sigin12345"
-        }
+//        debug {
+//            storeFile file('E:\\sigin.jks')
+//            storePassword "sigin12345"
+//            keyAlias "sigin"
+//            keyPassword "sigin12345"
+//        }
 
     }
     compileOptions {

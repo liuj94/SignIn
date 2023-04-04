@@ -13,12 +13,14 @@ import com.example.signin.MeetingUserDectivity
 import com.example.signin.PageRoutes
 import com.example.signin.adapter.FMeetingDeList3Adapter
 import com.example.signin.adapter.SelectMeetingAdapter
+import com.example.signin.adapter.SelectMeetingAdapter2
 import com.example.signin.adapter.SelectTypeDataAdapter
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.*
 import com.example.signin.databinding.FragMeetingde3Binding
 import com.example.signin.net.JsonCallback
+import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 
@@ -46,8 +48,11 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
     private var list: MutableList<MeetingUserData> = ArrayList()
     private var siginUpList: MutableList<SiginUpListData> = ArrayList()
     private var siginUp2List: MutableList<TypeData> = ArrayList()
+    private var adapterSelect3: SelectMeetingAdapter2? = null
+    private var selectList3: MutableList<SiginData> = ArrayList()
     var meetingid: String? = ""
     var signUpId: String? = ""
+    var signUpLocationId: String? = ""
     var status: String? = ""
     var nameMobile: String? = ""
 
@@ -55,6 +60,24 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
     override fun initData() {
 
         meetingid = arguments?.getString("meetingid", "")
+        binding.srecyclerview3.layoutManager = LinearLayoutManager(activity)
+        adapterSelect3 = SelectMeetingAdapter2().apply {
+            submitList(selectList3)
+            setOnItemClickListener { _, _, position ->
+                for (item in selectList3) {
+                    item.isMyselect = false
+                }
+                selectList3[position].isMyselect = true
+                signUpLocationId = "" + selectList3[position].id
+                binding.qddTv.text = selectList3[position].name
+                adapterSelect3?.notifyDataSetChanged()
+                binding.selectLl3.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                getList()
+            }
+        }
+        binding.srecyclerview3.adapter = adapterSelect3
+
         binding.srecyclerview.layoutManager = LinearLayoutManager(activity)
         adapterSelect = SelectMeetingAdapter().apply {
             submitList(siginUpList)
@@ -135,6 +158,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
         binding.nameLl.setOnClickListener {
             binding.select2Ll.visibility = View.GONE
+            binding.selectLl3.visibility = View.GONE
             if (binding.selectLl.visibility == View.VISIBLE) {
                 binding.selectLl.visibility = View.GONE
                 LiveDataBus.get().with("selectLlGONE").postValue("1")
@@ -143,8 +167,21 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
             }
         }
+        binding.qddLl.setOnClickListener {
+            binding.select2Ll.visibility = View.GONE
+            binding.selectLl.visibility = View.GONE
+
+            if (binding.selectLl3.visibility == View.VISIBLE) {
+                binding.selectLl3.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
+            } else {
+                binding.selectLl3.visibility = View.VISIBLE
+                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
+            }
+        }
         binding.name2Ll.setOnClickListener {
             binding.selectLl.visibility = View.GONE
+            binding.selectLl3.visibility = View.GONE
             if (binding.select2Ll.visibility == View.VISIBLE) {
                 binding.select2Ll.visibility = View.GONE
                 LiveDataBus.get().with("selectLlGONE").postValue("1")
@@ -163,6 +200,13 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         binding.selectLl.setOnClickListener {
             if (binding.selectLl.visibility == View.VISIBLE) {
                 binding.selectLl.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
+            }
+
+        }
+        binding.selectLl3.setOnClickListener {
+            if (binding.selectLl3.visibility == View.VISIBLE) {
+                binding.selectLl3.visibility = View.GONE
                 LiveDataBus.get().with("selectLlGONE").postValue("1")
             }
 
@@ -209,7 +253,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         }
         var url =
 //            PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&orderByColumn=createTime&isAsc=desc&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
-            PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
+            PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&signUpId=" + signUpId +"&signUpLocationId="+signUpLocationId+ "&pageSize=10&pageNum=" + pageNum
         if (!status.isNullOrEmpty()) {
 //            url = "$url&signUpStatus=$status"
             url = "$url&status=$status"
@@ -266,9 +310,9 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 siginUpList.addAll(data.list)
                 adapterSelect?.notifyDataSetChanged()
                 setSelect2Data(data.list[0].type)
-                pageNum = 1
-                list.clear()
-                getList()
+                getqddList()
+
+
             }
 
         }
@@ -307,11 +351,51 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 7 -> {
                     siginUp2List.addAll(model.sys_fancheng)
                 }
+                8 -> {
+                    siginUp2List.addAll(model.sys_liping)
+                }
             }
         }
         adapterSelect2?.notifyDataSetChanged()
         adapter?.setSiginUp2List(siginUp2List)
     }
 
+    private fun getqddList() {
+        OkGo.get<List<SiginData>>(PageRoutes.Api_meetingSignUpLocation + meetingid + "&signUpId=" + signUpId)
+            .tag(PageRoutes.Api_meetingSignUpLocation + meetingid+2)
+            .headers("Authorization", kv.getString("token", ""))
+            .execute(object : RequestCallback<List<SiginData>>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
 
+                }
+
+                override fun onMySuccess(data: List<SiginData>) {
+                    super.onMySuccess(data)
+                    try {
+                        selectList3.addAll(data)
+                        selectList3[0].isMyselect = true
+                        signUpLocationId = "" + selectList3[0].id
+                        binding.qddTv.text = selectList3[0].name
+                        adapterSelect3?.notifyDataSetChanged()
+                        pageNum = 1
+                        list.clear()
+                        getList()
+                    }catch(e:Exception){}
+
+                }
+
+                override fun onError(response: Response<List<SiginData>>) {
+                    super.onError(response)
+
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+                    binding.refresh.finishRefresh()
+                }
+
+
+            })
+    }
 }

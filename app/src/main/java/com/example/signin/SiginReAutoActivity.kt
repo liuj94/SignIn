@@ -27,7 +27,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
     var okMsg: String = "签到成功"
     var repeatMsg: String = "重复签到"
     var success: String = ""
-    var voiceStatus: String = "2"
+    var voiceStatus: String = "1"
     override fun initData() {
         intent.getIntExtra("type", 0)?.let { type = it }
         intent.getSerializableExtra("data")?.let {
@@ -71,6 +71,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             }
             6 -> binding.title.text = "礼品签到"
             7 -> binding.title.text = "返程签到"
+            8 -> binding.title.text = "发票签到"
         }
 
         timer()
@@ -92,7 +93,9 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             binding.stateTv.text = failedMsg
             binding.stateTv.setTextColor(Color.parseColor("#D43030"))
             binding.stateIv.setImageResource(R.mipmap.cf_h)
-            LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
+            if(voiceStatus.equals("1")){
+                LiveDataBus.get().with("voiceStatus").postValue(repeatMsg)
+            }
         }
         binding.submit.text = "返回（"+timeLong+"）"
         timer?.start()

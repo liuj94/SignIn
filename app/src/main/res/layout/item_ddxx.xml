@@ -62,7 +62,7 @@
                 android:gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="门票名称"
+                android:text=""
                 android:textColor="#ff333333"
                 android:textSize="14sp"
                 />
@@ -115,6 +115,7 @@
                     android:textSize="19sp"
                     />
                 <TextView
+                    android:layout_marginTop="5dp"
                     android:id="@+id/dd_Num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

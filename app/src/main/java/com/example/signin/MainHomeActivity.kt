@@ -47,7 +47,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
         if (!initScanTool()) {
 //            Toast.makeText(this, "该机型还没有适配", Toast.LENGTH_SHORT).show();
         } else {
-            ScanTool.GET.playSound(true);
+//            ScanTool.GET.playSound(true);
         }
 
         getFragmentLists()
@@ -90,7 +90,10 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
         LiveDataBus.get().with("voiceStatus", String::class.java)
             .observeForever {
-                SpeechUtils.getInstance(this@MainHomeActivity).speakText(it);
+               if(!isMainHome){
+                   SpeechUtils.getInstance(this@MainHomeActivity).speakText(it);
+               }
+
 
             }
         LiveDataBus.get().with("voiceTime", String::class.java)

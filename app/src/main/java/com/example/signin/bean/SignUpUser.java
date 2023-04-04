@@ -22,7 +22,7 @@ public class SignUpUser implements Serializable {
 
 //1开启 2关闭 自动
     private String autoStatus = "2";
-    private String voiceStatus = "2";
+    private String voiceStatus = "1";
     private String name= "";
     private int timeLong = 3;
     private String id= "";

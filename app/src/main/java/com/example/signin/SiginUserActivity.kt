@@ -74,6 +74,9 @@ class SiginUserActivity : BaseBindingActivity<ActSiginUserBinding, BaseViewModel
                 7 -> {
                     siginUp2List.addAll(model.sys_fancheng)
                 }
+                8 -> {
+                    siginUp2List.addAll(model.sys_liping)
+                }
             }
         }
 

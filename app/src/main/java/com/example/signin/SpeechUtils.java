@@ -2,6 +2,7 @@ package com.example.signin;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -39,14 +40,20 @@ public class SpeechUtils {
                     textToSpeech.setSpeechRate(0.7f);
 
                 }
+//                else {
+////                    Toast.makeText(context,"语音播报失败",Toast.LENGTH_LONG).show();
+//                }
             }
         });
     }
 
     public void speakText(String text) {
         if (textToSpeech != null) {
-            textToSpeech.speak(text,
-                    TextToSpeech.QUEUE_FLUSH, null);
+            if(!text.equals("")){
+                textToSpeech.speak(text,
+                        TextToSpeech.QUEUE_FLUSH, null);
+            }
+
         }
 
     }

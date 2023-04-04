@@ -38,6 +38,12 @@
         <package android:name="com.tencent.mm" />
         <package android:name="com.eg.android.AlipayGphone" />
     </queries>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
 
     <application
         android:name=".App"

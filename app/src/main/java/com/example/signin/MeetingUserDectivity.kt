@@ -235,23 +235,22 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
     @SuppressLint("SetTextI18n")
     private fun setDate(data: MeetingUserDeData) {
-        binding.itemYhxx.name.text = data.name
-        binding.itemYhxx.gongshiName.text = data.corporateName
-        binding.itemYhxx.zhengjiangType.text = data.userMeetingTypeName
-
+        data.corporateName?.let {corporateName->  binding.itemYhxx.gongshiName.text = corporateName }
+        data.name?.let {name->  binding.itemYhxx.name.text = name }
+        data.userMeetingTypeName?.let {userMeetingTypeName->  binding.itemYhxx.zhengjiangType.text = userMeetingTypeName }
         binding.itemYhxx.jiedaidName.visibility = View.GONE
         binding.itemYhxx.call1.visibility = View.GONE
         data.jiedai?.let {
             it.selectCheckboxParam?.let {param->
                 binding.itemYhxx.jiedaidName.text = "接待员：" + param.boxValue
-                mobile = param.mobile
+                param.mobile?.let {m-> mobile = m }
                 binding.itemYhxx.jiedaidName.visibility = View.VISIBLE
                 binding.itemYhxx.call1.visibility = View.VISIBLE
             }
 
         }
+        data.mobile?.let {m-> mobile1 = m }
 
-        mobile1 = data.mobile
         Glide.with(this@MeetingUserDectivity).load(PageRoutes.BaseUrl + data.avatar)
             .error(R.mipmap.touxiang).into(binding.itemYhxx.tx)
         var model =
@@ -306,9 +305,9 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         "开票类型:" + item.dictLabel
                 }
             }
+            it.createTime?.let {createTime->  binding.itemDdxx.ddTime.text = parseTime2(createTime) }
+            it.invoiceNo?.let {invoiceNo->  binding.itemDdxx.ddNum.text = "发票票号:$invoiceNo" }
 
-            binding.itemDdxx.ddTime.text = parseTime(it.createTime)
-            binding.itemDdxx.ddNum.text = it.invoiceNo
             //0初始状态 1待审核 2审核成功 3审核失败
             examineStatus = "" + it.examineStatus
             invoiceStatus = "" + it.invoiceStatus
@@ -367,10 +366,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                                 binding.itemZcbd.data.text =
                                     getDateStr("MM月dd", startTime)
                                 it.endTime?.let { endTime ->
-                                    binding.itemZcbd.time.text = getDateStr(
+                                    binding.itemZcbd.time.text = getDateStr2(
                                         "HH:mm",
                                         startTime
-                                    ) + "-" + getDateStr("HH:mm", endTime)
+                                    ) + "-" + getDateStr2("HH:mm", endTime)
                                 }
                             }
                             it.address?.let { address -> binding.itemZcbd.address.text = address }
@@ -406,10 +405,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             it.startTime?.let { startTime ->
                                 binding.itemLpff.date.text = getDateStr("MM月dd", startTime)
                                 it.endTime?.let { endTime ->
-                                    binding.itemLpff.time.text = getDateStr(
+                                    binding.itemLpff.time.text = getDateStr2(
                                         "HH:mm",
                                         startTime
-                                    ) + "-" + getDateStr("HH:mm", endTime)
+                                    ) + "-" + getDateStr2("HH:mm", endTime)
                                 }
 
                             }
@@ -445,6 +444,9 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                                         if (list.dictValue.equals("1")) {
                                             binding.itemRzxx.location.text =
                                                 "签到后分配"
+                                        }else{
+                                            binding.itemRzxx.location.text =
+                                                "待分配"
                                         }
                                     }
                                 }
@@ -482,6 +484,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             userMeetingAccommodation.accommodation?.let { address -> binding.itemRzxx.address.text = address }
 
                             userMeetingAccommodation.roomNo?.let { location ->
+
                                 binding.itemRzxx.location.text =
                                     "房间号：" + location
                             }
@@ -515,6 +518,9 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                                     if (list.dictValue.equals("1")) {
                                         binding.itemHcqd.location.text =
                                             "签到后分配"
+                                    }else{
+                                        binding.itemHcqd.location.text =
+                                            "待分配"
                                     }
                                 }
                             }
@@ -530,10 +536,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                                 "MM月dd",
                                 it.startTime
                             )
-                            binding.itemHcqd.time.text = getDateStr(
+                            binding.itemHcqd.time.text = getDateStr2(
                                 "HH:mm",
                                 it.startTime
-                            ).toString() + "-" + getDateStr(
+                            ).toString() + "-" + getDateStr2(
                                 "HH:mm",
                                 it.endTime
                             ).toString()
@@ -569,6 +575,9 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                                     if (list.dictValue.equals("1")) {
                                         binding.itemCyxi.location.text =
                                             "签到后分配"
+                                    }else{
+                                        binding.itemCyxi.location.text =
+                                            "待分配"
                                     }
                                 }
                             }
@@ -586,10 +595,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                                     startTime
                                 ).toString()
                                 it.endTime?.let { endTime ->
-                                    binding.itemCyxi.time.text = getDateStr(
+                                    binding.itemCyxi.time.text = getDateStr2(
                                         "HH:mm",
                                         startTime
-                                    ).toString() + "-" + getDateStr(
+                                    ).toString() + "-" + getDateStr2(
                                         "HH:mm",
                                         endTime
                                     ).toString()
@@ -605,7 +614,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
                             it.location?.let { location ->
                                 binding.itemCyxi.location.text =
-                                    "请到" + it + "号桌"
+                                    "请到" + location + "号桌"
                                 state_chanyin.location = location
                             }
 
@@ -651,10 +660,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemFcxx.lcDidian2.text = it.endCity
                             binding.itemFcxx.lcJichang1.text = it.endAddress
 
-                            binding.itemFcxx.time.text = getDateStr(
+                            binding.itemFcxx.time.text = getDateStr2(
                                 "HH:mm",
                                 it.startTime
-                            ).toString() + "-" + getDateStr("HH:mm", it.endTime).toString()
+                            ).toString() + "-" + getDateStr2("HH:mm", it.endTime).toString()
                             //personChargeMobile status
 
                             for (item in model.transport_type) {
@@ -675,7 +684,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         data.backSiji?.let {
                             it.selectCheckboxParam?.let {param->
                                 binding.itemFcxx.jiedai.text = "司机：" + param.boxValue
-                                mobile3 = param.mobile
+                                param.mobile?.let {m-> mobile3 = m }
                                 binding.itemFcxx.jiedai.visibility = View.VISIBLE
                                 binding.itemFcxx.call1.visibility = View.VISIBLE
                             }
@@ -720,10 +729,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemLcxx.lcDidian2.text = it.endCity
                             binding.itemLcxx.lcJichang1.text = it.endAddress
 
-                            binding.itemLcxx.time.text = getDateStr(
+                            binding.itemLcxx.time.text = getDateStr2(
                                 "HH:mm",
                                 it.startTime
-                            ).toString() + "-" + getDateStr("HH:mm", it.endTime).toString()
+                            ).toString() + "-" + getDateStr2("HH:mm", it.endTime).toString()
 
                             //personChargeMobile status
 
@@ -746,7 +755,8 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         data.tripSiji?.let {
                             it.selectCheckboxParam?.let {param->
                                 binding.itemLcxx.jiedai.text = "司机：" + param.boxValue
-                                mobile2 = param.mobile
+//                                mobile2 = param.mobile
+                                param.mobile?.let {m-> mobile2 = m }
                                 binding.itemLcxx.jiedai.visibility = View.VISIBLE
                                 binding.itemLcxx.call1.visibility = View.VISIBLE
                             }
@@ -799,6 +809,31 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
     fun parseServerTime(serverTime: String): Date {
 
+        var format = "yyyy-MM-dd"
+        val sdf = SimpleDateFormat(format, Locale.CHINESE)
+        sdf.timeZone = TimeZone.getTimeZone("GMT+8:00")
+        var date: Date = Date()
+        try {
+            date = sdf.parse(serverTime)
+        } catch (e: Exception) {
+
+        }
+        return date
+    }
+    fun getDateStr2(format: String, dateStr: String): String {
+        if (format.isNullOrEmpty() || dateStr.isNullOrEmpty()) {
+            return ""
+        }
+        var date = parseServerTime2(dateStr)
+        var format = format
+        if (format == null || format.isEmpty()) {
+            format = "MM-dd"
+        }
+        val formatter = SimpleDateFormat(format)
+        return formatter.format(date)
+    }
+    fun parseServerTime2(serverTime: String): Date {
+
         var format = "yyyy-MM-dd HH:mm"
         val sdf = SimpleDateFormat(format, Locale.CHINESE)
         sdf.timeZone = TimeZone.getTimeZone("GMT+8:00")
@@ -810,7 +845,6 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         }
         return date
     }
-
     fun parseTime(serverTime: String): String {
         if (serverTime.isNullOrEmpty()) {
             return ""
@@ -828,7 +862,23 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         return formatter.format(date)
 
     }
+    fun parseTime2(serverTime: String): String {
+        if (serverTime.isNullOrEmpty()) {
+            return ""
+        }
+        var format = "yyyy-MM-dd HH:mm:ss"
+        val sdf = SimpleDateFormat(format, Locale.CHINESE)
+        sdf.timeZone = TimeZone.getTimeZone("GMT+8:00")
+        var date: Date = Date()
+        try {
+            date = sdf.parse(serverTime)
+        } catch (e: Exception) {
 
+        }
+        val formatter = SimpleDateFormat("MM月dd日")
+        return formatter.format(date)
+
+    }
     fun daydiff(fDateString: String, oDateString: String): Int {
         if (fDateString.isNullOrEmpty() || oDateString.isNullOrEmpty()) {
             return 0

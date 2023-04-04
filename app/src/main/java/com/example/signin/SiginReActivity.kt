@@ -69,6 +69,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
             }
             6->binding.title.text = "礼品签到"
             7->binding.title.text = "返程签到"
+            8->binding.title.text = "发票签到"
         }
         binding.submit.setOnClickListener {
             if(binding.submit.text.contains("返回")){
@@ -130,7 +131,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                         } else {
                             binding.submit.text = "返回"
                         }
-                        if(it.voiceStatus.equals("1")){
+                        if(voiceStatus.equals("1")){
                             if(data.equals("1")){
                                 binding.stateTv.text = okMsg
                                 binding.stateTv.setTextColor(Color.parseColor("#3974F6"))

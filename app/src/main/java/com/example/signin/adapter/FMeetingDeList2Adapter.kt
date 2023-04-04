@@ -22,7 +22,7 @@ class FMeetingDeList2Adapter: BaseBindingAdapter<SiginData, ListMeetingde2Bindin
     override fun onBindViewHolder(holder: ListMeetingde2Binding, item: SiginData, position: Int) {
 
         holder.name.text =  item.name
-//1 注册签到2 来程签到3 入住签到4 会场签到5 餐饮签到6 礼品签到7 返程签到
+//1 注册签到2 来程签到3 入住签到4 会场签到5 餐饮签到6 礼品签到7 返程签到 8发票签到
         var num = ""
         if(item.type == 1){
             num = "注册签到"+item.currentUserCount+"/"+item.totalUserCount
@@ -38,6 +38,8 @@ class FMeetingDeList2Adapter: BaseBindingAdapter<SiginData, ListMeetingde2Bindin
             num = "礼品签到"+item.currentUserCount+"/"+item.totalUserCount
         }else if(item.type == 7){
             num = "返程签到"+item.currentUserCount+"/"+item.totalUserCount
+        }else if(item.type == 8){
+            num = "发票签到"+item.currentUserCount+"/"+item.totalUserCount
         }
         holder.num.text = num
         //"status": 2,

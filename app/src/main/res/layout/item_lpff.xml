@@ -88,7 +88,7 @@
                     android:id="@+id/date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="MM月dd日"
                     android:gravity="center"
                     android:textColor="#ff7d8592"
                     android:textSize="12sp"
@@ -98,7 +98,7 @@
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="hh:mm-hh:mm"
                     android:textColor="#ff030303"
                     android:textSize="19sp"
                     />
