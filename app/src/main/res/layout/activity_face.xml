@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".face.FaceActivity">
+    android:layout_height="match_parent">
 
         <cn.bingoogolapple.qrcode.zxing.ZXingView
             android:id="@+id/mZXingView"
@@ -38,13 +37,13 @@
             app:qrcv_toolbarHeight="56dp"
             app:qrcv_topOffset="65dp"
             app:qrcv_verticalBias="-1" />
-        <com.bifan.detectlib.FaceDetectView
-            android:id="@+id/faceDetectView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:background="#000000"
-            tools:ignore="MissingConstraints" />
+<!--        <com.bifan.detectlib.FaceDetectView-->
+<!--            android:id="@+id/faceDetectView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:background="#000000"-->
+<!--            tools:ignore="MissingConstraints" />-->
 
 
     <Button

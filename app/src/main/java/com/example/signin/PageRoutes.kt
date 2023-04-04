@@ -4,8 +4,8 @@ package com.example.signin
 interface PageRoutes {
 
     companion object {
-        val BaseUrlApi = "https://meeting.nbqichen.com:20882/prod-api"
-        val BaseUrl = "https://meeting.nbqichen.com:20882"
+        val BaseUrlApi = "https://meeting.nbqichen.com/prod-api"
+        val BaseUrl = "https://meeting.nbqichen.com"
 
 
         //登录

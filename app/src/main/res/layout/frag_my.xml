@@ -20,17 +20,17 @@
             android:text="个人中心"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-        <ImageView
-            android:id="@+id/set"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-           android:layout_centerVertical="true"
-            android:paddingRight="15dp"
-            android:paddingLeft="10dp"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/set"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+<!--        <ImageView-->
+<!--            android:id="@+id/set"-->
+<!--            android:paddingTop="5dp"-->
+<!--            android:paddingBottom="5dp"-->
+<!--           android:layout_centerVertical="true"-->
+<!--            android:paddingRight="15dp"-->
+<!--            android:paddingLeft="10dp"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:src="@mipmap/set"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"/>-->
     </RelativeLayout>
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/refresh"
@@ -175,7 +175,23 @@
                 android:textColor="#ff333333"
                 android:textSize="14sp"
                 />
+
             <TextView
+
+                android:id="@+id/set"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:drawableRight="@mipmap/jiantou"
+                android:drawablePadding="11dp"
+                android:drawableLeft="@mipmap/grzxsz"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="设置"
+                android:textColor="#ff333333"
+                android:textSize="14sp"
+                />
+            <TextView
+                android:visibility="gone"
                 android:id="@+id/gjrlsz"
                 android:paddingTop="14dp"
                 android:paddingBottom="14dp"

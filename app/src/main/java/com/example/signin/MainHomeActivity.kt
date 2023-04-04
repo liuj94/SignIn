@@ -1,14 +1,8 @@
 package com.example.signin
 
 
-import android.text.TextUtils
-import android.util.Log
-import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import com.alibaba.fastjson.JSON
-import com.common.apiutil.ResultCode
-import com.common.apiutil.decode.DecodeReader
-import com.common.callback.IDecodeReaderListener
 import com.dylanc.longan.toast
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
@@ -23,20 +17,22 @@ import com.tencent.mmkv.MMKV
 import getDataType
 
 
-class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>(),
-    KeyEventResolver.OnScanSuccessListener {
+class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>()
+//    ,
+//    KeyEventResolver.OnScanSuccessListener
+{
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
     var isMainHome = true
-    var mDecodeReader: DecodeReader? = null
-    var mKeyEventResolver: KeyEventResolver? = null
+//    var mDecodeReader: DecodeReader? = null
+//    var mKeyEventResolver: KeyEventResolver? = null
     override fun initData() {
         SpeechUtils.getInstance(this@MainHomeActivity)
-        initScan()
-        mDecodeReader?.open(115200)?.let {
-            if (it === ResultCode.SUCCESS) toast("打开成功") else toast("打开失败")
-            Log.e("Hello", "ResultCode=it == > $it")
-        }
+//        initScan()
+//        mDecodeReader?.open(115200)?.let {
+//            if (it === ResultCode.SUCCESS) toast("打开成功") else toast("打开失败")
+//            Log.e("Hello", "ResultCode=it == > $it")
+//        }
 
         getFragmentLists()
 
@@ -204,65 +200,65 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 //    }
 
     override fun onDestroy() {
-        if (mDecodeReader != null) {
-            mDecodeReader?.close();
-        }
-        mKeyEventResolver?.onDestroy();
+//        if (mDecodeReader != null) {
+//            mDecodeReader?.close();
+//        }
+//        mKeyEventResolver?.onDestroy();
         super.onDestroy()
     }
 
     /**
      * 截获按键事件.发给ScanGunKeyEventHelper
      */
-    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        //要是重虚拟键盘输入怎不拦截
-        if ("Virtual" == event.device.name) {
-            return super.dispatchKeyEvent(event)
-        }
-        mKeyEventResolver!!.analysisKeyEvent(event)
-        return true
-    }
+//    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+//        //要是重虚拟键盘输入怎不拦截
+//        if ("Virtual" == event.device.name) {
+//            return super.dispatchKeyEvent(event)
+//        }
+//        mKeyEventResolver!!.analysisKeyEvent(event)
+//        return true
+//    }
 
-    override fun onScanSuccess(barcode: String?) {
-        gotoScan(barcode)
-    }
+//    override fun onScanSuccess(barcode: String?) {
+//        gotoScan(barcode)
+//    }
 
-    private fun initScan() {
-        if (mDecodeReader == null) {
-            mDecodeReader = DecodeReader(this);//初始化
-        }
-        mKeyEventResolver = KeyEventResolver(this)
+//    private fun initScan() {
+//        if (mDecodeReader == null) {
+//            mDecodeReader = DecodeReader(this);//初始化
+//        }
+//        mKeyEventResolver = KeyEventResolver(this)
+//
+//        mDecodeReader?.setDecodeReaderListener(object : IDecodeReaderListener {
+//            override fun onRecvData(data: ByteArray?) {
+//                val str = data.toString()
+//                gotoScan(str)
+//            }
+//        })
+//    }
 
-        mDecodeReader?.setDecodeReaderListener(object : IDecodeReaderListener {
-            override fun onRecvData(data: ByteArray?) {
-                val str = data.toString()
-                gotoScan(str)
-            }
-        })
-    }
-
-    private fun gotoScan(data: String?) {
-        data?.let { toast(it) }
-        if(isMainHome){
-           return
-        }
-        try {
-            if (AppManager.getAppManager().activityClassIsLive(ScanActivity::class.java)) {
-                if (null != AppManager.getAppManager()
-                        .findActivity(ScanActivity::class.java)
-                ) {
-                    if (AppManager.getAppManager()
-                            .getTopActivity() == ScanActivity::class.java
-                    ) {
-                        if (TextUtils.isEmpty(data)) return
-                        Log.e("Hello", "回调数据 == > $data")
-                        LiveDataBus.get().with("onScanCallBack")
-                            .postValue(JSON.toJSONString(data))
-                    }
-
-                }
-            }
-        } catch (e: Exception) {
-        }
-    }
+//    private fun gotoScan(data: String?) {
+//        data?.let { toast(it) }
+//        if(isMainHome){
+//           return
+//        }
+//        try {
+//            if (AppManager.getAppManager().activityClassIsLive(ScanActivity::class.java)) {
+//                if (null != AppManager.getAppManager()
+//                        .findActivity(ScanActivity::class.java)
+//                ) {
+//                    if (AppManager.getAppManager()
+//                            .getTopActivity() == ScanActivity::class.java
+//                    ) {
+//                        if (TextUtils.isEmpty(data)) return
+//                        Log.e("Hello", "回调数据 == > $data")
+//                        LiveDataBus.get().with("onScanCallBack")
+//                            .postValue(JSON.toJSONString(data))
+//                    }
+//
+//                }
+//            }
+//        } catch (e: Exception) {
+//        }
+//    }
 }

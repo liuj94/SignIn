@@ -90,7 +90,7 @@
                 android:textColor="#ff333333"
                 android:textColorHint="#ff999999"
                 android:textSize="16sp"
-                android:text="15310333567"/>
+                android:text=""/>
 <!--                android:text="15310333456"/>-->
 <!--                android:text="15310333567"/>-->
 
@@ -109,7 +109,7 @@
                 android:textColor="#ff333333"
                 android:textColorHint="#ff999999"
                 android:textSize="16sp"
-                android:text="123456"/>
+                android:text=""/>
 
             <TextView
                 android:id="@+id/login"
