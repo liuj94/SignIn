@@ -128,7 +128,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
     fun add( phonenumber:String,userName:String,userData :String){
         val params = HashMap<String, String>()
         params["phonenumber"] = phonenumber
-        params["userName"] = userName
+        params["nickName"] = userName
 
         OkGo.put<String>(PageRoutes.Api_editUser)
             .tag(PageRoutes.Api_editUser)

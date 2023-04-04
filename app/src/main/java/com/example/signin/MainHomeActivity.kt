@@ -1,11 +1,14 @@
 package com.example.signin
 
 
-import android.os.Build
 import android.text.TextUtils
 import android.util.Log
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import com.alibaba.fastjson.JSON
+import com.common.apiutil.ResultCode
+import com.common.apiutil.decode.DecodeReader
+import com.common.callback.IDecodeReaderListener
 import com.dylanc.longan.toast
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
@@ -14,40 +17,25 @@ import com.example.signin.databinding.ActivityMainBinding
 import com.example.signin.fragment.HomeMainFragment
 import com.example.signin.fragment.MyFragment
 import com.example.signin.net.RequestCallback
-import com.hello.scan.ScanCallBack
-import com.hello.scan.ScanTool
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
 import getDataType
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
-class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>(), ScanCallBack {
-    private var sDevices: MutableMap<String, Pair<String, Int>>? = null
-
-
-    private var scanCount = 0
+class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>(),
+    KeyEventResolver.OnScanSuccessListener {
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
     var isMainHome = true
+    var mDecodeReader: DecodeReader? = null
+    var mKeyEventResolver: KeyEventResolver? = null
     override fun initData() {
         SpeechUtils.getInstance(this@MainHomeActivity)
-        sDevices = HashMap<String, Pair<String, Int>>()
-        sDevices!!.put("TPS508", Pair<String, Int>("/dev/ttyACM0", 115200))
-        sDevices!!.put("TPS360", Pair<String, Int>("/dev/ttyACM0", 115200))
-        sDevices!!.put("TPS537", Pair<String, Int>("/dev/ttyACM0", 115200))
-        sDevices!!.put("D2", Pair<String, Int>("/dev/ttyHSL0", 9600)) // D2串口模式
-        sDevices!!.put("D2",  Pair<String, Int>("/dev/ttyACM0", 115200)); // D2U转串模式
-        sDevices!!.put("TPS980", Pair<String, Int>("/dev/ttyS0", 115200))
-        sDevices!!.put("TPS980P", Pair<String, Int>("/dev/ttyS0", 115200))
-        sDevices!!.put("TPS980P",  Pair<String, Int>("/dev/ttyS0", 9600));
-        sDevices!!.put("TPS530", Pair<String, Int>("/dev/ttyUSB0", 115200))
-        if (!initScanTool()) {
-//            Toast.makeText(this, "该机型还没有适配", Toast.LENGTH_SHORT).show();
-        } else {
-//            ScanTool.GET.playSound(true);
+        initScan()
+        mDecodeReader?.open(115200)?.let {
+            if (it === ResultCode.SUCCESS) toast("打开成功") else toast("打开失败")
+            Log.e("Hello", "ResultCode=it == > $it")
         }
 
         getFragmentLists()
@@ -104,24 +92,6 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
     }
 
-    /**
-     * 判断使用模式
-     *
-     * @return 返回true表示表示该机型已经适配，false表示该机型还没有适配
-     */
-    private fun initScanTool(): Boolean {
-        for (s in sDevices!!.keys) {
-            if (s == Build.MODEL) {
-                val (first, second) = sDevices!![s] ?: continue
-                Log.e("Hello", "judgeModel == > $s")
-                Log.e("Hello", "path == > $first")
-                Log.e("Hello", "baud rate == > $second")
-                ScanTool.GET.initSerial(this, first, second, this@MainHomeActivity)
-                return true
-            }
-        }
-        return false
-    }
 
     override fun onPause() {
         super.onPause()
@@ -211,32 +181,88 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
             })
     }
 
-    override fun onScanCallBack(data: String?) {
+//    override fun onScanCallBack(data: String?) {
+//        try {
+//            if (AppManager.getAppManager().activityClassIsLive(ScanActivity::class.java)) {
+//                if (null != AppManager.getAppManager().findActivity(ScanActivity::class.java)) {
+//                    if (AppManager.getAppManager().getTopActivity()==ScanActivity::class.java) {
+//                        if (TextUtils.isEmpty(data)) return
+//                        Log.e("Hello", "回调数据 == > $data")
+//                        LiveDataBus.get().with("onScanCallBack").postValue(JSON.toJSONString(data))
+//                    }
+//
+//                }
+//            }
+//        }catch (e:Exception){}
+
+
+//    }
+
+//    override fun onInitScan(isSuccess: Boolean) {
+//        val str = if (isSuccess) "初始化成功" else "初始化失败"
+//        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
+//    }
+
+    override fun onDestroy() {
+        if (mDecodeReader != null) {
+            mDecodeReader?.close();
+        }
+        mKeyEventResolver?.onDestroy();
+        super.onDestroy()
+    }
+
+    /**
+     * 截获按键事件.发给ScanGunKeyEventHelper
+     */
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        //要是重虚拟键盘输入怎不拦截
+        if ("Virtual" == event.device.name) {
+            return super.dispatchKeyEvent(event)
+        }
+        mKeyEventResolver!!.analysisKeyEvent(event)
+        return true
+    }
+
+    override fun onScanSuccess(barcode: String?) {
+        gotoScan(barcode)
+    }
+
+    private fun initScan() {
+        if (mDecodeReader == null) {
+            mDecodeReader = DecodeReader(this);//初始化
+        }
+        mKeyEventResolver = KeyEventResolver(this)
+
+        mDecodeReader?.setDecodeReaderListener(object : IDecodeReaderListener {
+            override fun onRecvData(data: ByteArray?) {
+                val str = data.toString()
+                gotoScan(str)
+            }
+        })
+    }
+
+    private fun gotoScan(data: String?) {
+        data?.let { toast(it) }
+        if(isMainHome){
+           return
+        }
         try {
             if (AppManager.getAppManager().activityClassIsLive(ScanActivity::class.java)) {
-                if (null != AppManager.getAppManager().findActivity(ScanActivity::class.java)) {
-                    if (AppManager.getAppManager().getTopActivity()==ScanActivity::class.java) {
+                if (null != AppManager.getAppManager()
+                        .findActivity(ScanActivity::class.java)
+                ) {
+                    if (AppManager.getAppManager()
+                            .getTopActivity() == ScanActivity::class.java
+                    ) {
                         if (TextUtils.isEmpty(data)) return
                         Log.e("Hello", "回调数据 == > $data")
-                        LiveDataBus.get().with("onScanCallBack").postValue(JSON.toJSONString(data))
+                        LiveDataBus.get().with("onScanCallBack")
+                            .postValue(JSON.toJSONString(data))
                     }
 
                 }
             }
-        }catch (e:Exception){}
-
-
+        } catch (e: Exception) {
+        }
     }
-
-    override fun onInitScan(isSuccess: Boolean) {
-//        val str = if (isSuccess) "初始化成功" else "初始化失败"
-//        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onDestroy() {
-        try {
-        ScanTool.GET.release(); }catch (e:Exception){}
-        super.onDestroy()
-    }
-
 }
