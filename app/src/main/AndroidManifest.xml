@@ -38,7 +38,9 @@
         <package android:name="com.tencent.mm" />
         <package android:name="com.eg.android.AlipayGphone" />
     </queries>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <queries>
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE" />
@@ -60,7 +62,6 @@
         tools:targetApi="31">
 
 
-
         <receiver
             android:name=".BootReceiver"
             android:enabled="true"
@@ -72,7 +73,6 @@
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
-
 
         <activity
             android:name=".SiginReAutoActivity"
@@ -106,7 +106,6 @@
         <activity
             android:name=".SiginUserActivity"
             android:exported="false" />
-
         <activity
             android:name=".SigninSetActivity"
             android:exported="false"
@@ -121,8 +120,18 @@
         <activity
             android:name=".MainHomeActivity"
             android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".SplashActivity"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
         <activity
-            android:name=".SplashActivity"
+            android:name=".scan.ScanTestActvtity"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -132,9 +141,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:launchMode="singleTop"
             android:name=".LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
