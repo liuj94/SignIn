@@ -1,6 +1,7 @@
 package com.example.signin
 
 
+import android.media.MediaPlayer
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
@@ -11,6 +12,7 @@ import com.dylanc.longan.toast
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
+import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActivityMainBinding
 import com.example.signin.fragment.HomeMainFragment
 import com.example.signin.fragment.MyFragment
@@ -23,14 +25,16 @@ import com.tencent.mmkv.MMKV
 import getDataType
 
 
-class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>(), ScanCallBack
+class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>()
 //    ,
 //    KeyEventResolver.OnScanSuccessListener
 {
-
+    companion object {
+        var isScan = false
+    }
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
     var isMainHome = true
-    var scanTool: ScanTool? = null
+
 //    var mDecodeReader: DecodeReader? = null
 //    var mKeyEventResolver: KeyEventResolver? = null
     override fun initData() {
@@ -40,7 +44,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 //            if (it === ResultCode.SUCCESS) toast("打开成功") else toast("打开失败")
 //            Log.e("Hello", "ResultCode=it == > $it")
 //        }
-    initScanTool()
+
     getFragmentLists()
 
         getDataType("sys_zhuce") {
@@ -79,14 +83,36 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
             }
         }
 
-//        LiveDataBus.get().with("voiceStatus", String::class.java)
-//            .observeForever {
-//               if(!isMainHome){
-//                   SpeechUtils.getInstance(this@MainHomeActivity).speakText(it);
-//               }
-//
-//
-//            }
+        LiveDataBus.get().with("voiceStatus", String::class.java)
+            .observeForever {
+
+               if(!isMainHome){
+
+                   if(SpeechUtils.getInstance(this@MainHomeActivity).isSpeech){
+
+                       SpeechUtils.getInstance(this@MainHomeActivity).speakText(it);
+                   }else{
+
+                       var mRingPlayer: MediaPlayer? = null
+                       if (it.contains("成功")) {
+                           mRingPlayer = MediaPlayer.create(this@MainHomeActivity, R.raw.cg);
+                           mRingPlayer?.start();
+
+
+                       } else  if (it.contains("重复")){
+                           mRingPlayer = MediaPlayer.create(this@MainHomeActivity, R.raw.cf);
+                           mRingPlayer?.start();
+                       }else {
+                           mRingPlayer = MediaPlayer.create(this@MainHomeActivity, R.raw.qdsb);
+                           mRingPlayer?.start();
+                       }
+                   }
+
+
+               }
+
+
+            }
         LiveDataBus.get().with("voiceTime", String::class.java)
             .observeForever {
                 setState(it)
@@ -95,18 +121,16 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
     }
 
-    private fun initScanTool() {
-//        ToastUtils.toast(this," SystemUtil.getInternalModel()=="+ SystemUtil.getInternalModel())
-        Log.d("Model"," SystemUtil.getInternalModel()=="+ SystemUtil.getInternalModel())
-        scanTool = ScanTool.GET
-        scanTool?.initSerial(this, "/dev/ttyACM0", 115200, this@MainHomeActivity)
-        scanTool?.playSound(true)
-    }
-    override fun onInitScan(isSuccess: Boolean) {
-        val str = if (isSuccess) "初始化成功" else "初始化失败"
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
-    }
 
+//    override fun onInitScan(isSuccess: Boolean) {
+//        val str = if (isSuccess) "初始化成功" else "初始化失败"
+////        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
+//    }
+
+    override fun onResume() {
+        super.onResume()
+        isMainHome = true
+    }
     override fun onPause() {
         super.onPause()
         isMainHome = false
@@ -195,94 +219,13 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
             })
     }
 
-//    override fun onScanCallBack(data: String?) {
-//        try {
-//            if (AppManager.getAppManager().activityClassIsLive(ScanActivity::class.java)) {
-//                if (null != AppManager.getAppManager().findActivity(ScanActivity::class.java)) {
-//                    if (AppManager.getAppManager().getTopActivity()==ScanActivity::class.java) {
-//                        if (TextUtils.isEmpty(data)) return
-//                        Log.e("Hello", "回调数据 == > $data")
-//                        LiveDataBus.get().with("onScanCallBack").postValue(JSON.toJSONString(data))
-//                    }
-//
-//                }
-//            }
-//        }catch (e:Exception){}
 
 
-//    }
 
-//    override fun onInitScan(isSuccess: Boolean) {
-//        val str = if (isSuccess) "初始化成功" else "初始化失败"
-//        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
-//    }
 
-    override fun onDestroy() {
-//        if (mDecodeReader != null) {
-//            mDecodeReader?.close();
-//        }
-//        mKeyEventResolver?.onDestroy();
-        scanTool?.pauseReceiveData()
-        scanTool?.release()
-        super.onDestroy()
-    }
 
-    /**
-     * 截获按键事件.发给ScanGunKeyEventHelper
-     */
-//    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-//        //要是重虚拟键盘输入怎不拦截
-//        if ("Virtual" == event.device.name) {
-//            return super.dispatchKeyEvent(event)
-//        }
-//        mKeyEventResolver!!.analysisKeyEvent(event)
-//        return true
-//    }
 
-//    override fun onScanSuccess(barcode: String?) {
-//        gotoScan(barcode)
-//    }
 
-//    private fun initScan() {
-//        if (mDecodeReader == null) {
-//            mDecodeReader = DecodeReader(this);//初始化
-//        }
-//        mKeyEventResolver = KeyEventResolver(this)
-//
-//        mDecodeReader?.setDecodeReaderListener(object : IDecodeReaderListener {
-//            override fun onRecvData(data: ByteArray?) {
-//                val str = data.toString()
-//                gotoScan(str)
-//            }
-//        })
-//    }
 
-    private fun gotoScan(data: String?) {
-        data?.let { toast(it) }
-        if(isMainHome){
-           return
-        }
-        try {
-            if (AppManager.getAppManager().activityClassIsLive(ScanActivity::class.java)) {
-                if (AppManager.getAppManager()
-                        .getTopActivity() == ScanActivity::class.java
-                ) {
-                    if (TextUtils.isEmpty(data)) return
-                    Log.e("Hello", "回调数据 == > $data")
-                    LiveDataBus.get().with("onScanCallBack")
-                        .postValue(JSON.toJSONString(data))
-                }
 
-            }
-        } catch (e: Exception) {
-        }
-    }
-
-    override fun onScanCallBack(data: String?) {
-        try {
-            Toast.makeText(this, data, Toast.LENGTH_SHORT).show()
-        gotoScan(data)
-        } catch (e: Exception) {
-        }
-    }
 }

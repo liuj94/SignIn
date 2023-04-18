@@ -164,7 +164,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
             toast("再按一次返回退出程序")
             exitTime = System.currentTimeMillis()
         } else {
-
+            AppManager.getAppManager().killAll()
             System.exit(0);
         }
     }

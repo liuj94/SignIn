@@ -40,6 +40,7 @@ abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActi
         setContentViewWithBinding()
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         mViewModel.mContext = this
+        getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         AppManager.getAppManager().addActivity(this)
         initProgressDialog()
         initIntentStringExtra()

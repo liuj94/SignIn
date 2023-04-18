@@ -57,7 +57,7 @@ class ScanTestActvtity : AppCompatActivity(), ScanCallBack {
 
     override fun onInitScan(isSuccess: Boolean) {
         val str = if (isSuccess) "初始化成功" else "初始化失败"
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {
