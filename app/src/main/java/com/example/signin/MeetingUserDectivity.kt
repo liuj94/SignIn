@@ -176,7 +176,12 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     "type" to type,
                     "data" to data
                 )
-            }, {}, {})
+            }, {
+                data.success = "500"
+                startActivity<SiginReAutoActivity>(
+                    "type" to type,
+                    "data" to data
+                )}, {})
         } else {
             startActivity<SiginReActivity>("type" to type, "data" to data)
         }

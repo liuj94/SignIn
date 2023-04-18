@@ -5,6 +5,7 @@ import android.widget.Toast
 import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.alibaba.fastjson.JSON
+import com.dylanc.longan.startActivity
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.SignUpUser
@@ -103,7 +104,11 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
                             "type" to showType,
                             "data" to signUpUser
                         )
-                    },{binding.mZXingView.startSpotAndShowRect()},{})}
+                    },{  signUpUser.success = "500"
+                        com.dylanc.longan.startActivity<SiginReAutoActivity>(
+                            "type" to showType,
+                            "data" to signUpUser
+                        )},{})}
             }else{
                 com.dylanc.longan.startActivity<SiginReActivity>(
                     "type" to showType,
@@ -188,7 +193,11 @@ var isPause =true
                             "type" to showType,
                             "data" to signUpUser
                         )
-                    },{},{})}
+                    },{ signUpUser.success  = "500"
+                        startActivity<SiginReAutoActivity>(
+                            "type" to showType,
+                            "data" to signUpUser
+                        )},{})}
             }else{
                 com.dylanc.longan.startActivity<SiginReActivity>(
                     "type" to showType,

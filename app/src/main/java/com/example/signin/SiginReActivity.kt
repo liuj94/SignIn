@@ -159,6 +159,10 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                 override fun onError(response: Response<String>) {
                     super.onError(response)
                     mViewModel.isShowLoading.value = false
+                    binding.stateTv.text = failedMsg
+                    binding.stateTv.setTextColor(Color.parseColor("#D43030"))
+                    binding.stateIv.setImageResource(R.mipmap.cf_h)
+                    LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
                 }
 
                 override fun onFinish() {
