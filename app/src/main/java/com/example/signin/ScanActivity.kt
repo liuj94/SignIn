@@ -101,17 +101,7 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
 
     }
     override fun onScanQRCodeSuccess(result: String?) {
-//        val intent = Intent()
-//            intent.putExtra("QrCodeScanned", result)
-//            setResult(111, intent)
-//        if (isCallBack==1) {
-//            val intent = Intent()
-//            intent.putExtra("QrCodeScanned", result)
-//            setResult(111, intent)
-//        } else {
-//            AppManager.getAppManager().startScanResultWeb(PageRoutes.SCAN, result)
-//        }
-//        finish()
+
         result?.let {param->
             var signUpUser = JSON.parseObject(param, SignUpUser::class.java)
 
@@ -160,30 +150,38 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
     override fun onCameraAmbientBrightnessChanged(isDark: Boolean) {
 
     }
-
+var scanQRCodeOpenCameraError = false
     override fun onScanQRCodeOpenCameraError() {
-        binding.mZXingView.startCamera()
-        binding.mZXingView.startSpotAndShowRect()
+//        binding.mZXingView.startCamera()
+//        binding.mZXingView.startSpotAndShowRect()
+        scanQRCodeOpenCameraError = true
     }
     override fun onStart() {
         super.onStart()
-        binding.mZXingView.startCamera() // 打开后置摄像头开始预览，但是并未开始识别
+        if(!scanQRCodeOpenCameraError){ binding.mZXingView.startCamera() }
+        // 打开后置摄像头开始预览，但是并未开始识别}
+
+
 
     }
 
     override fun onResume() {
         super.onResume()
-        binding.mZXingView.startSpotAndShowRect() // 显示扫描框，并开始识别
+        if(!scanQRCodeOpenCameraError){  binding.mZXingView.startSpotAndShowRect() }
+        // 显示扫描框，并开始识别}
     }
 
     override fun onStop() {
-        binding.mZXingView.stopSpotAndHiddenRect()
-
+        if(!scanQRCodeOpenCameraError) {
+            binding.mZXingView.stopSpotAndHiddenRect()
+        }
         super.onStop()
     }
 
     override fun onDestroy() {
-        binding.mZXingView.onDestroy() // 销毁二维码扫描控件
+        if(!scanQRCodeOpenCameraError){
+        binding.mZXingView.onDestroy() }
+        // 销毁二维码扫描控件
         super.onDestroy()
     }
 }
