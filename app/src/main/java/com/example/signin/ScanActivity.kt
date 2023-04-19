@@ -1,21 +1,24 @@
 package com.example.signin
 
-import android.util.Log
-import android.widget.Toast
+import android.view.KeyEvent
 import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.alibaba.fastjson.JSON
+import com.common.apiutil.decode.DecodeReader
 import com.dylanc.longan.startActivity
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActScanBinding
+import com.example.signin.scan.KeyEventResolver
 import com.hello.scan.ScanCallBack
 import com.hello.scan.ScanTool
 import sigin
+import java.io.UnsupportedEncodingException
+import java.nio.charset.StandardCharsets
 
 class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCodeView.Delegate,
-    ScanCallBack {
+    ScanCallBack, KeyEventResolver.OnScanSuccessListener {
 
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
@@ -33,8 +36,11 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
     var okMsg:String = "签到成功"
     var repeatMsg:String = "重复签到"
     var voiceStatus:String = "2"
+    private var mDecodeReader: DecodeReader? = null
+    private var mKeyEventResolver: KeyEventResolver? = null
     override fun initData() {
         ScanTool.GET.initSerial(this, "/dev/ttyACM0", 115200, this@ScanActivity)
+        openHardreader()
         intent.getStringExtra("id")?.let { id = it }
         intent.getStringExtra("name")?.let { name = it }
         intent.getStringExtra("params")?.let { params = it }
@@ -48,14 +54,42 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
         intent.getIntExtra("timeLong",3)?.let { timeLong = it }
         intent.getIntExtra("showType",0)?.let { showType = it }
         binding.mZXingView.setDelegate(this)
-//        Log.d("mZXingView","name=="+name)
-//                LiveDataBus.get().with("onScanCallBack", String::class.java)
-//            .observeForever {
-//                it?.let {param->
-//
-//
-//                }
-//            }
+
+    }
+    private fun openHardreader() {
+        try {
+        if (mDecodeReader == null) {
+            mDecodeReader = DecodeReader(this) //初始化
+        }
+//        mKeyEventResolver = KeyEventResolver(this)
+        mDecodeReader?.setDecodeReaderListener { data ->
+            mDecodeReader?.close()
+            try {
+                val str = String(data, StandardCharsets.UTF_8)
+                runOnUiThread {
+                   goRe(str)
+                }
+            } catch (e: UnsupportedEncodingException) {
+                e.printStackTrace()
+            }
+        }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        // val ret = mDecodeReader!!.open(115200)
+    }
+
+    /**
+     * 截获按键事件.发给ScanGunKeyEventHelper
+     */
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        //要是重虚拟键盘输入怎不拦截
+        if ("Virtual" == event.device.name) {
+            return super.dispatchKeyEvent(event)
+        }
+        mDecodeReader?.open(115200)
+//        mKeyEventResolver?.analysisKeyEvent(event)
+        return true
     }
     private fun showPermission() {
         MaterialDialog(this).show {
@@ -153,10 +187,18 @@ var scanQRCodeOpenCameraError = false
             binding.mZXingView.stopSpotAndHiddenRect()
         }
         super.onStop()
+        mDecodeReader?.close()
     }
 var isPause =true
     override fun onScanCallBack(data: String?) {
-        if(isPause){
+        try {
+        goRe(data)
+        } catch (e: Exception) {
+        }
+    }
+
+    private fun goRe(data: String?) {
+        if (isPause) {
             return
         }
         try {
@@ -168,37 +210,40 @@ var isPause =true
             signUpUser.userMeetingId = signUpUser.id
             signUpUser.meetingId = signUpUser.meetingId
             signUpUser.userMeetingTypeName = signUpUser.supplement
-            signUpUser.autoStatus =  autoStatus
-            signUpUser.timeLong =  timeLong
+            signUpUser.autoStatus = autoStatus
+            signUpUser.timeLong = timeLong
             signUpUser.okMsg = okMsg
             signUpUser.failedMsg = failedMsg
             signUpUser.repeatMsg = repeatMsg
             signUpUser.voiceStatus = voiceStatus
-            if(autoStatus.equals("1")){
-                if(showType==3){
+            if (autoStatus.equals("1")) {
+                if (showType == 3) {
                     com.dylanc.longan.startActivity<SiginReActivity>(
                         "type" to showType,
                         "data" to signUpUser
                     )
-                }else{
-                    var params = java.util.HashMap<String, String>()
+                } else {
+                    var params = HashMap<String, String>()
                     params["meetingId"] = signUpUser.meetingId//会议id
                     params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
                     params["signUpId"] = signUpUser.signUpId//签到站id
                     params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
                     params["status"] = "2"//用户参与会议id
-                    sigin(JSON.toJSONString(params),{ success->
+                    sigin(JSON.toJSONString(params), { success ->
                         signUpUser.success = success
                         com.dylanc.longan.startActivity<SiginReAutoActivity>(
                             "type" to showType,
                             "data" to signUpUser
                         )
-                    },{ signUpUser.success  = "500"
+                    }, {
+                        signUpUser.success = "500"
                         startActivity<SiginReAutoActivity>(
                             "type" to showType,
                             "data" to signUpUser
-                        )},{})}
-            }else{
+                        )
+                    }, {})
+                }
+            } else {
                 com.dylanc.longan.startActivity<SiginReActivity>(
                     "type" to showType,
                     "data" to signUpUser
@@ -207,6 +252,7 @@ var isPause =true
         } catch (e: Exception) {
         }
     }
+
     override fun onDestroy() {
         MainHomeActivity.isScan = false
         if(!scanQRCodeOpenCameraError){
@@ -214,5 +260,14 @@ var isPause =true
         // 销毁二维码扫描控件
         super.onDestroy()
         ScanTool.GET.release()
+        mDecodeReader?.close()
+//        mKeyEventResolver?.onDestroy()
+    }
+
+    override fun onScanSuccess(barcode: String?) {
+        try {
+            goRe(barcode)
+        } catch (e: Exception) {
+        }
     }
 }

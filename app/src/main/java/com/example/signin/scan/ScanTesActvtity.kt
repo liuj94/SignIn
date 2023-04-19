@@ -33,17 +33,6 @@ class ScanTestActvtity : AppCompatActivity(), ScanCallBack {
      */
     private fun initScanTool(): Boolean {
         ScanTool.GET.initSerial(this, "/dev/ttyACM0", 115200, this@ScanTestActvtity)
-//        for (s in sDevices!!.keys) {
-//            if (s == Build.MODEL) {
-//                val pair = sDevices[s] ?: continue
-//                Log.e("Hello", "judgeModel == > $s")
-//                Log.e("Hello", "path == > " + pair.first)
-//                Log.e("Hello", "baud rate == > " + pair.second)
-//                ScanTool.GET.initSerial(this, pair.first, pair.second, this@MainActivity)
-//                return true
-//            }
-//        }
-//        return false
         return true
     }
 
