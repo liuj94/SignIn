@@ -94,7 +94,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             binding.stateTv.setTextColor(Color.parseColor("#D43030"))
             binding.stateIv.setImageResource(R.mipmap.cf_h)
             if(voiceStatus.equals("1")){
-                LiveDataBus.get().with("voiceStatus").postValue(repeatMsg)
+                LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
             }
         }
         binding.submit.text = "返回（"+timeLong+"）"

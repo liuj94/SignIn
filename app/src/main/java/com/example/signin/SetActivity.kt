@@ -17,7 +17,7 @@ class SetActivity : BaseBindingActivity<ActivitySetBinding, BaseViewModel>() {
     var startApp = "1"
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD){
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD){
             if(Settings.canDrawOverlays(this)){
                 if (kv.getString("startApp", "2").equals("1")) {
                     startApp = "1"

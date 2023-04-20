@@ -6,6 +6,9 @@ import android.app.Application
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Build
+import android.util.Log
+import com.common.apiutil.util.SDKUtil
+import com.common.apiutil.util.SystemUtil
 import com.example.signin.agora.GlobalSettings
 import com.tencent.bugly.crashreport.CrashReport
 
@@ -30,7 +33,14 @@ class App :  Application() {
         super.onCreate()
         mApplication = this
         AppManager.getAppManager().init(mApplication)
+        SDKUtil.getInstance(this).initSDK()
         initUtils()
+        if (!SystemUtil.checkPackage("com.common.service")) {
+            Log.d("tagg", "API 调用 >> 系统反射")
+        } else {
+            Log.d("tagg", "API 调用 >> 服务APK")
+        }
+
         CrashReport.initCrashReport(this, "361d06bc84", false)
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {

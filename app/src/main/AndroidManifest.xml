@@ -133,7 +133,7 @@
             </intent-filter>
         </activity>
 <!--        <activity-->
-<!--            android:name=".scan.ScanTestActvtity"-->
+<!--            android:name=".scan.DecodeReaderActivity"-->
 <!--            android:enabled="true"-->
 <!--            android:exported="true">-->
 <!--            <intent-filter>-->

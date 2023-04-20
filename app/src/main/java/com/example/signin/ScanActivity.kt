@@ -1,10 +1,12 @@
 package com.example.signin
 
+import android.util.Log
 import android.view.KeyEvent
 import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.alibaba.fastjson.JSON
 import com.common.apiutil.decode.DecodeReader
+import com.common.apiutil.util.SystemUtil
 import com.dylanc.longan.startActivity
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
@@ -39,6 +41,12 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
     private var mDecodeReader: DecodeReader? = null
     private var mKeyEventResolver: KeyEventResolver? = null
     override fun initData() {
+       Log.d("initData","SystemUtil.getInternalModel()="+SystemUtil.getInternalModel())
+//        if(SystemUtil.getInternalModel().equals("P8")){
+//            openHardreader()
+//        }else{
+//            ScanTool.GET.initSerial(this, "/dev/ttyACM0", 115200, this@ScanActivity)
+//        }
         ScanTool.GET.initSerial(this, "/dev/ttyACM0", 115200, this@ScanActivity)
         openHardreader()
         intent.getStringExtra("id")?.let { id = it }
@@ -87,7 +95,9 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
         if ("Virtual" == event.device.name) {
             return super.dispatchKeyEvent(event)
         }
+//        if(SystemUtil.getInternalModel().equals("P8")){
         mDecodeReader?.open(115200)
+//        }
 //        mKeyEventResolver?.analysisKeyEvent(event)
         return true
     }
@@ -187,7 +197,8 @@ var scanQRCodeOpenCameraError = false
             binding.mZXingView.stopSpotAndHiddenRect()
         }
         super.onStop()
-        mDecodeReader?.close()
+        if(SystemUtil.getInternalModel().equals("P8")){
+        mDecodeReader?.close()}
     }
 var isPause =true
     override fun onScanCallBack(data: String?) {
@@ -259,9 +270,14 @@ var isPause =true
         binding.mZXingView.onDestroy() }
         // 销毁二维码扫描控件
         super.onDestroy()
-        ScanTool.GET.release()
-        mDecodeReader?.close()
+
+//        if(SystemUtil.getInternalModel().equals("P8")){
+//        mDecodeReader?.close()}else{
+//            ScanTool.GET.release()
+//        }
 //        mKeyEventResolver?.onDestroy()
+        mDecodeReader?.close()
+        ScanTool.GET.release()
     }
 
     override fun onScanSuccess(barcode: String?) {
