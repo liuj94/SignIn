@@ -1,6 +1,7 @@
 package com.example.signin
 
 import android.graphics.Color
+import android.media.MediaPlayer
 import android.os.CountDownTimer
 import android.view.View
 import com.example.signin.base.BaseBindingActivity
@@ -28,6 +29,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
     var repeatMsg: String = "重复签到"
     var success: String = ""
     var voiceStatus: String = "1"
+    var mRingPlayer: MediaPlayer? = null
     override fun initData() {
         intent.getIntExtra("type", 0)?.let { type = it }
         intent.getSerializableExtra("data")?.let {
@@ -77,14 +79,26 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
         timer()
         if (success.equals("1")) {
             if(voiceStatus.equals("1")){
-                LiveDataBus.get().with("voiceStatus").postValue(okMsg)
+//                LiveDataBus.get().with("voiceStatus").postValue(okMsg)
+                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
+                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(okMsg);
+                }else{
+                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.cg);
+                    mRingPlayer?.start();
+                }
             }
             binding.stateTv.text = okMsg
             binding.stateTv.setTextColor(Color.parseColor("#3974F6"))
             binding.stateIv.setImageResource(R.mipmap.qd2)
         } else if (success.equals("2")) {
             if(voiceStatus.equals("1")){
-                LiveDataBus.get().with("voiceStatus").postValue(repeatMsg)
+//                LiveDataBus.get().with("voiceStatus").postValue(repeatMsg)
+                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
+                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(repeatMsg);
+                }else{
+                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.cf);
+                    mRingPlayer?.start();
+                }
             }
             binding.stateTv.text = repeatMsg
             binding.stateTv.setTextColor(Color.parseColor("#FFC300"))
@@ -94,7 +108,13 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             binding.stateTv.setTextColor(Color.parseColor("#D43030"))
             binding.stateIv.setImageResource(R.mipmap.cf_h)
             if(voiceStatus.equals("1")){
-                LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
+//                LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
+                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
+                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(failedMsg);
+                }else{
+                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.qdsb);
+                    mRingPlayer?.start();
+                }
             }
         }
         binding.submit.text = "返回（"+timeLong+"）"
@@ -117,6 +137,11 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                 finish()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
     }
 
 }

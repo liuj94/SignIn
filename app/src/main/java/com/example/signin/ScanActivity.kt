@@ -3,7 +3,6 @@ package com.example.signin
 import android.util.Log
 import android.view.KeyEvent
 import cn.bingoogolapple.qrcode.core.QRCodeView
-import com.afollestad.materialdialogs.MaterialDialog
 import com.alibaba.fastjson.JSON
 import com.common.apiutil.decode.DecodeReader
 import com.common.apiutil.util.SystemUtil
@@ -39,16 +38,16 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
     var repeatMsg:String = "重复签到"
     var voiceStatus:String = "2"
     private var mDecodeReader: DecodeReader? = null
-    private var mKeyEventResolver: KeyEventResolver? = null
+
     override fun initData() {
        Log.d("initData","SystemUtil.getInternalModel()="+SystemUtil.getInternalModel())
-//        if(SystemUtil.getInternalModel().equals("P8")){
-//            openHardreader()
-//        }else{
-//            ScanTool.GET.initSerial(this, "/dev/ttyACM0", 115200, this@ScanActivity)
-//        }
-        ScanTool.GET.initSerial(this, "/dev/ttyACM0", 115200, this@ScanActivity)
-        openHardreader()
+        if(SystemUtil.getInternalModel().equals("P8")){
+            openHardreader()
+        }else{
+            ScanTool.GET.initSerial(this, "/dev/ttyACM0", 115200, this@ScanActivity)
+        }
+//        ScanTool.GET.initSerial(this, "/dev/ttyACM0", 115200, this@ScanActivity)
+//        openHardreader()
         intent.getStringExtra("id")?.let { id = it }
         intent.getStringExtra("name")?.let { name = it }
         intent.getStringExtra("params")?.let { params = it }
@@ -65,13 +64,11 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
 
     }
     private fun openHardreader() {
-        try {
         if (mDecodeReader == null) {
             mDecodeReader = DecodeReader(this) //初始化
         }
-//        mKeyEventResolver = KeyEventResolver(this)
+
         mDecodeReader?.setDecodeReaderListener { data ->
-            mDecodeReader?.close()
             try {
                 val str = String(data, StandardCharsets.UTF_8)
                 runOnUiThread {
@@ -81,10 +78,8 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
                 e.printStackTrace()
             }
         }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        // val ret = mDecodeReader!!.open(115200)
+
+        mDecodeReader?.close()
     }
 
     /**
@@ -96,21 +91,11 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
             return super.dispatchKeyEvent(event)
         }
 //        if(SystemUtil.getInternalModel().equals("P8")){
-        mDecodeReader?.open(115200)
+         mDecodeReader?.open(115200)
 //        }
 //        mKeyEventResolver?.analysisKeyEvent(event)
+//        Toast.makeText(this,"ret="+ret,Toast.LENGTH_LONG).show();
         return true
-    }
-    private fun showPermission() {
-        MaterialDialog(this).show {
-            title(text ="提示")
-            message(text ="无相机权限，无法使用扫一扫功能")
-            positiveButton(text = "确定"){
-                finish()
-            }
-
-        }
-
     }
     override fun onScanQRCodeSuccess(result: String?) {
 
@@ -168,8 +153,6 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
     }
 var scanQRCodeOpenCameraError = false
     override fun onScanQRCodeOpenCameraError() {
-//        binding.mZXingView.startCamera()
-//        binding.mZXingView.startSpotAndShowRect()
         scanQRCodeOpenCameraError = true
     }
     override fun onStart() {
@@ -271,11 +254,7 @@ var isPause =true
         // 销毁二维码扫描控件
         super.onDestroy()
 
-//        if(SystemUtil.getInternalModel().equals("P8")){
-//        mDecodeReader?.close()}else{
-//            ScanTool.GET.release()
-//        }
-//        mKeyEventResolver?.onDestroy()
+
         mDecodeReader?.close()
         ScanTool.GET.release()
     }

@@ -39,10 +39,8 @@ public class DecodeReaderActivity extends Activity implements KeyEventResolver.O
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_decodereader);
-
         initView();
     }
-
     private void initView() {
 
         tvDataShow = (TextView) findViewById(R.id.data_show);
@@ -107,12 +105,10 @@ public class DecodeReaderActivity extends Activity implements KeyEventResolver.O
                         public void run() {
                             successCount++;
                             circleCountShow.setText("成功"+"[" + successCount + "]");
-
                             tvDataShow.setText(str);
                         }
                     });
                 } catch (UnsupportedEncodingException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }

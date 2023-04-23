@@ -2,23 +2,16 @@ package com.example.signin
 
 
 import android.media.MediaPlayer
-import android.text.TextUtils
-import android.util.Log
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.alibaba.fastjson.JSON
-import com.common.apiutil.util.SystemUtil
 import com.dylanc.longan.toast
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
-import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActivityMainBinding
 import com.example.signin.fragment.HomeMainFragment
 import com.example.signin.fragment.MyFragment
 import com.example.signin.net.RequestCallback
-import com.hello.scan.ScanCallBack
-import com.hello.scan.ScanTool
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
@@ -89,16 +82,12 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                if(!isMainHome){
 
                    if(SpeechUtils.getInstance(this@MainHomeActivity).isSpeech){
-
                        SpeechUtils.getInstance(this@MainHomeActivity).speakText(it);
                    }else{
-
                        var mRingPlayer: MediaPlayer? = null
                        if (it.contains("成功")) {
                            mRingPlayer = MediaPlayer.create(this@MainHomeActivity, R.raw.cg);
                            mRingPlayer?.start();
-
-
                        } else  if (it.contains("重复")){
                            mRingPlayer = MediaPlayer.create(this@MainHomeActivity, R.raw.cf);
                            mRingPlayer?.start();

@@ -56,25 +56,8 @@ class FMeetingDeList3Adapter : BaseBindingAdapter<MeetingUserData, ListMeetingde
         }
         var SignUpStatus = ""+item.signUpStatus
         holder.state.text = ""
-//        if (!item.userMeetingSignUpStatus.isNullOrEmpty()) {
+
         if (!SignUpStatus.isNullOrEmpty()) {
-
-//            if(!model.user_meeting_sign_up_status.isNullOrEmpty()){
-//                for (data in model.user_meeting_sign_up_status){
-//                    if(item.userMeetingSignUpStatus.equals(data.dictValue))  {
-//                        holder.state.text =  data.dictLabel
-//                        if(data.dictValue.equals("2")){
-//                            holder.state.setTextColor(Color.parseColor("#43CF7C"))
-//                        }else if(item.userMeetingSignUpStatus.equals("1")){
-//                            holder.state.setTextColor(Color.parseColor("#FFC300"))
-//                        }else{
-//                            holder.state.setTextColor(Color.parseColor("#666666"))
-//                        }
-//                        return
-//                    }
-//                }
-//            }
-
             if (!siginUp2List.isNullOrEmpty()) {
                 for (data in siginUp2List) {
                     if (SignUpStatus.equals(data.dictValue)) {

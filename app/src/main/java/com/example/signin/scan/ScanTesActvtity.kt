@@ -12,7 +12,6 @@ import com.hello.scan.ScanTool
 import java.util.*
 
 class ScanTestActvtity : AppCompatActivity(), ScanCallBack {
-    private var scanCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +45,7 @@ class ScanTestActvtity : AppCompatActivity(), ScanCallBack {
 
     override fun onInitScan(isSuccess: Boolean) {
         val str = if (isSuccess) "初始化成功" else "初始化失败"
-//        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {

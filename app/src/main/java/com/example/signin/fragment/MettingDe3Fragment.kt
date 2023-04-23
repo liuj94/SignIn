@@ -97,7 +97,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 binding.name2Tv.text = "筛选"
                 pageNum = 1
                 list.clear()
-                getList()
+                getqddList()
             }
         }
         binding.srecyclerview.adapter = adapterSelect
@@ -119,21 +119,6 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
                 }
                 binding.name2Tv.text = siginUp2List[position].dictLabel
-//                if (siginUp2List[position].isMyselect) {
-//                    for (item in siginUp2List) {
-//                        item.isMyselect = false
-//                    }
-//                    status = ""
-//                    binding.name2Tv.text = "筛选"
-//                } else {
-//                    for (item in siginUp2List) {
-//                        item.isMyselect = false
-//                    }
-//                    siginUp2List[position].isMyselect = true
-//                    status = "" + siginUp2List[position].dictValue
-//                    binding.name2Tv.text = siginUp2List[position].dictLabel
-//                }
-
                 adapterSelect2?.notifyDataSetChanged()
                 binding.select2Ll.visibility = View.GONE
                 LiveDataBus.get().with("selectLlGONE").postValue("1")
@@ -255,8 +240,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 //            PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&orderByColumn=createTime&isAsc=desc&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
             PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&signUpId=" + signUpId +"&signUpLocationId="+signUpLocationId+ "&pageSize=10&pageNum=" + pageNum
         if (!status.isNullOrEmpty()) {
-//            url = "$url&signUpStatus=$status"
-            url = "$url&status=$status"
+            url = "$url&signUpStatus=$status"
         }
         if (!nameMobile.isNullOrEmpty()) {
             url = "$url&nameMobile=$nameMobile"
@@ -373,6 +357,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 override fun onMySuccess(data: List<SiginData>) {
                     super.onMySuccess(data)
                     try {
+                        selectList3.clear()
                         selectList3.addAll(data)
                         selectList3[0].isMyselect = true
                         signUpLocationId = "" + selectList3[0].id
