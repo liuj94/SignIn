@@ -310,7 +310,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             binding.itemDdxx.kong.visibility = View.GONE
             binding.itemDdxx.ll.visibility = View.VISIBLE
             it.ticketName?.let {ticketName->  binding.itemDdxx.ddName.text = ticketName }
-            it.ticketName?.let {amount->  binding.itemDdxx.ddPrice.text = "¥" + amount
+            it.amount?.let {amount->  binding.itemDdxx.ddPrice.text = "¥" + amount
                 cAmount = amount.toDouble()}
 
 

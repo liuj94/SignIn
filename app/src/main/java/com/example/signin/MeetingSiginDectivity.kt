@@ -108,11 +108,6 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             a2.isKuan =true
             selectList3.add(a2)
 
-            val deviceon = File("/sys/class/leds/led-white")
-            if (deviceon.canRead()) {
-                FaceUtil.LedSet("led-white", 0);
-            }
-            ScanTool.GET.release()
             openHardreader()
 
         }else if(moshi.equals("二维码识别")){
@@ -194,13 +189,13 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                     ScanTool.GET.release()
                     openHardreader()
                 }else if(moshi.equals("二维码识别")){
+                    mDecodeReader?.close()
                     val deviceon = File("/sys/class/leds/led-white")
                     if (deviceon.canRead()) {
                         FaceUtil.LedSet("led-white", 1);
                     }else{
                         toast("灯光打开失败")
                     }
-                    mDecodeReader?.close()
                     ScanTool.GET.initSerial(this@MeetingSiginDectivity, "/dev/ttyACM0", 115200, this@MeetingSiginDectivity)
                 }
             }
@@ -558,7 +553,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         if ("Virtual" == event.device.name) {
             return super.dispatchKeyEvent(event)
         }
-        if(moshi.equals("二维码识别")){
+        if(moshi.equals("激光头识别")){
             mDecodeReader?.open(115200)
         }
         return true
@@ -591,7 +586,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     override fun onResume() {
         super.onResume()
         isPause = false
-        if(moshi.equals("激光头识别")){
+        if(moshi.equals("二维码识别")){
             val deviceon = File("/sys/class/leds/led-white")
             if (deviceon.canRead()) {
                 FaceUtil.LedSet("led-white", 1);
@@ -604,7 +599,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     override fun onPause() {
         super.onPause()
         isPause = true
-        if(moshi.equals("激光头识别")){
+        if(moshi.equals("二维码识别")){
             val deviceon = File("/sys/class/leds/led-white")
             if (deviceon.canRead()) {
                 FaceUtil.LedSet("led-white", 0);

@@ -126,7 +126,9 @@ class SiginReFailActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
         }else{
             binding.submit.text = "返回"
         }
-
+        binding.submit.setOnClickListener {
+            finish()
+        }
 
     }
 
