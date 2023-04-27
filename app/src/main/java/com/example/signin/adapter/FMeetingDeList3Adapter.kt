@@ -5,7 +5,10 @@ import android.graphics.Color
 import android.view.View
 import com.alibaba.fastjson.JSON
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.example.signin.PageRoutes.Companion.BaseUrl
+import com.example.signin.R
 import com.example.signin.base.BaseBindingAdapter
 import com.example.signin.bean.MeetingUserData
 import com.example.signin.bean.TypeData
@@ -36,7 +39,10 @@ class FMeetingDeList3Adapter : BaseBindingAdapter<MeetingUserData, ListMeetingde
             holder.img.visibility = View.GONE
         } else {
             holder.img.visibility = View.VISIBLE
-            Glide.with(holder.img.context).load(BaseUrl + item.avatar).into(holder.img)
+            Glide.with(holder.img.context).load(BaseUrl + item.avatar).apply(RequestOptions.bitmapTransform(CircleCrop()))
+                .error(R.mipmap.touxiang).into(holder.img)
+
+//            Glide.with(holder.img.context).load(BaseUrl + item.avatar).into(holder.img)
         }
         var model = JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
 

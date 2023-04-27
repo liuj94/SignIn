@@ -3,10 +3,13 @@ package com.example.signin
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.alibaba.fastjson.JSON
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.dylanc.longan.startActivity
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
@@ -81,9 +84,12 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         }
         binding.itemDdxx.ddBtn.setOnClickListener {
             if (examineStatus.equals("2")) {
-                if (invoiceStatus.equals("1")) {
+                if(cAmount>0){
                     startActivity<ExamineKPActivity>("order" to order)
+                }else{
+                    startActivity<ExamineActivity>("order" to order)
                 }
+
             } else if (examineStatus.equals("1")) {
                 startActivity<ExamineActivity>("order" to order)
             }
@@ -106,7 +112,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         binding.itemRzxx.ddBtn.setOnClickListener {
             if (state_ruzhu.status.equals("1")) {
 //                gotoSigin(state_ruzhu,3)
-                startActivity<SiginReActivity>("type" to 3, "data" to state_ruzhu)
+                startActivity<SiginReActivity>("type" to 3, "data" to state_ruzhu,"avatar" to avatar)
             }
         }
         binding.itemHcqd.zcBtn.setOnClickListener {
@@ -162,8 +168,6 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
     }
 
     private fun gotoSigin(data: SignUpUser, type: Int) {
-        if (data.equals("2")) {
-
             var params = HashMap<String, String>()
             params["meetingId"] = data.meetingId//会议id
             params["signUpLocationId"] = data.signUpLocationId//签到点id
@@ -175,16 +179,16 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 startActivity<SiginReAutoActivity>(
                     "type" to type,
                     "data" to data
+                    ,"avatar" to avatar
                 )
             }, {
                 data.success = "500"
                 startActivity<SiginReAutoActivity>(
                     "type" to type,
                     "data" to data
+                    ,"avatar" to avatar
                 )}, {})
-        } else {
-            startActivity<SiginReActivity>("type" to type, "data" to data)
-        }
+
     }
 
     fun takePhone(phone: String) {
@@ -237,7 +241,8 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
     var mobile1 = ""
     var mobile2 = ""
     var mobile3 = ""
-
+    var avatar = ""
+    var cAmount :Double = 0.00
     @SuppressLint("SetTextI18n")
     private fun setDate(data: MeetingUserDeData) {
         data.corporateName?.let {corporateName->  binding.itemYhxx.gongshiName.text = corporateName }
@@ -255,9 +260,14 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
         }
         data.mobile?.let {m-> mobile1 = m }
-
-        Glide.with(this@MeetingUserDectivity).load(PageRoutes.BaseUrl + data.avatar)
+        data.avatar?.let { avatar = it }
+        Glide.with(this@MeetingUserDectivity).load(PageRoutes.BaseUrl + data.avatar).apply(
+            RequestOptions.bitmapTransform(
+                CircleCrop()
+            ))
             .error(R.mipmap.touxiang).into(binding.itemYhxx.tx)
+//        Glide.with(this@MeetingUserDectivity).load(PageRoutes.BaseUrl + data.avatar)
+//            .error(R.mipmap.touxiang).into(binding.itemYhxx.tx)
         var model =
             JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
         state_zhuche.name = data.name
@@ -299,19 +309,29 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             order.corporateName = data.corporateName
             binding.itemDdxx.kong.visibility = View.GONE
             binding.itemDdxx.ll.visibility = View.VISIBLE
-            binding.itemDdxx.ddName.text = it.ticketName
-            binding.itemDdxx.ddPrice.text = "¥" + it.amount
-            binding.itemDdxx.ddType.text =
-                "开票类型:"
-            //invoiceType	1 普票 2专票
-            for (item in model.sys_invoice_type) {
-                if (it.invoiceType.equals(item.dictValue)) {
-                    binding.itemDdxx.ddType.text =
-                        "开票类型:" + item.dictLabel
+            it.ticketName?.let {ticketName->  binding.itemDdxx.ddName.text = ticketName }
+            it.ticketName?.let {amount->  binding.itemDdxx.ddPrice.text = "¥" + amount
+                cAmount = amount.toDouble()}
+
+
+            Log.d("cAmount","it.amount=="+it.amount)
+
+            Log.d("cAmount","cAmount=="+cAmount)
+            if(cAmount>0){
+                binding.itemDdxx.ddType.text =
+                    "开票类型:"
+                //invoiceType	1 普票 2专票
+                for (item in model.sys_invoice_type) {
+                    if (it.invoiceType.equals(item.dictValue)) {
+                        binding.itemDdxx.ddType.text =
+                            "开票类型:" + item.dictLabel
+                    }
                 }
+                it.invoiceNo?.let {invoiceNo->  binding.itemDdxx.ddNum.text = "发票票号:$invoiceNo" }
+
             }
+
             it.createTime?.let {createTime->  binding.itemDdxx.ddTime.text = parseTime2(createTime) }
-            it.invoiceNo?.let {invoiceNo->  binding.itemDdxx.ddNum.text = "发票票号:$invoiceNo" }
 
             //0初始状态 1待审核 2审核成功 3审核失败
             examineStatus = "" + it.examineStatus
@@ -325,13 +345,20 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     if (item.dictValue.equals("2")) {
                         binding.infoLl.visibility = View.VISIBLE
                         if (invoiceStatus.equals("1")) {
-                            binding.itemDdxx.ddBtn.text = "审核开票"
+                            if(cAmount>0){
+                                binding.itemDdxx.ddBtn.text = "开具发票"
+                            }else{
+                                binding.itemDdxx.ddBtn.text = "订单详情"
+                            }
+
                             binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
                         } else {
                             binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
                         }
 
-                    } else {
+                    } else  if (item.dictValue.equals("1")){
+                        binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
+                    }else  {
 
                         binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
                     }

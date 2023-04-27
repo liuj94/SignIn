@@ -19,6 +19,7 @@ import com.example.signin.bean.SiginUpListModel
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
+import java.text.DecimalFormat
 
 /**
  *   author : LiuJie
@@ -99,6 +100,16 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
                         binding.num3.text = "0.00"
                     }else{
                         binding.num3.text = data.totalAmount
+                      var amount = data.totalAmount.toDouble()
+                        var df =  DecimalFormat("0.00");
+                        var s = df.format(amount);
+                       if(amount>=10000){
+                           binding.danwei.text = "门票总收入(万元)"
+                           binding.num3.text = s
+                       }  else{
+                           binding.danwei.text = "门票总收入(元)"
+                       }
+
                     }
 
                     binding.num4.text = "" + data.todayInsertUserCount

@@ -44,13 +44,13 @@
 
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical">
 
 
         <TextView
+            android:id="@+id/tvkg1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="签到点"
@@ -64,6 +64,7 @@
 
             android:src="@mipmap/kaiguan1" />
         <TextView
+            android:id="@+id/tvkg2"
             android:layout_marginLeft="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,6 +78,7 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/kaiguan1" />
         <TextView
+            android:id="@+id/tvsz"
             android:layout_marginLeft="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -91,6 +93,7 @@
             android:layout_height="32dp"
             android:src="@mipmap/sz" />
         <TextView
+            android:id="@+id/tvqd"
             android:layout_marginLeft="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

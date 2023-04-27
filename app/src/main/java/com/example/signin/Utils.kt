@@ -75,6 +75,7 @@ fun encode(unicode: String? = ""): String {
 
     return s
 }
+
 fun takePhotoDialog(context:Activity,
                     finish: ((file:File) -> Unit)? = null) {
 

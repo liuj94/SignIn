@@ -1,11 +1,7 @@
 package com.example.signin
 
-import android.util.Log
-import android.view.KeyEvent
 import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.alibaba.fastjson.JSON
-import com.common.apiutil.decode.DecodeReader
-import com.common.apiutil.util.SystemUtil
 import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
 import com.example.signin.base.BaseBindingActivity
@@ -14,10 +10,7 @@ import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActScanBinding
 import com.example.signin.scan.KeyEventResolver
 import com.hello.scan.ScanCallBack
-import com.hello.scan.ScanTool
 import sigin
-import java.io.UnsupportedEncodingException
-import java.nio.charset.StandardCharsets
 
 class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCodeView.Delegate,
     ScanCallBack, KeyEventResolver.OnScanSuccessListener {
@@ -86,36 +79,37 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
             signUpUser.failedMsg = failedMsg
             signUpUser.repeatMsg = repeatMsg
             signUpUser.voiceStatus = voiceStatus
-            if(autoStatus.equals("1")){
-                if(showType==3){
-                    com.dylanc.longan.startActivity<SiginReActivity>(
-                        "type" to showType,
-                        "data" to signUpUser
-                    )
-                }else{
-                    var params = java.util.HashMap<String, String>()
-                    params["meetingId"] = signUpUser.meetingId//会议id
-                    params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
-                    params["signUpId"] = signUpUser.signUpId//签到站id
-                    params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
-                    params["status"] = "2"//用户参与会议id
-                    sigin(JSON.toJSONString(params),{ success->
-                        signUpUser.success = success
-                        com.dylanc.longan.startActivity<SiginReAutoActivity>(
-                            "type" to showType,
-                            "data" to signUpUser
-                        )
-                    },{  signUpUser.success = "500"
-                        com.dylanc.longan.startActivity<SiginReAutoActivity>(
-                            "type" to showType,
-                            "data" to signUpUser
-                        )},{})}
-            }else{
+            if(showType==3){
                 com.dylanc.longan.startActivity<SiginReActivity>(
                     "type" to showType,
                     "data" to signUpUser
                 )
-            }
+            }else{
+                var params = java.util.HashMap<String, String>()
+                params["meetingId"] = signUpUser.meetingId//会议id
+                params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
+                params["signUpId"] = signUpUser.signUpId//签到站id
+                params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
+                params["status"] = "2"//用户参与会议id
+                sigin(JSON.toJSONString(params),{ success->
+                    signUpUser.success = success
+                    com.dylanc.longan.startActivity<SiginReAutoActivity>(
+                        "type" to showType,
+                        "data" to signUpUser
+                    )
+                },{  signUpUser.success = "500"
+                    com.dylanc.longan.startActivity<SiginReAutoActivity>(
+                        "type" to showType,
+                        "data" to signUpUser
+                    )},{})}
+//            if(autoStatus.equals("1")){
+//
+//            }else{
+//                com.dylanc.longan.startActivity<SiginReActivity>(
+//                    "type" to showType,
+//                    "data" to signUpUser
+//                )
+//            }
         }
 
     }

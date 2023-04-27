@@ -58,15 +58,13 @@
                 android:layout_height="wrap_content"
                >
 
-
+                <include
+                    android:id="@+id/item_zcbd"
+                    layout="@layout/item_zcbd" />
                 <include
                     android:id="@+id/item_lcxx"
                     layout="@layout/item_lcxx" />
 
-
-                <include
-                    android:id="@+id/item_zcbd"
-                    layout="@layout/item_zcbd" />
 
                 <include
                     android:id="@+id/item_rzxx"
@@ -80,14 +78,14 @@
                     android:id="@+id/item_cyxi"
                     layout="@layout/item_cyxi" />
 
-
+                <include
+                    android:id="@+id/item_lpff"
+                    layout="@layout/item_lpff" />
                 <include
                     android:id="@+id/item_fcxx"
                     layout="@layout/item_fcxx" />
                 <!-- 礼品发放-->
-                <include
-                    android:id="@+id/item_lpff"
-                    layout="@layout/item_lpff" />
+
             </LinearLayout>
 <View
     android:layout_width="match_parent"

@@ -5,6 +5,9 @@ import android.media.MediaPlayer
 import android.os.CountDownTimer
 import android.view.View
 import com.alibaba.fastjson.JSON
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.dylanc.longan.toast
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
@@ -33,9 +36,12 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
     var okMsg: String = "签到成功"
     var repeatMsg: String = "重复签到"
     var voiceStatus: String = "2"
+    var autoStatus: String = "1"
     var mRingPlayer: MediaPlayer? = null
+    var avatar: String = ""
     override fun initData() {
         intent.getIntExtra("type", 0)?.let { type = it }
+        intent.getStringExtra("avatar")?.let { avatar = it }
         intent.getSerializableExtra("data")?.let {
             signUpUser = it as SignUpUser
         }
@@ -46,11 +52,12 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
             params["userMeetingId"] = it.userMeetingId//用户参与会议id
             params["status"] = "2"//用户参与会议id
             it.meetingName?.let { meetingName -> binding.name.text = meetingName }
-            it.name?.let { name -> binding.userName.text = encode(name) }
-            it.corporateName?.let { companyName -> binding.companyName.text = encode(companyName) }
-            it.userMeetingTypeName?.let { userMeetingTypeName ->
-                binding.type.text = encode(userMeetingTypeName)
-            }
+            it.name?.let { name-> binding.userName.text = encode(name)
+                binding.userName.visibility = View.VISIBLE}
+            it.corporateName?.let {companyName-> binding.companyName.text = encode(companyName)
+                binding.companyName.visibility = View.VISIBLE}
+            it.userMeetingTypeName?.let {userMeetingTypeName->binding.type.text = encode(userMeetingTypeName)
+                binding.type.visibility = View.VISIBLE}
             it.timeLong?.let { t -> timeLong = t }
             it.voiceStatus?.let { t -> voiceStatus = t }
         }
@@ -88,7 +95,8 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
 
 
         }
-        timer()
+        if(autoStatus.equals("1")){
+        timer()}
     }
 
     private fun sigin() {
@@ -124,7 +132,16 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                     if (data.equals("1")) {
                         binding.stateTv.text = okMsg
                         binding.stateTv.setTextColor(Color.parseColor("#3974F6"))
-                        binding.stateIv.setImageResource(R.mipmap.qd2)
+//                        binding.stateIv.setImageResource(R.mipmap.qd2)
+                        if(avatar.isNullOrEmpty()){
+                            binding.stateIv.setImageResource(R.mipmap.touxiang)
+                        }else{
+                            Glide.with(this@SiginReActivity).load(PageRoutes.BaseUrl + avatar).apply(
+                                RequestOptions.bitmapTransform(
+                                    CircleCrop()
+                                ))
+                                .error(R.mipmap.touxiang).into(binding.stateIv)
+                        }
                     } else if (data.equals("2")) {
                         binding.stateTv.text = repeatMsg
                         binding.stateTv.setTextColor(Color.parseColor("#FFC300"))

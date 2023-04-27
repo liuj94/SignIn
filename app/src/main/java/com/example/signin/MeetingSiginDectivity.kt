@@ -209,6 +209,9 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         binding.ll.setOnClickListener {
             binding.selectLl.visibility = View.VISIBLE
         }
+        binding.selectLl.setOnClickListener {
+            binding.selectLl.visibility = View.GONE
+        }
 
         binding.recyclerview.layoutManager = LinearLayoutManager(activity)
         adapter = FMeetingDeList3Adapter().apply {
@@ -260,6 +263,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                         "showType" to showType,
                         "name" to name
                     )
+
                 }
             }
             false
@@ -580,7 +584,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             }
 
         }
-        mDecodeReader?.open(115200)
+//        mDecodeReader?.open(115200)
 
     }
     var isPause =true
@@ -593,6 +597,8 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 FaceUtil.LedSet("led-white", 1);
             }
         }
+        binding.et.setText("")
+        nameMobile = ""
     }
 
     override fun onPause() {
@@ -636,11 +642,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         try {
             var signUpUser = JSON.parseObject(data, SignUpUser::class.java)
 
-            if(signUpUser.id.isNullOrEmpty()){
-                isShiBieZ = false
-                toast("请提供正确会议二维码")
-                return
-            }
+
             signUpUser.signUpLocationId = id
             signUpUser.meetingName = name
             signUpUser.signUpId = signUpId
@@ -653,47 +655,104 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             signUpUser.failedMsg = failedMsg
             signUpUser.repeatMsg = repeatMsg
             signUpUser.voiceStatus = voiceStatus
-            if (autoStatus.equals("1")) {
-                if (showType == 3) {
-                    com.dylanc.longan.startActivity<SiginReActivity>(
-                        "type" to showType,
-                        "data" to signUpUser
-                    )
-                } else {
-                    var params = HashMap<String, String>()
-                    params["meetingId"] = signUpUser.meetingId//会议id
-                    params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
-                    params["signUpId"] = signUpUser.signUpId//签到站id
-                    params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
-                    params["status"] = "2"//用户参与会议id
-                    mViewModel.isShowLoading.value = true
-                    sigin(JSON.toJSONString(params), { success ->
-                        signUpUser.success = success
-                        com.dylanc.longan.startActivity<SiginReAutoActivity>(
-                            "type" to showType,
-                            "data" to signUpUser
-                        )
-                    }, {
-                        signUpUser.success = "500"
-                        startActivity<SiginReAutoActivity>(
-                            "type" to showType,
-                            "data" to signUpUser
-                        )
-                    }, {
-                        isShiBieZ = false
-                        mViewModel.isShowLoading.value = false
-                    })
-                }
-            } else {
+            if(signUpUser.id.isNullOrEmpty()){
                 isShiBieZ = false
+                signUpUser.success = "500"
+                startActivity<SiginReAutoActivity>(
+                    "type" to showType,
+                    "data" to signUpUser
+                )
+                return
+            }
+            if (showType == 3) {
                 com.dylanc.longan.startActivity<SiginReActivity>(
                     "type" to showType,
                     "data" to signUpUser
                 )
+            } else {
+                var params = HashMap<String, String>()
+                params["meetingId"] = signUpUser.meetingId//会议id
+                params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
+                params["signUpId"] = signUpUser.signUpId//签到站id
+                params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
+                params["status"] = "2"//用户参与会议id
+                mViewModel.isShowLoading.value = true
+                sigin(JSON.toJSONString(params), { success ->
+                    signUpUser.success = success
+                    com.dylanc.longan.startActivity<SiginReAutoActivity>(
+                        "type" to showType,
+                        "data" to signUpUser
+                    )
+                }, {
+                    signUpUser.success = "500"
+                    startActivity<SiginReAutoActivity>(
+                        "type" to showType,
+                        "data" to signUpUser
+                    )
+                }, {
+                    isShiBieZ = false
+                    mViewModel.isShowLoading.value = false
+                })
             }
+//            if (autoStatus.equals("1")) {
+//                if (showType == 3) {
+//                    com.dylanc.longan.startActivity<SiginReActivity>(
+//                        "type" to showType,
+//                        "data" to signUpUser
+//                    )
+//                } else {
+//                    var params = HashMap<String, String>()
+//                    params["meetingId"] = signUpUser.meetingId//会议id
+//                    params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
+//                    params["signUpId"] = signUpUser.signUpId//签到站id
+//                    params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
+//                    params["status"] = "2"//用户参与会议id
+//                    mViewModel.isShowLoading.value = true
+//                    sigin(JSON.toJSONString(params), { success ->
+//                        signUpUser.success = success
+//                        com.dylanc.longan.startActivity<SiginReAutoActivity>(
+//                            "type" to showType,
+//                            "data" to signUpUser
+//                        )
+//                    }, {
+//                        signUpUser.success = "500"
+//                        startActivity<SiginReAutoActivity>(
+//                            "type" to showType,
+//                            "data" to signUpUser
+//                        )
+//                    }, {
+//                        isShiBieZ = false
+//                        mViewModel.isShowLoading.value = false
+//                    })
+//                }
+//            } else {
+//                isShiBieZ = false
+//                com.dylanc.longan.startActivity<SiginReActivity>(
+//                    "type" to showType,
+//                    "data" to signUpUser
+//                )
+//            }
         } catch (e: Exception) {
             isShiBieZ = false
-            toast("二维码解析失败")
+//            toast("二维码解析失败")
+            var signUpUser = SignUpUser()
+            signUpUser.signUpLocationId = id
+            signUpUser.meetingName = name
+            signUpUser.signUpId = signUpId
+            signUpUser.userMeetingId = ""
+            signUpUser.meetingId = ""
+            signUpUser.userMeetingTypeName = ""
+            signUpUser.autoStatus = autoStatus
+            signUpUser.timeLong = timeLong
+            signUpUser.okMsg = okMsg
+            signUpUser.failedMsg = failedMsg
+            signUpUser.repeatMsg = repeatMsg
+            signUpUser.voiceStatus = voiceStatus
+            signUpUser.success = "500"
+            startActivity<SiginReAutoActivity>(
+                "type" to showType,
+                "data" to signUpUser
+            )
         }
     }
 

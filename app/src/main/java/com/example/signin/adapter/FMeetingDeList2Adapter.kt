@@ -84,6 +84,62 @@ class FMeetingDeList2Adapter: BaseBindingAdapter<SiginData, ListMeetingde2Bindin
 //            }
 
         }
+        holder.tvkg1.setOnClickListener {
+            var status = 1
+
+            if(item.status==1){
+                status = 2
+            }
+            setState(item.id,status,item.voiceStatus,item)
+//            if (!kv.getString("userData", "").isNullOrEmpty()) {
+//                var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
+//                userData?.let {
+//                    if (it.userType.equals("01")||it.userType.equals("04")){
+//                        var status = 1
+//
+//                        if(item.status==1){
+//                            status = 2
+//                        }
+//                        setState(item.id,status,item.voiceStatus,item)
+//
+//                    }else{
+//                        Toast.makeText(context, "账号没有修改权限", Toast.LENGTH_SHORT).show()
+//
+//                    }
+//
+//
+//                }
+//
+//
+//            }
+
+        }
+        holder.tvkg2.setOnClickListener {
+            if (!kv.getString("userData", "").isNullOrEmpty()) {
+                var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
+                userData?.let {
+                    if (it.userType.equals("01")||it.userType.equals("04")){
+                        var voiceStatus = 1
+
+                        if(item.voiceStatus==1){
+                            voiceStatus = 2
+                        }else{
+                            voiceStatus = 1
+                        }
+                        setState(item.id,item.status,voiceStatus,item)
+
+                    }else{
+                        Toast.makeText(context, "账号没有修改权限", Toast.LENGTH_SHORT).show()
+
+                    }
+
+
+                }
+
+
+            }
+
+        }
         holder.kg2.setOnClickListener {
             if (!kv.getString("userData", "").isNullOrEmpty()) {
                 var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
@@ -112,6 +168,9 @@ class FMeetingDeList2Adapter: BaseBindingAdapter<SiginData, ListMeetingde2Bindin
         }
         holder.sz.setOnClickListener {
            startActivity<SigninSetActivity>("id" to ""+item.id)
+        }
+        holder.tvsz.setOnClickListener {
+            startActivity<SigninSetActivity>("id" to ""+item.id)
         }
 //        holder.qd.setOnClickListener {
 //

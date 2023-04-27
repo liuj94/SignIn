@@ -249,9 +249,9 @@
                         app:layout_constraintRight_toRightOf="parent"
                         android:layout_height="0dp"
                         app:layout_constraintHeight_default="wrap"
-                        app:layout_constraintHeight_max="350dp"
+                        app:layout_constraintHeight_max="400dp"
                         android:background="@drawable/shape_bg_f3f4f8_12"
-
+                        android:paddingTop="5dp"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"/>
 
@@ -286,12 +286,13 @@
                         android:id="@+id/srecyclerview3"
                         android:layout_width="match_parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        android:paddingTop="5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         android:layout_height="0dp"
                         app:layout_constraintHeight_default="wrap"
-                        app:layout_constraintHeight_max="350dp"
+                        app:layout_constraintHeight_max="400dp"
                         android:background="@drawable/shape_bg_f3f4f8_12"
 
                         android:paddingLeft="20dp"
@@ -325,8 +326,9 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         android:layout_height="0dp"
+                        android:paddingTop="5dp"
                         app:layout_constraintHeight_default="wrap"
-                        app:layout_constraintHeight_max="250dp"
+                        app:layout_constraintHeight_max="280dp"
                         android:minHeight="100dp"
                         android:background="@drawable/shape_bg_f3f4f8_12"
                         android:paddingLeft="20dp"

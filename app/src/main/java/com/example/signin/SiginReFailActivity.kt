@@ -4,9 +4,6 @@ import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.CountDownTimer
 import android.view.View
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.bumptech.glide.request.RequestOptions
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.base.StatusBarUtil
@@ -15,7 +12,7 @@ import com.example.signin.databinding.ActSigninStateBinding
 import java.util.HashMap
 
 
-class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel>() {
+class SiginReFailActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel>() {
     override fun initTranslucentStatus() {
         StatusBarUtil.setTranslucentStatus(this, Color.TRANSPARENT)
         //设置状态栏字体颜色
@@ -33,11 +30,10 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
     var success: String = ""
     var voiceStatus: String = "1"
     var autoStatus: String = "1"
-    var avatar: String = ""
     var mRingPlayer: MediaPlayer? = null
     override fun initData() {
+        binding.title.text = "签到"
         intent.getIntExtra("type", 0)?.let { type = it }
-        intent.getStringExtra("avatar")?.let { avatar = it }
         intent.getSerializableExtra("data")?.let {
             signUpUser = it as SignUpUser
         }
@@ -48,12 +44,9 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             params["userMeetingId"] = it.userMeetingId//用户参与会议id
             params["status"] = "2"//用户参与会议id
             it.meetingName?.let {meetingName-> binding.name.text = meetingName }
-            it.name?.let { name-> binding.userName.text = encode(name)
-                binding.userName.visibility = View.VISIBLE}
-            it.corporateName?.let {companyName-> binding.companyName.text = encode(companyName)
-                binding.companyName.visibility = View.VISIBLE}
-            it.userMeetingTypeName?.let {userMeetingTypeName->binding.type.text = encode(userMeetingTypeName)
-                binding.type.visibility = View.VISIBLE}
+            it.name?.let { name-> binding.userName.text = encode(name) }
+            it.corporateName?.let {companyName-> binding.companyName.text = encode(companyName) }
+            it.userMeetingTypeName?.let {userMeetingTypeName->binding.type.text = encode(userMeetingTypeName)  }
             it.timeLong?.let {t-> timeLong=t }
             it.success?.let {t-> success=t }
             it.voiceStatus?.let {t-> voiceStatus=t }
@@ -89,32 +82,23 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
         if (success.equals("1")) {
             if(voiceStatus.equals("1")){
 //                LiveDataBus.get().with("voiceStatus").postValue(okMsg)
-                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
-                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(okMsg);
+                if(SpeechUtils.getInstance(this@SiginReFailActivity).isSpeech){
+                    SpeechUtils.getInstance(this@SiginReFailActivity).speakText(okMsg);
                 }else{
-                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.cg);
+                    mRingPlayer = MediaPlayer.create(this@SiginReFailActivity, R.raw.cg);
                     mRingPlayer?.start();
                 }
             }
             binding.stateTv.text = okMsg
             binding.stateTv.setTextColor(Color.parseColor("#3974F6"))
-            if(avatar.isNullOrEmpty()){
-                binding.stateIv.setImageResource(R.mipmap.touxiang)
-            }else{
-                Glide.with(this@SiginReAutoActivity).load(PageRoutes.BaseUrl + avatar).apply(
-                    RequestOptions.bitmapTransform(
-                        CircleCrop()
-                    ))
-                    .error(R.mipmap.touxiang).into(binding.stateIv)
-            }
-
+            binding.stateIv.setImageResource(R.mipmap.qd2)
         } else if (success.equals("2")) {
             if(voiceStatus.equals("1")){
 //                LiveDataBus.get().with("voiceStatus").postValue(repeatMsg)
-                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
-                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(repeatMsg);
+                if(SpeechUtils.getInstance(this@SiginReFailActivity).isSpeech){
+                    SpeechUtils.getInstance(this@SiginReFailActivity).speakText(repeatMsg);
                 }else{
-                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.cf);
+                    mRingPlayer = MediaPlayer.create(this@SiginReFailActivity, R.raw.cf);
                     mRingPlayer?.start();
                 }
             }
@@ -127,10 +111,10 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             binding.stateIv.setImageResource(R.mipmap.cf_h)
             if(voiceStatus.equals("1")){
 //                LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
-                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
-                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(failedMsg);
+                if(SpeechUtils.getInstance(this@SiginReFailActivity).isSpeech){
+                    SpeechUtils.getInstance(this@SiginReFailActivity).speakText(failedMsg);
                 }else{
-                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.qdsb);
+                    mRingPlayer = MediaPlayer.create(this@SiginReFailActivity, R.raw.qdsb);
                     mRingPlayer?.start();
                 }
             }

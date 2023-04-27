@@ -48,8 +48,9 @@ var businessId = ""
         intent.getStringExtra("businessId")?.let {
             businessId = it
         }
-        mViewModel.isShowLoading.value = true
-        getData()
+//        mViewModel.isShowLoading.value = true
+//        getData()
+        getFragmentLists()
         LiveDataBus.get().with("selectLlVISIBLE", String::class.java)
             .observeForever {
                 binding.zhez.visibility = View.VISIBLE

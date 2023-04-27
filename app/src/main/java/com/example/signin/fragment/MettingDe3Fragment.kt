@@ -73,6 +73,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 adapterSelect3?.notifyDataSetChanged()
                 binding.selectLl3.visibility = View.GONE
                 LiveDataBus.get().with("selectLlGONE").postValue("1")
+                list.clear()
                 getList()
             }
         }
@@ -239,6 +240,13 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         var url =
 //            PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&orderByColumn=createTime&isAsc=desc&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
             PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&signUpId=" + signUpId +"&signUpLocationId="+signUpLocationId+ "&pageSize=10&pageNum=" + pageNum
+       if(signUpLocationId.isNullOrEmpty()||signUpLocationId.equals("0")){
+            url =
+//            PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&orderByColumn=createTime&isAsc=desc&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
+               PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
+
+       }
+
         if (!status.isNullOrEmpty()) {
             url = "$url&signUpStatus=$status"
         }
@@ -358,6 +366,10 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                     super.onMySuccess(data)
                     try {
                         selectList3.clear()
+                        var a = SiginData()
+                        a.name = "全部"
+                        a.id = 0
+                        selectList3.add(a)
                         selectList3.addAll(data)
                         selectList3[0].isMyselect = true
                         signUpLocationId = "" + selectList3[0].id

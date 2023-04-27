@@ -94,7 +94,7 @@
                     android:id="@+id/dd_Type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="开票类型"
+                    android:text=""
                     android:textColor="#ff7d8592"
                     android:textSize="12sp"
                     />
@@ -110,7 +110,7 @@
                     android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="¥50.00"
+                    android:text=""
                     android:textColor="#ff030303"
                     android:textSize="19sp"
                     />
@@ -119,7 +119,7 @@
                     android:id="@+id/dd_Num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="发票票号"
+                    android:text=""
                     android:textColor="#ff7d8592"
                     android:textSize="12sp"
                     />

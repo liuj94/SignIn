@@ -97,7 +97,7 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
             }
         }
 
-        getData()
+//        getData()
         binding.img.setOnClickListener {
             activity?.let { it1 -> takePhotoDialog(it1) { submitUserAvatar(it) } }
         }
@@ -114,7 +114,7 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
             getUserInfo {
                 setUserData()
             }
-            getData()
+//            getData()
         }
         binding.refresh.setEnableLoadMore(false)
     }

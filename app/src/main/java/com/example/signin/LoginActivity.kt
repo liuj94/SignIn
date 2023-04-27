@@ -67,6 +67,14 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
 
                                 override fun onMySuccess(data: User) {
                                     super.onMySuccess(data)
+                                    if (data.userType.equals("01")||data.userType.equals("04")){
+                                        data.name = binding.userName.text.toString().trim()
+                                        data.password = binding.password.text.toString().trim()
+                                        kv.putString("userData",JSON.toJSONString(data))
+                                        startActivity<MainHomeActivity>()
+                                        finish()
+                                    }else{
+
 
                                     if(data.userName.isNullOrEmpty()||data.phonenumber.isNullOrEmpty()){
                                         MaterialDialog(this@LoginActivity).show {
@@ -94,6 +102,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                                         startActivity<MainHomeActivity>()
                                          finish()
 
+                                    }
                                     }
                                 }
 
