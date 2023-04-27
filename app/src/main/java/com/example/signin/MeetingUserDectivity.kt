@@ -3,7 +3,6 @@ package com.example.signin
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.alibaba.fastjson.JSON
@@ -22,6 +21,7 @@ import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import sigin
+import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -311,12 +311,12 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             binding.itemDdxx.ll.visibility = View.VISIBLE
             it.ticketName?.let {ticketName->  binding.itemDdxx.ddName.text = ticketName }
             it.amount?.let {amount->  binding.itemDdxx.ddPrice.text = "¥" + amount
-                cAmount = amount.toDouble()}
+                try {
+                    cAmount = BigDecimal(amount).toDouble()
+                }catch (e:Exception){}
 
+            }
 
-            Log.d("cAmount","it.amount=="+it.amount)
-
-            Log.d("cAmount","cAmount=="+cAmount)
             if(cAmount>0){
                 binding.itemDdxx.ddType.text =
                     "开票类型:"

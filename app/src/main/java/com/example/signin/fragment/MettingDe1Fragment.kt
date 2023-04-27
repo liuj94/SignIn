@@ -19,6 +19,7 @@ import com.example.signin.bean.SiginUpListModel
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
+import java.math.BigDecimal
 import java.text.DecimalFormat
 
 /**
@@ -105,9 +106,12 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
                         var s = df.format(amount);
                        if(amount>=10000){
                            binding.danwei.text = "门票总收入(万元)"
-                           binding.num3.text = s
+                           var b1 =  BigDecimal(amount);
+                           var b2 =  BigDecimal(10000);
+                           binding.num3.text = ""+b1.divide(b2)
                        }  else{
                            binding.danwei.text = "门票总收入(元)"
+                           binding.num3.text = s
                        }
 
                     }
@@ -139,6 +143,7 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
             })
     }
+
 
     fun setNumData(todayInsertUserCount: Int, yesterdayInsertUserCount: Int, tv: TextView) {
         if (todayInsertUserCount > yesterdayInsertUserCount) {

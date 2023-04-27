@@ -6,10 +6,14 @@ import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
+import com.example.signin.bean.MeetingUserDeData
 import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActScanBinding
+import com.example.signin.net.RequestCallback
 import com.example.signin.scan.KeyEventResolver
 import com.hello.scan.ScanCallBack
+import com.lzy.okgo.OkGo
+import com.lzy.okgo.model.Response
 import sigin
 
 class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCodeView.Delegate,
@@ -64,44 +68,27 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
         result?.let {param->
             var signUpUser = JSON.parseObject(param, SignUpUser::class.java)
             if(signUpUser.id.isNullOrEmpty()){
-                toast("请提供正确会议二维码")
-                return
-            }
-            signUpUser.signUpLocationId = id
-            signUpUser.meetingName = name
-            signUpUser.signUpId = signUpId
-            signUpUser.userMeetingId = signUpUser.id
-            signUpUser.meetingId = signUpUser.meetingId
-            signUpUser.userMeetingTypeName = signUpUser.supplement
-            signUpUser.autoStatus =  autoStatus
-            signUpUser.timeLong =  timeLong
-            signUpUser.okMsg = okMsg
-            signUpUser.failedMsg = failedMsg
-            signUpUser.repeatMsg = repeatMsg
-            signUpUser.voiceStatus = voiceStatus
-            if(showType==3){
-                com.dylanc.longan.startActivity<SiginReActivity>(
+                signUpUser.signUpLocationId = id
+                signUpUser.meetingName = name
+                signUpUser.signUpId = signUpId
+                signUpUser.userMeetingId = ""
+                signUpUser.meetingId = ""
+                signUpUser.userMeetingTypeName = ""
+                signUpUser.autoStatus =  autoStatus
+                signUpUser.timeLong =  timeLong
+                signUpUser.okMsg = okMsg
+                signUpUser.failedMsg = failedMsg
+                signUpUser.repeatMsg = repeatMsg
+                signUpUser.voiceStatus = voiceStatus
+                signUpUser.success = "500"
+                com.dylanc.longan.startActivity<SiginReAutoActivity>(
                     "type" to showType,
                     "data" to signUpUser
                 )
-            }else{
-                var params = java.util.HashMap<String, String>()
-                params["meetingId"] = signUpUser.meetingId//会议id
-                params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
-                params["signUpId"] = signUpUser.signUpId//签到站id
-                params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
-                params["status"] = "2"//用户参与会议id
-                sigin(JSON.toJSONString(params),{ success->
-                    signUpUser.success = success
-                    com.dylanc.longan.startActivity<SiginReAutoActivity>(
-                        "type" to showType,
-                        "data" to signUpUser
-                    )
-                },{  signUpUser.success = "500"
-                    com.dylanc.longan.startActivity<SiginReAutoActivity>(
-                        "type" to showType,
-                        "data" to signUpUser
-                    )},{})}
+                return
+            }
+            getData(signUpUser.id)
+
 //            if(autoStatus.equals("1")){
 //
 //            }else{
@@ -113,7 +100,76 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
         }
 
     }
+    private fun getData(userid:String) {
+        mViewModel.isShowLoading.value = true
+        OkGo.get<MeetingUserDeData>(PageRoutes.Api_meetinguser_data + userid + "?id=" + userid)
+            .tag(PageRoutes.Api_meetinguser_data + userid + "?id=" + userid)
+            .headers("Authorization", kv.getString("token", ""))
+            .execute(object : RequestCallback<MeetingUserDeData>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
 
+                }
+
+                override fun onMySuccess(data: MeetingUserDeData) {
+                    super.onMySuccess(data)
+                    var signUpUser = SignUpUser()
+                    signUpUser.signUpLocationId = id
+                    signUpUser.meetingName = name
+                    signUpUser.signUpId = signUpId
+                    signUpUser.userMeetingId = userid
+                    signUpUser.meetingId = ""+data.meetingId
+                    signUpUser.userMeetingTypeName = ""+data.userMeetingTypeName
+                    signUpUser.autoStatus =  autoStatus
+                    signUpUser.timeLong =  timeLong
+                    signUpUser.okMsg = okMsg
+                    signUpUser.failedMsg = failedMsg
+                    signUpUser.repeatMsg = repeatMsg
+                    signUpUser.voiceStatus = voiceStatus
+                    if(showType==3){
+                        com.dylanc.longan.startActivity<SiginReActivity>(
+                            "type" to showType,
+                            "data" to signUpUser
+                        )
+                    }else{
+                        var avatar = ""
+                        data.avatar?.let { avatar = it }
+                        var params = java.util.HashMap<String, String>()
+                        params["meetingId"] = signUpUser.meetingId//会议id
+                        params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
+                        params["signUpId"] = signUpUser.signUpId//签到站id
+                        params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
+                        params["status"] = "2"//用户参与会议id
+                        sigin(JSON.toJSONString(params),{ success->
+                            signUpUser.success = success
+                            com.dylanc.longan.startActivity<SiginReAutoActivity>(
+                                "type" to showType,
+                                "data" to signUpUser,
+                                "avatar" to avatar
+                            )
+                        },{  signUpUser.success = "500"
+                            com.dylanc.longan.startActivity<SiginReAutoActivity>(
+                                "type" to showType,
+                                "data" to signUpUser,
+                                "avatar" to avatar
+                            )},{})}
+
+
+                }
+
+                override fun onError(response: Response<MeetingUserDeData>) {
+                    super.onError(response)
+
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+                    mViewModel.isShowLoading.value = false
+                }
+
+
+            })
+    }
     override fun onCameraAmbientBrightnessChanged(isDark: Boolean) {
 
     }
