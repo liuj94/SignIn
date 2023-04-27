@@ -10,10 +10,21 @@
 
 
         android:padding="20dp">
-
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/kuan"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="注册签到"
+            android:textColor="#ff333333"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
 
         <TextView
+
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -65,6 +65,16 @@ public class SiginData implements Serializable {
      */
 
     private String searchValue= "";
+    private boolean kuan= false;
+
+    public boolean isKuan() {
+        return kuan;
+    }
+
+    public void setKuan(boolean kuan) {
+        this.kuan = kuan;
+    }
+
     private String meetingSignUpCount= "";
     private String modelType= "";
 

@@ -22,9 +22,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 //    ,
 //    KeyEventResolver.OnScanSuccessListener
 {
-    companion object {
-        var isScan = false
-    }
+
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
     var isMainHome = true
 
@@ -54,7 +52,10 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                                                     getDataType("transport_type") {
                                                         getDataType("sys_examine_reason") {
                                                             getDataType("pay_status") {
-                                                                getDataType("user_type") {}
+                                                                getDataType("user_type") {
+//                                                                    getDataType("signSiteType") {}
+                                                                }
+
                                                             }
 
                                                         }

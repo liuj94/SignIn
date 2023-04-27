@@ -13,10 +13,18 @@ class SelectMeetingAdapter2: BaseBindingAdapter<SiginData, ListTcMeetingdeBindin
 
     override fun onBindViewHolder(holder: ListTcMeetingdeBinding, item: SiginData, position: Int) {
         holder.name.text =  item.name
+        holder.kuan.text =  item.name
         if(item.isMyselect){
             holder.img.visibility = View.VISIBLE
         }else{
             holder.img.visibility = View.GONE
+        }
+        if(item.isKuan){
+            holder.name.visibility = View.GONE
+            holder.kuan.visibility = View.VISIBLE
+        }else{
+            holder.kuan.visibility = View.GONE
+            holder.name.visibility = View.VISIBLE
         }
 
     }

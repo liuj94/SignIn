@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSON
 import com.common.apiutil.decode.DecodeReader
 import com.common.apiutil.util.SystemUtil
 import com.dylanc.longan.startActivity
+import com.dylanc.longan.toast
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.SignUpUser
@@ -37,15 +38,14 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
     var okMsg:String = "签到成功"
     var repeatMsg:String = "重复签到"
     var voiceStatus:String = "2"
-    private var mDecodeReader: DecodeReader? = null
+
 
     override fun initData() {
-       Log.d("initData","SystemUtil.getInternalModel()="+SystemUtil.getInternalModel())
-        if(SystemUtil.getInternalModel().equals("P8")){
-            openHardreader()
-        }else{
-            ScanTool.GET.initSerial(this, "/dev/ttyACM0", 115200, this@ScanActivity)
-        }
+//        if(SystemUtil.getInternalModel().equals("P8")){
+//            openHardreader()
+//        }else{
+//            ScanTool.GET.initSerial(this, "/dev/ttyACM0", 115200, this@ScanActivity)
+//        }
 //        ScanTool.GET.initSerial(this, "/dev/ttyACM0", 115200, this@ScanActivity)
 //        openHardreader()
         intent.getStringExtra("id")?.let { id = it }
@@ -63,45 +63,17 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
         binding.mZXingView.setDelegate(this)
 
     }
-    private fun openHardreader() {
-        if (mDecodeReader == null) {
-            mDecodeReader = DecodeReader(this) //初始化
-        }
 
-        mDecodeReader?.setDecodeReaderListener { data ->
-            try {
-                val str = String(data, StandardCharsets.UTF_8)
-                runOnUiThread {
-                   goRe(str)
-                }
-            } catch (e: UnsupportedEncodingException) {
-                e.printStackTrace()
-            }
-        }
 
-        mDecodeReader?.close()
-    }
 
-    /**
-     * 截获按键事件.发给ScanGunKeyEventHelper
-     */
-    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        //要是重虚拟键盘输入怎不拦截
-        if ("Virtual" == event.device.name) {
-            return super.dispatchKeyEvent(event)
-        }
-//        if(SystemUtil.getInternalModel().equals("P8")){
-         mDecodeReader?.open(115200)
-//        }
-//        mKeyEventResolver?.analysisKeyEvent(event)
-//        Toast.makeText(this,"ret="+ret,Toast.LENGTH_LONG).show();
-        return true
-    }
     override fun onScanQRCodeSuccess(result: String?) {
 
         result?.let {param->
             var signUpUser = JSON.parseObject(param, SignUpUser::class.java)
-
+            if(signUpUser.id.isNullOrEmpty()){
+                toast("请提供正确会议二维码")
+                return
+            }
             signUpUser.signUpLocationId = id
             signUpUser.meetingName = name
             signUpUser.signUpId = signUpId
@@ -180,8 +152,6 @@ var scanQRCodeOpenCameraError = false
             binding.mZXingView.stopSpotAndHiddenRect()
         }
         super.onStop()
-        if(SystemUtil.getInternalModel().equals("P8")){
-        mDecodeReader?.close()}
     }
 var isPause =true
     override fun onScanCallBack(data: String?) {
@@ -244,19 +214,15 @@ var isPause =true
                 )
             }
         } catch (e: Exception) {
+            toast("二维码解析失败")
         }
     }
 
     override fun onDestroy() {
-        MainHomeActivity.isScan = false
         if(!scanQRCodeOpenCameraError){
         binding.mZXingView.onDestroy() }
         // 销毁二维码扫描控件
         super.onDestroy()
-
-
-        mDecodeReader?.close()
-        ScanTool.GET.release()
     }
 
     override fun onScanSuccess(barcode: String?) {

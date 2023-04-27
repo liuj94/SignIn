@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.common.apiutil.ResultCode;
 import com.common.apiutil.decode.DecodeReader;
@@ -20,7 +21,7 @@ import com.example.signin.R;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
-public class DecodeReaderActivity extends Activity implements KeyEventResolver.OnScanSuccessListener {
+public class DecodeReaderActivity extends Activity   {
 
     private DecodeReader mDecodeReader;
     private TextView tvDataShow, circleCountShow;
@@ -31,7 +32,6 @@ public class DecodeReaderActivity extends Activity implements KeyEventResolver.O
     private ArrayAdapter<String> mCharsetAdapter;
     private int mCharsetIndex = -1;
 
-    private KeyEventResolver mKeyEventResolver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,14 +90,13 @@ public class DecodeReaderActivity extends Activity implements KeyEventResolver.O
         if (mDecodeReader == null) {
             mDecodeReader = new DecodeReader(this);//初始化
         }
-        mKeyEventResolver = new KeyEventResolver(this);
+
 
         mDecodeReader.setDecodeReaderListener(new IDecodeReaderListener() {
 
             @Override
             public void onRecvData(byte[] data) {
-                // TODO Auto-generated method stub
-
+                tvDataShow.setText("data="+data.toString());
                 try {
                     final String str = new String(data, mCharsetAdapter.getItem(mCharsetIndex));
                     runOnUiThread(new Runnable() {
@@ -109,8 +108,9 @@ public class DecodeReaderActivity extends Activity implements KeyEventResolver.O
                         }
                     });
                 } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+//                    e.printStackTrace();
+                    circleCountShow.setText("UnsupportedEncodingException="+e.getMessage());
+                    }
             }
         });
     }
@@ -133,22 +133,16 @@ public class DecodeReaderActivity extends Activity implements KeyEventResolver.O
         if ("Virtual".equals(event.getDevice().getName())) {
             return super.dispatchKeyEvent(event);
         }
-        mKeyEventResolver.analysisKeyEvent(event);
+
         return true;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mKeyEventResolver.onDestroy();
+
     }
 
-    @Override
-    public void onScanSuccess(String barcode) {
-        tvDataShow.setText(barcode);
-        successCount++;
-        circleCountShow.setText("成功"+"[" + successCount + "]");
-    }
 
     private AdapterView.OnItemSelectedListener spnCharsetListener = new AdapterView.OnItemSelectedListener() {
         @Override
