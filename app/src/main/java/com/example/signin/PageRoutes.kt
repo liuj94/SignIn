@@ -74,12 +74,48 @@ interface PageRoutes {
         val Api_upload = "$BaseUrlApi/common/upload"
 
         val Api_billfinish = "$BaseUrlApi/manager/meeting/order/bill/finish"
-//        val Api_bill = "$BaseUrlApi/manager/meeting/order/bill/{orderId}"
-        val Api_bill = "$BaseUrlApi/manager/meeting/order/bill/"
+
 
         val Api_detect = "$BaseUrlApi/common/baidu/aip/detect?img="
         val Api_search = "$BaseUrlApi/common/baidu/aip/search?img="
         val Api_balance = "$BaseUrlApi/manager/business/current/balance?aBusinessId="
+
+        /**
+         * {
+        "beginCreateDate": "",
+        "beginCreateTime": "",
+        "createBy": "",
+        "createTime": "",
+        "dateFormat": "",
+        "dateType": 0,
+        "endAddress": "",
+        "endCity": "",
+        "endCreateDate": "",
+        "endCreateTime": "",
+        "endDate": "",
+        "endTime": "",
+        "groupBy": "",
+        "id": 0,
+        "params": {},
+        "remark": "",
+        "searchValue": "",
+        "signUpId": 0,
+        "startAddress": "",
+        "startCity": "",
+        "startDate": "",
+        "startTime": "",
+        "transport": "",
+        "type": 0,
+        "updateBy": "",
+        "updateTime": "",
+        "userId": 0,
+        "userMeetingId": 0
+        }
+         */
+        val Api_trip = "$BaseUrlApi/manager/userMeetingTrip/trip"
+        val Api_get_trip = "$BaseUrlApi/manager/userMeetingTrip/trip/"
+        //        val Api_bill = "$BaseUrlApi/manager/meeting/order/bill/{orderId}"
+        val Api_bill = "$BaseUrlApi/manager/meeting/order/bill/"
 
         val baiduToken = "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=Va5yQRHlA4Fq5eR3LT0vuXV4&client_secret=0rDSjzQ20XUj5itV6WRtznPQSzr5pVw2&"
 

@@ -121,7 +121,26 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             binding.stateTv.text = repeatMsg
             binding.stateTv.setTextColor(Color.parseColor("#FFC300"))
             binding.stateIv.setImageResource(R.mipmap.qd3)
-        } else {
+        } else if(success.equals("501")) {
+            binding.userName.visibility = View.GONE
+            binding.companyName.visibility = View.GONE
+            binding.type.visibility = View.GONE
+            binding.stateTv.text = failedMsg
+            binding.stateTv.setTextColor(Color.parseColor("#D43030"))
+            binding.stateIv.setImageResource(R.mipmap.cf_h)
+            if(voiceStatus.equals("1")){
+//                LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
+                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
+                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(failedMsg);
+                }else{
+                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.qdsb);
+                    mRingPlayer?.start();
+                }
+            }
+        }else {
+            binding.userName.visibility = View.GONE
+            binding.companyName.visibility = View.GONE
+            binding.type.visibility = View.GONE
             binding.stateTv.text = failedMsg
             binding.stateTv.setTextColor(Color.parseColor("#D43030"))
             binding.stateIv.setImageResource(R.mipmap.cf_h)

@@ -95,30 +95,35 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
                 override fun onMySuccess(data: MeetingStatisticsData) {
                     super.onMySuccess(data)
-                    binding.num1.text = data.browseCount
-                    binding.num2.text = data.userMeetingCount
-                    if(data.totalAmount.isNullOrEmpty()){
-                        binding.num3.text = "0.00"
-                    }else{
-                        binding.num3.text = data.totalAmount
-                      var amount = data.totalAmount.toDouble()
-                        var df =  DecimalFormat("0.00");
-                        var s = df.format(amount);
-                       if(amount>=10000){
-                           binding.danwei.text = "门票总收入(万元)"
-                           var b1 =  BigDecimal(amount);
-                           var b2 =  BigDecimal(10000);
-                           binding.num3.text = ""+b1.divide(b2)
-                       }  else{
-                           binding.danwei.text = "门票总收入(元)"
-                           binding.num3.text = s
-                       }
+//                    binding.num1.text = data.browseCount
+//                    binding.num2.text = data.userMeetingCount
+//                    binding.num2.text = data.userMeetingCount
 
-                    }
+                    binding.num1.text = toNum(data.browseCount)
+                    binding.num2.text = toNum(data.userMeetingCount)
+//                    binding.num3.text = toNum(data.totalAmount)
+                    binding.num3.text = toNum("123456.54")
+//                    if(data.totalAmount.isNullOrEmpty()){
+//                        binding.num3.text = "0.00"
+//                    }else{
+////                        binding.num3.text = data.totalAmount
+//                        data.totalAmount = "123456.54"
+//                      var amount = data.totalAmount.toDouble()
+//                        var df =  DecimalFormat("0.00");
+//                        var s = df.format(amount);
+//                       if(amount>=10000){
+//                           var b1 =  BigDecimal(amount);
+//                           var b2 =  BigDecimal(10000);
+//                           binding.num3.text = ""+b1.divide(b2)+"万"
+//                       }  else{
+//                           binding.num3.text = s
+//                       }
+//
+//                    }
 
-                    binding.num4.text = "" + data.todayInsertUserCount
-                    binding.num5.text = "" + data.todayBeReviewedCount
-                    binding.num6.text = "" + data.leaveCount
+                    binding.num4.text =  toNum("" +data.todayInsertUserCount)
+                    binding.num5.text =  toNum("" +data.todayBeReviewedCount)
+                    binding.num6.text =  toNum("" +data.leaveCount)
                     setNumData(
                         data.todayInsertUserCount,
                         data.yesterdayInsertUserCount,
@@ -142,6 +147,24 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
 
             })
+    }
+    fun toNum(data:String?) : String{
+        if(data.isNullOrEmpty()){
+            return "0"
+        }
+        var d = "0"
+        var amount = data.toDouble()
+        var df =  DecimalFormat("0.00");
+        var s = df.format(amount);
+        if(amount>=10000){
+            var b1 =  BigDecimal(amount);
+            var b2 =  BigDecimal(10000);
+//            d = ""+b1.divide(b2)+"万"
+            d = ""+b1.divide(b2,2,BigDecimal.ROUND_DOWN)+"万"
+        }  else{
+            d = data
+        }
+        return d
     }
 
 

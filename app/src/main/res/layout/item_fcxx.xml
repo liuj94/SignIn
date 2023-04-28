@@ -67,7 +67,20 @@
                 android:textColor="#ff333333"
                 android:textSize="14sp"
                 />
-
+            <TextView
+                android:id="@+id/edit"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="修改"
+                android:textColor="#ff2196F3"
+                android:textSize="14sp"
+                />
         </LinearLayout>
         <LinearLayout
             android:paddingLeft="20dp"

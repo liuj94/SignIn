@@ -185,6 +185,9 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                                     mRingPlayer?.start();
                                 }
                             } else {
+                                binding.userName.visibility = View.GONE
+                                binding.companyName.visibility = View.GONE
+                                binding.type.visibility = View.GONE
                                 binding.stateTv.text = failedMsg
                                 binding.stateTv.setTextColor(Color.parseColor("#D43030"))
                                 binding.stateIv.setImageResource(R.mipmap.cf_h)
@@ -207,6 +210,9 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
 
                 override fun onError(response: Response<String>) {
                     super.onError(response)
+                    binding.userName.visibility = View.GONE
+                    binding.companyName.visibility = View.GONE
+                    binding.type.visibility = View.GONE
                     mViewModel.isShowLoading.value = false
                     binding.stateTv.text = failedMsg
                     binding.stateTv.setTextColor(Color.parseColor("#D43030"))

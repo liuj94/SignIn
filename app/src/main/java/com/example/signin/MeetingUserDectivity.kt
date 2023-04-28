@@ -12,10 +12,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.dylanc.longan.startActivity
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
-import com.example.signin.bean.MeetingUserDeData
-import com.example.signin.bean.SignUpUser
-import com.example.signin.bean.TypeData
-import com.example.signin.bean.TypeModel
+import com.example.signin.bean.*
 import com.example.signin.databinding.ActMeetingUserInfoBinding
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
@@ -79,6 +76,9 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
             }
         }
+//1来程2返程
+        binding.itemFcxx.edit.setOnClickListener {  startActivity<XCActivity>("type" to 1,"userMeetingId" to id ) }
+        binding.itemLcxx.edit.setOnClickListener {  startActivity<XCActivity>("type" to 2,"userMeetingId" to id) }
         binding.itemDdxx.ll.setOnClickListener {
             startActivity<ExamineActivity>("order" to order)
         }
@@ -200,7 +200,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
 
     }
-
+var meetingUserDeData:MeetingUserDeData?=null
     private fun getData() {
         mViewModel.isShowLoading.value = true
         OkGo.get<MeetingUserDeData>(PageRoutes.Api_meetinguser_data + id + "?id=" + id)
@@ -214,6 +214,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
                 override fun onMySuccess(data: MeetingUserDeData) {
                     super.onMySuccess(data)
+                    meetingUserDeData = data
                     try {
                         setDate(data)
                     } catch (e: java.lang.Exception) {
@@ -373,6 +374,11 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         }
         for (item in data.meetingSignUps) {
             when (item.type) {
+                8->{
+                    item.meetingSignUpLocation?.let {
+                        it.name?.let { name -> order.meetingSignUpLocationName = name }
+                    }
+                }
                 1 -> {
                     try {
                         //注册报到
@@ -952,4 +958,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
 
     }
+
+
+
 }

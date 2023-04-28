@@ -167,6 +167,8 @@ fun select() {
             scrollable = true,			//让自定义宽高生效
             noVerticalPadding = true    //让自定义高度生效
         ).apply{
+            findViewById<RecyclerView>(R.id.btn1).setOnClickListener { dismiss() }
+            findViewById<RecyclerView>(R.id.btn2).setOnClickListener { examine() }
             findViewById<RecyclerView>(R.id.gb).setOnClickListener { dismiss() }
             findViewById<RecyclerView>(R.id.recyclerView).layoutManager = LinearLayoutManager(activity)
             var model = JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
@@ -182,7 +184,7 @@ fun select() {
                     failRemark = items[position].dictLabel
                     params["failRemark"] = failRemark
                     params["examine"] = false
-                    examine()
+
                 }
             }
 

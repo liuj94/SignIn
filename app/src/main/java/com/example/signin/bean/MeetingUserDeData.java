@@ -348,6 +348,7 @@ public class MeetingUserDeData implements Serializable {
          */
 
         private String searchValue= "";
+        private String qr= "";
         private String supplement= "";
         private String createBy= "";
         private String createTime= "";
@@ -393,7 +394,25 @@ public class MeetingUserDeData implements Serializable {
         private String payConfigId;
         private String meetingPayId;
         private String name;
+        private String meetingSignUpLocationName;
+
+        public String getMeetingSignUpLocationName() {
+            return meetingSignUpLocationName;
+        }
+
+        public void setMeetingSignUpLocationName(String meetingSignUpLocationName) {
+            this.meetingSignUpLocationName = meetingSignUpLocationName;
+        }
+
         private String mobile;
+
+        public String getQr() {
+            return qr;
+        }
+
+        public void setQr(String qr) {
+            this.qr = qr;
+        }
 
         public String getSupplement() {
             return supplement;

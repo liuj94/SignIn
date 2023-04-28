@@ -200,9 +200,9 @@
                                     android:textColor="#ff4d4d4d"
                                     android:textSize="14sp" />
 
-                                <EditText
+                                <TextView
                                     android:windowSoftInputMode="adjustPan"
-                                    android:hint="请输入发票代码"
+                                    android:hint=""
                                     android:singleLine="true"
                                     android:maxLines="1"
                                     android:background="#fff"
@@ -230,8 +230,8 @@
                                     android:textColor="#ff4d4d4d"
                                     android:textSize="14sp" />
 
-                                <EditText
-                                    android:hint="请输入发票号码"
+                                <TextView
+                                    android:hint=""
                                     android:singleLine="true"
                                     android:maxLines="1"
                                     android:background="#fff"
@@ -246,6 +246,7 @@
                         </LinearLayout>
 
                         <ImageView
+                            android:id="@+id/sm"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_marginRight="18dp"
