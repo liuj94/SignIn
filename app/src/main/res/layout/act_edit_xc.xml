@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#F3F4F8">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -26,5 +27,302 @@
             android:textSize="16sp"
             android:textStyle="bold" />
     </RelativeLayout>
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:background="@color/white"
+            android:padding="15dp"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <View
+                android:layout_width="3dp"
+                android:layout_height="15dp"
+                android:background="#ff3974f6" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="基础信息"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:paddingBottom="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="行程"
+                android:layout_marginRight="10dp"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+            <EditText
+                android:background="@color/white"
+                android:id="@+id/startCity"
+                android:minWidth="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColorHint="#999999"
+                android:hint="请输入起始地点"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp"
+                android:background="#eee"/>
+            <EditText
+                android:background="@color/white"
+                android:id="@+id/endCity"
+                android:textColorHint="#999999"
+                android:minWidth="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="请输入目的地点"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:paddingBottom="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="出行方式"
+                android:layout_marginRight="10dp"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请选择出行方式"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:paddingBottom="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="相关备注"
+                android:layout_marginRight="10dp"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+            <EditText
+                android:background="@color/white"
+                android:minWidth="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColorHint="#999999"
+                android:hint="航班号、高铁车次等"
+                android:textColor="#ff333333"
+                android:textSize="15sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:background="@color/white"
+            android:padding="15dp"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <View
+                android:layout_width="3dp"
+                android:layout_height="15dp"
+                android:background="#ff3974f6" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="更多信息"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:paddingBottom="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="出发日期"
+                android:layout_marginRight="10dp"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请选择出行方式"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:paddingBottom="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="出发时间"
+                android:layout_marginRight="10dp"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请选择出行方式"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:paddingBottom="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="出发地"
+                android:layout_marginRight="10dp"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+            <EditText
+                android:background="@color/white"
+                android:id="@+id/startAddress"
+                android:minWidth="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColorHint="#999999"
+                android:hint="机场/高铁站名称"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:paddingBottom="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="到达日期"
+                android:layout_marginRight="10dp"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请选择出行方式"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:paddingBottom="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="到达时间"
+                android:layout_marginRight="10dp"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请选择出行方式"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:paddingBottom="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="到达地"
+                android:layout_marginRight="10dp"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+            <EditText
+                android:background="@color/white"
+                android:id="@+id/endAddress"
+                android:minWidth="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColorHint="#999999"
+                android:hint="机场/高铁站名称"
+                android:textColor="#ff333333"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/btn"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/shape_bg_3974f6_24"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="#ffffffff"
+            android:textSize="12sp" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

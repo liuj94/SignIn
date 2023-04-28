@@ -20,8 +20,12 @@ class XCActivity  : BaseBindingActivity<ActEditXcBinding, BaseViewModel>() {
         //1来程2返程
         if(type==1){
             binding.title.text ="修改来程信息"
+            binding.endCity.isFocusable = false
+            binding.endCity.isFocusableInTouchMode = false
         }else{
             binding.title.text ="修改返程信息"
+            binding.startCity.isFocusable = false
+            binding.startCity.isFocusableInTouchMode = false
         }
 
         getData()
