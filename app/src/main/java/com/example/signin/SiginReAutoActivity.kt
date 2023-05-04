@@ -59,6 +59,47 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             it.voiceStatus?.let {t-> voiceStatus=t }
             it.autoStatus?.let {t-> autoStatus=t }
 
+
+            if(it.name.isNullOrEmpty()){
+                if(it.corporateName.isNullOrEmpty()){
+                    if(it.userMeetingTypeName.isNullOrEmpty()){
+                        binding.userName.text = ""
+                        binding.companyName.text = ""
+                        binding.type.text = ""
+                    }else{
+                        binding.userName.text = it.userMeetingTypeName
+                    }
+
+                }else{
+                    binding.userName.text = it.corporateName
+                    if(it.userMeetingTypeName.isNullOrEmpty()){
+                        binding.companyName.text = ""
+                        binding.type.text = ""
+                    }else{
+                        binding.companyName.text = it.userMeetingTypeName
+                    }
+                }
+
+            }else{
+                binding.userName.text = it.name
+                if(it.corporateName.isNullOrEmpty()){
+                    if(it.userMeetingTypeName.isNullOrEmpty()){
+                        binding.companyName.text = ""
+                        binding.type.text = ""
+                    }else{
+                        binding.companyName.text = it.userMeetingTypeName
+                    }
+
+                }else{
+                    binding.companyName.text = it.corporateName
+                    if(it.userMeetingTypeName.isNullOrEmpty()){
+                        binding.type.text = ""
+                    }else{
+                        binding.type.text = it.userMeetingTypeName
+                    }
+                }
+            }
+
         }
 //        1 注册签到2 来程签到3 入住签到4 会场签到5 餐饮签到6 礼品签到7 返程签到
         binding.numEt.visibility = View.INVISIBLE
@@ -99,13 +140,13 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             binding.stateTv.text = okMsg
             binding.stateTv.setTextColor(Color.parseColor("#3974F6"))
             if(avatar.isNullOrEmpty()){
-                binding.stateIv.setImageResource(R.mipmap.touxiang)
+                binding.stateIv.setImageResource(R.mipmap.qd2)
             }else{
                 Glide.with(this@SiginReAutoActivity).load(PageRoutes.BaseUrl + avatar).apply(
                     RequestOptions.bitmapTransform(
                         CircleCrop()
                     ))
-                    .error(R.mipmap.touxiang).into(binding.stateIv)
+                    .error(R.mipmap.qd2).into(binding.stateIv)
             }
 
         } else if (success.equals("2")) {
@@ -122,12 +163,15 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             binding.stateTv.setTextColor(Color.parseColor("#FFC300"))
             binding.stateIv.setImageResource(R.mipmap.qd3)
         } else if(success.equals("501")) {
-            binding.userName.visibility = View.GONE
-            binding.companyName.visibility = View.GONE
-            binding.type.visibility = View.GONE
+            binding.userName.text = ""
+            binding.companyName.text = ""
+            binding.type.text = ""
+//            binding.userName.visibility = View.GONE
+//            binding.companyName.visibility = View.GONE
+//            binding.type.visibility = View.GONE
             binding.stateTv.text = failedMsg
             binding.stateTv.setTextColor(Color.parseColor("#D43030"))
-            binding.stateIv.setImageResource(R.mipmap.cf_h)
+            binding.stateIv.setImageResource(R.mipmap.cw_h)
             if(voiceStatus.equals("1")){
 //                LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
                 if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
@@ -138,12 +182,15 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                 }
             }
         }else {
-            binding.userName.visibility = View.GONE
-            binding.companyName.visibility = View.GONE
-            binding.type.visibility = View.GONE
+//            binding.userName.visibility = View.GONE
+//            binding.companyName.visibility = View.GONE
+//            binding.type.visibility = View.GONE
+            binding.userName.text = ""
+            binding.companyName.text = ""
+            binding.type.text = ""
             binding.stateTv.text = failedMsg
             binding.stateTv.setTextColor(Color.parseColor("#D43030"))
-            binding.stateIv.setImageResource(R.mipmap.cf_h)
+            binding.stateIv.setImageResource(R.mipmap.cw_h)
             if(voiceStatus.equals("1")){
 //                LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
                 if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
@@ -161,7 +208,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
         }else{
             binding.submit.text = "返回"
         }
-
+        binding.submit.setOnClickListener { finish() }
 
     }
 

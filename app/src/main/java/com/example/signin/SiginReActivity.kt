@@ -60,6 +60,46 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                 binding.type.visibility = View.VISIBLE}
             it.timeLong?.let { t -> timeLong = t }
             it.voiceStatus?.let { t -> voiceStatus = t }
+
+            if(it.name.isNullOrEmpty()){
+                if(it.corporateName.isNullOrEmpty()){
+                    if(it.userMeetingTypeName.isNullOrEmpty()){
+                        binding.userName.text = ""
+                        binding.companyName.text = ""
+                        binding.type.text = ""
+                    }else{
+                        binding.userName.text = it.userMeetingTypeName
+                    }
+
+                }else{
+                    binding.userName.text = it.corporateName
+                    if(it.userMeetingTypeName.isNullOrEmpty()){
+                        binding.companyName.text = ""
+                        binding.type.text = ""
+                    }else{
+                        binding.companyName.text = it.userMeetingTypeName
+                    }
+                }
+
+            }else{
+                binding.userName.text = it.name
+                if(it.corporateName.isNullOrEmpty()){
+                    if(it.userMeetingTypeName.isNullOrEmpty()){
+                        binding.companyName.text = ""
+                        binding.type.text = ""
+                    }else{
+                        binding.companyName.text = it.userMeetingTypeName
+                    }
+
+                }else{
+                    binding.companyName.text = it.corporateName
+                    if(it.userMeetingTypeName.isNullOrEmpty()){
+                        binding.type.text = ""
+                    }else{
+                        binding.type.text = it.userMeetingTypeName
+                    }
+                }
+            }
         }
 //        1 注册签到2 来程签到3 入住签到4 会场签到5 餐饮签到6 礼品签到7 返程签到
         binding.numEt.visibility = View.INVISIBLE
@@ -134,13 +174,13 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                         binding.stateTv.setTextColor(Color.parseColor("#3974F6"))
 //                        binding.stateIv.setImageResource(R.mipmap.qd2)
                         if(avatar.isNullOrEmpty()){
-                            binding.stateIv.setImageResource(R.mipmap.touxiang)
+                            binding.stateIv.setImageResource(R.mipmap.qd2)
                         }else{
                             Glide.with(this@SiginReActivity).load(PageRoutes.BaseUrl + avatar).apply(
                                 RequestOptions.bitmapTransform(
                                     CircleCrop()
                                 ))
-                                .error(R.mipmap.touxiang).into(binding.stateIv)
+                                .error(R.mipmap.qd2).into(binding.stateIv)
                         }
                     } else if (data.equals("2")) {
                         binding.stateTv.text = repeatMsg
@@ -149,7 +189,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                     } else {
                         binding.stateTv.text = failedMsg
                         binding.stateTv.setTextColor(Color.parseColor("#D43030"))
-                        binding.stateIv.setImageResource(R.mipmap.cf_h)
+                        binding.stateIv.setImageResource(R.mipmap.cw_h)
                     }
                     signUpUser?.let {
                         if (it.autoStatus.equals("1")) {
@@ -185,12 +225,15 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                                     mRingPlayer?.start();
                                 }
                             } else {
-                                binding.userName.visibility = View.GONE
-                                binding.companyName.visibility = View.GONE
-                                binding.type.visibility = View.GONE
+//                                binding.userName.visibility = View.GONE
+//                                binding.companyName.visibility = View.GONE
+//                                binding.type.visibility = View.GONE
+                                binding.userName.text = ""
+                                binding.companyName.text = ""
+                                binding.type.text = ""
                                 binding.stateTv.text = failedMsg
                                 binding.stateTv.setTextColor(Color.parseColor("#D43030"))
-                                binding.stateIv.setImageResource(R.mipmap.cf_h)
+                                binding.stateIv.setImageResource(R.mipmap.cw_h)
 //                                LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
                                 if (SpeechUtils.getInstance(this@SiginReActivity).isSpeech) {
                                     SpeechUtils.getInstance(this@SiginReActivity)
@@ -210,13 +253,16 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
 
                 override fun onError(response: Response<String>) {
                     super.onError(response)
-                    binding.userName.visibility = View.GONE
-                    binding.companyName.visibility = View.GONE
-                    binding.type.visibility = View.GONE
+//                    binding.userName.visibility = View.GONE
+//                    binding.companyName.visibility = View.GONE
+//                    binding.type.visibility = View.GONE
+                    binding.userName.text = ""
+                    binding.companyName.text = ""
+                    binding.type.text = ""
                     mViewModel.isShowLoading.value = false
                     binding.stateTv.text = failedMsg
                     binding.stateTv.setTextColor(Color.parseColor("#D43030"))
-                    binding.stateIv.setImageResource(R.mipmap.cf_h)
+                    binding.stateIv.setImageResource(R.mipmap.cw_h)
 //                    LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
                     if (SpeechUtils.getInstance(this@SiginReActivity).isSpeech) {
                         SpeechUtils.getInstance(this@SiginReActivity)

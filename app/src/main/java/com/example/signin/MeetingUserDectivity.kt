@@ -292,33 +292,33 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 //            .error(R.mipmap.touxiang).into(binding.itemYhxx.tx)
         var model =
             JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
-        state_zhuche.name = data.name+""
-        state_zhuche.corporateName = data.corporateName+""
-        state_zhuche.userMeetingTypeName = data.userMeetingTypeName+""
+        state_zhuche.name = data.name
+        state_zhuche.corporateName = data.corporateName
+        state_zhuche.userMeetingTypeName = data.userMeetingTypeName
 
-        state_laicheng.name = data.name+""
-        state_laicheng.corporateName = data.corporateName+""
-        state_laicheng.userMeetingTypeName = data.userMeetingTypeName+""
+        state_laicheng.name = data.name
+        state_laicheng.corporateName = data.corporateName
+        state_laicheng.userMeetingTypeName = data.userMeetingTypeName
 
-        state_chanyin.name = data.name+""
-        state_chanyin.corporateName = data.corporateName+""
-        state_chanyin.userMeetingTypeName = data.userMeetingTypeName+""
+        state_chanyin.name = data.name
+        state_chanyin.corporateName = data.corporateName
+        state_chanyin.userMeetingTypeName = data.userMeetingTypeName
 
-        state_ruzhu.name = data.name+""
-        state_ruzhu.corporateName = data.corporateName+""
-        state_ruzhu.userMeetingTypeName = data.userMeetingTypeName+""
+        state_ruzhu.name = data.name
+        state_ruzhu.corporateName = data.corporateName
+        state_ruzhu.userMeetingTypeName = data.userMeetingTypeName
 
-        state_huichang.name = data.name+""
-        state_huichang.corporateName = data.corporateName+""
-        state_huichang.userMeetingTypeName = data.userMeetingTypeName+""
+        state_huichang.name = data.name
+        state_huichang.corporateName = data.corporateName
+        state_huichang.userMeetingTypeName = data.userMeetingTypeName
 
-        state_fancheng.name = data.name+""
-        state_fancheng.corporateName = data.corporateName+""
-        state_fancheng.userMeetingTypeName = data.userMeetingTypeName+""
+        state_fancheng.name = data.name
+        state_fancheng.corporateName = data.corporateName
+        state_fancheng.userMeetingTypeName = data.userMeetingTypeName
 
-        state_liwu.name = data.name+""
-        state_liwu.corporateName = data.corporateName+""
-        state_liwu.userMeetingTypeName = data.userMeetingTypeName+""
+        state_liwu.name = data.name
+        state_liwu.corporateName = data.corporateName
+        state_liwu.userMeetingTypeName = data.userMeetingTypeName
 
 
         //订单
@@ -326,9 +326,9 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         binding.itemDdxx.ll.visibility = View.GONE
         data.userOrder?.let {
             order = it
-            order.supplement = data.userMeetingTypeName+""
-            order.userName = data.name+""
-            order.corporateName = data.corporateName+""
+            order.supplement = data.userMeetingTypeName
+            order.userName = data.name
+            order.corporateName = data.corporateName
             binding.itemDdxx.kong.visibility = View.GONE
             binding.itemDdxx.ll.visibility = View.VISIBLE
             it.ticketName?.let { ticketName -> binding.itemDdxx.ddName.text = ticketName }
@@ -368,7 +368,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             for (item in model.sys_invoice_status) {
                 if (examineStatus.equals(item.dictValue.trim())) {
 
-                    binding.itemDdxx.ddBtn.text = item.dictLabel+""
+                    binding.itemDdxx.ddBtn.text = item.dictLabel
                     if (item.dictValue.trim().equals("2")) {
                         binding.infoLl.visibility = View.VISIBLE
                         if (invoiceStatus.equals("1")) {
@@ -723,17 +723,17 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemFcxx.kong.visibility = View.GONE
                             binding.itemFcxx.ll.visibility = View.VISIBLE
 
-                            binding.itemFcxx.name.text = it.remark+""
+                            binding.itemFcxx.name.text = it.remark
                             it.startDate?.let {startDate-> binding.itemFcxx.lcData1.text =
                                 getDateStr("MM月dd", startDate).toString() }
 
-                            binding.itemFcxx.lcDidian1.text = it.startCity+""
-                            binding.itemFcxx.lcJichang1.text = it.startAddress+""
+                            binding.itemFcxx.lcDidian1.text = it.startCity
+                            binding.itemFcxx.lcJichang1.text = it.startAddress
                             it.endDate?.let {endDate->  binding.itemFcxx.lcData2.text =
                                 getDateStr("MM月dd", endDate).toString() }
 
-                            binding.itemFcxx.lcDidian2.text = it.endCity+""
-                            binding.itemFcxx.lcJichang1.text = it.endAddress+""
+                            binding.itemFcxx.lcDidian2.text = it.endCity
+                            binding.itemFcxx.lcJichang1.text = it.endAddress
                             it.startTime?.let {startTime->  binding.itemFcxx.time.text = startTime + "-" +it.endTime }
 
 //                            binding.itemFcxx.time.text = getDateStr2(
@@ -798,13 +798,13 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             it.startDate?.let {startDate->  binding.itemLcxx.lcData1.text =
                                 getDateStr("MM月dd", startDate).toString() }
 
-                            binding.itemLcxx.lcDidian1.text = it.startCity+""
-                            binding.itemLcxx.lcJichang1.text = it.startAddress+""
+                            binding.itemLcxx.lcDidian1.text = it.startCity
+                            binding.itemLcxx.lcJichang1.text = it.startAddress
                             it.endDate?.let {endDate-> binding.itemLcxx.lcData2.text =
                                 getDateStr("MM月dd", endDate).toString() }
 
-                            binding.itemLcxx.lcDidian2.text = it.endCity+""
-                            binding.itemLcxx.lcJichang1.text = it.endAddress+""
+                            binding.itemLcxx.lcDidian2.text = it.endCity
+                            binding.itemLcxx.lcJichang1.text = it.endAddress
                             it.startTime?.let {startTime->  binding.itemLcxx.time.text = startTime + "-" +it.endTime }
 
 //                            binding.itemLcxx.time.text = getDateStr2(
