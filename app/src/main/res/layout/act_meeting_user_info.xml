@@ -65,25 +65,22 @@
                     android:id="@+id/item_lcxx"
                     layout="@layout/item_lcxx" />
 
-
+                <include
+                    android:id="@+id/item_hcqd"
+                    layout="@layout/item_hcqd" />
                 <include
                     android:id="@+id/item_rzxx"
                     layout="@layout/item_rzxx" />
 
                 <include
-                    android:id="@+id/item_hcqd"
-                    layout="@layout/item_hcqd" />
-
-                <include
                     android:id="@+id/item_cyxi"
                     layout="@layout/item_cyxi" />
-
-                <include
-                    android:id="@+id/item_lpff"
-                    layout="@layout/item_lpff" />
                 <include
                     android:id="@+id/item_fcxx"
                     layout="@layout/item_fcxx" />
+                <include
+                    android:id="@+id/item_lpff"
+                    layout="@layout/item_lpff" />
                 <!-- 礼品发放-->
 
             </LinearLayout>

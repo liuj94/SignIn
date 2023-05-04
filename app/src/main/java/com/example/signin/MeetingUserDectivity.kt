@@ -615,8 +615,8 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                                 ).toString()
 
                             }
+                            it.address?.let {address->   binding.itemHcqd.address.text = address}
 
-                            binding.itemHcqd.address.text = it.address
                             it.location?.let { location ->
                                 binding.itemHcqd.location.text =
                                     "座位号：" + location
@@ -722,18 +722,19 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         item.backUserMeetingTrip?.let {
                             binding.itemFcxx.kong.visibility = View.GONE
                             binding.itemFcxx.ll.visibility = View.VISIBLE
+                            it.remark?.let {remark-> binding.itemFcxx.name.text = remark }
 
-                            binding.itemFcxx.name.text = it.remark
                             it.startDate?.let {startDate-> binding.itemFcxx.lcData1.text =
                                 getDateStr("MM月dd", startDate).toString() }
+                            it.startCity?.let {startCity-> binding.itemFcxx.lcDidian1.text = startCity }
+                            it.startAddress?.let {startAddress-> binding.itemFcxx.lcJichang1.text = startAddress }
 
-                            binding.itemFcxx.lcDidian1.text = it.startCity
-                            binding.itemFcxx.lcJichang1.text = it.startAddress
+//                            binding.itemFcxx.lcJichang1.text = it.startAddress
                             it.endDate?.let {endDate->  binding.itemFcxx.lcData2.text =
                                 getDateStr("MM月dd", endDate).toString() }
+                            it.endCity?.let {endCity-> binding.itemFcxx.lcDidian2.text = endCity }
+                            it.endAddress?.let {endAddress-> binding.itemFcxx.lcJichang2.text = endAddress }
 
-                            binding.itemFcxx.lcDidian2.text = it.endCity
-                            binding.itemFcxx.lcJichang1.text = it.endAddress
                             it.startTime?.let {startTime->  binding.itemFcxx.time.text = startTime + "-" +it.endTime }
 
 //                            binding.itemFcxx.time.text = getDateStr2(
@@ -798,13 +799,16 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             it.startDate?.let {startDate->  binding.itemLcxx.lcData1.text =
                                 getDateStr("MM月dd", startDate).toString() }
 
-                            binding.itemLcxx.lcDidian1.text = it.startCity
-                            binding.itemLcxx.lcJichang1.text = it.startAddress
+//                            binding.itemLcxx.lcDidian1.text = it.startCity
+//                            binding.itemLcxx.lcJichang1.text = it.startAddress
+                            it.startCity?.let { startCity-> binding.itemLcxx.lcDidian1.text = startCity }
+                            it.startAddress?.let {startAddress-> binding.itemLcxx.lcJichang1.text = startAddress }
+
                             it.endDate?.let {endDate-> binding.itemLcxx.lcData2.text =
                                 getDateStr("MM月dd", endDate).toString() }
+                            it.endCity?.let { endCity-> binding.itemLcxx.lcDidian2.text = endCity }
+                            it.endAddress?.let {endAddress-> binding.itemLcxx.lcJichang2.text = endAddress }
 
-                            binding.itemLcxx.lcDidian2.text = it.endCity
-                            binding.itemLcxx.lcJichang1.text = it.endAddress
                             it.startTime?.let {startTime->  binding.itemLcxx.time.text = startTime + "-" +it.endTime }
 
 //                            binding.itemLcxx.time.text = getDateStr2(
