@@ -64,9 +64,9 @@ class ExamineActivity : BaseBindingActivity<ActInformationReviewBinding, BaseVie
             var model =
                 JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
             for (item in model.pay_status) {
-                if (order.payStatus.equals(item.dictValue)) {
+                if (order.payStatus.equals(item.dictValue.trim())) {
                     binding.state.text = item.dictLabel
-                    if (item.dictValue.equals("03")){
+                    if (item.dictValue.trim().equals("03")){
                         binding.stateIv.visibility = View.VISIBLE
                     }
                 }

@@ -347,7 +347,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     "开票类型:"
                 //invoiceType	1 普票 2专票
                 for (item in model.sys_invoice_type) {
-                    if (it.invoiceType.equals(item.dictValue)) {
+                    if (it.invoiceType.equals(item.dictValue.trim())) {
                         binding.itemDdxx.ddType.text =
                             "开票类型:" + item.dictLabel
                     }
@@ -366,10 +366,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
             binding.infoLl.visibility = View.GONE
             for (item in model.sys_invoice_status) {
-                if (examineStatus.equals(item.dictValue)) {
+                if (examineStatus.equals(item.dictValue.trim())) {
 
-                    binding.itemDdxx.ddBtn.text = item.dictLabel
-                    if (item.dictValue.equals("2")) {
+                    binding.itemDdxx.ddBtn.text = item.dictLabel+""
+                    if (item.dictValue.trim().equals("2")) {
                         binding.infoLl.visibility = View.VISIBLE
                         if (invoiceStatus.equals("1")) {
                             if (cAmount > 0) {
@@ -383,7 +383,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
                         }
 
-                    } else if (item.dictValue.equals("1")) {
+                    } else if (item.dictValue.trim().equals("1")) {
                         binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
                     } else {
 
@@ -723,15 +723,17 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemFcxx.kong.visibility = View.GONE
                             binding.itemFcxx.ll.visibility = View.VISIBLE
 
-                            binding.itemFcxx.name.text = it.remark
-                            binding.itemFcxx.lcData1.text =
-                                getDateStr("MM月dd", it.startDate).toString()
-                            binding.itemFcxx.lcDidian1.text = it.startCity
-                            binding.itemFcxx.lcJichang1.text = it.startAddress
-                            binding.itemFcxx.lcData2.text =
-                                getDateStr("MM月dd", it.endDate).toString()
-                            binding.itemFcxx.lcDidian2.text = it.endCity
-                            binding.itemFcxx.lcJichang1.text = it.endAddress
+                            binding.itemFcxx.name.text = it.remark+""
+                            it.startDate?.let {startDate-> binding.itemFcxx.lcData1.text =
+                                getDateStr("MM月dd", startDate).toString() }
+
+                            binding.itemFcxx.lcDidian1.text = it.startCity+""
+                            binding.itemFcxx.lcJichang1.text = it.startAddress+""
+                            it.endDate?.let {endDate->  binding.itemFcxx.lcData2.text =
+                                getDateStr("MM月dd", endDate).toString() }
+
+                            binding.itemFcxx.lcDidian2.text = it.endCity+""
+                            binding.itemFcxx.lcJichang1.text = it.endAddress+""
                             it.startTime?.let {startTime->  binding.itemFcxx.time.text = startTime + "-" +it.endTime }
 
 //                            binding.itemFcxx.time.text = getDateStr2(
@@ -741,8 +743,8 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             //personChargeMobile status
 
                             for (item in model.transport_type) {
-                                if (it.transport.equals(item.dictValue)) {
-                                    if (item.dictValue.equals("03")) {
+                                if (it.transport.equals(item.dictValue.trim())) {
+                                    if (item.dictValue.trim().equals("03")) {
                                         binding.itemFcxx.icon.setImageResource(R.mipmap.laichengxingxi)
                                     } else {
                                         binding.itemFcxx.icon.setImageResource(R.mipmap.hc)
@@ -793,15 +795,16 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemLcxx.kong.visibility = View.GONE
                             binding.itemLcxx.ll.visibility = View.VISIBLE
                             binding.itemLcxx.name.text = it.remark
+                            it.startDate?.let {startDate->  binding.itemLcxx.lcData1.text =
+                                getDateStr("MM月dd", startDate).toString() }
 
-                            binding.itemLcxx.lcData1.text =
-                                getDateStr("MM月dd", it.startDate).toString()
-                            binding.itemLcxx.lcDidian1.text = it.startCity
-                            binding.itemLcxx.lcJichang1.text = it.startAddress
-                            binding.itemLcxx.lcData2.text =
-                                getDateStr("MM月dd", it.endDate).toString()
-                            binding.itemLcxx.lcDidian2.text = it.endCity
-                            binding.itemLcxx.lcJichang1.text = it.endAddress
+                            binding.itemLcxx.lcDidian1.text = it.startCity+""
+                            binding.itemLcxx.lcJichang1.text = it.startAddress+""
+                            it.endDate?.let {endDate-> binding.itemLcxx.lcData2.text =
+                                getDateStr("MM月dd", endDate).toString() }
+
+                            binding.itemLcxx.lcDidian2.text = it.endCity+""
+                            binding.itemLcxx.lcJichang1.text = it.endAddress+""
                             it.startTime?.let {startTime->  binding.itemLcxx.time.text = startTime + "-" +it.endTime }
 
 //                            binding.itemLcxx.time.text = getDateStr2(
@@ -812,8 +815,8 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             //personChargeMobile status
 
                             for (item in model.transport_type) {
-                                if (it.transport.equals(item.dictValue)) {
-                                    if (item.dictValue.equals("03")) {
+                                if (it.transport.equals(item.dictValue.trim())) {
+                                    if (item.dictValue.trim().equals("03")) {
                                         binding.itemLcxx.icon.setImageResource(R.mipmap.laichengxingxi)
                                     } else {
                                         binding.itemLcxx.icon.setImageResource(R.mipmap.hc)

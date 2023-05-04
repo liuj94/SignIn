@@ -198,7 +198,7 @@ class XCActivity  : BaseBindingActivity<ActEditXcBinding, BaseViewModel>() {
                     binding.endCity.setText(data.endCity)
                     model?.let {
                         for (item in it.transport_type) {
-                            if (xcData!!.transport.equals(item.dictValue)) {
+                            if (xcData!!.transport.equals(item.dictValue.trim())) {
                                 binding.transport.text = item.dictLabel
                             }
                         }

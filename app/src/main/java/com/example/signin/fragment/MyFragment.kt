@@ -136,7 +136,7 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
                 JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
             if (model.user_type != null && model.user_type.size > 0) {
                 for (item in model.user_type) {
-                    if (userData?.userType.equals(item.dictValue)) {
+                    if (userData?.userType.equals(item.dictValue.trim())) {
                         binding.type.text = item.dictLabel
                     }
                 }
@@ -158,7 +158,7 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
                     JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
 
                 for (item in model.user_type) {
-                    if (userData?.userType.equals(item.dictValue)) {
+                    if (userData?.userType.equals(item.dictValue.trim())) {
                         binding.type.text = item.dictLabel
                     }
                 }

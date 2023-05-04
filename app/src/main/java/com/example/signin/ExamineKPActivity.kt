@@ -83,7 +83,7 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
         var model =
             JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
         for (item in model.sys_invoice_type) {
-            if (order.invoiceType.equals(item.dictValue)) {
+            if (order.invoiceType.equals(item.dictValue.trim())) {
                 binding.invoiceType.text =
                     item.dictLabel
             }
