@@ -5,29 +5,46 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.AsyncTask
 import android.text.Html
+import android.view.KeyEvent
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import cn.bingoogolapple.qrcode.core.BGAQRCodeUtil
 import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder
+import com.afollestad.materialdialogs.LayoutMode
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.customview.customView
 import com.alibaba.fastjson.JSON
+import com.common.apiutil.decode.DecodeReader
+import com.common.face.api.FaceUtil
 import com.dylanc.longan.activity
 import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
+import com.example.signin.adapter.SelectAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.base.StatusBarUtil
 import com.example.signin.bean.MeetingUserDeData
+import com.example.signin.bean.TypeData
 import com.example.signin.bean.TypeModel
 import com.example.signin.databinding.ActKpBinding
 import com.example.signin.net.RequestCallback
+import com.hello.scan.ScanCallBack
+import com.hello.scan.ScanTool
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
-import kotlin.collections.HashMap
+import java.io.File
+import java.io.UnsupportedEncodingException
+import java.nio.charset.StandardCharsets
 
 
-class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>() {
+class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), ScanCallBack {
     override fun initTranslucentStatus() {
         StatusBarUtil.setTranslucentStatus(this, Color.TRANSPARENT)
         //设置状态栏字体颜色
@@ -38,7 +55,15 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>() {
     var order: MeetingUserDeData.UserOrderBean = MeetingUserDeData.UserOrderBean()
 
     var params = HashMap<String, Any>()
+    var moshi :String?= ""
     override fun initData() {
+        moshi = kv.getString("shaomamoshi","")
+        if(moshi.equals("激光头识别")){
+            openHardreader()
+        }else if(moshi.equals("二维码识别")){
+            ScanTool.GET.initSerial(this@ExamineKPActivity, "/dev/ttyACM0", 115200, this@ExamineKPActivity)
+            ScanTool.GET.playSound(true)
+        }
 
         intent.getSerializableExtra("order")?.let { order = it as MeetingUserDeData.UserOrderBean }
         binding.name.text = ""
@@ -94,6 +119,14 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>() {
 //        String s3 = "Real-How-To";
 //        var temp = s3.split(",");
         binding.sm.setOnClickListener {
+            if(moshi.equals("识别模式")||moshi.isNullOrEmpty()){
+                toast("请选择识别模式")
+                select()
+                return@setOnClickListener
+            }
+            if(!moshi.equals("摄像头识别")){
+                return@setOnClickListener
+            }
             activity?.let {
 
                 XXPermissions.with(activity)
@@ -104,7 +137,7 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>() {
                             if (!all) {
                                 toast("获取权限失败")
                             } else {
-                                var intent = Intent(it, ScanActivity::class.java)
+                                var intent = Intent(it, ScanKPActivity::class.java)
                                 startActivityForResult(intent, 1111)
                             }
 
@@ -212,6 +245,150 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>() {
                 binding.invoiceNo.text = it
             }
 
+        }
+    }
+    fun select() {
+        val list: MutableList<TypeData> = ArrayList<TypeData>()
+        var a = TypeData()
+        a.dictLabel = "二维码识别"
+        list.add(a)
+        var a1 = TypeData()
+        a1.dictLabel = "摄像头识别"
+        list.add(a1)
+        var a2 = TypeData()
+        a2.dictLabel = "激光头识别"
+        list.add(a2)
+
+
+        MaterialDialog(this, BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+//            title(null,"请选择审核不通过原因")
+
+            customView(	//自定义弹窗
+                viewRes = R.layout.tc_ly,//自定义文件
+                dialogWrapContent = true,	//让自定义宽度生效
+                scrollable = true,			//让自定义宽高生效
+                noVerticalPadding = true    //让自定义高度生效
+            ).apply{
+                findViewById<TextView>(R.id.btn1).setOnClickListener { dismiss() }
+                findViewById<TextView>(R.id.btn2).setOnClickListener {   kv.putString("shaomamoshi",moshi)
+                    if(moshi.equals("激光头识别")){
+                        openHardreader()
+                    }else if(moshi.equals("二维码识别")){
+                        ScanTool.GET.initSerial(this@ExamineKPActivity, "/dev/ttyACM0", 115200, this@ExamineKPActivity)
+                        ScanTool.GET.playSound(true)
+                    }}
+                findViewById<ImageView>(R.id.gb).setOnClickListener { dismiss() }
+                findViewById<RecyclerView>(R.id.recyclerView).layoutManager = LinearLayoutManager(activity)
+
+                var adapter = SelectAdapter().apply {
+                    submitList(list)
+                    setOnItemClickListener { _, _, position ->
+                        for(item in items){
+                            items[position].isMyselect = false
+                        }
+                        items[position].isMyselect = true
+                        moshi = items[position].dictLabel
+                        notifyDataSetChanged()
+
+
+
+                    }
+                }
+
+                findViewById<RecyclerView>(R.id.recyclerView).adapter = adapter
+            }
+
+
+
+        }
+    }
+    private var mDecodeReader: DecodeReader? = null
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        //要是重虚拟键盘输入怎不拦截
+        if ("Virtual" == event.device.name) {
+            return super.dispatchKeyEvent(event)
+        }
+        if(moshi.equals("激光头识别")){
+            mDecodeReader?.open(115200)
+        }
+        return true
+    }
+    private fun openHardreader() {
+        if (mDecodeReader == null) {
+            mDecodeReader = DecodeReader(this) //初始化
+        }
+
+        mDecodeReader?.setDecodeReaderListener { data ->
+            mDecodeReader?.close()
+            try {
+                val str = String(data, StandardCharsets.UTF_8)
+                runOnUiThread {
+                    try {
+                        var temp = str.split(",")
+                        var dm = temp[2]
+                        var hm = temp[3]
+                        binding.invoiceNumber.text = dm
+                        binding.invoiceNo.text = hm
+                    }catch (e:java.lang.Exception){
+                        toast("请提供正确发票码")
+                    }
+
+
+                }
+            } catch (e: UnsupportedEncodingException) {
+                e.printStackTrace()
+            }
+
+        }
+
+
+    }
+
+    override fun onScanCallBack(p0: String?) {
+        try {
+            p0?.let {
+                var temp = p0.split(",")
+                var dm = temp[2]
+                var hm = temp[3]
+                binding.invoiceNumber.text = dm
+                binding.invoiceNo.text = hm
+                openBlue()
+            }
+
+        }catch (e:java.lang.Exception){
+            toast("请提供正确发票码")
+            openRed()
+        }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        mDecodeReader?.close()
+        ScanTool.GET.release()
+        closeBlue()
+        closeRed()
+    }
+    fun openRed(){
+        val deviceon = File("/sys/class/leds/led-red")
+        if (deviceon.canRead()) {
+            FaceUtil.LedSet("led-red", 1);
+        }
+    }
+    fun closeRed(){
+        val deviceon = File("/sys/class/leds/led-red")
+        if (deviceon.canRead()) {
+            FaceUtil.LedSet("led-red", 0);
+        }
+    }
+    fun openBlue(){
+        val deviceon = File("/sys/class/leds/led-blue")
+        if (deviceon.canRead()) {
+            FaceUtil.LedSet("led-blue", 1);
+        }
+    }
+    fun closeBlue(){
+        val deviceon = File("/sys/class/leds/led-blue")
+        if (deviceon.canRead()) {
+            FaceUtil.LedSet("led-blue", 0);
         }
     }
 

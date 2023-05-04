@@ -2,6 +2,7 @@ package com.example.signin
 
 import android.content.Intent
 import cn.bingoogolapple.qrcode.core.QRCodeView
+import com.dylanc.longan.toast
 
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
@@ -30,13 +31,18 @@ class ScanKPActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QR
         result?.let {param->
 //        044031801104（发票代码）,
 //        40021227（发票号码）,
-            var temp = param.split(",")
-            var dm = temp[2]
-            var hm = temp[3]
-            val intent = Intent()
-            intent.putExtra("dm", dm)
-            intent.putExtra("hm", hm)
-            setResult(1111, intent)
+            try {
+                var temp = param.split(",")
+                var dm = temp[2]
+                var hm = temp[3]
+                val intent = Intent()
+                intent.putExtra("dm", dm)
+                intent.putExtra("hm", hm)
+                setResult(1111, intent)
+            }catch (e:java.lang.Exception){
+                toast("请提供正确发票码")
+            }
+
         }
 
     }

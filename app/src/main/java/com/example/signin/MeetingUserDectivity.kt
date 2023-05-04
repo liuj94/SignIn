@@ -3,6 +3,7 @@ package com.example.signin
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.alibaba.fastjson.JSON
@@ -77,16 +78,26 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             }
         }
 //1来程2返程
-        binding.itemFcxx.edit.setOnClickListener {  startActivity<XCActivity>("type" to 1,"userMeetingId" to id ) }
-        binding.itemLcxx.edit.setOnClickListener {  startActivity<XCActivity>("type" to 2,"userMeetingId" to id) }
+        binding.itemFcxx.edit.setOnClickListener {
+            startActivity<XCActivity>(
+                "type" to 2,
+                "userMeetingId" to state_fancheng.userMeetingId
+            )
+        }
+        binding.itemLcxx.edit.setOnClickListener {
+            startActivity<XCActivity>(
+                "type" to 1,
+                "userMeetingId" to state_laicheng.userMeetingId
+            )
+        }
         binding.itemDdxx.ll.setOnClickListener {
             startActivity<ExamineActivity>("order" to order)
         }
         binding.itemDdxx.ddBtn.setOnClickListener {
             if (examineStatus.equals("2")) {
-                if(cAmount>0){
+                if (cAmount > 0) {
                     startActivity<ExamineKPActivity>("order" to order)
-                }else{
+                } else {
                     startActivity<ExamineActivity>("order" to order)
                 }
 
@@ -112,7 +123,11 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         binding.itemRzxx.ddBtn.setOnClickListener {
             if (state_ruzhu.status.equals("1")) {
 //                gotoSigin(state_ruzhu,3)
-                startActivity<SiginReActivity>("type" to 3, "data" to state_ruzhu,"avatar" to avatar)
+                startActivity<SiginReActivity>(
+                    "type" to 3,
+                    "data" to state_ruzhu,
+                    "avatar" to avatar
+                )
             }
         }
         binding.itemHcqd.zcBtn.setOnClickListener {
@@ -157,7 +172,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             takePhone(mobile2)
         }
         binding.itemYhxx.call1.setOnClickListener {
-            if(!mobile.isNullOrEmpty()){
+            if (!mobile.isNullOrEmpty()) {
                 takePhone(mobile)
             }
 
@@ -168,26 +183,25 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
     }
 
     private fun gotoSigin(data: SignUpUser, type: Int) {
-            var params = HashMap<String, String>()
-            params["meetingId"] = data.meetingId//会议id
-            params["signUpLocationId"] = data.signUpLocationId//签到点id
-            params["signUpId"] = data.signUpId//签到站id
-            params["userMeetingId"] = data.userMeetingId//用户参与会议id
-            params["status"] = "2"//用户参与会议id
-            sigin(JSON.toJSONString(params), { success ->
-                data.success = success
-                startActivity<SiginReAutoActivity>(
-                    "type" to type,
-                    "data" to data
-                    ,"avatar" to avatar
-                )
-            }, {
-                data.success = "500"
-                startActivity<SiginReAutoActivity>(
-                    "type" to type,
-                    "data" to data
-                    ,"avatar" to avatar
-                )}, {})
+        var params = HashMap<String, String>()
+        params["meetingId"] = data.meetingId//会议id
+        params["signUpLocationId"] = data.signUpLocationId//签到点id
+        params["signUpId"] = data.signUpId//签到站id
+        params["userMeetingId"] = data.userMeetingId//用户参与会议id
+        params["status"] = "2"//用户参与会议id
+        sigin(JSON.toJSONString(params), { success ->
+            data.success = success
+            startActivity<SiginReAutoActivity>(
+                "type" to type,
+                "data" to data, "avatar" to avatar
+            )
+        }, {
+            data.success = "500"
+            startActivity<SiginReAutoActivity>(
+                "type" to type,
+                "data" to data, "avatar" to avatar
+            )
+        }, {})
 
     }
 
@@ -200,7 +214,8 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
 
     }
-var meetingUserDeData:MeetingUserDeData?=null
+
+    var meetingUserDeData: MeetingUserDeData? = null
     private fun getData() {
         mViewModel.isShowLoading.value = true
         OkGo.get<MeetingUserDeData>(PageRoutes.Api_meetinguser_data + id + "?id=" + id)
@@ -218,7 +233,7 @@ var meetingUserDeData:MeetingUserDeData?=null
                     try {
                         setDate(data)
                     } catch (e: java.lang.Exception) {
-
+                        Log.d("Exception", "" + e?.message)
                     }
 
 
@@ -243,61 +258,67 @@ var meetingUserDeData:MeetingUserDeData?=null
     var mobile2 = ""
     var mobile3 = ""
     var avatar = ""
-    var cAmount :Double = 0.00
+    var cAmount: Double = 0.00
+
     @SuppressLint("SetTextI18n")
     private fun setDate(data: MeetingUserDeData) {
-        data.corporateName?.let {corporateName->  binding.itemYhxx.gongshiName.text = corporateName }
-        data.name?.let {name->  binding.itemYhxx.name.text = name }
-        data.userMeetingTypeName?.let {userMeetingTypeName->  binding.itemYhxx.zhengjiangType.text = userMeetingTypeName }
+        data.corporateName?.let { corporateName ->
+            binding.itemYhxx.gongshiName.text = corporateName
+        }
+        data.name?.let { name -> binding.itemYhxx.name.text = name }
+        data.userMeetingTypeName?.let { userMeetingTypeName ->
+            binding.itemYhxx.zhengjiangType.text = userMeetingTypeName
+        }
         binding.itemYhxx.jiedaidName.visibility = View.GONE
         binding.itemYhxx.call1.visibility = View.GONE
         data.jiedai?.let {
-            it.selectCheckboxParam?.let {param->
+            it.selectCheckboxParam?.let { param ->
                 binding.itemYhxx.jiedaidName.text = "接待员：" + param.boxValue
-                param.mobile?.let {m-> mobile = m }
+                param.mobile?.let { m -> mobile = m }
                 binding.itemYhxx.jiedaidName.visibility = View.VISIBLE
                 binding.itemYhxx.call1.visibility = View.VISIBLE
             }
 
         }
-        data.mobile?.let {m-> mobile1 = m }
+        data.mobile?.let { m -> mobile1 = m }
         data.avatar?.let { avatar = it }
         Glide.with(this@MeetingUserDectivity).load(PageRoutes.BaseUrl + data.avatar).apply(
             RequestOptions.bitmapTransform(
                 CircleCrop()
-            ))
+            )
+        )
             .error(R.mipmap.touxiang).into(binding.itemYhxx.tx)
 //        Glide.with(this@MeetingUserDectivity).load(PageRoutes.BaseUrl + data.avatar)
 //            .error(R.mipmap.touxiang).into(binding.itemYhxx.tx)
         var model =
             JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
-        state_zhuche.name = data.name
-        state_zhuche.corporateName = data.corporateName
-        state_zhuche.userMeetingTypeName = data.userMeetingTypeName
+        state_zhuche.name = data.name+""
+        state_zhuche.corporateName = data.corporateName+""
+        state_zhuche.userMeetingTypeName = data.userMeetingTypeName+""
 
-        state_laicheng.name = data.name
-        state_laicheng.corporateName = data.corporateName
-        state_laicheng.userMeetingTypeName = data.userMeetingTypeName
+        state_laicheng.name = data.name+""
+        state_laicheng.corporateName = data.corporateName+""
+        state_laicheng.userMeetingTypeName = data.userMeetingTypeName+""
 
-        state_chanyin.name = data.name
-        state_chanyin.corporateName = data.corporateName
-        state_chanyin.userMeetingTypeName = data.userMeetingTypeName
+        state_chanyin.name = data.name+""
+        state_chanyin.corporateName = data.corporateName+""
+        state_chanyin.userMeetingTypeName = data.userMeetingTypeName+""
 
-        state_ruzhu.name = data.name
-        state_ruzhu.corporateName = data.corporateName
-        state_ruzhu.userMeetingTypeName = data.userMeetingTypeName
+        state_ruzhu.name = data.name+""
+        state_ruzhu.corporateName = data.corporateName+""
+        state_ruzhu.userMeetingTypeName = data.userMeetingTypeName+""
 
-        state_huichang.name = data.name
-        state_huichang.corporateName = data.corporateName
-        state_huichang.userMeetingTypeName = data.userMeetingTypeName
+        state_huichang.name = data.name+""
+        state_huichang.corporateName = data.corporateName+""
+        state_huichang.userMeetingTypeName = data.userMeetingTypeName+""
 
-        state_fancheng.name = data.name
-        state_fancheng.corporateName = data.corporateName
-        state_fancheng.userMeetingTypeName = data.userMeetingTypeName
+        state_fancheng.name = data.name+""
+        state_fancheng.corporateName = data.corporateName+""
+        state_fancheng.userMeetingTypeName = data.userMeetingTypeName+""
 
-        state_liwu.name = data.name
-        state_liwu.corporateName = data.corporateName
-        state_liwu.userMeetingTypeName = data.userMeetingTypeName
+        state_liwu.name = data.name+""
+        state_liwu.corporateName = data.corporateName+""
+        state_liwu.userMeetingTypeName = data.userMeetingTypeName+""
 
 
         //订单
@@ -305,20 +326,23 @@ var meetingUserDeData:MeetingUserDeData?=null
         binding.itemDdxx.ll.visibility = View.GONE
         data.userOrder?.let {
             order = it
-            order.supplement = data.userMeetingTypeName
-            order.userName = data.name
-            order.corporateName = data.corporateName
+            order.supplement = data.userMeetingTypeName+""
+            order.userName = data.name+""
+            order.corporateName = data.corporateName+""
             binding.itemDdxx.kong.visibility = View.GONE
             binding.itemDdxx.ll.visibility = View.VISIBLE
-            it.ticketName?.let {ticketName->  binding.itemDdxx.ddName.text = ticketName }
-            it.amount?.let {amount->  binding.itemDdxx.ddPrice.text = "¥" + amount
+            it.ticketName?.let { ticketName -> binding.itemDdxx.ddName.text = ticketName }
+            it.amount?.let { amount ->
+                binding.itemDdxx.ddPrice.text = "¥" + amount
                 try {
                     cAmount = BigDecimal(amount).toDouble()
-                }catch (e:Exception){}
+                } catch (e: Exception) {
+                    Log.d("Exception", "" + e?.message)
+                }
 
             }
 
-            if(cAmount>0){
+            if (cAmount > 0) {
                 binding.itemDdxx.ddType.text =
                     "开票类型:"
                 //invoiceType	1 普票 2专票
@@ -328,11 +352,13 @@ var meetingUserDeData:MeetingUserDeData?=null
                             "开票类型:" + item.dictLabel
                     }
                 }
-                it.invoiceNo?.let {invoiceNo->  binding.itemDdxx.ddNum.text = "发票票号:$invoiceNo" }
+                it.invoiceNo?.let { invoiceNo -> binding.itemDdxx.ddNum.text = "发票票号:$invoiceNo" }
 
             }
 
-            it.createTime?.let {createTime->  binding.itemDdxx.ddTime.text = parseTime2(createTime) }
+            it.createTime?.let { createTime ->
+                binding.itemDdxx.ddTime.text = parseTime2(createTime)
+            }
 
             //0初始状态 1待审核 2审核成功 3审核失败
             examineStatus = "" + it.examineStatus
@@ -346,9 +372,9 @@ var meetingUserDeData:MeetingUserDeData?=null
                     if (item.dictValue.equals("2")) {
                         binding.infoLl.visibility = View.VISIBLE
                         if (invoiceStatus.equals("1")) {
-                            if(cAmount>0){
+                            if (cAmount > 0) {
                                 binding.itemDdxx.ddBtn.text = "开具发票"
-                            }else{
+                            } else {
                                 binding.itemDdxx.ddBtn.text = "订单详情"
                             }
 
@@ -357,9 +383,9 @@ var meetingUserDeData:MeetingUserDeData?=null
                             binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
                         }
 
-                    } else  if (item.dictValue.equals("1")){
+                    } else if (item.dictValue.equals("1")) {
                         binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
-                    }else  {
+                    } else {
 
                         binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
                     }
@@ -374,7 +400,7 @@ var meetingUserDeData:MeetingUserDeData?=null
         }
         for (item in data.meetingSignUps) {
             when (item.type) {
-                8->{
+                8 -> {
                     item.meetingSignUpLocation?.let {
                         it.name?.let { name -> order.meetingSignUpLocationName = name }
                     }
@@ -402,8 +428,9 @@ var meetingUserDeData:MeetingUserDeData?=null
                             it.name?.let { name -> binding.itemZcbd.name.text = name }
                             it.startTime?.let { startTime ->
                                 binding.itemZcbd.data.text =
-                                    getDateStr("MM月dd", startTime)
+                                    getDateStr("MM月dd", it.startTime)
                                 it.endTime?.let { endTime ->
+//                                    binding.itemZcbd.time.text = startTime + "-" +endTime
                                     binding.itemZcbd.time.text = getDateStr2(
                                         "HH:mm",
                                         startTime
@@ -415,7 +442,7 @@ var meetingUserDeData:MeetingUserDeData?=null
 
                         }
                     } catch (e: java.lang.Exception) {
-
+                        Log.d("Exception", "" + e?.message)
                     }
 
                 }
@@ -443,6 +470,7 @@ var meetingUserDeData:MeetingUserDeData?=null
                             it.startTime?.let { startTime ->
                                 binding.itemLpff.date.text = getDateStr("MM月dd", startTime)
                                 it.endTime?.let { endTime ->
+//                                    binding.itemLpff.time.text = startTime + "-" +endTime
                                     binding.itemLpff.time.text = getDateStr2(
                                         "HH:mm",
                                         startTime
@@ -455,7 +483,7 @@ var meetingUserDeData:MeetingUserDeData?=null
 
                         }
                     } catch (e: java.lang.Exception) {
-
+                        Log.d("Exception", "" + e?.message)
                     }
 
                 }
@@ -463,7 +491,7 @@ var meetingUserDeData:MeetingUserDeData?=null
                     try {
                         binding.itemRzxx.kong.visibility = View.VISIBLE
                         binding.itemRzxx.ll.visibility = View.GONE
-                        item.userMeetingAccommodation?.let {userMeetingAccommodation->
+                        item.userMeetingAccommodation?.let { userMeetingAccommodation ->
                             binding.itemRzxx.kong.visibility = View.GONE
                             binding.itemRzxx.ll.visibility = View.VISIBLE
                             //入住签到
@@ -482,7 +510,7 @@ var meetingUserDeData:MeetingUserDeData?=null
                                         if (list.dictValue.equals("1")) {
                                             binding.itemRzxx.location.text =
                                                 "签到后分配"
-                                        }else{
+                                        } else {
                                             binding.itemRzxx.location.text =
                                                 "待分配"
                                         }
@@ -519,7 +547,9 @@ var meetingUserDeData:MeetingUserDeData?=null
                                     endTime
                                 ).toString()
                             }
-                            userMeetingAccommodation.accommodation?.let { address -> binding.itemRzxx.address.text = address }
+                            userMeetingAccommodation.accommodation?.let { address ->
+                                binding.itemRzxx.address.text = address
+                            }
 
                             userMeetingAccommodation.roomNo?.let { location ->
 
@@ -530,7 +560,7 @@ var meetingUserDeData:MeetingUserDeData?=null
                         }
 
                     } catch (e: java.lang.Exception) {
-
+                        Log.d("Exception", "" + e?.message)
                     }
 
                 }
@@ -556,7 +586,7 @@ var meetingUserDeData:MeetingUserDeData?=null
                                     if (list.dictValue.equals("1")) {
                                         binding.itemHcqd.location.text =
                                             "签到后分配"
-                                    }else{
+                                    } else {
                                         binding.itemHcqd.location.text =
                                             "待分配"
                                     }
@@ -570,17 +600,21 @@ var meetingUserDeData:MeetingUserDeData?=null
                             binding.itemHcqd.ll.visibility = View.VISIBLE
 
                             binding.itemHcqd.name.text = "" + it.name
-                            binding.itemHcqd.data.text = getDateStr(
-                                "MM月dd",
-                                it.startTime
-                            )
-                            binding.itemHcqd.time.text = getDateStr2(
-                                "HH:mm",
-                                it.startTime
-                            ).toString() + "-" + getDateStr2(
-                                "HH:mm",
-                                it.endTime
-                            ).toString()
+                            it.startTime?.let {startTime->
+                                binding.itemHcqd.data.text = getDateStr(
+                                    "MM月dd",
+                                    startTime
+                                )
+//                            binding.itemHcqd.time.text = it.startTime + "-" +it.endTime
+                                binding.itemHcqd.time.text = getDateStr2(
+                                    "HH:mm",
+                                    startTime
+                                ).toString() + "-" + getDateStr2(
+                                    "HH:mm",
+                                    it.endTime
+                                ).toString()
+
+                            }
 
                             binding.itemHcqd.address.text = it.address
                             it.location?.let { location ->
@@ -592,7 +626,7 @@ var meetingUserDeData:MeetingUserDeData?=null
 
 
                     } catch (e: java.lang.Exception) {
-
+                        Log.d("Exception", "" + e?.message)
                     }
                     //会场签到
 
@@ -613,7 +647,7 @@ var meetingUserDeData:MeetingUserDeData?=null
                                     if (list.dictValue.equals("1")) {
                                         binding.itemCyxi.location.text =
                                             "签到后分配"
-                                    }else{
+                                    } else {
                                         binding.itemCyxi.location.text =
                                             "待分配"
                                     }
@@ -633,6 +667,7 @@ var meetingUserDeData:MeetingUserDeData?=null
                                     startTime
                                 ).toString()
                                 it.endTime?.let { endTime ->
+//                                    binding.itemCyxi.time.text = startTime + "-" +endTime
                                     binding.itemCyxi.time.text = getDateStr2(
                                         "HH:mm",
                                         startTime
@@ -659,7 +694,7 @@ var meetingUserDeData:MeetingUserDeData?=null
 
                         }
                     } catch (e: java.lang.Exception) {
-
+                        Log.d("Exception", "" + e?.message)
                     }
 
                 }
@@ -697,11 +732,12 @@ var meetingUserDeData:MeetingUserDeData?=null
                                 getDateStr("MM月dd", it.endDate).toString()
                             binding.itemFcxx.lcDidian2.text = it.endCity
                             binding.itemFcxx.lcJichang1.text = it.endAddress
+                            it.startTime?.let {startTime->  binding.itemFcxx.time.text = startTime + "-" +it.endTime }
 
-                            binding.itemFcxx.time.text = getDateStr2(
-                                "HH:mm",
-                                it.startTime
-                            ).toString() + "-" + getDateStr2("HH:mm", it.endTime).toString()
+//                            binding.itemFcxx.time.text = getDateStr2(
+//                                "HH:mm",
+//                                it.startTime
+//                            ).toString() + "-" + getDateStr2("HH:mm", it.endTime).toString()
                             //personChargeMobile status
 
                             for (item in model.transport_type) {
@@ -720,9 +756,9 @@ var meetingUserDeData:MeetingUserDeData?=null
                         binding.itemFcxx.jiedai.visibility = View.GONE
                         binding.itemFcxx.call1.visibility = View.GONE
                         data.backSiji?.let {
-                            it.selectCheckboxParam?.let {param->
+                            it.selectCheckboxParam?.let { param ->
                                 binding.itemFcxx.jiedai.text = "司机：" + param.boxValue
-                                param.mobile?.let {m-> mobile3 = m }
+                                param.mobile?.let { m -> mobile3 = m }
                                 binding.itemFcxx.jiedai.visibility = View.VISIBLE
                                 binding.itemFcxx.call1.visibility = View.VISIBLE
                             }
@@ -730,7 +766,7 @@ var meetingUserDeData:MeetingUserDeData?=null
                         }
 
                     } catch (e: java.lang.Exception) {
-
+                        Log.d("Exception", "" + e?.message)
                     }
                 }
                 2 -> {
@@ -766,11 +802,12 @@ var meetingUserDeData:MeetingUserDeData?=null
                                 getDateStr("MM月dd", it.endDate).toString()
                             binding.itemLcxx.lcDidian2.text = it.endCity
                             binding.itemLcxx.lcJichang1.text = it.endAddress
+                            it.startTime?.let {startTime->  binding.itemLcxx.time.text = startTime + "-" +it.endTime }
 
-                            binding.itemLcxx.time.text = getDateStr2(
-                                "HH:mm",
-                                it.startTime
-                            ).toString() + "-" + getDateStr2("HH:mm", it.endTime).toString()
+//                            binding.itemLcxx.time.text = getDateStr2(
+//                                "HH:mm",
+//                                it.startTime
+//                            ).toString() + "-" + getDateStr2("HH:mm", it.endTime).toString()
 
                             //personChargeMobile status
 
@@ -791,17 +828,17 @@ var meetingUserDeData:MeetingUserDeData?=null
                         binding.itemFcxx.jiedai.visibility = View.GONE
                         binding.itemFcxx.call1.visibility = View.GONE
                         data.tripSiji?.let {
-                            it.selectCheckboxParam?.let {param->
+                            it.selectCheckboxParam?.let { param ->
                                 binding.itemLcxx.jiedai.text = "司机：" + param.boxValue
 //                                mobile2 = param.mobile
-                                param.mobile?.let {m-> mobile2 = m }
+                                param.mobile?.let { m -> mobile2 = m }
                                 binding.itemLcxx.jiedai.visibility = View.VISIBLE
                                 binding.itemLcxx.call1.visibility = View.VISIBLE
                             }
 
                         }
                     } catch (e: java.lang.Exception) {
-
+                        Log.d("Exception", "" + e?.message)
                     }
                 }
             }
@@ -858,6 +895,7 @@ var meetingUserDeData:MeetingUserDeData?=null
         }
         return date
     }
+
     fun getDateStr2(format: String, dateStr: String): String {
         if (format.isNullOrEmpty() || dateStr.isNullOrEmpty()) {
             return ""
@@ -870,6 +908,7 @@ var meetingUserDeData:MeetingUserDeData?=null
         val formatter = SimpleDateFormat(format)
         return formatter.format(date)
     }
+
     fun parseServerTime2(serverTime: String): Date {
 
         var format = "yyyy-MM-dd HH:mm"
@@ -883,6 +922,7 @@ var meetingUserDeData:MeetingUserDeData?=null
         }
         return date
     }
+
     fun parseTime(serverTime: String): String {
         if (serverTime.isNullOrEmpty()) {
             return ""
@@ -900,6 +940,7 @@ var meetingUserDeData:MeetingUserDeData?=null
         return formatter.format(date)
 
     }
+
     fun parseTime2(serverTime: String): String {
         if (serverTime.isNullOrEmpty()) {
             return ""
@@ -917,6 +958,7 @@ var meetingUserDeData:MeetingUserDeData?=null
         return formatter.format(date)
 
     }
+
     fun daydiff(fDateString: String, oDateString: String): Int {
         if (fDateString.isNullOrEmpty() || oDateString.isNullOrEmpty()) {
             return 0
@@ -929,7 +971,7 @@ var meetingUserDeData:MeetingUserDeData?=null
         aCalendar.time = oDate
         val day2 = aCalendar[Calendar.DAY_OF_YEAR]
         var numdata = day2 - day1
-        if(numdata<1){
+        if (numdata < 1) {
             numdata = 1
         }
         return numdata
@@ -958,7 +1000,6 @@ var meetingUserDeData:MeetingUserDeData?=null
 
 
     }
-
 
 
 }

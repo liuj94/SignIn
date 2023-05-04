@@ -11,8 +11,16 @@ import android.util.Log;
 public class BootReceiver extends BroadcastReceiver {
     private static final String ACTION = "android.intent.action.BOOT_COMPLETED";
 
+
     @Override
     public void onReceive(Context context, Intent intent) {
+//        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+//            Intent newIntent = new Intent(context, SplashActivity.class);  // 要启动的Activity
+//            //这句话必须加上才能开机自动运行app的界面
+//            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            //2.如果自启动Activity
+//            context.startActivity(newIntent);
+//        }
         Log.e("接收广播", "onReceive: ");
         Log.e("接收广播", "onReceive: " + intent.getAction());
         //开机启动

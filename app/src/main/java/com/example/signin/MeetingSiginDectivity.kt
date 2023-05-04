@@ -127,14 +127,14 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             selectList3.add(a2)
             mDecodeReader?.close()
 
-            val deviceon = File("/sys/class/leds/led-white")
-            if (deviceon.canRead()) {
-                FaceUtil.LedSet("led-white", 1);
-            }else{
-                toast("灯光打开失败")
-            }
+//            val deviceon = File("/sys/class/leds/led-white")
+//            if (deviceon.canRead()) {
+//                FaceUtil.LedSet("led-white", 1);
+//            }else{
+//                toast("灯光打开失败")
+//            }
             ScanTool.GET.initSerial(this@MeetingSiginDectivity, "/dev/ttyACM0", 115200, this@MeetingSiginDectivity)
-
+            ScanTool.GET.playSound(true)
         }else if(moshi.equals("摄像头识别")){
             var a = SiginData()
             a.name = "二维码识别"
@@ -182,21 +182,22 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 kv.putString("shaomamoshi",moshi)
                 adapterSelect3?.notifyDataSetChanged()
                 if(moshi.equals("激光头识别")){
-                    val deviceon = File("/sys/class/leds/led-white")
-                    if (deviceon.canRead()) {
-                        FaceUtil.LedSet("led-white", 0);
-                    }
+//                    val deviceon = File("/sys/class/leds/led-white")
+//                    if (deviceon.canRead()) {
+//                        FaceUtil.LedSet("led-white", 0);
+//                    }
                     ScanTool.GET.release()
                     openHardreader()
                 }else if(moshi.equals("二维码识别")){
                     mDecodeReader?.close()
                     val deviceon = File("/sys/class/leds/led-white")
-                    if (deviceon.canRead()) {
-                        FaceUtil.LedSet("led-white", 1);
-                    }else{
-                        toast("灯光打开失败")
-                    }
+//                    if (deviceon.canRead()) {
+//                        FaceUtil.LedSet("led-white", 1);
+//                    }else{
+//                        toast("灯光打开失败")
+//                    }
                     ScanTool.GET.initSerial(this@MeetingSiginDectivity, "/dev/ttyACM0", 115200, this@MeetingSiginDectivity)
+                    ScanTool.GET.playSound(true)
                 }
             }
         }
@@ -315,7 +316,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             setState()
         }
         binding.shaoma.setOnClickListener {
-            if(moshi.equals("识别模式")){
+            if(moshi.equals("识别模式")||moshi.isNullOrEmpty()){
                 toast("请选择识别模式")
                 return@setOnClickListener
             }
@@ -567,14 +568,16 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         mDecodeReader?.setDecodeReaderListener { data ->
             if (!isShiBieZ){
                 isShiBieZ = true
+                mDecodeReader?.close()
                 try {
                     val str = String(data, StandardCharsets.UTF_8)
                     runOnUiThread {
                         goRe(str)
-//                        mDecodeReader?.close()
+
                     }
                 } catch (e: UnsupportedEncodingException) {
                     e.printStackTrace()
+                    isShiBieZ = false
                 }
             }
 
@@ -587,33 +590,33 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         super.onResume()
         isPause = false
         if(moshi.equals("二维码识别")){
-            val deviceon = File("/sys/class/leds/led-white")
-            if (deviceon.canRead()) {
-                FaceUtil.LedSet("led-white", 1);
-            }
+//            val deviceon = File("/sys/class/leds/led-blue")
+//            if (deviceon.canRead()) {
+//                FaceUtil.LedSet("led-blue", 1);
+//            }
         }
         binding.et.setText("")
         nameMobile = ""
+        closeBlue()
+        closeRed()
     }
 
     override fun onPause() {
         super.onPause()
         isPause = true
         if(moshi.equals("二维码识别")){
-            val deviceon = File("/sys/class/leds/led-white")
-            if (deviceon.canRead()) {
-                FaceUtil.LedSet("led-white", 0);
-            }
+//            val deviceon = File("/sys/class/leds/led-white")
+//            if (deviceon.canRead()) {
+//                FaceUtil.LedSet("led-white", 0);
+//            }
         }
     }
     override fun onDestroy() {
         super.onDestroy()
         mDecodeReader?.close()
         ScanTool.GET.release()
-        val deviceon = File("/sys/class/leds/led-white")
-        if (deviceon.canRead()) {
-            FaceUtil.LedSet("led-white", 0);
-        }
+        closeBlue()
+        closeRed()
     }
 
     override fun onScanCallBack(data: String?) {
@@ -640,6 +643,9 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
 
             if(signUpUser.id.isNullOrEmpty()){
+                if(moshi.equals("二维码识别")){
+                    openRed()
+                }
                 isShiBieZ = false
                 signUpUser.signUpLocationId = id
                 signUpUser.meetingName = name
@@ -701,6 +707,9 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 //                )
 //            }
         } catch (e: Exception) {
+            if(moshi.equals("二维码识别")){
+                openRed()
+            }
             isShiBieZ = false
 //            toast("二维码解析失败")
             var signUpUser = SignUpUser()
@@ -770,7 +779,14 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                                 "data" to signUpUser,
                                 "avatar" to avatar
                             )
-                        },{  signUpUser.success = "500"
+                            if(moshi.equals("二维码识别")){
+                                openBlue()
+                            }
+                        },{
+                            if(moshi.equals("二维码识别")){
+                                openRed()
+                            }
+                            signUpUser.success = "500"
                             com.dylanc.longan.startActivity<SiginReAutoActivity>(
                                 "type" to showType,
                                 "data" to signUpUser,
@@ -782,7 +798,29 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
                 override fun onError(response: Response<MeetingUserDeData>) {
                     super.onError(response)
-
+                    if(moshi.equals("二维码识别")){
+                        openRed()
+                    }
+                    var signUpUser = SignUpUser()
+                    signUpUser.signUpLocationId = id
+                    signUpUser.meetingName = name
+                    signUpUser.signUpId = signUpId
+                    signUpUser.userMeetingId = ""
+                    signUpUser.meetingId = ""
+                    signUpUser.userMeetingTypeName = ""
+                    signUpUser.autoStatus = autoStatus
+                    signUpUser.timeLong = timeLong
+                    signUpUser.okMsg = okMsg
+                    signUpUser.failedMsg = failedMsg
+                    signUpUser.repeatMsg = repeatMsg
+                    signUpUser.voiceStatus = voiceStatus
+                    signUpUser.success = "500"
+                    signUpUser.success = "500"
+                    com.dylanc.longan.startActivity<SiginReAutoActivity>(
+                        "type" to showType,
+                        "data" to signUpUser,
+                        "avatar" to "avatar"
+                    )
                 }
 
                 override fun onFinish() {
@@ -792,6 +830,30 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
 
             })
+    }
+    fun openRed(){
+        val deviceon = File("/sys/class/leds/led-red")
+        if (deviceon.canRead()) {
+            FaceUtil.LedSet("led-red", 1);
+        }
+    }
+    fun closeRed(){
+        val deviceon = File("/sys/class/leds/led-red")
+        if (deviceon.canRead()) {
+            FaceUtil.LedSet("led-red", 0);
+        }
+    }
+    fun openBlue(){
+        val deviceon = File("/sys/class/leds/led-blue")
+        if (deviceon.canRead()) {
+            FaceUtil.LedSet("led-blue", 1);
+        }
+    }
+    fun closeBlue(){
+        val deviceon = File("/sys/class/leds/led-blue")
+        if (deviceon.canRead()) {
+            FaceUtil.LedSet("led-blue", 0);
+        }
     }
 
 }

@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
+    android:fitsSystemWindows="true"
     android:background="#F3F4F8">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -72,6 +74,7 @@
                 android:background="@color/white"
                 android:id="@+id/startCity"
                 android:minWidth="50dp"
+                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -84,6 +87,7 @@
                 android:layout_height="1dp"
                 android:background="#eee"/>
             <EditText
+                android:gravity="center"
                 android:background="@color/white"
                 android:id="@+id/endCity"
                 android:textColorHint="#999999"
@@ -95,6 +99,7 @@
                 android:textSize="15sp" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/transportLL"
             android:background="@color/white"
             android:paddingBottom="15dp"
             android:paddingLeft="15dp"
@@ -111,10 +116,13 @@
                 android:textColor="#ff333333"
                 android:textSize="15sp" />
             <TextView
+                android:id="@+id/transport"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="请选择出行方式"
+                android:text=""
                 android:textColor="#ff333333"
+                android:hint="请选择出行方式"
+                android:textColorHint="#999999"
                 android:textSize="15sp" />
         </LinearLayout>
         <LinearLayout
@@ -134,6 +142,7 @@
                 android:textColor="#ff333333"
                 android:textSize="15sp" />
             <EditText
+                android:id="@+id/remark"
                 android:background="@color/white"
                 android:minWidth="50dp"
                 android:layout_width="wrap_content"
@@ -165,6 +174,7 @@
                 android:textSize="15sp" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/startDatell"
             android:background="@color/white"
             android:paddingBottom="15dp"
             android:paddingLeft="15dp"
@@ -181,13 +191,17 @@
                 android:textColor="#ff333333"
                 android:textSize="15sp" />
             <TextView
+                android:id="@+id/startDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="请选择出行方式"
+                android:text=""
                 android:textColor="#ff333333"
+                android:hint="请选择出发日期"
+                android:textColorHint="#999999"
                 android:textSize="15sp" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/startTimell"
             android:background="@color/white"
             android:paddingBottom="15dp"
             android:paddingLeft="15dp"
@@ -204,10 +218,13 @@
                 android:textColor="#ff333333"
                 android:textSize="15sp" />
             <TextView
+                android:id="@+id/startTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="请选择出行方式"
+                android:text=""
                 android:textColor="#ff333333"
+                android:hint="请选择出发时间"
+                android:textColorHint="#999999"
                 android:textSize="15sp" />
         </LinearLayout>
         <LinearLayout
@@ -226,6 +243,7 @@
                 android:textColor="#ff333333"
                 android:textSize="15sp" />
             <EditText
+
                 android:background="@color/white"
                 android:id="@+id/startAddress"
                 android:minWidth="50dp"
@@ -239,6 +257,7 @@
 
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/endDatell"
             android:background="@color/white"
             android:paddingBottom="15dp"
             android:paddingLeft="15dp"
@@ -255,13 +274,17 @@
                 android:textColor="#ff333333"
                 android:textSize="15sp" />
             <TextView
+                android:id="@+id/endDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="请选择出行方式"
+                android:text=""
                 android:textColor="#ff333333"
+                android:hint="请选择到达日期"
+                android:textColorHint="#999999"
                 android:textSize="15sp" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/endTimell"
             android:background="@color/white"
             android:paddingBottom="15dp"
             android:paddingLeft="15dp"
@@ -278,10 +301,13 @@
                 android:textColor="#ff333333"
                 android:textSize="15sp" />
             <TextView
+                android:id="@+id/endTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="请选择出行方式"
+                android:text=""
                 android:textColor="#ff333333"
+                android:hint="请选择到达时间"
+                android:textColorHint="#999999"
                 android:textSize="15sp" />
         </LinearLayout>
         <LinearLayout

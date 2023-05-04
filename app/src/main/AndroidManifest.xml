@@ -75,6 +75,10 @@
         </receiver>
 
         <activity
+            android:name=".XCActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
+        <activity
             android:name=".SiginReAutoActivity"
             android:exported="false"
             android:windowSoftInputMode="stateVisible|adjustResize"/>
