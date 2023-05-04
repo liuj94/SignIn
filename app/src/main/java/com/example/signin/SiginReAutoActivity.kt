@@ -96,6 +96,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                         binding.type.text = ""
                     }else{
                         binding.type.text = it.userMeetingTypeName
+
                     }
                 }
             }
