@@ -97,6 +97,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                         binding.type.text = ""
                     }else{
                         binding.type.text = it.userMeetingTypeName
+
                     }
                 }
             }
