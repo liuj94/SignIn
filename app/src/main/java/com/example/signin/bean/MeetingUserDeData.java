@@ -1,6 +1,7 @@
 package com.example.signin.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,6 +42,15 @@ public class MeetingUserDeData implements Serializable {
     private BackSiji backSiji ;
     private TripSiji tripSiji ;
     private Jiedai jiedai ;
+    private List<UserMeetingForms> userMeetingForms = new ArrayList<UserMeetingForms>();
+
+    public List<UserMeetingForms> getUserMeetingForms() {
+        return userMeetingForms;
+    }
+
+    public void setUserMeetingForms(List<UserMeetingForms> userMeetingForms) {
+        this.userMeetingForms = userMeetingForms;
+    }
 
     public BackSiji getBackSiji() {
         return backSiji;

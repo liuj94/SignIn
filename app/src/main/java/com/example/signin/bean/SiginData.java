@@ -1,8 +1,10 @@
 package com.example.signin.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
- 
+
 public class SiginData implements Serializable {
 
     /**
@@ -65,6 +67,7 @@ public class SiginData implements Serializable {
      */
 
     private String searchValue= "";
+    private List<MeetingFormList> meetingFormList= new ArrayList<>();
     private boolean kuan= false;
 
     public boolean isKuan() {
@@ -73,6 +76,14 @@ public class SiginData implements Serializable {
 
     public void setKuan(boolean kuan) {
         this.kuan = kuan;
+    }
+
+    public List<MeetingFormList> getMeetingFormList() {
+        return meetingFormList;
+    }
+
+    public void setMeetingFormList(List<MeetingFormList> meetingFormList) {
+        this.meetingFormList = meetingFormList;
     }
 
     private String meetingSignUpCount= "";

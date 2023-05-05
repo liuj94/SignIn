@@ -22,6 +22,7 @@ import sigin
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, BaseViewModel>() {
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
@@ -44,7 +45,6 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
     override fun initData() {
         intent.getStringExtra("id")?.let { id = it }
         intent.getIntExtra("showType", 0)?.let { showType = it }
-
         if (showType != 0) {
             binding.itemZcbd.root.visibility = View.GONE
             binding.itemLcxx.root.visibility = View.GONE
@@ -115,6 +115,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
         }
         binding.itemZcbd.zcBtn.setOnClickListener {
+//            gotoSigin(state_zhuche, 1)
             if (state_zhuche.status.equals("1")) {
                 gotoSigin(state_zhuche, 1)
 //                startActivity<SiginReActivity>("type" to 1, "data" to state_zhuche)
@@ -183,25 +184,31 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
     }
 
     private fun gotoSigin(data: SignUpUser, type: Int) {
-        var params = HashMap<String, String>()
-        params["meetingId"] = data.meetingId//会议id
-        params["signUpLocationId"] = data.signUpLocationId//签到点id
-        params["signUpId"] = data.signUpId//签到站id
-        params["userMeetingId"] = data.userMeetingId//用户参与会议id
-        params["status"] = "2"//用户参与会议id
-        sigin(JSON.toJSONString(params), { success ->
-            data.success = success
-            startActivity<SiginReAutoActivity>(
-                "type" to type,
-                "data" to data, "avatar" to avatar
-            )
-        }, {
-            data.success = "500"
-            startActivity<SiginReAutoActivity>(
-                "type" to type,
-                "data" to data, "avatar" to avatar
-            )
-        }, {})
+        getSiginData(data.signUpLocationId) {
+            var params = HashMap<String, String>()
+            params["meetingId"] = data.meetingId//会议id
+            params["signUpLocationId"] = data.signUpLocationId//签到点id
+            params["signUpId"] = data.signUpId//签到站id
+            params["userMeetingId"] = data.userMeetingId//用户参与会议id
+            params["status"] = "2"//用户参与会议id
+            sigin(JSON.toJSONString(params), { success ->
+                data.success = success
+                startActivity<SiginReAutoActivity>(
+                    "type" to type,
+                    "data" to data, "avatar" to avatar
+                )
+            }, {
+                data.success = "500"
+                startActivity<SiginReAutoActivity>(
+                    "type" to type,
+                    "data" to data, "avatar" to avatar
+                )
+            }, {
+                mViewModel.isShowLoading.value = false
+            })
+
+        }
+
 
     }
 
@@ -230,6 +237,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 override fun onMySuccess(data: MeetingUserDeData) {
                     super.onMySuccess(data)
                     meetingUserDeData = data
+
                     try {
                         setDate(data)
                     } catch (e: java.lang.Exception) {
@@ -855,6 +863,8 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
     override fun onResume() {
         super.onResume()
         getData()
+
+
     }
 
     private fun setStateColor(
@@ -1007,6 +1017,56 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
 
     }
+    var meetingFormData:MeetingFormData?=null
+    private fun getSiginData(signUpLocationId:String, back: () -> Unit) {
+        mViewModel.isShowLoading.value = true
+        OkGo.get<SiginData>(PageRoutes.Api_meetingSignUpLocationDe + signUpLocationId)
+            .tag(PageRoutes.Api_meetingSignUpLocationDe)
+            .headers("Authorization", kv.getString("token", ""))
+            .execute(object : RequestCallback<SiginData>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
+
+                }
+
+                override fun onMySuccess(data: SiginData) {
+                    super.onMySuccess(data)
+                     meetingFormData = MeetingFormData()
+                    meetingFormData?.meetingFormList = data.meetingFormList
+
+                    meetingFormData?.let {
+                        meetingUserDeData?.let {meetingUserDeData->
+                            for (list in it.meetingFormList){
+                                for (listFrom in meetingUserDeData.userMeetingForms){
+                                    if (list.name.equals(listFrom.name)){
+                                        if(listFrom.selectCheckboxParam!=null){
+                                            list.value = listFrom.selectCheckboxParam.boxValue
+                                        }else{
+                                            list.value = listFrom.value
+                                        }
+                                    }
+
+                                }
+                            }
+                            kv.putString("MeetingFormData",JSON.toJSONString(meetingFormData))
+                        }
 
 
+                    }
+                    back.invoke()
+                }
+
+                override fun onError(response: Response<SiginData>) {
+                    super.onError(response)
+                    meetingFormData = MeetingFormData()
+                    meetingFormData?.meetingFormList = ArrayList<MeetingFormList>()
+                    meetingFormData?.let {  kv.putString("MeetingFormData",JSON.toJSONString(meetingFormData)) }
+                    back.invoke()
+                }
+
+
+
+
+            })
+    }
 }

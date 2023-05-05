@@ -6,6 +6,7 @@ import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
+import com.example.signin.bean.MeetingFormData
 import com.example.signin.bean.MeetingUserDeData
 import com.example.signin.bean.SignUpUser
 import com.example.signin.databinding.ActScanBinding
@@ -113,6 +114,29 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
 
                 override fun onMySuccess(data: MeetingUserDeData) {
                     super.onMySuccess(data)
+                    var d = kv.getString("MeetingFormData","")
+                    if(!d.isNullOrEmpty()){
+                        try {
+                            var meetingFormData = JSON.parseObject(d, MeetingFormData::class.java)
+                            meetingFormData?.let {
+                                for (list in it.meetingFormList){
+                                    for (listFrom in data.userMeetingForms){
+                                        if (list.name.equals(listFrom.name)){
+                                            if(listFrom.selectCheckboxParam!=null){
+                                                list.value = listFrom.selectCheckboxParam.boxValue
+                                            }else{
+                                                list.value = listFrom.value
+                                            }
+
+                                        }
+                                    }
+                                }
+                                kv.putString("MeetingFormData",JSON.toJSONString(meetingFormData))
+                            }
+                        }catch (e:Exception){}
+
+                    }
+
                     var signUpUser = SignUpUser()
                     signUpUser.signUpLocationId = id
                     signUpUser.meetingName = name

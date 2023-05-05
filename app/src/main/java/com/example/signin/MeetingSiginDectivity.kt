@@ -1,5 +1,6 @@
 package com.example.signin
 
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -505,7 +506,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
             })
     }
-
+    var meetingFormData:MeetingFormData?=null
     private fun getSiginData() {
         OkGo.get<SiginData>(PageRoutes.Api_meetingSignUpLocationDe + id)
             .tag(PageRoutes.Api_meetingSignUpLocationDe)
@@ -518,6 +519,9 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
                 override fun onMySuccess(data: SiginData) {
                     super.onMySuccess(data)
+                    meetingFormData = MeetingFormData()
+                    meetingFormData?.meetingFormList = data.meetingFormList
+                    kv.putString("MeetingFormData",JSON.toJSONString(meetingFormData))
                     binding.num1.text = "" + data.beUserCount
                     binding.num2.text = "" + data.signUpCount
                     binding.num3.text = "" + data.localSignUpCount
@@ -745,6 +749,21 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
                 override fun onMySuccess(data: MeetingUserDeData) {
                     super.onMySuccess(data)
+                    meetingFormData?.let {
+                        for (list in it.meetingFormList){
+                            for (listFrom in data.userMeetingForms){
+                                if (list.name.equals(listFrom.name)){
+                                    if(listFrom.selectCheckboxParam!=null){
+                                        list.value = listFrom.selectCheckboxParam.boxValue
+                                    }else{
+                                        list.value = listFrom.value
+                                    }
+                                }
+                            }
+                        }
+                        kv.putString("MeetingFormData",JSON.toJSONString(meetingFormData))
+                    }
+                    Log.d("MeetingFormData",JSON.toJSONString(meetingFormData))
                     var signUpUser = SignUpUser()
                     signUpUser.signUpLocationId = id
                     signUpUser.meetingName = name
