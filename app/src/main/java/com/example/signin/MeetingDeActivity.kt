@@ -9,6 +9,7 @@ import com.dylanc.longan.addStatusBarHeightToMarginTop
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
+import com.example.signin.bean.CustomUpdateParser
 import com.example.signin.bean.SiginUpListData
 import com.example.signin.bean.SiginUpListModel
 import com.example.signin.bean.User
@@ -21,6 +22,7 @@ import com.example.signin.fragment.MettingDe4Fragment
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
+import com.xuexiang.xupdate.XUpdate
 
 
 class MeetingDeActivity : BaseBindingActivity<ActMeetdaBinding, BaseViewModel>() {
@@ -180,6 +182,17 @@ var businessId = ""
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        XUpdate.newBuild(this)
+            .updateUrl(PageRoutes.Api_appVersion)
+//            .promptThemeColor(ResUtils.getColor(R.color.text4c93fd))
+//            .promptButtonTextColor(Color.WHITE)
+//            .promptTopResId(R.mipmap.bg_update_top)
+            .updateParser( CustomUpdateParser(this))
+            .update();
     }
 
 }

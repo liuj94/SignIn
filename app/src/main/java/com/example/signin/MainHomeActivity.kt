@@ -5,9 +5,11 @@ import android.media.MediaPlayer
 import androidx.fragment.app.Fragment
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.toast
+import com.example.signin.PageRoutes.Companion.Api_appVersion
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
+import com.example.signin.bean.CustomUpdateParser
 import com.example.signin.databinding.ActivityMainBinding
 import com.example.signin.fragment.HomeMainFragment
 import com.example.signin.fragment.MyFragment
@@ -15,6 +17,7 @@ import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
+import com.xuexiang.xupdate.XUpdate
 import getDataType
 
 
@@ -120,6 +123,10 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
     override fun onResume() {
         super.onResume()
         isMainHome = true
+        XUpdate.newBuild(this)
+            .updateParser( CustomUpdateParser(this))
+            .updateUrl(Api_appVersion)
+            .update();
     }
     override fun onPause() {
         super.onPause()

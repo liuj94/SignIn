@@ -108,7 +108,6 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             a2.isMyselect = true
             a2.isKuan =true
             selectList3.add(a2)
-
             openHardreader()
 
         }else if(moshi.equals("二维码识别")){
@@ -126,14 +125,6 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             a2.name = "激光头识别"
             a2.isKuan =true
             selectList3.add(a2)
-            mDecodeReader?.close()
-
-//            val deviceon = File("/sys/class/leds/led-white")
-//            if (deviceon.canRead()) {
-//                FaceUtil.LedSet("led-white", 1);
-//            }else{
-//                toast("灯光打开失败")
-//            }
             ScanTool.GET.initSerial(this@MeetingSiginDectivity, "/dev/ttyACM0", 115200, this@MeetingSiginDectivity)
             ScanTool.GET.playSound(true)
         }else if(moshi.equals("摄像头识别")){
@@ -183,20 +174,10 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 kv.putString("shaomamoshi",moshi)
                 adapterSelect3?.notifyDataSetChanged()
                 if(moshi.equals("激光头识别")){
-//                    val deviceon = File("/sys/class/leds/led-white")
-//                    if (deviceon.canRead()) {
-//                        FaceUtil.LedSet("led-white", 0);
-//                    }
                     ScanTool.GET.release()
                     openHardreader()
                 }else if(moshi.equals("二维码识别")){
                     mDecodeReader?.close()
-                    val deviceon = File("/sys/class/leds/led-white")
-//                    if (deviceon.canRead()) {
-//                        FaceUtil.LedSet("led-white", 1);
-//                    }else{
-//                        toast("灯光打开失败")
-//                    }
                     ScanTool.GET.initSerial(this@MeetingSiginDectivity, "/dev/ttyACM0", 115200, this@MeetingSiginDectivity)
                     ScanTool.GET.playSound(true)
                 }
@@ -560,18 +541,20 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         }
         if(moshi.equals("激光头识别")){
             mDecodeReader?.open(115200)
+        }else{
+            toast("请选择激光头识别模式")
         }
         return true
     }
-    var isShiBieZ = false
+//    var isShiBieZ = false
     private fun openHardreader() {
         if (mDecodeReader == null) {
             mDecodeReader = DecodeReader(this) //初始化
         }
 
         mDecodeReader?.setDecodeReaderListener { data ->
-            if (!isShiBieZ){
-                isShiBieZ = true
+//            if (!isShiBieZ){
+//                isShiBieZ = true
                 mDecodeReader?.close()
                 try {
                     val str = String(data, StandardCharsets.UTF_8)
@@ -581,9 +564,9 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                     }
                 } catch (e: UnsupportedEncodingException) {
                     e.printStackTrace()
-                    isShiBieZ = false
+//                    isShiBieZ = false
                 }
-            }
+//            }
 
         }
 //        mDecodeReader?.open(115200)
@@ -625,18 +608,15 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
     override fun onScanCallBack(data: String?) {
         try {
-            if(!isShiBieZ ){
-                isShiBieZ = true
-                goRe(data)
-            }
+            goRe(data)
 
         } catch (e: Exception) {
-            isShiBieZ = false
+//            isShiBieZ = false
         }
     }
     private fun goRe(data: String?) {
         if (isPause) {
-            isShiBieZ = false
+//            isShiBieZ = false
             return
         }
 
@@ -650,7 +630,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 if(moshi.equals("二维码识别")){
                     openRed()
                 }
-                isShiBieZ = false
+//                isShiBieZ = false
                 signUpUser.signUpLocationId = id
                 signUpUser.meetingName = name
                 signUpUser.signUpId = signUpId
@@ -714,7 +694,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             if(moshi.equals("二维码识别")){
                 openRed()
             }
-            isShiBieZ = false
+//            isShiBieZ = false
 //            toast("二维码解析失败")
             var signUpUser = SignUpUser()
             signUpUser.signUpLocationId = id

@@ -11,12 +11,15 @@ import com.dylanc.longan.toast
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.base.StatusBarUtil
+import com.example.signin.bean.CustomUpdateParser
 import com.example.signin.bean.Token
 import com.example.signin.bean.User
 import com.example.signin.databinding.ActLoginBinding
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
+import com.xuexiang.xupdate.XUpdate
+import com.xuexiang.xutil.resource.ResUtils
 
 
 class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
@@ -178,6 +181,17 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        XUpdate.newBuild(this)
+            .updateUrl(PageRoutes.Api_appVersion)
+//            .promptThemeColor(ResUtils.getColor(R.color.text4c93fd))
+//            .promptButtonTextColor(Color.WHITE)
+//            .promptTopResId(R.mipmap.bg_update_top)
+             .updateParser( CustomUpdateParser(this))
+            .update();
+
+    }
 }
 
 
