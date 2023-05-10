@@ -57,6 +57,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                                                             getDataType("pay_status") {
                                                                 getDataType("user_type") {
 //                                                                    getDataType("signSiteType") {}
+                                                                    getDataType("sys_fapiao") {}
                                                                 }
 
                                                             }

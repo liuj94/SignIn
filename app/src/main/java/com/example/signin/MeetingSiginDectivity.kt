@@ -378,7 +378,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                     siginUp2List.addAll(model.sys_fancheng)
                 }
                 8 -> {
-                    siginUp2List.addAll(model.sys_liping)
+                    siginUp2List.addAll(model.sys_fapiao)
                 }
             }
         }

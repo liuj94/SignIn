@@ -12,6 +12,7 @@ public class TypeModel {
      礼品发放 sys_liping
      返程送客 sys_fancheng
      餐饮安排 sys_canyin
+     发票 sys_fapiao
      这7个 是用status
 
      userMeetingSignUpStatus
@@ -30,8 +31,16 @@ public class TypeModel {
     public List<TypeData> sys_invoice_type;
     public List<TypeData> transport_type;
     public List<TypeData> sys_examine_reason;
+    public List<TypeData> sys_fapiao;
 
 
+    public List<TypeData> getSys_fapiao() {
+        return sys_fapiao;
+    }
+
+    public void setSys_fapiao(List<TypeData> sys_fapiao) {
+        this.sys_fapiao = sys_fapiao;
+    }
 
     public List<TypeData> sys_zhuce;
     public List<TypeData> pay_status;

@@ -43,6 +43,7 @@ interface PageRoutes {
         礼品发放 sys_liping
         返程送客 sys_fancheng
         餐饮安排 sys_canyin
+        发票 sys_fapiao
         这7个 是用status
 
         userMeetingSignUpStatus

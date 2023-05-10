@@ -216,6 +216,9 @@ fun getDataType(type: String, finish: (() -> Unit)? = null) {
                     "user_type" -> {
                         model.user_type = data
                     }
+                    "sys_fapiao"->{
+                        model.sys_fapiao = data
+                    }
 
                 }
                 kv.putString("TypeModel", JSON.toJSONString(model))
