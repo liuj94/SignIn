@@ -3,6 +3,7 @@ package com.example.signin
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.media.MediaPlayer
 import android.os.AsyncTask
 import android.text.Html
 import android.view.KeyEvent
@@ -319,6 +320,9 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
         }
 
         mDecodeReader?.setDecodeReaderListener { data ->
+            var mRingPlayer =
+                MediaPlayer.create(this@ExamineKPActivity, R.raw.ddd)
+            mRingPlayer?.start()
             mDecodeReader?.close()
             try {
                 val str = String(data, StandardCharsets.UTF_8)
