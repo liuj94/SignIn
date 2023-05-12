@@ -124,6 +124,9 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
+            android:name=".ScanKPActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainHomeActivity"
             android:exported="false" />
         <activity

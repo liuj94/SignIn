@@ -3,6 +3,7 @@ package com.example.signin
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.media.MediaPlayer
 import android.os.AsyncTask
 import android.text.Html
 import android.view.KeyEvent
@@ -18,6 +19,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
 import com.alibaba.fastjson.JSON
+import com.bumptech.glide.Glide
 import com.common.apiutil.decode.DecodeReader
 import com.common.face.api.FaceUtil
 import com.dylanc.longan.activity
@@ -74,20 +76,20 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
         order.userName?.let { binding.userName.text = it }
         var p = "开票金额<font color='#D43030'>" + order.amount + "</font>元"
         binding.amount.text = Html.fromHtml(p)
-        //增值税专用发票、普通销售发票
+        //增值税专用发票、普通销售发票{{pagedata.userOrder.invoiceType==1?'增值税普通发票':'增值税专用发票'}}
         if (order.invoiceType.equals("1")) {
-            binding.invoiceType.text = "普通销售发票"
+            binding.invoiceType.text = "增值税普通发票"
         } else {
             binding.invoiceType.text = "增值税专用发票"
         }
-        var model =
-            JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
-        for (item in model.sys_invoice_type) {
-            if (order.invoiceType.equals(item.dictValue.trim())) {
-                binding.invoiceType.text =
-                    item.dictLabel
-            }
-        }
+//        var model =
+//            JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
+//        for (item in model.sys_invoice_type) {
+//            if (order.invoiceType.equals(item.dictValue.trim())) {
+//                binding.invoiceType.text =
+//                    item.dictLabel
+//            }
+//        }
         /**
          * id: data.id
         name: escape(data.userMeeting.name)
@@ -167,7 +169,12 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
 
                 override fun onMySuccess(data: MeetingUserDeData.UserOrderBean?) {
                     super.onMySuccess(data)
-                    data?.let { createChineseQRCode(it.qr) }
+                    data?.let {
+
+//                        createChineseQRCode(it.qr)
+                        Glide.with(this@ExamineKPActivity).load("https://meeting.nbqichen.com/prod-api/common/qr/created?content="+it.qr+"&h=210&w=210").error(R.mipmap.qrcodeopy)
+                            .into(binding.stateIv)
+                    }
 
                 }
 
@@ -189,6 +196,8 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
     private fun examine() {
         var params = HashMap<String, Any>()
         params["id"] = order.id
+        params["code"] = binding.invoiceNumber.text.toString().trim()
+        params["no"] =  binding.invoiceNo.text.toString().trim()
         mViewModel.isShowLoading.value = true
         OkGo.post<String>(PageRoutes.Api_billfinish)
             .tag(PageRoutes.Api_billfinish)
@@ -239,10 +248,10 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1111) {
             data?.getStringExtra("dm").let {
-                binding.invoiceNumber.text = it
+                binding.invoiceNumber.setText(it)
             }
             data?.getStringExtra("hm")?.let {
-                binding.invoiceNo.text = it
+                binding.invoiceNo.setText(it)
             }
 
         }
@@ -269,6 +278,7 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
                 scrollable = true,			//让自定义宽高生效
                 noVerticalPadding = true    //让自定义高度生效
             ).apply{
+                findViewById<TextView>(R.id.title).setText("请选择模式")
                 findViewById<TextView>(R.id.btn1).setOnClickListener { dismiss() }
                 findViewById<TextView>(R.id.btn2).setOnClickListener {   kv.putString("shaomamoshi",moshi)
                     if(moshi.equals("激光头识别")){
@@ -319,6 +329,9 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
         }
 
         mDecodeReader?.setDecodeReaderListener { data ->
+            var mRingPlayer =
+                MediaPlayer.create(this@ExamineKPActivity, R.raw.ddd)
+            mRingPlayer?.start()
             mDecodeReader?.close()
             try {
                 val str = String(data, StandardCharsets.UTF_8)
@@ -327,8 +340,8 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
                         var temp = str.split(",")
                         var dm = temp[2]
                         var hm = temp[3]
-                        binding.invoiceNumber.text = dm
-                        binding.invoiceNo.text = hm
+                        binding.invoiceNumber.setText(dm)
+                        binding.invoiceNo.setText( hm)
                     }catch (e:java.lang.Exception){
                         toast("请提供正确发票码")
                     }
@@ -350,8 +363,8 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
                 var temp = p0.split(",")
                 var dm = temp[2]
                 var hm = temp[3]
-                binding.invoiceNumber.text = dm
-                binding.invoiceNo.text = hm
+                binding.invoiceNumber.setText(dm)
+                binding.invoiceNo.setText( hm)
                 openBlue()
             }
 

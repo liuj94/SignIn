@@ -200,9 +200,9 @@
                                     android:textColor="#ff4d4d4d"
                                     android:textSize="14sp" />
 
-                                <TextView
+                                <EditText
                                     android:windowSoftInputMode="adjustPan"
-                                    android:hint=""
+                                    android:hint="请输入发票代码"
                                     android:singleLine="true"
                                     android:maxLines="1"
                                     android:background="#fff"
@@ -230,8 +230,8 @@
                                     android:textColor="#ff4d4d4d"
                                     android:textSize="14sp" />
 
-                                <TextView
-                                    android:hint=""
+                                <EditText
+                                    android:hint="请输入发票号码"
                                     android:singleLine="true"
                                     android:maxLines="1"
                                     android:background="#fff"

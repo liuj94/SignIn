@@ -1,5 +1,6 @@
 package com.example.signin
 
+import android.media.MediaPlayer
 import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.startActivity
@@ -65,7 +66,9 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCo
 
 
     override fun onScanQRCodeSuccess(result: String?) {
-
+        var mRingPlayer =
+            MediaPlayer.create(this@ScanActivity, R.raw.ddd)
+        mRingPlayer?.start()
         result?.let {param->
             var signUpUser = JSON.parseObject(param, SignUpUser::class.java)
             if(signUpUser.id.isNullOrEmpty()){

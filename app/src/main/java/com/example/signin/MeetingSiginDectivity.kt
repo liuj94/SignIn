@@ -1,5 +1,6 @@
 package com.example.signin
 
+import android.media.MediaPlayer
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -553,6 +554,9 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         }
 
         mDecodeReader?.setDecodeReaderListener { data ->
+            var mRingPlayer =
+                MediaPlayer.create(this@MeetingSiginDectivity, R.raw.ddd)
+            mRingPlayer?.start()
 //            if (!isShiBieZ){
 //                isShiBieZ = true
                 mDecodeReader?.close()
