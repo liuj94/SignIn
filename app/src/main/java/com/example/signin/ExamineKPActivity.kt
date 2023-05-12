@@ -329,6 +329,9 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
         }
 
         mDecodeReader?.setDecodeReaderListener { data ->
+            if( AppManager.getAppManager().topActivity!=this@ExamineKPActivity){
+                return@setDecodeReaderListener
+            }
             var mRingPlayer =
                 MediaPlayer.create(this@ExamineKPActivity, R.raw.ddd)
             mRingPlayer?.start()
@@ -358,6 +361,9 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
     }
 
     override fun onScanCallBack(p0: String?) {
+        if( AppManager.getAppManager().topActivity!=this@ExamineKPActivity){
+            return
+        }
         try {
             p0?.let {
                 var temp = p0.split(",")

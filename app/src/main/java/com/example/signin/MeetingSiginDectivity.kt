@@ -554,6 +554,9 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         }
 
         mDecodeReader?.setDecodeReaderListener { data ->
+            if( AppManager.getAppManager().topActivity!=this@MeetingSiginDectivity){
+                return@setDecodeReaderListener
+            }
             var mRingPlayer =
                 MediaPlayer.create(this@MeetingSiginDectivity, R.raw.ddd)
             mRingPlayer?.start()
@@ -611,6 +614,9 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     }
 
     override fun onScanCallBack(data: String?) {
+        if( AppManager.getAppManager().topActivity!=this@MeetingSiginDectivity){
+            return
+        }
         try {
             goRe(data)
 

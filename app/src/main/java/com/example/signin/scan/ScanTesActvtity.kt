@@ -36,10 +36,10 @@ class ScanTestActvtity : AppCompatActivity(), ScanCallBack {
     }
 
     override fun onScanCallBack(data: String) {
-        if (TextUtils.isEmpty(data)) return
-        Log.e("Hello", "回调数据 == > $data")
-
-        findViewById<TextView>(R.id.scan_result).setText(String.format(Locale.CHINA, "扫码结果：\n\n%s", data))
+//        if (TextUtils.isEmpty(data)) return
+//        Log.e("Hello", "回调数据 == > $data")
+//
+//        findViewById<TextView>(R.id.scan_result).setText(String.format(Locale.CHINA, "扫码结果：\n\n%s", data))
 
     }
 

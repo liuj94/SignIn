@@ -18,8 +18,7 @@ import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import sigin
 
-class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCodeView.Delegate,
-    ScanCallBack, KeyEventResolver.OnScanSuccessListener {
+class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QRCodeView.Delegate{
 
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
@@ -231,12 +230,12 @@ var scanQRCodeOpenCameraError = false
         super.onStop()
     }
 var isPause =true
-    override fun onScanCallBack(data: String?) {
-        try {
-        goRe(data)
-        } catch (e: Exception) {
-        }
-    }
+//    override fun onScanCallBack(data: String?) {
+//        try {
+//        goRe(data)
+//        } catch (e: Exception) {
+//        }
+//    }
 
     private fun goRe(data: String?) {
         if (isPause) {
@@ -302,10 +301,10 @@ var isPause =true
         super.onDestroy()
     }
 
-    override fun onScanSuccess(barcode: String?) {
-        try {
-            goRe(barcode)
-        } catch (e: Exception) {
-        }
-    }
+//    override fun onScanSuccess(barcode: String?) {
+//        try {
+//            goRe(barcode)
+//        } catch (e: Exception) {
+//        }
+//    }
 }

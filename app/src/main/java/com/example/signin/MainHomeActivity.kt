@@ -29,15 +29,9 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
     var isMainHome = true
 
-//    var mDecodeReader: DecodeReader? = null
-//    var mKeyEventResolver: KeyEventResolver? = null
     override fun initData() {
         SpeechUtils.getInstance(this@MainHomeActivity)
-//        initScan()
-//        mDecodeReader?.open(115200)?.let {
-//            if (it === ResultCode.SUCCESS) toast("打开成功") else toast("打开失败")
-//            Log.e("Hello", "ResultCode=it == > $it")
-//        }
+
 
     getFragmentLists()
 
