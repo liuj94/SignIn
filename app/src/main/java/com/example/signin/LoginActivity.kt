@@ -76,27 +76,31 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                                         kv.putString("userData",JSON.toJSONString(data))
                                         startActivity<MainHomeActivity>()
                                         finish()
-                                    }else{
+                                    }
+                                    else{
+                                    if(data.userName.isNullOrEmpty()){
+                                        data.name = binding.userName.text.toString().trim()
+                                        data.password = binding.password.text.toString().trim()
+                                        kv.putString("userData",JSON.toJSONString(data))
+                                        startActivity<MainHomeActivity>()
+                                        finish()
+//                                        MaterialDialog(this@LoginActivity).show {
+//                                          customView(	//自定义弹窗
+//                                                viewRes = R.layout.tc_user_add,//自定义文件
+//                                                dialogWrapContent = true,	//让自定义宽度生效
+//                                                scrollable = true,			//让自定义宽高生效
+//                                                noVerticalPadding = true    //让自定义高度生效
+//                                            ).apply {
+//                                              findViewById<TextView>(R.id.add).setOnClickListener {
+//                                                  add(findViewById<EditText>(R.id.userName).text.toString().trim(),JSON.toJSONString(data))
+//                                              }
+//                                          }
+//
+//                                            cancelOnTouchOutside(false)	//点击外部不消失
+//                                        }
 
-
-                                    if(data.userName.isNullOrEmpty()||data.phonenumber.isNullOrEmpty()){
-                                        MaterialDialog(this@LoginActivity).show {
-                                          customView(	//自定义弹窗
-                                                viewRes = R.layout.tc_user_add,//自定义文件
-                                                dialogWrapContent = true,	//让自定义宽度生效
-                                                scrollable = true,			//让自定义宽高生效
-                                                noVerticalPadding = true    //让自定义高度生效
-                                            ).apply {
-                                              findViewById<TextView>(R.id.add).setOnClickListener {
-                                                  add(findViewById<EditText>(R.id.phone).text.toString().trim(),
-                                                      findViewById<EditText>(R.id.userName).text.toString().trim(),JSON.toJSONString(data))
-                                              }
-                                          }
-
-                                            cancelOnTouchOutside(false)	//点击外部不消失
-                                        }
-
-                                    }else{
+                                    }
+                                    else{
 //                                        com.dylanc.longan.startActivity<MainHomeActivity>("id" to liveDataList[position].id)
 
                                         data.name = binding.userName.text.toString().trim()
@@ -137,9 +141,9 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
 
     }
 
-    fun add( phonenumber:String,userName:String,userData :String){
+    fun add( userName:String,userData :String){
         val params = HashMap<String, String>()
-        params["phonenumber"] = phonenumber
+//        params["phonenumber"] = phonenumber
         params["nickName"] = userName
 
         OkGo.put<String>(PageRoutes.Api_editUser)

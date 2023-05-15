@@ -59,7 +59,7 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
             startActivity<SetActivity>()
         }
         binding.infoll.setOnClickListener {
-            startActivity<UserSetActivity>()
+//            startActivity<UserSetActivity>()
         }
         binding.gjgy.setOnClickListener {
             com.dylanc.longan.startActivity<AboutActivity>()
@@ -126,8 +126,16 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
                 Glide.with(it).load(PageRoutes.BaseUrl + userData?.avatar).error(R.drawable.ov_999)
                     .into(binding.img)
             }
-            binding.name.text = userData?.nickName
-            binding.phone.text = userData?.phonenumber
+
+            if(userData?.userType.equals("01")){
+                binding.name.text = userData?.nickName
+                binding.phone.text = userData?.phonenumber
+            }else{
+                binding.name.text = userData?.remark
+                binding.phone.text = userData?.userName
+            }
+
+
 
 
         }
@@ -138,6 +146,7 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
                 for (item in model.user_type) {
                     if (userData?.userType.equals(item.dictValue.trim())) {
                         binding.type.text = item.dictLabel
+
                     }
                 }
             }

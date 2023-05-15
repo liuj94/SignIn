@@ -103,8 +103,12 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
             } else if (examineStatus.equals("1")) {
                 startActivity<ExamineActivity>("order" to order)
+            }else{
+                startActivity<ExamineActivity>("order" to order)
             }
-
+            if (invoiceStatus.equals("5")) {
+                startActivity<ExamineKPActivity>("order" to order)
+            }
 
         }
         binding.itemLcxx.lcBtn.setOnClickListener {
@@ -353,13 +357,18 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             if (cAmount > 0) {
                 binding.itemDdxx.ddType.text =
                     "开票类型:"
-                //invoiceType	1 普票 2专票
-                for (item in model.sys_invoice_type) {
-                    if (it.invoiceType.equals(item.dictValue.trim())) {
-                        binding.itemDdxx.ddType.text =
-                            "开票类型:" + item.dictLabel
-                    }
+                if (order.invoiceType.equals("1")) {
+                    binding.itemDdxx.ddType.text = "开票类型:" + "增值税普通发票"
+                } else {
+                    binding.itemDdxx.ddType.text = "开票类型:" + "增值税专用发票"
                 }
+                //invoiceType	1 普票 2专票
+//                for (item in model.sys_invoice_type) {
+//                    if (it.invoiceType.equals(item.dictValue.trim())) {
+//                        binding.itemDdxx.ddType.text =
+//                            "开票类型:" + item.dictLabel
+//                    }
+//                }
                 it.invoiceNo?.let { invoiceNo -> binding.itemDdxx.ddNum.text = "发票票号:$invoiceNo" }
 
             }
@@ -375,10 +384,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             binding.infoLl.visibility = View.GONE
             for (item in model.sys_invoice_status) {
                 if (examineStatus.equals(item.dictValue.trim())) {
-
                     binding.itemDdxx.ddBtn.text = item.dictLabel
                     if (item.dictValue.trim().equals("2")) {
                         binding.infoLl.visibility = View.VISIBLE
+                        //'1未开发票 2申请中 3申请成功 4申请失败 5已开票
                         if (invoiceStatus.equals("1")) {
                             if (cAmount > 0) {
                                 binding.itemDdxx.ddBtn.text = "开具发票"
@@ -387,15 +396,30 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             }
 
                             binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
+                        } else if (invoiceStatus.equals("2")) {
+                            binding.itemDdxx.ddBtn.text = "发票申请中"
+                            binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
+                        } else if (invoiceStatus.equals("3")) {
+                            binding.itemDdxx.ddBtn.text = "开具发票"
+                            binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
+
+                        } else if (invoiceStatus.equals("4")) {
+                            binding.itemDdxx.ddBtn.text = "发票申请失败"
+                            binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
+
+                        } else if (invoiceStatus.equals("5")) {
+                            binding.itemDdxx.ddBtn.text = "已开票"
+                            binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
                         } else {
                             binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
                         }
 
-                    } else if (item.dictValue.trim().equals("1")) {
-                        binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
-                    } else {
-
+                    }
+                    else if (item.dictValue.trim().equals("3")) {
                         binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
+                    } else {
+                        binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
+
                     }
                 }
             }
@@ -608,7 +632,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemHcqd.ll.visibility = View.VISIBLE
 
                             binding.itemHcqd.name.text = "" + it.name
-                            it.startTime?.let {startTime->
+                            it.startTime?.let { startTime ->
                                 binding.itemHcqd.data.text = getDateStr(
                                     "MM月dd",
                                     startTime
@@ -623,7 +647,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                                 ).toString()
 
                             }
-                            it.address?.let {address->   binding.itemHcqd.address.text = address}
+                            it.address?.let { address -> binding.itemHcqd.address.text = address }
 
                             it.location?.let { location ->
                                 binding.itemHcqd.location.text =
@@ -730,20 +754,32 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         item.backUserMeetingTrip?.let {
                             binding.itemFcxx.kong.visibility = View.GONE
                             binding.itemFcxx.ll.visibility = View.VISIBLE
-                            it.remark?.let {remark-> binding.itemFcxx.name.text = remark }
+                            it.remark?.let { remark -> binding.itemFcxx.name.text = remark }
 
-                            it.startDate?.let {startDate-> binding.itemFcxx.lcData1.text =
-                                getDateStr("MM月dd", startDate).toString() }
-                            it.startCity?.let {startCity-> binding.itemFcxx.lcDidian1.text = startCity }
-                            it.startAddress?.let {startAddress-> binding.itemFcxx.lcJichang1.text = startAddress }
+                            it.startDate?.let { startDate ->
+                                binding.itemFcxx.lcData1.text =
+                                    getDateStr("MM月dd", startDate).toString()
+                            }
+                            it.startCity?.let { startCity ->
+                                binding.itemFcxx.lcDidian1.text = startCity
+                            }
+                            it.startAddress?.let { startAddress ->
+                                binding.itemFcxx.lcJichang1.text = startAddress
+                            }
 
 //                            binding.itemFcxx.lcJichang1.text = it.startAddress
-                            it.endDate?.let {endDate->  binding.itemFcxx.lcData2.text =
-                                getDateStr("MM月dd", endDate).toString() }
-                            it.endCity?.let {endCity-> binding.itemFcxx.lcDidian2.text = endCity }
-                            it.endAddress?.let {endAddress-> binding.itemFcxx.lcJichang2.text = endAddress }
+                            it.endDate?.let { endDate ->
+                                binding.itemFcxx.lcData2.text =
+                                    getDateStr("MM月dd", endDate).toString()
+                            }
+                            it.endCity?.let { endCity -> binding.itemFcxx.lcDidian2.text = endCity }
+                            it.endAddress?.let { endAddress ->
+                                binding.itemFcxx.lcJichang2.text = endAddress
+                            }
 
-                            it.startTime?.let {startTime->  binding.itemFcxx.time.text = startTime + "-" +it.endTime }
+                            it.startTime?.let { startTime ->
+                                binding.itemFcxx.time.text = startTime + "-" + it.endTime
+                            }
 
 //                            binding.itemFcxx.time.text = getDateStr2(
 //                                "HH:mm",
@@ -804,20 +840,32 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemLcxx.kong.visibility = View.GONE
                             binding.itemLcxx.ll.visibility = View.VISIBLE
                             binding.itemLcxx.name.text = it.remark
-                            it.startDate?.let {startDate->  binding.itemLcxx.lcData1.text =
-                                getDateStr("MM月dd", startDate).toString() }
+                            it.startDate?.let { startDate ->
+                                binding.itemLcxx.lcData1.text =
+                                    getDateStr("MM月dd", startDate).toString()
+                            }
 
 //                            binding.itemLcxx.lcDidian1.text = it.startCity
 //                            binding.itemLcxx.lcJichang1.text = it.startAddress
-                            it.startCity?.let { startCity-> binding.itemLcxx.lcDidian1.text = startCity }
-                            it.startAddress?.let {startAddress-> binding.itemLcxx.lcJichang1.text = startAddress }
+                            it.startCity?.let { startCity ->
+                                binding.itemLcxx.lcDidian1.text = startCity
+                            }
+                            it.startAddress?.let { startAddress ->
+                                binding.itemLcxx.lcJichang1.text = startAddress
+                            }
 
-                            it.endDate?.let {endDate-> binding.itemLcxx.lcData2.text =
-                                getDateStr("MM月dd", endDate).toString() }
-                            it.endCity?.let { endCity-> binding.itemLcxx.lcDidian2.text = endCity }
-                            it.endAddress?.let {endAddress-> binding.itemLcxx.lcJichang2.text = endAddress }
+                            it.endDate?.let { endDate ->
+                                binding.itemLcxx.lcData2.text =
+                                    getDateStr("MM月dd", endDate).toString()
+                            }
+                            it.endCity?.let { endCity -> binding.itemLcxx.lcDidian2.text = endCity }
+                            it.endAddress?.let { endAddress ->
+                                binding.itemLcxx.lcJichang2.text = endAddress
+                            }
 
-                            it.startTime?.let {startTime->  binding.itemLcxx.time.text = startTime + "-" +it.endTime }
+                            it.startTime?.let { startTime ->
+                                binding.itemLcxx.time.text = startTime + "-" + it.endTime
+                            }
 
 //                            binding.itemLcxx.time.text = getDateStr2(
 //                                "HH:mm",
@@ -1017,8 +1065,9 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
 
     }
-    var meetingFormData:MeetingFormData?=null
-    private fun getSiginData(signUpLocationId:String, back: () -> Unit) {
+
+    var meetingFormData: MeetingFormData? = null
+    private fun getSiginData(signUpLocationId: String, back: () -> Unit) {
         mViewModel.isShowLoading.value = true
         OkGo.get<SiginData>(PageRoutes.Api_meetingSignUpLocationDe + signUpLocationId)
             .tag(PageRoutes.Api_meetingSignUpLocationDe)
@@ -1031,24 +1080,24 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
                 override fun onMySuccess(data: SiginData) {
                     super.onMySuccess(data)
-                     meetingFormData = MeetingFormData()
+                    meetingFormData = MeetingFormData()
                     meetingFormData?.meetingFormList = data.meetingFormList
 
                     meetingFormData?.let {
-                        meetingUserDeData?.let {meetingUserDeData->
-                            for (list in it.meetingFormList){
-                                for (listFrom in meetingUserDeData.userMeetingForms){
-                                    if (list.name.equals(listFrom.name)){
-                                        if(listFrom.selectCheckboxParam!=null){
+                        meetingUserDeData?.let { meetingUserDeData ->
+                            for (list in it.meetingFormList) {
+                                for (listFrom in meetingUserDeData.userMeetingForms) {
+                                    if (list.name.equals(listFrom.name)) {
+                                        if (listFrom.selectCheckboxParam != null) {
                                             list.value = listFrom.selectCheckboxParam.boxValue
-                                        }else{
+                                        } else {
                                             list.value = listFrom.value
                                         }
                                     }
 
                                 }
                             }
-                            kv.putString("MeetingFormData",JSON.toJSONString(meetingFormData))
+                            kv.putString("MeetingFormData", JSON.toJSONString(meetingFormData))
                         }
 
 
@@ -1060,11 +1109,14 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     super.onError(response)
                     meetingFormData = MeetingFormData()
                     meetingFormData?.meetingFormList = ArrayList<MeetingFormList>()
-                    meetingFormData?.let {  kv.putString("MeetingFormData",JSON.toJSONString(meetingFormData)) }
+                    meetingFormData?.let {
+                        kv.putString(
+                            "MeetingFormData",
+                            JSON.toJSONString(meetingFormData)
+                        )
+                    }
                     back.invoke()
                 }
-
-
 
 
             })

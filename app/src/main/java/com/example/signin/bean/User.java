@@ -15,13 +15,19 @@ public class User {
     public String deptName = "";
     public String orderNum = "";
     public String dept = "";
-
+    public String remark = "";
+    public String getRemark() {
+        return remark;
+    }
     public String getDeptName() {
         return deptName;
     }
 
     public void setDeptName(String deptName) {
         this.deptName = deptName;
+    }
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getOrderNum() {

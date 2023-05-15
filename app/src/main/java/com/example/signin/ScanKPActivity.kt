@@ -1,6 +1,7 @@
 package com.example.signin
 
 import android.content.Intent
+import android.media.MediaPlayer
 import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.dylanc.longan.toast
 
@@ -27,7 +28,9 @@ class ScanKPActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QR
 
 
     override fun onScanQRCodeSuccess(result: String?) {
-
+        var mRingPlayer =
+            MediaPlayer.create(this@ScanKPActivity, R.raw.ddd)
+        mRingPlayer?.start()
         result?.let {param->
 //        044031801104（发票代码）,
 //        40021227（发票号码）,
@@ -39,6 +42,7 @@ class ScanKPActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>() , QR
                 intent.putExtra("dm", dm)
                 intent.putExtra("hm", hm)
                 setResult(1111, intent)
+                finish()
             }catch (e:java.lang.Exception){
                 toast("请提供正确发票码")
             }
