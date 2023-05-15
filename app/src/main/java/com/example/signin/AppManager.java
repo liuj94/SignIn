@@ -134,6 +134,7 @@ public final class AppManager {
             if (!activities.contains(activity)) {
                 activities.add(activity);
             }
+//            mActivityList = activities;
         }
     }
 
