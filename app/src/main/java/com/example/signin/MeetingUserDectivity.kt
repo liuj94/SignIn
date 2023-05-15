@@ -430,6 +430,13 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             binding.itemDdxx.root.visibility = View.GONE
             binding.infoLl.visibility = View.VISIBLE
         }
+        binding.itemZcbd.root.visibility = View.GONE
+        binding.itemLpff.root.visibility = View.GONE
+        binding.itemRzxx.root.visibility = View.GONE
+        binding.itemHcqd.root.visibility = View.GONE
+        binding.itemCyxi.root.visibility = View.GONE
+        binding.itemFcxx.root.visibility = View.GONE
+        binding.itemLcxx.root.visibility = View.GONE
         for (item in data.meetingSignUps) {
             when (item.type) {
                 8 -> {
@@ -439,6 +446,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
                 1 -> {
                     try {
+                        binding.itemZcbd.root.visibility = View.VISIBLE
                         //注册报到
                         binding.itemZcbd.kong.visibility = View.GONE
                         binding.itemZcbd.ll.visibility = View.VISIBLE
@@ -480,6 +488,9 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
                 6 -> {
                     try {
+                        binding.itemLpff.root.visibility = View.VISIBLE
+                        binding.itemLpff.kong.visibility = View.GONE
+                        binding.itemLpff.ll.visibility = View.VISIBLE
                         //礼品发放
                         setStateColor(model.sys_liping, "1", binding.itemLpff.lpBtn)
 
@@ -521,6 +532,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
                 3 -> {
                     try {
+                        binding.itemRzxx.root.visibility = View.VISIBLE
                         binding.itemRzxx.kong.visibility = View.VISIBLE
                         binding.itemRzxx.ll.visibility = View.GONE
                         item.userMeetingAccommodation?.let { userMeetingAccommodation ->
@@ -598,6 +610,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
                 4 -> {
                     try {
+                        binding.itemHcqd.root.visibility = View.VISIBLE
                         setStateColor(
                             model.sys_huichang,
                             "1",
@@ -665,6 +678,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
                 5 -> {
                     try {
+                        binding.itemCyxi.root.visibility = View.VISIBLE
                         //餐饮签到
                         setStateColor(model.sys_canyin, "1", binding.itemCyxi.zcBtn)
                         item.userMeetingSignUp?.let {
@@ -732,6 +746,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
                 7 -> {
                     try {
+                        binding.itemFcxx.root.visibility = View.VISIBLE
                         //返程签到
                         setStateColor(
                             model.sys_fancheng,
@@ -818,6 +833,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
                 2 -> {
                     try {
+                        binding.itemLcxx.root.visibility = View.VISIBLE
                         setStateColor(
                             model.sys_laicheng,
                             "1",

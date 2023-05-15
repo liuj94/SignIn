@@ -130,7 +130,7 @@ public class MeetingUserData implements Serializable {
     private int travelMsgStatus;
     private String date= "";
     private String payStatus= "";
-    private int signUpStatus = 0;
+    private String signUpStatus ="0";
     private String userMeetingTrip= "";
     private int printStatus;
     private String registerSignUpTime= "";
@@ -529,11 +529,11 @@ public class MeetingUserData implements Serializable {
         this.payStatus = payStatus;
     }
 
-    public int getSignUpStatus() {
+    public String getSignUpStatus() {
         return signUpStatus;
     }
 
-    public void setSignUpStatus(int signUpStatus) {
+    public void setSignUpStatus(String signUpStatus) {
         this.signUpStatus = signUpStatus;
     }
 

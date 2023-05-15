@@ -66,7 +66,7 @@ class FMeetingDeList3Adapter : BaseBindingAdapter<MeetingUserData, ListMeetingde
         if (!SignUpStatus.isNullOrEmpty()) {
             if (!siginUp2List.isNullOrEmpty()) {
                 for (data in siginUp2List) {
-                    if (SignUpStatus.equals(data.dictValue)) {
+                    if (SignUpStatus.trim().equals(data.dictValue.trim())) {
                         holder.state.text = data.dictLabel
                         if(data.dictValue.equals("2")){
                             holder.state.setTextColor(Color.parseColor("#43CF7C"))
