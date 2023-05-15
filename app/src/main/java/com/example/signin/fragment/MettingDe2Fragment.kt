@@ -116,6 +116,12 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
         binding.refresh.setOnRefreshListener {
             getList()
         }
+        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
+            .observeForever {
+                signUpId = ""
+                getDatasign_up_app_list()
+                getList()
+            }
     }
 
     override fun onResume() {
@@ -171,42 +177,52 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
             selectList.add(all)
             selectList.addAll(data.list)
             adapterSelect?.notifyDataSetChanged()
+        }else{
+            getDatasign_up_app_list()
         }
-//        OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
-//            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
-//            .headers("Authorization", kv.getString("token", ""))
-//            .execute(object : RequestCallback<List<SiginUpListData>>() {
-//                override fun onSuccessNullData() {
-//                    super.onSuccessNullData()
-//
-//                }
-//
-//                override fun onMySuccess(data: List<SiginUpListData>) {
-//                    super.onMySuccess(data)
-//                    selectList.clear()
-////                    全部签到站点
-//                    var all = SiginUpListData()
-//                    all.name = "全部签到站点"
-//                    all.id = ""
-//                    all.isMyselect = true
-//                    selectList.add(all)
-//                    selectList.addAll(data)
-//                    adapterSelect?.notifyDataSetChanged()
-//
-//                }
-//
-//                override fun onError(response: Response<List<SiginUpListData>>) {
-//                    super.onError(response)
-//
-//                }
-//
-//                override fun onFinish() {
-//                    super.onFinish()
-//
-//                }
-//
-//
-//            })
+
+    }
+    private fun getDatasign_up_app_list() {
+
+        OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+            .headers("Authorization", kv.getString("token", ""))
+            .execute(object : RequestCallback<List<SiginUpListData>>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
+
+                }
+
+                override fun onMySuccess(data: List<SiginUpListData>) {
+                    super.onMySuccess(data)
+                    var list = SiginUpListModel()
+                    list.list = data
+                    kv.putString("SiginUpListModel", JSON.toJSONString(list))
+                    selectList.clear()
+
+                    var all = SiginUpListData()
+                    all.name = "全部签到站点"
+                    all.id = ""
+                    all.isMyselect = true
+                    selectList.add(all)
+                    selectList.addAll(data)
+                    adapterSelect?.notifyDataSetChanged()
+
+                }
+
+                override fun onError(response: Response<List<SiginUpListData>>) {
+                    super.onError(response)
+
+
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+
+                }
+
+
+            })
     }
 
 

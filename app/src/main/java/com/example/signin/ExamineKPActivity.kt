@@ -31,7 +31,6 @@ import com.example.signin.base.BaseViewModel
 import com.example.signin.base.StatusBarUtil
 import com.example.signin.bean.MeetingUserDeData
 import com.example.signin.bean.TypeData
-import com.example.signin.bean.TypeModel
 import com.example.signin.databinding.ActKpBinding
 import com.example.signin.net.RequestCallback
 import com.hello.scan.ScanCallBack
@@ -280,7 +279,9 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
             ).apply{
                 findViewById<TextView>(R.id.title).setText("请选择模式")
                 findViewById<TextView>(R.id.btn1).setOnClickListener { dismiss() }
-                findViewById<TextView>(R.id.btn2).setOnClickListener {   kv.putString("shaomamoshi",moshi)
+                findViewById<TextView>(R.id.btn2).setOnClickListener {
+                    dismiss()
+                    kv.putString("shaomamoshi",moshi)
                     if(moshi.equals("激光头识别")){
                         openHardreader()
                     }else if(moshi.equals("二维码识别")){
@@ -293,14 +294,12 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
                 var adapter = SelectAdapter().apply {
                     submitList(list)
                     setOnItemClickListener { _, _, position ->
-                        for(item in items){
-                            items[position].isMyselect = false
+                        for(item in list){
+                            list[position].isMyselect = false
                         }
-                        items[position].isMyselect = true
-                        moshi = items[position].dictLabel
+                        list[position].isMyselect = true
+                        moshi = list[position].dictLabel
                         notifyDataSetChanged()
-
-
 
                     }
                 }

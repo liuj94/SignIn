@@ -11,14 +11,17 @@ interface PageRoutes {
         //登录
         val Api_login = "$BaseUrlApi/login"
         val Api_editUser = "$BaseUrlApi/manager/system/user"
-//        val Api_getUserInfo = "$BaseUrlApi/getInfo"
+
+        //        val Api_getUserInfo = "$BaseUrlApi/getInfo"
         val Api_getUserInfo = "$BaseUrlApi/manager/system/user/getInfo"
+
         //appStatus	-1,全部;1,进行中;2,过期
         val Api_meetingList = "$BaseUrlApi/manager/meeting/list?"
 
-//        val Api_meeting_statistics = "$BaseUrl/manager/meeting/meeting/statistics/{id}"
+        //        val Api_meeting_statistics = "$BaseUrl/manager/meeting/meeting/statistics/{id}"
         val Api_meeting_statistics = "$BaseUrlApi/manager/meeting/meeting/statistics/"
-//        val Api_meeting_business = "$BaseUrl/manager/meeting/business/{id}"
+
+        //        val Api_meeting_business = "$BaseUrl/manager/meeting/business/{id}"
         val Api_meeting_business = "$BaseUrlApi/manager/meeting/business/"
 
         val Api_ed_meetingSignUpLocation = "$BaseUrlApi/manager/meetingSignUpLocation"
@@ -29,10 +32,12 @@ interface PageRoutes {
         //manager/meetingSignUpLocation/list?meetingId=20&signUpId=
         val Api_meetingSignUpLocation = "$BaseUrlApi/manager/meetingSignUpLocation/list?meetingId="
         val Api_voice = "$BaseUrlApi/manager/voice"
-//        val Api_meetinguser = "$BaseUrlApi/manager/meeting/user/list?meetingId="
+
+        //        val Api_meetinguser = "$BaseUrlApi/manager/meeting/user/list?meetingId="
 //        val Api_meetinguser_data = "$BaseUrlApi/manager/meeting/user/35?id=35"
         val Api_meetinguser_data = "$BaseUrlApi/manager/meeting/user/"
-        val Api_meeting_sign_up_data_list = "$BaseUrlApi/manager/meeting/user/sign/up/data/list?meetingId="
+        val Api_meeting_sign_up_data_list =
+            "$BaseUrlApi/manager/meeting/user/sign/up/data/list?meetingId="
 
         /**
          * status
@@ -55,20 +60,21 @@ interface PageRoutes {
          */
         val Api_datatype = "$BaseUrlApi/common/dict/data/type/"
 
-//        val Api_datatype = "$BaseUrlApi/manager/meeting/sign/up/{id}"
+        //        val Api_datatype = "$BaseUrlApi/manager/meeting/sign/up/{id}"
         val Api_signdata = "$BaseUrlApi/manager/meeting/sign/up/"
 
-//        val Api_signdata = "$BaseUrlApi/manager/meetingSignUpLocation/{id}"
+        //        val Api_signdata = "$BaseUrlApi/manager/meetingSignUpLocation/{id}"
         val Api_meetingSignUpLocationDe = "$BaseUrlApi/manager/meetingSignUpLocation/"
 
-       //审核订单
+        //审核订单
 //        val Api_examine = "$BaseUrlApi/exe/meeting/user/examine"
         val Api_examine = "$BaseUrlApi/manager/meeting/order/examine"
+
         //签到
 //        val Api_sigin = "$BaseUrlApi/exe/meeting/user"
         val Api_sigin = "$BaseUrlApi/manager/meeting/user"
 
-//        val Api_sigin = "$BaseUrlApi/manager/meeting/order/{id}"
+        //        val Api_sigin = "$BaseUrlApi/manager/meeting/order/{id}"
         val Api_order = "$BaseUrlApi/manager/meeting/order/"
 
 
@@ -115,14 +121,16 @@ interface PageRoutes {
          */
         val Api_trip = "$BaseUrlApi/manager/userMeetingTrip/trip"
         val Api_get_trip = "$BaseUrlApi/manager/userMeetingTrip/trip/"
+
         //        val Api_bill = "$BaseUrlApi/manager/meeting/order/bill/{orderId}"
         val Api_bill = "$BaseUrlApi/manager/meeting/order/bill/"
         val Api_appVersion = "$BaseUrlApi/common/appVersion/new/1"
 
 
-        val baiduToken = "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=Va5yQRHlA4Fq5eR3LT0vuXV4&client_secret=0rDSjzQ20XUj5itV6WRtznPQSzr5pVw2&"
+        val baiduToken =
+            "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=Va5yQRHlA4Fq5eR3LT0vuXV4&client_secret=0rDSjzQ20XUj5itV6WRtznPQSzr5pVw2&"
 
-
+        val websocketUrl = "wss://meeting.nbqichen.com/websocket/user?source=sys&Authorization="
 
     }
 

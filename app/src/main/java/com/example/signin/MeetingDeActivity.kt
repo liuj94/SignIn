@@ -64,6 +64,11 @@ var businessId = ""
         binding.zhez.setOnClickListener {
 
         }
+        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
+            .observeForever {
+                getData()
+
+            }
     }
     private fun getData() {
 

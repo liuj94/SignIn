@@ -2,6 +2,7 @@ package com.example.signin
 
 
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.toast
@@ -10,6 +11,7 @@ import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.CustomUpdateParser
+import com.example.signin.bean.SocketData
 import com.example.signin.databinding.ActivityMainBinding
 import com.example.signin.fragment.HomeMainFragment
 import com.example.signin.fragment.MyFragment
@@ -19,6 +21,7 @@ import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
 import com.xuexiang.xupdate.XUpdate
 import getDataType
+import java.net.URI
 
 
 class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>()
@@ -31,8 +34,34 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
     override fun initData() {
         SpeechUtils.getInstance(this@MainHomeActivity)
+        val uri: URI = URI.create("wss://meeting.nbqichen.com/websocket/user?source=sys&Authorization="+kv.getString("token", ""))
+        val client: JWebSocketClient = object : JWebSocketClient(uri) {
+            override fun onMessage(message: String) {
+//                type=="delete_location"
+//                type=="add_location" 刷新站点数据
+                //message就是接收到的消息 {"code":"200","count":1,"type":"refresh"}
+                try {
+                    var data =  JSON.parseObject(message, SocketData::class.java)
+                    if(data.code.equals("200")){
+                        if(data.type.equals("refresh")){
+                            LiveDataBus.get().with("JWebSocketClientRefresh").postValue(data.type)
+                        }else if(data.type.equals("delete_location")||data.type.equals("add_location")){
+                            LiveDataBus.get().with("JWebSocketClientlocation").postValue(data.type)
+                        }
+                    }
+                }catch (e:Exception){
 
+                }
 
+                Log.e("JWebSClientService", message)
+
+            }
+        }
+        try {
+            client.connectBlocking()
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
     getFragmentLists()
 
         getDataType("sys_zhuce") {

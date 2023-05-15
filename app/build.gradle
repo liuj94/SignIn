@@ -114,4 +114,5 @@ dependencies {
     implementation 'com.zhy:okhttputils:2.6.2'
     implementation 'com.github.xuexiangjys.XUtil:xutil-core:2.0.0'
     implementation 'com.github.xuexiangjys.XUtil:xutil-sub:2.0.0'
+    implementation "org.java-websocket:Java-WebSocket:1.4.0"
 }

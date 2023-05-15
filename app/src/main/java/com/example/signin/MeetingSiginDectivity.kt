@@ -75,6 +75,10 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         intent.getStringExtra("voiceStatus")?.let { voiceStatus = it }
         intent.getIntExtra("timeLong", 3)?.let { timeLong = it }
         intent.getIntExtra("showType", 0)?.let { showType = it }
+        LiveDataBus.get().with("JWebSocketClientRefresh", String::class.java)
+            .observeForever {
+                getSiginData()
+            }
         var num=""
         if(showType == 1){
             num = "注册签到"

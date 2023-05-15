@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
+import com.example.signin.LiveDataBus
 import com.example.signin.PageRoutes
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
@@ -69,6 +70,12 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
             getData()
             refreshData()
         }
+        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
+            .observeForever {
+                getData()
+                refreshData()
+
+            }
     }
 
     private fun getList() {
