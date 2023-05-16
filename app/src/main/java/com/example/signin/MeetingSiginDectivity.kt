@@ -773,6 +773,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                     signUpUser.failedMsg = failedMsg
                     signUpUser.repeatMsg = repeatMsg
                     signUpUser.voiceStatus = voiceStatus
+                    signUpUser.signUpStatus = signUpStatus
                     if(showType==3){
                         com.dylanc.longan.startActivity<SiginReActivity>(
                             "type" to showType,
@@ -787,6 +788,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                         params["signUpId"] = signUpUser.signUpId//签到站id
                         params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
                         params["status"] = "2"//用户参与会议id
+                        params["signUpStatus"] = signUpStatus
                         sigin(JSON.toJSONString(params),{ success->
                             signUpUser.success = success
                             com.dylanc.longan.startActivity<SiginReAutoActivity>(

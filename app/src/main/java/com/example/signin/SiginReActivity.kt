@@ -44,6 +44,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
     var autoStatus: String = "1"
     var mRingPlayer: MediaPlayer? = null
     var avatar: String = ""
+    var signUpStatus: String = "1"
     var isShowAvatar: Boolean = false
     var meetingFormList: MutableList<MeetingFormList> = ArrayList()
     override fun initData() {
@@ -77,6 +78,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
             params["signUpId"] = it.signUpId//签到站id
             params["userMeetingId"] = it.userMeetingId//用户参与会议id
             params["status"] = "2"//用户参与会议id
+            params["signUpStatus"] = it.signUpStatus
             it.meetingName?.let { meetingName -> binding.name.text = meetingName }
 //            it.name?.let { name-> binding.userName.text = encode(name)
 //                binding.userName.visibility = View.VISIBLE}
