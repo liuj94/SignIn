@@ -108,6 +108,7 @@
                     android:layout_marginBottom="5dp"
                     android:id="@+id/lc_didian1"
                     android:textStyle="bold"
+                    android:maxLength="3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -152,6 +153,7 @@
                     android:layout_marginBottom="5dp"
                     android:id="@+id/lc_didian2"
                     android:textStyle="bold"
+                    android:maxLength="3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -189,6 +191,8 @@
             android:layout_height="0.5dp"
             android:background="#F3F4F8"/>
         <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/jiedaill"
             android:gravity="center_vertical"
             android:paddingRight="16dp"
             android:paddingLeft="18dp"
@@ -198,7 +202,7 @@
                 android:id="@+id/jiedai"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="接待员：马师傅"
+                android:text=""
                 android:textColor="#ff333333"
                 android:textSize="12sp"
                 android:textStyle="bold"

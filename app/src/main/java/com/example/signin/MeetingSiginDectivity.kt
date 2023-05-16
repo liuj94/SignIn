@@ -832,7 +832,6 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                     signUpUser.repeatMsg = repeatMsg
                     signUpUser.voiceStatus = voiceStatus
                     signUpUser.success = "500"
-                    signUpUser.success = "500"
                     com.dylanc.longan.startActivity<SiginReAutoActivity>(
                         "type" to showType,
                         "data" to signUpUser,

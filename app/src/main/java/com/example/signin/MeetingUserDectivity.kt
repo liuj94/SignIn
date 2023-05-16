@@ -120,7 +120,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         }
         binding.itemZcbd.zcBtn.setOnClickListener {
 //            gotoSigin(state_zhuche, 1)
-            if (state_zhuche.status.equals("1")) {
+            if (state_zhuche.status.equals("2")) {
                 gotoSigin(state_zhuche, 1)
 //                startActivity<SiginReActivity>("type" to 1, "data" to state_zhuche)
             }
@@ -454,11 +454,11 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         //注册报到
                         binding.itemZcbd.kong.visibility = View.GONE
                         binding.itemZcbd.ll.visibility = View.VISIBLE
-                        setStateColor(model.sys_zhuce, "1", binding.itemZcbd.zcBtn)
+                        setStatezcColor(model.sys_zhuce, "1", binding.itemZcbd.zcBtn)
 
                         data.id?.let { state_zhuche.userMeetingId = data.id }
                         state_zhuche.status = "" + item.select
-                        setStateColor(
+                        setStatezcColor(
                             model.sys_zhuce,
                             "" + item.select,
                             binding.itemZcbd.zcBtn
@@ -819,6 +819,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                                 param.mobile?.let { m -> mobile3 = m }
                                 binding.itemFcxx.jiedai.visibility = View.VISIBLE
                                 binding.itemFcxx.call1.visibility = View.VISIBLE
+                                binding.itemFcxx.jiedaill.visibility = View.VISIBLE
                             }
 
                         }
@@ -908,6 +909,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                                 param.mobile?.let { m -> mobile2 = m }
                                 binding.itemLcxx.jiedai.visibility = View.VISIBLE
                                 binding.itemLcxx.call1.visibility = View.VISIBLE
+                                binding.itemLcxx.jiedaill.visibility = View.VISIBLE
                             }
 
                         }
@@ -944,7 +946,23 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         }
     }
 
+    private fun setStatezcColor(
+        lists: List<TypeData>,
+        status: String,
+        tv: TextView
+    ) {
+        for (list in lists) {
+            if (list.dictValue.equals(status)) {
+                tv.text = list.dictLabel
+                if (!list.dictValue.equals("2")) {
+                    tv.setBackgroundResource(R.drawable.shape_bg_999999_15)
+                } else {
+                    tv.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
+                }
+            }
 
+        }
+    }
     fun getDateStr(format: String, dateStr: String): String {
         if (format.isNullOrEmpty() || dateStr.isNullOrEmpty()) {
             return ""
