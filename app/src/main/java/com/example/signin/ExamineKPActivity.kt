@@ -291,8 +291,11 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
                     dismiss()
                     kv.putString("shaomamoshi", moshi)
                     if (moshi.equals("激光头识别")) {
+                        ScanTool.GET.release()
                         openHardreader()
                     } else if (moshi.equals("二维码识别")) {
+                        mDecodeReader?.close()
+                        mDecodeReader = null
                         ScanTool.GET.initSerial(
                             this@ExamineKPActivity,
                             "/dev/ttyACM0",
@@ -300,6 +303,12 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
                             this@ExamineKPActivity
                         )
                         ScanTool.GET.playSound(true)
+
+
+                    }else{
+                        ScanTool.GET.release()
+                        mDecodeReader?.close()
+                        mDecodeReader = null
                     }
                 }
                 findViewById<ImageView>(R.id.gb).setOnClickListener { dismiss() }
@@ -350,7 +359,7 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
             var mRingPlayer =
                 MediaPlayer.create(this@ExamineKPActivity, R.raw.ddd)
             mRingPlayer?.start()
-            mDecodeReader?.close()
+//            mDecodeReader?.close()
             try {
                 val str = String(data, StandardCharsets.UTF_8)
                 runOnUiThread {

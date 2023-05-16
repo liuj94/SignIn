@@ -1,10 +1,6 @@
 package com.example.signin
 
 import android.graphics.Color
-import android.widget.EditText
-import android.widget.TextView
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.customview.customView
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
@@ -19,7 +15,6 @@ import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.xuexiang.xupdate.XUpdate
-import com.xuexiang.xutil.resource.ResUtils
 
 
 class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
@@ -44,7 +39,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
             params["username"] = binding.userName.text.toString().trim()
             params["password"] = binding.password.text.toString().trim()
             //source=app
-            params["source"] = "app"
+//            params["source"] = "app"
 
             OkGo.post<Token>(PageRoutes.Api_login)
                 .tag(PageRoutes.Api_login)

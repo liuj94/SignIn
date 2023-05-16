@@ -390,12 +390,16 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         //'1未开发票 2申请中 3申请成功 4申请失败 5已开票
                         if (invoiceStatus.equals("1")) {
                             if (cAmount > 0) {
-                                binding.itemDdxx.ddBtn.text = "开具发票"
+//                                binding.itemDdxx.ddBtn.text = "开具发票"
+                                binding.itemDdxx.ddBtn.text = "待申请"
+                                binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
                             } else {
                                 binding.itemDdxx.ddBtn.text = "订单详情"
+                                binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
+
                             }
 
-                            binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
+
                         } else if (invoiceStatus.equals("2")) {
                             binding.itemDdxx.ddBtn.text = "发票申请中"
                             binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
@@ -453,15 +457,13 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         setStateColor(model.sys_zhuce, "1", binding.itemZcbd.zcBtn)
 
                         data.id?.let { state_zhuche.userMeetingId = data.id }
+                        state_zhuche.status = "" + item.select
+                        setStateColor(
+                            model.sys_zhuce,
+                            "" + item.select,
+                            binding.itemZcbd.zcBtn
+                        )
 
-                        item.userMeetingSignUp?.let {
-                            state_zhuche.status = "" + it.status
-                            setStateColor(
-                                model.sys_zhuce,
-                                "" + it.status,
-                                binding.itemZcbd.zcBtn
-                            )
-                        }
                         item.meetingSignUpLocation?.let {
                             state_zhuche.userMeetingId = data.id
                             eData(state_zhuche, it)
@@ -493,16 +495,13 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         binding.itemLpff.ll.visibility = View.VISIBLE
                         //礼品发放
                         setStateColor(model.sys_liping, "1", binding.itemLpff.lpBtn)
+                        state_liwu.status = "" + item.select
+                        setStateColor(
+                            model.sys_liping,
+                            "" + item.select,
+                            binding.itemLpff.lpBtn
+                        )
 
-                        item.userMeetingSignUp?.let {
-                            state_liwu.status = "" + it.status
-                            setStateColor(
-                                model.sys_liping,
-                                "" + it.status,
-                                binding.itemLpff.lpBtn
-                            )
-
-                        }
                         state_liwu.userMeetingId = data.id
                         item.meetingSignUpLocation?.let {
 
@@ -540,17 +539,13 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemRzxx.ll.visibility = View.VISIBLE
                             //入住签到
                             setStateColor(model.sys_ruzhu, "1", binding.itemRzxx.ddBtn)
-
+                            state_ruzhu.status =  "" + item.select
                             item.userMeetingSignUp?.let {
 
-                                setStateColor(
-                                    model.sys_ruzhu,
-                                    "" + it.status,
-                                    binding.itemRzxx.ddBtn
-                                )
+
                                 for (list in model.sys_ruzhu) {
-                                    if (list.dictValue.equals("" + it.status)) {
-                                        state_ruzhu.status = list.dictValue
+                                    if (list.dictValue.equals("" + item.select)) {
+
                                         if (list.dictValue.equals("1")) {
                                             binding.itemRzxx.location.text =
                                                 "签到后分配"
@@ -617,17 +612,18 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemHcqd.zcBtn
                         )
                         state_huichang.userMeetingId = data.id
-
+                        setStateColor(
+                            model.sys_huichang,
+                            "" + item.select,
+                            binding.itemHcqd.zcBtn
+                        )
+                        state_huichang.status = "" + item.select
                         item.userMeetingSignUp?.let {
 
-                            setStateColor(
-                                model.sys_huichang,
-                                "" + it.status,
-                                binding.itemHcqd.zcBtn
-                            )
+
                             for (list in model.sys_huichang) {
-                                if (list.dictValue.equals("" + it.status)) {
-                                    state_huichang.status = list.dictValue
+                                if (list.dictValue.equals("" + item.select)) {
+
                                     if (list.dictValue.equals("1")) {
                                         binding.itemHcqd.location.text =
                                             "签到后分配"
@@ -681,15 +677,17 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         binding.itemCyxi.root.visibility = View.VISIBLE
                         //餐饮签到
                         setStateColor(model.sys_canyin, "1", binding.itemCyxi.zcBtn)
+                        setStateColor(
+                            model.sys_canyin,
+                            "" + item.select,
+                            binding.itemCyxi.zcBtn
+                        )
+                        state_chanyin.status = "" + item.select
                         item.userMeetingSignUp?.let {
-                            setStateColor(
-                                model.sys_canyin,
-                                "" + it.status,
-                                binding.itemCyxi.zcBtn
-                            )
+
                             for (list in model.sys_canyin) {
-                                if (list.dictValue.equals("" + it.status)) {
-                                    state_chanyin.status = list.dictValue
+                                if (list.dictValue.equals("" + item.select)) {
+
                                     if (list.dictValue.equals("1")) {
                                         binding.itemCyxi.location.text =
                                             "签到后分配"
@@ -753,14 +751,12 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             "1",
                             binding.itemFcxx.lcBtn
                         )
-                        item.userMeetingSignUp?.let {
-                            state_fancheng.status = "" + it.status
-                            setStateColor(
-                                model.sys_fancheng,
-                                "" + it.status,
-                                binding.itemFcxx.lcBtn
-                            )
-                        }
+                        state_fancheng.status = "" + item.select
+                        setStateColor(
+                            model.sys_fancheng,
+                            "" + item.select,
+                            binding.itemFcxx.lcBtn
+                        )
                         item.meetingSignUpLocation?.let {
                             state_fancheng.userMeetingId = data.id
                             eData(state_fancheng, it)
@@ -840,14 +836,13 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemLcxx.lcBtn
                         )
                         //来程签到
-                        item.userMeetingSignUp?.let {
-                            state_laicheng.status = "" + item.userMeetingSignUp.status
-                            setStateColor(
-                                model.sys_laicheng,
-                                "" + item.userMeetingSignUp.status,
-                                binding.itemLcxx.lcBtn
-                            )
-                        }
+                        state_laicheng.status = "" + item.select
+                        setStateColor(
+                            model.sys_laicheng,
+                            "" + item.select,
+                            binding.itemLcxx.lcBtn
+                        )
+
                         item.meetingSignUpLocation?.let {
                             state_laicheng.userMeetingId = data.id
                             eData(state_laicheng, it)

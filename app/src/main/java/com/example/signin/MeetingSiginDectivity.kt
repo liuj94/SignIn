@@ -183,8 +183,13 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                     openHardreader()
                 }else if(moshi.equals("二维码识别")){
                     mDecodeReader?.close()
+                    mDecodeReader =null
                     ScanTool.GET.initSerial(this@MeetingSiginDectivity, "/dev/ttyACM0", 115200, this@MeetingSiginDectivity)
                     ScanTool.GET.playSound(true)
+                }else{
+                    mDecodeReader?.close()
+                    mDecodeReader =null
+                    ScanTool.GET.release()
                 }
             }
         }
@@ -564,7 +569,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             mRingPlayer?.start()
 //            if (!isShiBieZ){
 //                isShiBieZ = true
-                mDecodeReader?.close()
+//                mDecodeReader?.close()
                 try {
                     val str = String(data, StandardCharsets.UTF_8)
                     runOnUiThread {
@@ -574,6 +579,24 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 } catch (e: UnsupportedEncodingException) {
                     e.printStackTrace()
 //                    isShiBieZ = false
+                    var signUpUser = SignUpUser()
+                    signUpUser.signUpLocationId = id
+                    signUpUser.meetingName = name
+                    signUpUser.signUpId = signUpId
+                    signUpUser.userMeetingId = ""
+                    signUpUser.meetingId = ""
+                    signUpUser.userMeetingTypeName = ""
+                    signUpUser.autoStatus = autoStatus
+                    signUpUser.timeLong = timeLong
+                    signUpUser.okMsg = okMsg
+                    signUpUser.failedMsg = failedMsg
+                    signUpUser.repeatMsg = repeatMsg
+                    signUpUser.voiceStatus = voiceStatus
+                    signUpUser.success = "500"
+                    startActivity<SiginReAutoActivity>(
+                        "type" to showType,
+                        "data" to signUpUser
+                    )
                 }
 //            }
 
@@ -624,6 +647,24 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
         } catch (e: Exception) {
 //            isShiBieZ = false
+            var signUpUser = SignUpUser()
+            signUpUser.signUpLocationId = id
+            signUpUser.meetingName = name
+            signUpUser.signUpId = signUpId
+            signUpUser.userMeetingId = ""
+            signUpUser.meetingId = ""
+            signUpUser.userMeetingTypeName = ""
+            signUpUser.autoStatus = autoStatus
+            signUpUser.timeLong = timeLong
+            signUpUser.okMsg = okMsg
+            signUpUser.failedMsg = failedMsg
+            signUpUser.repeatMsg = repeatMsg
+            signUpUser.voiceStatus = voiceStatus
+            signUpUser.success = "500"
+            startActivity<SiginReAutoActivity>(
+                "type" to showType,
+                "data" to signUpUser
+            )
         }
     }
     private fun goRe(data: String?) {
@@ -664,44 +705,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             }
             getData(signUpUser.id)
 
-//            if (autoStatus.equals("1")) {
-//                if (showType == 3) {
-//                    com.dylanc.longan.startActivity<SiginReActivity>(
-//                        "type" to showType,
-//                        "data" to signUpUser
-//                    )
-//                } else {
-//                    var params = HashMap<String, String>()
-//                    params["meetingId"] = signUpUser.meetingId//会议id
-//                    params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
-//                    params["signUpId"] = signUpUser.signUpId//签到站id
-//                    params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
-//                    params["status"] = "2"//用户参与会议id
-//                    mViewModel.isShowLoading.value = true
-//                    sigin(JSON.toJSONString(params), { success ->
-//                        signUpUser.success = success
-//                        com.dylanc.longan.startActivity<SiginReAutoActivity>(
-//                            "type" to showType,
-//                            "data" to signUpUser
-//                        )
-//                    }, {
-//                        signUpUser.success = "500"
-//                        startActivity<SiginReAutoActivity>(
-//                            "type" to showType,
-//                            "data" to signUpUser
-//                        )
-//                    }, {
-//                        isShiBieZ = false
-//                        mViewModel.isShowLoading.value = false
-//                    })
-//                }
-//            } else {
-//                isShiBieZ = false
-//                com.dylanc.longan.startActivity<SiginReActivity>(
-//                    "type" to showType,
-//                    "data" to signUpUser
-//                )
-//            }
+
         } catch (e: Exception) {
             if(moshi.equals("二维码识别")){
                 openRed()

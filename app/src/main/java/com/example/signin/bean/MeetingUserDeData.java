@@ -1357,6 +1357,7 @@ public class MeetingUserDeData implements Serializable {
             private String pointId= "";
             private int userId;
             private int status;
+            private String select;
             private String createUserId= "";
             private String userMeetingId= "";
             private String locationId= "";
@@ -1372,6 +1373,14 @@ public class MeetingUserDeData implements Serializable {
             private String levelStatus= "";
             private String startTime= "";
             private String endTime= "";
+
+            public String getSelect() {
+                return select;
+            }
+
+            public void setSelect(String select) {
+                this.select = select;
+            }
 
             public String getSearchValue() {
                 return searchValue;
