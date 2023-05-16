@@ -79,13 +79,50 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
     }
 
     private fun getList() {
-        if (!kv.getString("SiginUpListModel", "").isNullOrEmpty()) {
-            var data =
-                JSON.parseObject(kv.getString("SiginUpListModel", ""), SiginUpListModel::class.java)
-            list.clear()
-            list.addAll(data.list)
-            adapter?.notifyDataSetChanged()
-        }
+//        if (!kv.getString("SiginUpListModel", "").isNullOrEmpty()) {
+//            var data =
+//                JSON.parseObject(kv.getString("SiginUpListModel", ""), SiginUpListModel::class.java)
+//            list.clear()
+//            list.addAll(data.list)
+//            adapter?.notifyDataSetChanged()
+//        }else{
+
+                mViewModel.isShowLoading.value = true
+                OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+                    .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+                    .headers("Authorization", kv.getString("token", ""))
+                    .execute(object : RequestCallback<List<SiginUpListData>>() {
+                        override fun onSuccessNullData() {
+                            super.onSuccessNullData()
+
+                        }
+
+                        override fun onMySuccess(data: List<SiginUpListData>) {
+                            super.onMySuccess(data)
+                            var a = SiginUpListModel()
+                            a.list = data
+                            kv.putString("SiginUpListModel", JSON.toJSONString(a))
+                            list.clear()
+                            list.addAll(data)
+                            adapter?.notifyDataSetChanged()
+                        }
+
+                        override fun onError(response: Response<List<SiginUpListData>>) {
+                            super.onError(response)
+
+
+                        }
+
+                        override fun onFinish() {
+                            super.onFinish()
+                            mViewModel.isShowLoading.value = false
+
+                        }
+
+
+                    })
+
+//        }
 
     }
 

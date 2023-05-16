@@ -91,7 +91,7 @@ class ExamineActivity : BaseBindingActivity<ActInformationReviewBinding, BaseVie
 
         }
 //        0初始状态 1待审核 2审核成功 3审核失败
-        if (order.examineStatus.equals("0")|| order.examineStatus.equals("1")) {
+        if (order.examineStatus==0|| order.examineStatus==1) {
             binding.btnll.visibility = View.VISIBLE
             binding.reviewTime.visibility = View.GONE
         } else {

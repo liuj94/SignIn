@@ -393,10 +393,10 @@ public class MeetingUserDeData implements Serializable {
         private String payFinishTime;
         private String transactionId;
         private int delTf;
-        private String invoiceStatus;
+        private int invoiceStatus;
         private String invoiceNo;
         private String invoiceType;
-        private String examineStatus;
+        private int examineStatus;
         private String failRemark;
         private int ticketType;
         private String channelName;
@@ -704,11 +704,11 @@ public class MeetingUserDeData implements Serializable {
             this.delTf = delTf;
         }
 
-        public String getInvoiceStatus() {
+        public int getInvoiceStatus() {
             return invoiceStatus;
         }
 
-        public void setInvoiceStatus(String invoiceStatus) {
+        public void setInvoiceStatus(int invoiceStatus) {
             this.invoiceStatus = invoiceStatus;
         }
 
@@ -728,11 +728,11 @@ public class MeetingUserDeData implements Serializable {
             this.invoiceType = invoiceType;
         }
 
-        public String getExamineStatus() {
+        public int getExamineStatus() {
             return examineStatus;
         }
 
-        public void setExamineStatus(String examineStatus) {
+        public void setExamineStatus(int examineStatus) {
             this.examineStatus = examineStatus;
         }
 

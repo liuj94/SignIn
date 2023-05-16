@@ -166,20 +166,20 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
     }
 
     private fun getData() {
-        if(!kv.getString("SiginUpListModel","").isNullOrEmpty()){
-            var data = JSON.parseObject(kv.getString("SiginUpListModel",""), SiginUpListModel::class.java)
-            selectList.clear()
-
-            var all = SiginUpListData()
-            all.name = "全部签到站点"
-            all.id = ""
-            all.isMyselect = true
-            selectList.add(all)
-            selectList.addAll(data.list)
-            adapterSelect?.notifyDataSetChanged()
-        }else{
+//        if(!kv.getString("SiginUpListModel","").isNullOrEmpty()){
+//            var data = JSON.parseObject(kv.getString("SiginUpListModel",""), SiginUpListModel::class.java)
+//            selectList.clear()
+//
+//            var all = SiginUpListData()
+//            all.name = "全部签到站点"
+//            all.id = ""
+//            all.isMyselect = true
+//            selectList.add(all)
+//            selectList.addAll(data.list)
+//            adapterSelect?.notifyDataSetChanged()
+//        }else{
             getDatasign_up_app_list()
-        }
+//        }
 
     }
     private fun getDatasign_up_app_list() {

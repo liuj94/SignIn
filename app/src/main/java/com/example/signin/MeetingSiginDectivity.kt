@@ -441,7 +441,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
     }
 
-    var addressStatus = "1"
+    var addressStatus = "2"
     fun setState() {
 
         val params = HashMap<String, String>()
@@ -512,16 +512,14 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                     binding.num2.text = "" + data.signUpCount
                     binding.num3.text = "" + data.localSignUpCount
                     //01 签入模式 02 签入签出模式
-//                    signUpStatus	签到模式 1签出模式 2签入模式
+//                    signUpStatus	签到模式 1签入模式 2签出模式
                     signUpStatus = "" + data.signUpStatus
                     if (signUpStatus == "2") {
-                        binding.moshitv.text = "签入模式"
-                        binding.moshiiv.setImageResource(R.mipmap.kaiguank)
-
-                    } else {
                         binding.moshitv.text = "签出模式"
                         binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
-
+                    } else {
+                        binding.moshitv.text = "签入模式"
+                        binding.moshiiv.setImageResource(R.mipmap.kaiguank)
                     }
 
                 }
@@ -558,7 +556,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         }
 
         mDecodeReader?.setDecodeReaderListener { data ->
-            if( AppManager.getAppManager().topActivity!=this@MeetingSiginDectivity){
+            if( isPause){
                 return@setDecodeReaderListener
             }
             var mRingPlayer =
@@ -618,9 +616,9 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     }
 
     override fun onScanCallBack(data: String?) {
-        if( AppManager.getAppManager().topActivity!=this@MeetingSiginDectivity){
-            return
-        }
+//        if( AppManager.getAppManager().topActivity!=this@MeetingSiginDectivity){
+//            return
+//        }
         try {
             goRe(data)
 

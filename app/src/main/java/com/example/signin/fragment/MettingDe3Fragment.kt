@@ -111,11 +111,11 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                     item.isMyselect = false
                 }
                 siginUp2List[position].isMyselect = true
-                if(siginUp2List[position].dictValue.equals("-1")){
+                if (siginUp2List[position].dictValue.equals("-1")) {
 
                     status = ""
 //                    binding.name2Tv.text = "筛选"
-                }else{
+                } else {
                     status = "" + siginUp2List[position].dictValue
 
                 }
@@ -134,8 +134,10 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         adapter = FMeetingDeList3Adapter().apply {
             submitList(list)
             setOnItemClickListener { _, _, position ->
-                com.dylanc.longan.startActivity<MeetingUserDectivity>("id" to list[position].id.toString(),
-                "showType" to 0)
+                com.dylanc.longan.startActivity<MeetingUserDectivity>(
+                    "id" to list[position].id.toString(),
+                    "showType" to 0
+                )
             }
         }
         binding.recyclerview.adapter = adapter
@@ -207,16 +209,17 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         binding.et.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 // 监听到回车键，会执行2次该方法。按下与松开
-                if(event.action == KeyEvent.ACTION_UP){
-                nameMobile = binding.et.text.toString().trim()
-                binding.et.setText(nameMobile)
-                nameMobile?.let {
-                    binding.et.setSelection(it.length)
+                if (event.action == KeyEvent.ACTION_UP) {
+                    nameMobile = binding.et.text.toString().trim()
+                    binding.et.setText(nameMobile)
+                    nameMobile?.let {
+                        binding.et.setSelection(it.length)
+                    }
+                    pageNum = 1
+                    list.clear()
+                    getList()
+                    activity?.hideSoftInput()
                 }
-                pageNum = 1
-                list.clear()
-                getList()
-                activity?.hideSoftInput()}
             }
             false
         })
@@ -239,13 +242,13 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         }
         var url =
 //            PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&orderByColumn=createTime&isAsc=desc&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
-            PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&signUpId=" + signUpId +"&signUpLocationId="+signUpLocationId+ "&pageSize=10&pageNum=" + pageNum
-       if(signUpLocationId.isNullOrEmpty()||signUpLocationId.equals("0")){
+            PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&signUpId=" + signUpId + "&signUpLocationId=" + signUpLocationId + "&pageSize=10&pageNum=" + pageNum
+        if (signUpLocationId.isNullOrEmpty() || signUpLocationId.equals("0")) {
             url =
 //            PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&orderByColumn=createTime&isAsc=desc&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
-               PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
+                PageRoutes.Api_meeting_sign_up_data_list + meetingid + "&signUpId=" + signUpId + "&pageSize=10&pageNum=" + pageNum
 
-       }
+        }
 
         if (!status.isNullOrEmpty()) {
             url = "$url&signUpStatus=$status"
@@ -291,24 +294,69 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
     }
 
     private fun getData() {
-        if (!kv.getString("SiginUpListModel", "").isNullOrEmpty()) {
-            var data =
-                JSON.parseObject(kv.getString("SiginUpListModel", ""), SiginUpListModel::class.java)
-            siginUpList.clear()
-            if (data.list.size > 0) {
-                data.list[0].isMyselect = true
-                signUpId = data.list[0].id
-                binding.nameTv.text = data.list[0].name
-                siginUpList.addAll(data.list)
-                adapterSelect?.notifyDataSetChanged()
-                setSelect2Data(data.list[0].type)
-                getqddList()
+        getDatasign_up_app_list()
+//        if (!kv.getString("SiginUpListModel", "").isNullOrEmpty()) {
+//            var data =
+//                JSON.parseObject(kv.getString("SiginUpListModel", ""), SiginUpListModel::class.java)
+//            siginUpList.clear()
+//            if (data.list.size > 0) {
+//                data.list[0].isMyselect = true
+//                signUpId = data.list[0].id
+//                binding.nameTv.text = data.list[0].name
+//                siginUpList.addAll(data.list)
+//                adapterSelect?.notifyDataSetChanged()
+//                setSelect2Data(data.list[0].type)
+//                getqddList()
+//
+//
+//            }
+//
+//        }
+
+    }
+
+    private fun getDatasign_up_app_list() {
+
+        OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+            .headers("Authorization", kv.getString("token", ""))
+            .execute(object : RequestCallback<List<SiginUpListData>>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
+
+                }
+
+                override fun onMySuccess(data: List<SiginUpListData>) {
+                    super.onMySuccess(data)
+                    siginUpList.clear()
+                    if (data.size > 0) {
+                        data[0].isMyselect = true
+                        signUpId = data[0].id
+                        binding.nameTv.text = data[0].name
+                        siginUpList.addAll(data)
+                        adapterSelect?.notifyDataSetChanged()
+                        setSelect2Data(data[0].type)
+                        getqddList()
 
 
-            }
+                    }
 
-        }
 
+                }
+
+                override fun onError(response: Response<List<SiginUpListData>>) {
+                    super.onError(response)
+
+
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+
+                }
+
+
+            })
     }
 
     private fun setSelect2Data(type: Int) {
@@ -317,7 +365,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         if (!kv.getString("TypeModel", "").isNullOrEmpty()) {
             model = JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
             siginUp2List.clear()
-            var all:TypeData=TypeData()
+            var all: TypeData = TypeData()
             all.dictLabel = "全部"
             all.dictValue = "-1"
             siginUp2List.add(all)
@@ -354,7 +402,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
     private fun getqddList() {
         OkGo.get<List<SiginData>>(PageRoutes.Api_meetingSignUpLocation + meetingid + "&signUpId=" + signUpId)
-            .tag(PageRoutes.Api_meetingSignUpLocation + meetingid+2)
+            .tag(PageRoutes.Api_meetingSignUpLocation + meetingid + 2)
             .headers("Authorization", kv.getString("token", ""))
             .execute(object : RequestCallback<List<SiginData>>() {
                 override fun onSuccessNullData() {
@@ -378,7 +426,8 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                         pageNum = 1
                         list.clear()
                         getList()
-                    }catch(e:Exception){}
+                    } catch (e: Exception) {
+                    }
 
                 }
 

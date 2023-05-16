@@ -26,7 +26,7 @@ interface PageRoutes {
 
         val Api_ed_meetingSignUpLocation = "$BaseUrlApi/manager/meetingSignUpLocation"
 
-        val Api_meeting_sign_up_app_list = "$BaseUrlApi/manager/meeting/sign/up/app/list?meetingId="
+        val Api_meeting_sign_up_app_list = "$BaseUrlApi/manager/meeting/sign/up/app/list?status=1&meetingId="
 
 
         //manager/meetingSignUpLocation/list?meetingId=20&signUpId=

@@ -56,13 +56,18 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
     var order: MeetingUserDeData.UserOrderBean = MeetingUserDeData.UserOrderBean()
 
     var params = HashMap<String, Any>()
-    var moshi :String?= ""
+    var moshi: String? = ""
     override fun initData() {
-        moshi = kv.getString("shaomamoshi","")
-        if(moshi.equals("激光头识别")){
+        moshi = kv.getString("shaomamoshi", "")
+        if (moshi.equals("激光头识别")) {
             openHardreader()
-        }else if(moshi.equals("二维码识别")){
-            ScanTool.GET.initSerial(this@ExamineKPActivity, "/dev/ttyACM0", 115200, this@ExamineKPActivity)
+        } else if (moshi.equals("二维码识别")) {
+            ScanTool.GET.initSerial(
+                this@ExamineKPActivity,
+                "/dev/ttyACM0",
+                115200,
+                this@ExamineKPActivity
+            )
             ScanTool.GET.playSound(true)
         }
 
@@ -120,12 +125,12 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
 //        String s3 = "Real-How-To";
 //        var temp = s3.split(",");
         binding.sm.setOnClickListener {
-            if(moshi.equals("识别模式")||moshi.isNullOrEmpty()){
+            if (moshi.equals("识别模式") || moshi.isNullOrEmpty()) {
                 toast("请选择识别模式")
                 select()
                 return@setOnClickListener
             }
-            if(!moshi.equals("摄像头识别")){
+            if (!moshi.equals("摄像头识别")) {
                 return@setOnClickListener
             }
             activity?.let {
@@ -171,7 +176,9 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
                     data?.let {
 
 //                        createChineseQRCode(it.qr)
-                        Glide.with(this@ExamineKPActivity).load("https://meeting.nbqichen.com/prod-api/common/qr/created?content="+it.qr+"&h=210&w=210").error(R.mipmap.qrcodeopy)
+                        Glide.with(this@ExamineKPActivity)
+                            .load("https://meeting.nbqichen.com/prod-api/common/qr/created?content=" + it.qr + "&h=210&w=210")
+                            .error(R.mipmap.qrcodeopy)
                             .into(binding.stateIv)
                     }
 
@@ -196,7 +203,7 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
         var params = HashMap<String, Any>()
         params["id"] = order.id
         params["code"] = binding.invoiceNumber.text.toString().trim()
-        params["no"] =  binding.invoiceNo.text.toString().trim()
+        params["no"] = binding.invoiceNo.text.toString().trim()
         mViewModel.isShowLoading.value = true
         OkGo.post<String>(PageRoutes.Api_billfinish)
             .tag(PageRoutes.Api_billfinish)
@@ -255,6 +262,7 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
 
         }
     }
+
     fun select() {
         val list: MutableList<TypeData> = ArrayList<TypeData>()
         var a = TypeData()
@@ -271,30 +279,37 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
         MaterialDialog(this, BottomSheet(LayoutMode.WRAP_CONTENT)).show {
 //            title(null,"请选择审核不通过原因")
 
-            customView(	//自定义弹窗
+            customView(    //自定义弹窗
                 viewRes = R.layout.tc_ly,//自定义文件
-                dialogWrapContent = true,	//让自定义宽度生效
-                scrollable = true,			//让自定义宽高生效
+                dialogWrapContent = true,    //让自定义宽度生效
+                scrollable = true,            //让自定义宽高生效
                 noVerticalPadding = true    //让自定义高度生效
-            ).apply{
+            ).apply {
                 findViewById<TextView>(R.id.title).setText("请选择模式")
                 findViewById<TextView>(R.id.btn1).setOnClickListener { dismiss() }
                 findViewById<TextView>(R.id.btn2).setOnClickListener {
                     dismiss()
-                    kv.putString("shaomamoshi",moshi)
-                    if(moshi.equals("激光头识别")){
+                    kv.putString("shaomamoshi", moshi)
+                    if (moshi.equals("激光头识别")) {
                         openHardreader()
-                    }else if(moshi.equals("二维码识别")){
-                        ScanTool.GET.initSerial(this@ExamineKPActivity, "/dev/ttyACM0", 115200, this@ExamineKPActivity)
+                    } else if (moshi.equals("二维码识别")) {
+                        ScanTool.GET.initSerial(
+                            this@ExamineKPActivity,
+                            "/dev/ttyACM0",
+                            115200,
+                            this@ExamineKPActivity
+                        )
                         ScanTool.GET.playSound(true)
-                    }}
+                    }
+                }
                 findViewById<ImageView>(R.id.gb).setOnClickListener { dismiss() }
-                findViewById<RecyclerView>(R.id.recyclerView).layoutManager = LinearLayoutManager(activity)
+                findViewById<RecyclerView>(R.id.recyclerView).layoutManager =
+                    LinearLayoutManager(activity)
 
                 var adapter = SelectAdapter().apply {
                     submitList(list)
                     setOnItemClickListener { _, _, position ->
-                        for(item in list){
+                        for (item in list) {
                             list[position].isMyselect = false
                         }
                         list[position].isMyselect = true
@@ -308,27 +323,28 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
             }
 
 
-
         }
     }
+
     private var mDecodeReader: DecodeReader? = null
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         //要是重虚拟键盘输入怎不拦截
         if ("Virtual" == event.device.name) {
             return super.dispatchKeyEvent(event)
         }
-        if(moshi.equals("激光头识别")){
+        if (moshi.equals("激光头识别")) {
             mDecodeReader?.open(115200)
         }
         return true
     }
+
     private fun openHardreader() {
         if (mDecodeReader == null) {
             mDecodeReader = DecodeReader(this) //初始化
         }
 
         mDecodeReader?.setDecodeReaderListener { data ->
-            if( AppManager.getAppManager().topActivity!=this@ExamineKPActivity){
+            if (isPause) {
                 return@setDecodeReaderListener
             }
             var mRingPlayer =
@@ -343,8 +359,8 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
                         var dm = temp[2]
                         var hm = temp[3]
                         binding.invoiceNumber.setText(dm)
-                        binding.invoiceNo.setText( hm)
-                    }catch (e:java.lang.Exception){
+                        binding.invoiceNo.setText(hm)
+                    } catch (e: java.lang.Exception) {
                         toast("请提供正确发票码")
                     }
 
@@ -359,8 +375,19 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
 
     }
 
+    var isPause = true
+    override fun onResume() {
+        super.onResume()
+        isPause = false
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isPause = true
+    }
+
     override fun onScanCallBack(p0: String?) {
-        if( AppManager.getAppManager().topActivity!=this@ExamineKPActivity){
+        if (isPause) {
             return
         }
         try {
@@ -369,15 +396,16 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
                 var dm = temp[2]
                 var hm = temp[3]
                 binding.invoiceNumber.setText(dm)
-                binding.invoiceNo.setText( hm)
+                binding.invoiceNo.setText(hm)
                 openBlue()
             }
 
-        }catch (e:java.lang.Exception){
+        } catch (e: java.lang.Exception) {
             toast("请提供正确发票码")
             openRed()
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
         mDecodeReader?.close()
@@ -385,25 +413,29 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
         closeBlue()
         closeRed()
     }
-    fun openRed(){
+
+    fun openRed() {
         val deviceon = File("/sys/class/leds/led-red")
         if (deviceon.canRead()) {
             FaceUtil.LedSet("led-red", 1);
         }
     }
-    fun closeRed(){
+
+    fun closeRed() {
         val deviceon = File("/sys/class/leds/led-red")
         if (deviceon.canRead()) {
             FaceUtil.LedSet("led-red", 0);
         }
     }
-    fun openBlue(){
+
+    fun openBlue() {
         val deviceon = File("/sys/class/leds/led-blue")
         if (deviceon.canRead()) {
             FaceUtil.LedSet("led-blue", 1);
         }
     }
-    fun closeBlue(){
+
+    fun closeBlue() {
         val deviceon = File("/sys/class/leds/led-blue")
         if (deviceon.canRead()) {
             FaceUtil.LedSet("led-blue", 0);
