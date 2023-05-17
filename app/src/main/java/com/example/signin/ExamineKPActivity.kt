@@ -75,9 +75,9 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
         binding.name.text = ""
         binding.userName.text = ""
         binding.companyName.text = ""
-        order.corporateName?.let { binding.companyName.text = it }
+//        order.corporateName?.let { binding.companyName.text = it }
         order.meetingSignUpLocationName?.let { binding.name.text = it }
-        order.userName?.let { binding.userName.text = it }
+//        order.userName?.let { binding.userName.text = it }
         var p = "开票金额<font color='#D43030'>" + order.amount + "</font>元"
         binding.amount.text = Html.fromHtml(p)
         //增值税专用发票、普通销售发票{{pagedata.userOrder.invoiceType==1?'增值税普通发票':'增值税专用发票'}}
@@ -174,6 +174,8 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
                 override fun onMySuccess(data: MeetingUserDeData.UserOrderBean?) {
                     super.onMySuccess(data)
                     data?.let {
+                        data.userName?.let { binding.userName.text = data.userName }
+                        data.name?.let {  binding.companyName.text =data.name }
 
 //                        createChineseQRCode(it.qr)
                         Glide.with(this@ExamineKPActivity)

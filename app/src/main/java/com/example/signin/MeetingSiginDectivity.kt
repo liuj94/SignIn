@@ -703,7 +703,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 goshibai(signUpUser)
                 return
             }
-            if(showType==8){
+            if (showType == 8) {
                 if (signUpUser.orderId.equals("")) {
                     goshibai(signUpUser)
                     return
@@ -821,6 +821,15 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                             order.supplement = data.userMeetingTypeName
                             order.userName = data.name
                             order.corporateName = data.corporateName
+                            for (item in data.meetingSignUps) {
+                                if (item.type == 8) {
+                                    item.meetingSignUpLocation?.let {
+                                        it.name?.let { name ->
+                                            order.meetingSignUpLocationName = name
+                                        }
+                                    }
+                                }
+                            }
                             startActivity<ExamineKPActivity>("order" to order)
                             return
                         }
