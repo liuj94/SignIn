@@ -387,6 +387,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
             binding.infoLl.visibility = View.GONE
             if(examineStatus.equals("2")){
+                binding.infoLl.visibility = View.VISIBLE
                 binding.itemDdxx.ddBtn.text = ""
                 if (cAmount > 0) {
                     if (invoiceStatus.equals("2")){
