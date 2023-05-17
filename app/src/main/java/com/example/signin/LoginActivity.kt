@@ -39,7 +39,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
             params["username"] = binding.userName.text.toString().trim()
             params["password"] = binding.password.text.toString().trim()
             //source=app
-//            params["source"] = "app"
+            params["source"] = "app"
 
             OkGo.post<Token>(PageRoutes.Api_login)
                 .tag(PageRoutes.Api_login)

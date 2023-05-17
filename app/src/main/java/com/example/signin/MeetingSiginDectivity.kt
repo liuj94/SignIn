@@ -57,7 +57,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     private var adapterSelect3: SelectMeetingAdapter2? = null
     private var selectList3: MutableList<SiginData> = ArrayList()
     private var mDecodeReader: DecodeReader? = null
-    var moshi :String?= ""
+    var moshi: String? = ""
     override fun initData() {
         mViewModel.isShowLoading.value = true
         intent.getStringExtra("id")?.let { id = it }
@@ -79,87 +79,92 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             .observeForever {
                 getSiginData()
             }
-        var num=""
-        if(showType == 1){
+        var num = ""
+        if (showType == 1) {
             num = "注册签到"
-        }else if(showType == 2){
+        } else if (showType == 2) {
             num = "来程签到"
-        }else if(showType == 3){
+        } else if (showType == 3) {
             num = "入住签到"
-        }else if(showType == 4){
+        } else if (showType == 4) {
             num = "会场签到"
-        }else if(showType == 5){
+        } else if (showType == 5) {
             num = "餐饮签到"
-        }else if(showType == 6){
+        } else if (showType == 6) {
             num = "礼品签到"
-        }else if(showType == 7){
+        } else if (showType == 7) {
             num = "返程签到"
-        }else if(showType == 8){
+        } else if (showType == 8) {
             num = "发票签到"
         }
         binding.title.text = num
-         moshi = kv.getString("shaomamoshi","")
-        if(moshi.equals("激光头识别")){
+        moshi = kv.getString("shaomamoshi", "")
+        if (moshi.equals("激光头识别")) {
             var a = SiginData()
             a.name = "二维码识别"
-            a.isKuan =true
+            a.isKuan = true
             selectList3.add(a)
             var a1 = SiginData()
             a1.name = "摄像头识别"
-            a1.isKuan =true
+            a1.isKuan = true
             selectList3.add(a1)
             var a2 = SiginData()
             a2.name = "激光头识别"
             a2.isMyselect = true
-            a2.isKuan =true
+            a2.isKuan = true
             selectList3.add(a2)
             openHardreader()
 
-        }else if(moshi.equals("二维码识别")){
+        } else if (moshi.equals("二维码识别")) {
             var a = SiginData()
             a.name = "二维码识别"
             a.isMyselect = true
-            a.isKuan =true
+            a.isKuan = true
             selectList3.add(a)
 
             var a1 = SiginData()
             a1.name = "摄像头识别"
-            a1.isKuan =true
+            a1.isKuan = true
             selectList3.add(a1)
             var a2 = SiginData()
             a2.name = "激光头识别"
-            a2.isKuan =true
+            a2.isKuan = true
             selectList3.add(a2)
-            ScanTool.GET.initSerial(this@MeetingSiginDectivity, "/dev/ttyACM0", 115200, this@MeetingSiginDectivity)
+            ScanTool.GET.initSerial(
+                this@MeetingSiginDectivity,
+                "/dev/ttyACM0",
+                115200,
+                this@MeetingSiginDectivity
+            )
             ScanTool.GET.playSound(true)
-        }else if(moshi.equals("摄像头识别")){
+        } else if (moshi.equals("摄像头识别")) {
             var a = SiginData()
             a.name = "二维码识别"
-            a.isKuan =true
+            a.isKuan = true
             selectList3.add(a)
 
             var a1 = SiginData()
             a1.name = "摄像头识别"
             a1.isMyselect = true
-            a1.isKuan =true
+            a1.isKuan = true
             selectList3.add(a1)
             var a2 = SiginData()
-            a2.isKuan =true
+            a2.isKuan = true
             a2.name = "激光头识别"
             selectList3.add(a2)
 
-        }else{
+        } else {
             var a = SiginData()
             a.name = "二维码识别"
-            a.isKuan =true
+            a.isKuan = true
             selectList3.add(a)
             var a1 = SiginData()
             a1.name = "摄像头识别"
-            a1.isKuan =true
+            a1.isKuan = true
             selectList3.add(a1)
             var a2 = SiginData()
             a2.name = "激光头识别"
-            a2.isKuan =true
+            a2.isKuan = true
             selectList3.add(a2)
         }
 
@@ -176,19 +181,24 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 }
                 selectList3[position].isMyselect = true
                 moshi = selectList3[position].name
-                kv.putString("shaomamoshi",moshi)
+                kv.putString("shaomamoshi", moshi)
                 adapterSelect3?.notifyDataSetChanged()
-                if(moshi.equals("激光头识别")){
+                if (moshi.equals("激光头识别")) {
                     ScanTool.GET.release()
                     openHardreader()
-                }else if(moshi.equals("二维码识别")){
+                } else if (moshi.equals("二维码识别")) {
                     mDecodeReader?.close()
-                    mDecodeReader =null
-                    ScanTool.GET.initSerial(this@MeetingSiginDectivity, "/dev/ttyACM0", 115200, this@MeetingSiginDectivity)
+                    mDecodeReader = null
+                    ScanTool.GET.initSerial(
+                        this@MeetingSiginDectivity,
+                        "/dev/ttyACM0",
+                        115200,
+                        this@MeetingSiginDectivity
+                    )
                     ScanTool.GET.playSound(true)
-                }else{
+                } else {
                     mDecodeReader?.close()
-                    mDecodeReader =null
+                    mDecodeReader = null
                     ScanTool.GET.release()
                 }
             }
@@ -259,11 +269,11 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         setState()
 
         binding.sm.setOnClickListener {
-            if(moshi.equals("识别模式")){
+            if (moshi.equals("识别模式")) {
                 toast("请选择识别模式")
                 return@setOnClickListener
             }
-            if(!moshi.equals("摄像头识别")){
+            if (!moshi.equals("摄像头识别")) {
                 return@setOnClickListener
             }
             activity?.let {
@@ -308,11 +318,11 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             setState()
         }
         binding.shaoma.setOnClickListener {
-            if(moshi.equals("识别模式")||moshi.isNullOrEmpty()){
+            if (moshi.equals("识别模式") || moshi.isNullOrEmpty()) {
                 toast("请选择识别模式")
                 return@setOnClickListener
             }
-            if(!moshi.equals("摄像头识别")){
+            if (!moshi.equals("摄像头识别")) {
                 return@setOnClickListener
             }
             activity?.let {
@@ -497,7 +507,8 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
             })
     }
-    var meetingFormData:MeetingFormData?=null
+
+    var meetingFormData: MeetingFormData? = null
     private fun getSiginData() {
         OkGo.get<SiginData>(PageRoutes.Api_meetingSignUpLocationDe + id)
             .tag(PageRoutes.Api_meetingSignUpLocationDe)
@@ -512,7 +523,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                     super.onMySuccess(data)
                     meetingFormData = MeetingFormData()
                     meetingFormData?.meetingFormList = data.meetingFormList
-                    kv.putString("MeetingFormData",JSON.toJSONString(meetingFormData))
+                    kv.putString("MeetingFormData", JSON.toJSONString(meetingFormData))
                     binding.num1.text = "" + data.beUserCount
                     binding.num2.text = "" + data.signUpCount
                     binding.num3.text = "" + data.localSignUpCount
@@ -542,34 +553,34 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
             })
     }
+
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         //要是重虚拟键盘输入怎不拦截
         if ("Virtual" == event.device.name) {
             return super.dispatchKeyEvent(event)
         }
-        if(moshi.equals("激光头识别")){
+        if (moshi.equals("激光头识别")) {
             mDecodeReader?.open(115200)
-        }else{
+        } else {
             toast("请选择激光头识别模式")
         }
         return true
     }
-//    var isShiBieZ = false
+
+    //    var isShiBieZ = false
     private fun openHardreader() {
         if (mDecodeReader == null) {
             mDecodeReader = DecodeReader(this) //初始化
-        }
-
-        mDecodeReader?.setDecodeReaderListener { data ->
-            if( isPause){
-                return@setDecodeReaderListener
-            }
-            var mRingPlayer =
-                MediaPlayer.create(this@MeetingSiginDectivity, R.raw.ddd)
-            mRingPlayer?.start()
+            mDecodeReader?.setDecodeReaderListener { data ->
+                if (isPause) {
+                    return@setDecodeReaderListener
+                }
+                var mRingPlayer =
+                    MediaPlayer.create(this@MeetingSiginDectivity, R.raw.ddd)
+                mRingPlayer?.start()
 //            if (!isShiBieZ){
 //                isShiBieZ = true
-//                mDecodeReader?.close()
+                mDecodeReader?.close()
                 try {
                     val str = String(data, StandardCharsets.UTF_8)
                     runOnUiThread {
@@ -600,19 +611,24 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 }
 //            }
 
+            }
         }
-//        mDecodeReader?.open(115200)
+
 
     }
-    var isPause =true
+
+    var isPause = true
     override fun onResume() {
         super.onResume()
         isPause = false
-        if(moshi.equals("二维码识别")){
+        if (moshi.equals("二维码识别")) {
 //            val deviceon = File("/sys/class/leds/led-blue")
 //            if (deviceon.canRead()) {
 //                FaceUtil.LedSet("led-blue", 1);
 //            }
+        }
+        if (moshi.equals("激光头识别")) {
+            openHardreader()
         }
         binding.et.setText("")
         nameMobile = ""
@@ -623,13 +639,18 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     override fun onPause() {
         super.onPause()
         isPause = true
-        if(moshi.equals("二维码识别")){
+        if (moshi.equals("二维码识别")) {
 //            val deviceon = File("/sys/class/leds/led-white")
 //            if (deviceon.canRead()) {
 //                FaceUtil.LedSet("led-white", 0);
 //            }
         }
+        if (moshi.equals("激光头识别")) {
+            mDecodeReader?.close()
+            mDecodeReader = null
+        }
     }
+
     override fun onDestroy() {
         super.onDestroy()
         mDecodeReader?.close()
@@ -667,6 +688,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             )
         }
     }
+
     private fun goRe(data: String?) {
         if (isPause) {
 //            isShiBieZ = false
@@ -677,37 +699,26 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         try {
             var signUpUser = JSON.parseObject(data, SignUpUser::class.java)
 
-
-
-            if(signUpUser.id.isNullOrEmpty()){
-                if(moshi.equals("二维码识别")){
-                    openRed()
+            if (!signUpUser.meetingId.equals(meetingid)) {
+                goshibai(signUpUser)
+                return
+            }
+            if(showType==8){
+                if (signUpUser.orderId.equals("")) {
+                    goshibai(signUpUser)
+                    return
                 }
-//                isShiBieZ = false
-                signUpUser.signUpLocationId = id
-                signUpUser.meetingName = name
-                signUpUser.signUpId = signUpId
-                signUpUser.userMeetingId = ""
-                signUpUser.meetingId = ""
-                signUpUser.userMeetingTypeName = ""
-                signUpUser.autoStatus = autoStatus
-                signUpUser.timeLong = timeLong
-                signUpUser.okMsg = okMsg
-                signUpUser.failedMsg = failedMsg
-                signUpUser.repeatMsg = repeatMsg
-                signUpUser.voiceStatus = voiceStatus
-                signUpUser.success = "500"
-                startActivity<SiginReAutoActivity>(
-                    "type" to showType,
-                    "data" to signUpUser
-                )
+            }
+
+            if (signUpUser.id.isNullOrEmpty()) {
+                goshibai(signUpUser)
                 return
             }
             getData(signUpUser.id)
 
 
         } catch (e: Exception) {
-            if(moshi.equals("二维码识别")){
+            if (moshi.equals("二维码识别")) {
                 openRed()
             }
 //            isShiBieZ = false
@@ -732,7 +743,32 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             )
         }
     }
-    private fun getData(userid:String) {
+
+    private fun MeetingSiginDectivity.goshibai(signUpUser: SignUpUser) {
+        if (moshi.equals("二维码识别")) {
+            openRed()
+        }
+        //                isShiBieZ = false
+        signUpUser.signUpLocationId = id
+        signUpUser.meetingName = name
+        signUpUser.signUpId = signUpId
+        signUpUser.userMeetingId = ""
+        signUpUser.meetingId = ""
+        signUpUser.userMeetingTypeName = ""
+        signUpUser.autoStatus = autoStatus
+        signUpUser.timeLong = timeLong
+        signUpUser.okMsg = okMsg
+        signUpUser.failedMsg = failedMsg
+        signUpUser.repeatMsg = repeatMsg
+        signUpUser.voiceStatus = voiceStatus
+        signUpUser.success = "500"
+        startActivity<SiginReAutoActivity>(
+            "type" to showType,
+            "data" to signUpUser
+        )
+    }
+
+    private fun getData(userid: String) {
         mViewModel.isShowLoading.value = true
         OkGo.get<MeetingUserDeData>(PageRoutes.Api_meetinguser_data + userid + "?id=" + userid)
             .tag(PageRoutes.Api_meetinguser_data + userid + "?id=" + userid)
@@ -746,61 +782,89 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 override fun onMySuccess(data: MeetingUserDeData) {
                     super.onMySuccess(data)
                     meetingFormData?.let {
-                        for (list in it.meetingFormList){
-                            for (listFrom in data.userMeetingForms){
-                                if (list.name.equals(listFrom.name)){
-                                    if(listFrom.selectCheckboxParam!=null){
+                        for (list in it.meetingFormList) {
+                            for (listFrom in data.userMeetingForms) {
+                                if (list.name.equals(listFrom.name)) {
+                                    if (listFrom.selectCheckboxParam != null) {
                                         list.value = listFrom.selectCheckboxParam.boxValue
-                                    }else{
+                                    } else {
                                         list.value = listFrom.value
                                     }
                                 }
                             }
                         }
-                        kv.putString("MeetingFormData",JSON.toJSONString(meetingFormData))
+                        kv.putString("MeetingFormData", JSON.toJSONString(meetingFormData))
                     }
-                    Log.d("MeetingFormData",JSON.toJSONString(meetingFormData))
+                    Log.d("MeetingFormData", JSON.toJSONString(meetingFormData))
                     var signUpUser = SignUpUser()
                     signUpUser.signUpLocationId = id
                     signUpUser.meetingName = name
                     signUpUser.signUpId = signUpId
                     signUpUser.userMeetingId = userid
-                    signUpUser.meetingId = ""+data.meetingId
-                    signUpUser.userMeetingTypeName = ""+data.userMeetingTypeName
-                    signUpUser.autoStatus =  autoStatus
-                    signUpUser.timeLong =  timeLong
+                    signUpUser.meetingId = "" + data.meetingId
+                    signUpUser.userMeetingTypeName = "" + data.userMeetingTypeName
+                    signUpUser.autoStatus = autoStatus
+                    signUpUser.timeLong = timeLong
                     signUpUser.okMsg = okMsg
                     signUpUser.failedMsg = failedMsg
                     signUpUser.repeatMsg = repeatMsg
                     signUpUser.voiceStatus = voiceStatus
                     signUpUser.signUpStatus = signUpStatus
-                    if(showType==3){
+                    if (showType == 8) {
+                        var order: MeetingUserDeData.UserOrderBean =
+                            MeetingUserDeData.UserOrderBean()
+                        if (data.userOrder != null) {
+                            if (moshi.equals("二维码识别")) {
+                                openRed()
+                            }
+                            order = data.userOrder
+                            order.supplement = data.userMeetingTypeName
+                            order.userName = data.name
+                            order.corporateName = data.corporateName
+                            startActivity<ExamineKPActivity>("order" to order)
+                            return
+                        }
+
+                    }
+                    if (showType == 3) {
                         com.dylanc.longan.startActivity<SiginReActivity>(
                             "type" to showType,
                             "data" to signUpUser
                         )
-                    }else{
+                    } else {
                         var avatar = ""
                         data.avatar?.let { avatar = it }
-                        var params = java.util.HashMap<String, String>()
-                        params["meetingId"] = signUpUser.meetingId//会议id
-                        params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
-                        params["signUpId"] = signUpUser.signUpId//签到站id
-                        params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
-                        params["status"] = "2"//用户参与会议id
-                        params["signUpStatus"] = signUpStatus
-                        sigin(JSON.toJSONString(params),{ success->
-                            signUpUser.success = success
-                            com.dylanc.longan.startActivity<SiginReAutoActivity>(
-                                "type" to showType,
-                                "data" to signUpUser,
-                                "avatar" to avatar
-                            )
-                            if(moshi.equals("二维码识别")){
-                                openBlue()
-                            }
-                        },{
-                            if(moshi.equals("二维码识别")){
+                        if (showType != 8) {
+                            var params = java.util.HashMap<String, String>()
+                            params["meetingId"] = signUpUser.meetingId//会议id
+                            params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
+                            params["signUpId"] = signUpUser.signUpId//签到站id
+                            params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
+                            params["status"] = "2"//用户参与会议id
+                            params["signUpStatus"] = signUpStatus
+                            sigin(JSON.toJSONString(params), { success ->
+                                signUpUser.success = success
+                                com.dylanc.longan.startActivity<SiginReAutoActivity>(
+                                    "type" to showType,
+                                    "data" to signUpUser,
+                                    "avatar" to avatar
+                                )
+                                if (moshi.equals("二维码识别")) {
+                                    openBlue()
+                                }
+                            }, {
+                                if (moshi.equals("二维码识别")) {
+                                    openRed()
+                                }
+                                signUpUser.success = "500"
+                                com.dylanc.longan.startActivity<SiginReAutoActivity>(
+                                    "type" to showType,
+                                    "data" to signUpUser,
+                                    "avatar" to avatar
+                                )
+                            }, {})
+                        } else {
+                            if (moshi.equals("二维码识别")) {
                                 openRed()
                             }
                             signUpUser.success = "500"
@@ -808,14 +872,16 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                                 "type" to showType,
                                 "data" to signUpUser,
                                 "avatar" to avatar
-                            )},{})}
+                            )
+                        }
+                    }
 
 
                 }
 
                 override fun onError(response: Response<MeetingUserDeData>) {
                     super.onError(response)
-                    if(moshi.equals("二维码识别")){
+                    if (moshi.equals("二维码识别")) {
                         openRed()
                     }
                     var signUpUser = SignUpUser()
@@ -847,25 +913,29 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
             })
     }
-    fun openRed(){
+
+    fun openRed() {
         val deviceon = File("/sys/class/leds/led-red")
         if (deviceon.canRead()) {
             FaceUtil.LedSet("led-red", 1);
         }
     }
-    fun closeRed(){
+
+    fun closeRed() {
         val deviceon = File("/sys/class/leds/led-red")
         if (deviceon.canRead()) {
             FaceUtil.LedSet("led-red", 0);
         }
     }
-    fun openBlue(){
+
+    fun openBlue() {
         val deviceon = File("/sys/class/leds/led-blue")
         if (deviceon.canRead()) {
             FaceUtil.LedSet("led-blue", 1);
         }
     }
-    fun closeBlue(){
+
+    fun closeBlue() {
         val deviceon = File("/sys/class/leds/led-blue")
         if (deviceon.canRead()) {
             FaceUtil.LedSet("led-blue", 0);

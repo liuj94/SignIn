@@ -145,8 +145,8 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
                     binding.num1.text = toNum(data.browseCount)
                     binding.num2.text = toNum(data.userMeetingCount)
-//                    binding.num3.text = toNum(data.totalAmount)
-                    binding.num3.text = toNum("123456.54")
+                    binding.num3.text = toNum(data.totalAmount)
+//                    binding.num3.text = toNum("123456.54")
 //                    if(data.totalAmount.isNullOrEmpty()){
 //                        binding.num3.text = "0.00"
 //                    }else{

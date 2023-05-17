@@ -350,36 +350,37 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
     private fun openHardreader() {
         if (mDecodeReader == null) {
             mDecodeReader = DecodeReader(this) //初始化
-        }
-
-        mDecodeReader?.setDecodeReaderListener { data ->
-            if (isPause) {
-                return@setDecodeReaderListener
-            }
-            var mRingPlayer =
-                MediaPlayer.create(this@ExamineKPActivity, R.raw.ddd)
-            mRingPlayer?.start()
-//            mDecodeReader?.close()
-            try {
-                val str = String(data, StandardCharsets.UTF_8)
-                runOnUiThread {
-                    try {
-                        var temp = str.split(",")
-                        var dm = temp[2]
-                        var hm = temp[3]
-                        binding.invoiceNumber.setText(dm)
-                        binding.invoiceNo.setText(hm)
-                    } catch (e: java.lang.Exception) {
-                        toast("请提供正确发票码")
-                    }
-
-
+            mDecodeReader?.setDecodeReaderListener { data ->
+                if (isPause) {
+                    return@setDecodeReaderListener
                 }
-            } catch (e: UnsupportedEncodingException) {
-                e.printStackTrace()
-            }
+                var mRingPlayer =
+                    MediaPlayer.create(this@ExamineKPActivity, R.raw.ddd)
+                mRingPlayer?.start()
+            mDecodeReader?.close()
+                try {
+                    val str = String(data, StandardCharsets.UTF_8)
+                    runOnUiThread {
+                        try {
+                            var temp = str.split(",")
+                            var dm = temp[2]
+                            var hm = temp[3]
+                            binding.invoiceNumber.setText(dm)
+                            binding.invoiceNo.setText(hm)
+                        } catch (e: java.lang.Exception) {
+                            toast("请提供正确发票码")
+                        }
 
+
+                    }
+                } catch (e: UnsupportedEncodingException) {
+                    e.printStackTrace()
+                }
+
+            }
         }
+
+
 
 
     }
@@ -388,11 +389,16 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
     override fun onResume() {
         super.onResume()
         isPause = false
+        if (moshi.equals("激光头识别")) {
+            openHardreader()
+            mDecodeReader?.close()
+        }
     }
 
     override fun onPause() {
         super.onPause()
         isPause = true
+        mDecodeReader = null
     }
 
     override fun onScanCallBack(p0: String?) {

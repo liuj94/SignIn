@@ -18,12 +18,20 @@ public class SignUpUser implements Serializable {
      * "corporateName":"%u4F01%u5BB8%u8F6F%u4EF6",
      * "supplement":"%u5609%u5BBE",
      * "meetingId":20,"nowTime":1677296122085}
+     * meetingId":"","orderId":447,
      */
 
 //1开启 2关闭 自动
     private String autoStatus = "2";
+    private String orderId = "";
     private String voiceStatus = "1";
+    public String getOrderId() {
+        return orderId;
+    }
 
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
     public String getSignUpStatus() {
         return signUpStatus;
     }

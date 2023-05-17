@@ -96,7 +96,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         binding.itemDdxx.ddBtn.setOnClickListener {
             if (examineStatus.equals("2")) {
                 if (cAmount > 0) {
-                    startActivity<ExamineKPActivity>("order" to order)
+                    if(invoiceStatus.equals("2")){
+                        startActivity<ExamineKPActivity>("order" to order)
+                    }
+
                 } else {
                     startActivity<ExamineActivity>("order" to order)
                 }
@@ -380,53 +383,73 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             //0初始状态 1待审核 2审核成功 3审核失败
             examineStatus = "" + it.examineStatus
             invoiceStatus = "" + it.invoiceStatus
+            binding.itemDdxx.ddBtn.text = ""
             binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
             binding.infoLl.visibility = View.GONE
-            for (item in model.sys_invoice_status) {
-                if (examineStatus.equals(item.dictValue.trim())) {
-                    binding.itemDdxx.ddBtn.text = item.dictLabel
-                    if (item.dictValue.trim().equals("2")) {
-                        binding.infoLl.visibility = View.VISIBLE
-                        //'1未开发票 2申请中 3申请成功 4申请失败 5已开票
-                        if (invoiceStatus.equals("1")) {
-                            if (cAmount > 0) {
-//                                binding.itemDdxx.ddBtn.text = "开具发票"
-                                binding.itemDdxx.ddBtn.text = "待申请"
-                                binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
-                            } else {
-                                binding.itemDdxx.ddBtn.text = "订单详情"
-                                binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
-
-                            }
-
-
-                        } else if (invoiceStatus.equals("2")) {
-                            binding.itemDdxx.ddBtn.text = "发票申请中"
-                            binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
-                        } else if (invoiceStatus.equals("3")) {
-                            binding.itemDdxx.ddBtn.text = "开具发票"
-                            binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
-
-                        } else if (invoiceStatus.equals("4")) {
-                            binding.itemDdxx.ddBtn.text = "发票申请失败"
-                            binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
-
-                        } else if (invoiceStatus.equals("5")) {
-                            binding.itemDdxx.ddBtn.text = "已开票"
-                            binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
-                        } else {
-                            binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
-                        }
-
-                    }
-                    else if (item.dictValue.trim().equals("3")) {
-                        binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
-                    } else {
+            if(examineStatus.equals("2")){
+                binding.itemDdxx.ddBtn.text = ""
+                if (cAmount > 0) {
+                    if (invoiceStatus.equals("2")){
+                        binding.itemDdxx.ddBtn.text = "开具发票"
                         binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
 
+                    }else if(invoiceStatus.equals("5")){
+                        binding.itemDdxx.ddBtn.text = "已开票"
+                        binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
+
+                    }else{
+                        binding.itemDdxx.ddBtn.text = "待申请"
+                        binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
                     }
+                }else{
+                    binding.itemDdxx.ddBtn.text = "订单详情"
+                    binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
                 }
+            }else if(examineStatus.equals("3")){
+                binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
+                binding.itemDdxx.ddBtn.text = "审核失败"
+            }else{
+                binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
+                binding.itemDdxx.ddBtn.text = "待审核"
             }
+//            for (item in model.sys_invoice_status) {
+//                if (examineStatus.equals(item.dictValue.trim())) {
+//                    binding.itemDdxx.ddBtn.text = item.dictLabel
+//                    if (item.dictValue.trim().equals("2")) {
+//                        binding.infoLl.visibility = View.VISIBLE
+//                        //'1未开发票 2申请中 3申请成功 4申请失败 5已开票
+//                        if (invoiceStatus.equals("1")) {
+//                            if (cAmount > 0) {
+////                                binding.itemDdxx.ddBtn.text = "开具发票"
+//                                binding.itemDdxx.ddBtn.text = "待申请"
+//                                binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
+//                            } else {
+//                                binding.itemDdxx.ddBtn.text = "订单详情"
+//                                binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
+//
+//                            }
+//
+//
+//                        } else if (invoiceStatus.equals("2")) {
+//                            binding.itemDdxx.ddBtn.text = "开具发票"
+//                            binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
+//                        }  else if (invoiceStatus.equals("5")) {
+//                            binding.itemDdxx.ddBtn.text = "已开票"
+//                            binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
+//                        } else {
+//                            binding.itemDdxx.ddBtn.text = "待申请"
+//                            binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
+//                        }
+//
+//                    }
+//                    else if (item.dictValue.trim().equals("3")) {
+//                        binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
+//                    } else {
+//                        binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
+//
+//                    }
+//                }
+//            }
 
         }
 
