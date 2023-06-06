@@ -5,8 +5,10 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.AsyncTask
+import android.os.CountDownTimer
 import android.text.Html
 import android.view.KeyEvent
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -57,6 +59,7 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
 
     var params = HashMap<String, Any>()
     var moshi: String? = ""
+    var id: String = ""
     override fun initData() {
         moshi = kv.getString("shaomamoshi", "")
         if (moshi.equals("激光头识别")) {
@@ -72,6 +75,8 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
         }
 
         intent.getSerializableExtra("order")?.let { order = it as MeetingUserDeData.UserOrderBean }
+        intent.getIntExtra("timeLong",3)?.let { timeLong = it  }
+        intent.getStringExtra("autoStatus")?.let { autoStatus = it  }
         binding.name.text = ""
         binding.userName.text = ""
         binding.companyName.text = ""
@@ -81,11 +86,7 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
         var p = "开票金额<font color='#D43030'>" + order.amount + "</font>元"
         binding.amount.text = Html.fromHtml(p)
         //增值税专用发票、普通销售发票{{pagedata.userOrder.invoiceType==1?'增值税普通发票':'增值税专用发票'}}
-        if (order.invoiceType.equals("1")) {
-            binding.invoiceType.text = "增值税普通发票"
-        } else {
-            binding.invoiceType.text = "增值税专用发票"
-        }
+
 //        var model =
 //            JSON.parseObject(kv.getString("TypeModel", ""), TypeModel::class.java)
 //        for (item in model.sys_invoice_type) {
@@ -115,6 +116,11 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
             //        binding.invoiceNumber
 //        binding.invoiceNo
             examine()
+        }
+        binding.submitfh.setOnClickListener {
+            //        binding.invoiceNumber
+//        binding.invoiceNo
+            finish()
         }
         getBill()
         //起始符+版本号+base64（名称</>纳税人识别号</>地址电话</>开户行及账号</>CRC）+结束符
@@ -159,7 +165,7 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
         }
 
     }
-
+    var autoStatus: String = "1"
     fun getBill() {
         OkGo.get<MeetingUserDeData.UserOrderBean>(PageRoutes.Api_bill + order.id)
             .tag(PageRoutes.Api_bill)
@@ -174,22 +180,74 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
                 override fun onMySuccess(data: MeetingUserDeData.UserOrderBean?) {
                     super.onMySuccess(data)
                     data?.let {
+                        binding.fpxx.visibility = View.VISIBLE
+                        binding.fpxxxq.visibility = View.VISIBLE
+                        binding.zwsj.visibility = View.GONE
+                        binding.submit.visibility = View.VISIBLE
+                        binding.submitfh.visibility = View.GONE
                         data.userName?.let { binding.userName.text = data.userName }
+                        data.id?.let { id =  data.id }
                         data.name?.let {  binding.companyName.text =data.name }
-
+                        if (data.invoiceTypes.equals("1")) {
+                            binding.invoiceType.text = "增值税普通发票"
+                        } else {
+                            binding.invoiceType.text = "增值税专用发票"
+                        }
 //                        createChineseQRCode(it.qr)
                         Glide.with(this@ExamineKPActivity)
                             .load("https://meeting.nbqichen.com/prod-api/common/qr/created?content=" + it.qr + "&h=210&w=210")
                             .error(R.mipmap.qrcodeopy)
                             .into(binding.stateIv)
                     }
+                    if(data==null){
+                        binding.fpxx.visibility = View.GONE
+                        binding.fpxxxq.visibility = View.GONE
+                        binding.zwsj.visibility = View.VISIBLE
+                        binding.submit.visibility = View.GONE
+                        binding.submitfh.visibility = View.VISIBLE
+                        if(autoStatus.equals("1")){
+                            timer()
+                            binding.submit.text = "返回（"+timeLong+"）"
+                            timer?.start()
+                        }else{
+                            binding.submit.text = "返回"
+                        }
+                    }
 
+                }
+
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
+                    binding.fpxx.visibility = View.GONE
+                    binding.fpxxxq.visibility = View.GONE
+                    binding.zwsj.visibility = View.VISIBLE
+                    binding.submit.visibility = View.GONE
+                    binding.submitfh.visibility = View.VISIBLE
+                    if(autoStatus.equals("1")){
+                        timer()
+                        binding.submit.text = "返回（"+timeLong+"）"
+                        timer?.start()
+                    }else{
+                        binding.submit.text = "返回"
+                    }
                 }
 
                 override fun onError(response: Response<MeetingUserDeData.UserOrderBean>) {
                     super.onError(response)
 
                     mViewModel.isShowLoading.value = false
+                    binding.fpxx.visibility = View.GONE
+                    binding.fpxxxq.visibility = View.GONE
+                    binding.zwsj.visibility = View.VISIBLE
+                    binding.submit.visibility = View.GONE
+                    binding.submitfh.visibility = View.VISIBLE
+                    if(autoStatus.equals("1")){
+                        timer()
+                        binding.submit.text = "返回（"+timeLong+"）"
+                        timer?.start()
+                    }else{
+                        binding.submit.text = "返回"
+                    }
                 }
 
                 override fun onFinish() {
@@ -203,7 +261,7 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
 
     private fun examine() {
         var params = HashMap<String, Any>()
-        params["id"] = order.id
+        params["id"] = id
         params["code"] = binding.invoiceNumber.text.toString().trim()
         params["no"] = binding.invoiceNo.text.toString().trim()
         mViewModel.isShowLoading.value = true
@@ -458,5 +516,20 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
             FaceUtil.LedSet("led-blue", 0);
         }
     }
+    var timeLong: Int = 3
+    var timer: CountDownTimer? = null
+    fun timer() {
+        timer = object : CountDownTimer((timeLong * 1000).toLong(), 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                binding.submitfh.text = "返回（" + millisUntilFinished / 1000 + "）"
+            }
 
+            /**
+             * 倒计时结束后调用的
+             */
+            override fun onFinish() {
+                finish()
+            }
+        }
+    }
 }

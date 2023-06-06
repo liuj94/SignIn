@@ -3,6 +3,7 @@ package com.example.signin
 import android.media.MediaPlayer
 import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.alibaba.fastjson.JSON
+import com.dylanc.longan.startActivity
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.MeetingFormData
@@ -32,6 +33,7 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>(), QRCod
     var okMsg: String = "签到成功"
     var repeatMsg: String = "重复签到"
     var voiceStatus: String = "2"
+    var meetingSignUpLocationName: String = ""
 
 
     override fun initData() {
@@ -41,6 +43,7 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>(), QRCod
         intent.getStringExtra("meetingid")?.let { meetingid = it }
         intent.getStringExtra("signUpId")?.let { signUpId = it }
         intent.getStringExtra("autoStatus")?.let { autoStatus = it }
+        intent.getStringExtra("meetingSignUpLocationName")?.let { meetingSignUpLocationName = it }
         intent.getStringExtra("okMsg")?.let { okMsg = it }
         intent.getStringExtra("failedMsg")?.let { failedMsg = it }
         intent.getStringExtra("repeatMsg")?.let { repeatMsg = it }
@@ -57,60 +60,34 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>(), QRCod
             MediaPlayer.create(this@ScanActivity, R.raw.ddd)
         mRingPlayer?.start()
         if (result.isNullOrEmpty()) {
-            var signUpUser = SignUpUser()
-            signUpUser.signUpLocationId = id
-            signUpUser.meetingName = name
-            signUpUser.signUpId = signUpId
-            signUpUser.userMeetingId = ""
-            signUpUser.meetingId = ""
-            signUpUser.userMeetingTypeName = ""
-            signUpUser.autoStatus = autoStatus
-            signUpUser.timeLong = timeLong
-            signUpUser.okMsg = okMsg
-            signUpUser.failedMsg = failedMsg
-            signUpUser.repeatMsg = repeatMsg
-            signUpUser.voiceStatus = voiceStatus
-            signUpUser.success = "500"
-            com.dylanc.longan.startActivity<SiginReAutoActivity>(
-                "type" to showType,
-                "data" to signUpUser
-            )
-            return
-        }
-        result?.let { param ->
-            var signUpUser = JSON.parseObject(param, SignUpUser::class.java)
-            if (signUpUser.id.isNullOrEmpty()) {
-                signUpUser.signUpLocationId = id
-                signUpUser.meetingName = name
-                signUpUser.signUpId = signUpId
-                signUpUser.userMeetingId = ""
-                signUpUser.meetingId = ""
-                signUpUser.userMeetingTypeName = ""
-                signUpUser.autoStatus = autoStatus
-                signUpUser.timeLong = timeLong
-                signUpUser.okMsg = okMsg
-                signUpUser.failedMsg = failedMsg
-                signUpUser.repeatMsg = repeatMsg
-                signUpUser.voiceStatus = voiceStatus
-                signUpUser.success = "500"
-                com.dylanc.longan.startActivity<SiginReAutoActivity>(
-                    "type" to showType,
-                    "data" to signUpUser
-                )
-                return
-            }
-            getData(signUpUser.id)
-
-//            if(autoStatus.equals("1")){
-//
-//            }else{
-//                com.dylanc.longan.startActivity<SiginReActivity>(
-//                    "type" to showType,
-//                    "data" to signUpUser
-//                )
-//            }
+            goshibai(SignUpUser())
+        } else {
+            getmeetingCode(result)
         }
 
+
+    }
+
+    private fun goshibai(signUpUser: SignUpUser) {
+
+        //                isShiBieZ = false
+        signUpUser.signUpLocationId = id
+        signUpUser.meetingName = name
+        signUpUser.signUpId = signUpId
+        signUpUser.userMeetingId = ""
+        signUpUser.meetingId = ""
+        signUpUser.userMeetingTypeName = ""
+        signUpUser.autoStatus = autoStatus
+        signUpUser.timeLong = timeLong
+        signUpUser.okMsg = okMsg
+        signUpUser.failedMsg = failedMsg
+        signUpUser.repeatMsg = repeatMsg
+        signUpUser.voiceStatus = voiceStatus
+        signUpUser.success = "500"
+        startActivity<SiginReAutoActivity>(
+            "type" to showType,
+            "data" to signUpUser
+        )
     }
 
     private fun getData(userid: String) {
@@ -163,35 +140,67 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>(), QRCod
                     signUpUser.failedMsg = failedMsg
                     signUpUser.repeatMsg = repeatMsg
                     signUpUser.voiceStatus = voiceStatus
+                    if (showType == 8) {
+                        var order: MeetingUserDeData.UserOrderBean =
+                            MeetingUserDeData.UserOrderBean()
+                        if (data.userOrder != null) {
+                            order = data.userOrder
+                            order.supplement = data.userMeetingTypeName
+                            order.userName = data.name
+                            order.corporateName = data.corporateName
+                            order.meetingSignUpLocationName = meetingSignUpLocationName
+
+                            startActivity<ExamineKPActivity>(
+                                "order" to order,
+                                "timeLong" to timeLong,
+                                "autoStatus" to "" + autoStatus
+                            )
+                            return
+                        }
+
+                    }
+
                     if (showType == 3) {
                         com.dylanc.longan.startActivity<SiginReActivity>(
                             "type" to showType,
                             "data" to signUpUser
                         )
                     } else {
-                        var avatar = ""
-                        data.avatar?.let { avatar = it }
-                        var params = java.util.HashMap<String, String>()
-                        params["meetingId"] = signUpUser.meetingId//会议id
-                        params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
-                        params["signUpId"] = signUpUser.signUpId//签到站id
-                        params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
-                        params["status"] = "2"//用户参与会议id
-                        sigin(JSON.toJSONString(params), { success ->
-                            signUpUser.success = success
-                            com.dylanc.longan.startActivity<SiginReAutoActivity>(
-                                "type" to showType,
-                                "data" to signUpUser,
-                                "avatar" to avatar
-                            )
-                        }, {
+                        if (showType != 8) {
+                            var avatar = ""
+                            data.avatar?.let { avatar = it }
+                            var params = java.util.HashMap<String, String>()
+                            params["meetingId"] = signUpUser.meetingId//会议id
+                            params["signUpLocationId"] = signUpUser.signUpLocationId//签到点id
+                            params["signUpId"] = signUpUser.signUpId//签到站id
+                            params["userMeetingId"] = signUpUser.userMeetingId//用户参与会议id
+                            params["status"] = "2"//用户参与会议id
+                            sigin(JSON.toJSONString(params), { success ->
+                                signUpUser.success = success
+                                com.dylanc.longan.startActivity<SiginReAutoActivity>(
+                                    "type" to showType,
+                                    "data" to signUpUser,
+                                    "avatar" to avatar
+                                )
+                            }, {
+                                signUpUser.success = "500"
+                                com.dylanc.longan.startActivity<SiginReAutoActivity>(
+                                    "type" to showType,
+                                    "data" to signUpUser,
+                                    "avatar" to avatar
+                                )
+                            }, {})
+                        } else {
                             signUpUser.success = "500"
+                            var avatar = ""
+                            data.avatar?.let { avatar = it }
                             com.dylanc.longan.startActivity<SiginReAutoActivity>(
                                 "type" to showType,
                                 "data" to signUpUser,
                                 "avatar" to avatar
                             )
-                        }, {})
+                        }
+
                     }
 
 
@@ -199,24 +208,7 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>(), QRCod
 
                 override fun onError(response: Response<MeetingUserDeData>) {
                     super.onError(response)
-                    var signUpUser = SignUpUser()
-                    signUpUser.signUpLocationId = id
-                    signUpUser.meetingName = name
-                    signUpUser.signUpId = signUpId
-                    signUpUser.userMeetingId = ""
-                    signUpUser.meetingId = ""
-                    signUpUser.userMeetingTypeName = ""
-                    signUpUser.autoStatus = autoStatus
-                    signUpUser.timeLong = timeLong
-                    signUpUser.okMsg = okMsg
-                    signUpUser.failedMsg = failedMsg
-                    signUpUser.repeatMsg = repeatMsg
-                    signUpUser.voiceStatus = voiceStatus
-                    signUpUser.success = "500"
-                    com.dylanc.longan.startActivity<SiginReAutoActivity>(
-                        "type" to showType,
-                        "data" to signUpUser
-                    )
+                    goshibai(SignUpUser())
                 }
 
                 override fun onFinish() {
@@ -250,6 +242,7 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>(), QRCod
     override fun onResume() {
         super.onResume()
         isPause = false
+        mViewModel.isShowLoading.value = false
         if (!scanQRCodeOpenCameraError) {
             binding.mZXingView.startSpotAndShowRect()
         }
@@ -284,10 +277,60 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>(), QRCod
         super.onDestroy()
     }
 
-//    override fun onScanSuccess(barcode: String?) {
-//        try {
-//            goRe(barcode)
-//        } catch (e: Exception) {
-//        }
-//    }
+    private fun getmeetingCode(meetingCode: String) {
+        mViewModel.isShowLoading.value = true
+        OkGo.get<SignUpUser>(PageRoutes.Api_meetingCode + meetingCode)
+            .tag(PageRoutes.Api_meetingCode + meetingCode)
+            .headers("Authorization", kv.getString("token", ""))
+            .execute(object : RequestCallback<SignUpUser>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
+
+                }
+
+                override fun onMySuccess(data: SignUpUser) {
+                    super.onMySuccess(data)
+                    try {
+                        var signUpUser = data
+
+                        if (!signUpUser.meetingId.equals(meetingid)) {
+                            goshibai(signUpUser)
+                            return
+                        }
+                        if (showType == 8) {
+                            if (signUpUser.orderId.isNullOrEmpty()) {
+                                goshibai(signUpUser)
+                                return
+                            }
+                        }
+
+                        if (signUpUser.id.isNullOrEmpty()) {
+                            goshibai(signUpUser)
+                            return
+                        }
+                        getData(signUpUser.id)
+
+
+                    } catch (e: Exception) {
+                        goshibai(SignUpUser())
+
+                    }
+
+
+                }
+
+                override fun onError(response: Response<SignUpUser>) {
+                    super.onError(response)
+                    mViewModel.isShowLoading.value = false
+                    goshibai(SignUpUser())
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+
+                }
+
+
+            })
+    }
 }

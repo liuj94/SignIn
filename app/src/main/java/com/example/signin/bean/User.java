@@ -1,5 +1,8 @@
 package com.example.signin.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
     public String avatar= "";
     public String phonenumber= "";
@@ -12,10 +15,27 @@ public class User {
     //00系统用户01举办方用户02分享商用户03小程序主账号04会议账号05站点账号06签到账号
     public String userType = "00";
     public String password = "";
+    public String signUpType = "0";
     public String deptName = "";
     public String orderNum = "";
     public String dept = "";
     public String remark = "";
+    public List<String> types = new ArrayList<String>();
+    public List<String> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<String> types) {
+        this.types = types;
+    }
+    public String getSignUpType() {
+        return signUpType;
+    }
+
+    public void setSignUpType(String signUpType) {
+        this.signUpType = signUpType;
+    }
+
     public String getRemark() {
         return remark;
     }

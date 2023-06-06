@@ -36,7 +36,7 @@ import io.agora.rtc2.RtcEngine
  */
 class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewModel>() {
     companion object {
-        fun newInstance(meetingid: String,businessId: String): MettingDe4Fragment {
+        fun newInstance(meetingid: String, businessId: String): MettingDe4Fragment {
             val args = Bundle()
             args.putString("meetingid", meetingid)
             args.putString("businessId", businessId)
@@ -73,7 +73,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
         meetingid = arguments?.getString("meetingid", "1")
         businessId = arguments?.getString("businessId", "1")
-        CHANNEL = ""+meetingid
+        CHANNEL = "" + meetingid
         binding.srecyclerview.layoutManager = LinearLayoutManager(activity)
         adapterSelect = SelectMeetingAdapter().apply {
             submitList(selectList)
@@ -161,8 +161,8 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         }
 
         binding.recyclerview.adapter = adapter
-        getData()
-
+//        getData()
+        delayed()
 
 //        binding.nameLl.setOnClickListener {
 //            binding.select2Ll.visibility = View.GONE
@@ -281,22 +281,22 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                 if (requestCode == 200 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     userData?.let {
 //                        if(talkTime>0){
-                            if (it.userType.equals("01")||it.userType.equals("04")) {
-                                voice()
-                            } else {
-                                if (selectList2.size > 0) {
-                                    if (selectList2[0].voiceStatus == 1) {
-                                        //对讲开启
-                                        voice()
+                        if (it.userType.equals("01") || it.userType.equals("04")) {
+                            voice()
+                        } else {
+                            if (selectList2.size > 0) {
+                                if (selectList2[0].voiceStatus == 1) {
+                                    //对讲开启
+                                    voice()
 
-                                    } else {
-
-                                    }
                                 } else {
 
                                 }
+                            } else {
 
                             }
+
+                        }
 //                        }else{
 //                            toast("当前暂无通话时长")
 //                        }
@@ -378,8 +378,8 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             )
             stats?.let {
                 val params = HashMap<String, Any>()
-                params["meetingId"] =""+ meetingid
-                params["time"] =  it.totalDuration*1000
+                params["meetingId"] = "" + meetingid
+                params["time"] = it.totalDuration * 1000
                 LiveDataBus.get().with("voiceTime").postValue(JSON.toJSONString(params))
             }
 
@@ -424,12 +424,11 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
     }
 
 
-
     private fun initializeAndJoinChannel() {
         /**In the demo, the default is to enter as the anchor. */
         mRtcEngine?.setClientRole(Constants.CLIENT_ROLE_BROADCASTER)
         mRtcEngine?.setAudioProfile(0)
-       mRtcEngine?.setAudioScenario(0)
+        mRtcEngine?.setAudioScenario(0)
 
         mRtcEngine?.setDefaultAudioRoutetoSpeakerphone(true)
         var option = ChannelMediaOptions()
@@ -573,7 +572,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         binding.roundProgress.progress = 0
         binding.roundProgress.maxProgress = 5000
         userData?.let {
-            if (it.userType.equals("01")||it.userType.equals("04")) {
+            if (it.userType.equals("01") || it.userType.equals("04")) {
                 binding.ztname.text = "当前对讲处于开启状态"
                 binding.ztiv.setImageResource(R.drawable.ov_3974f6)
                 binding.thstate.setImageResource(R.mipmap.tonghua3)
@@ -582,21 +581,80 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
     }
 
+    private val delayedLoad = SubstepDelayedLoad()
+    private fun delayed() {
+        delayedLoad
+            .delayed(1000)
+            .run {
+                //延时加载布局
+                getData()
+
+
+            }
+            .start()
+    }
+
     private fun getData() {
-        if (!kv.getString("SiginUpListModel", "").isNullOrEmpty()) {
-            var data =
-                JSON.parseObject(kv.getString("SiginUpListModel", ""), SiginUpListModel::class.java)
-            selectList.clear()
+//        if (!kv.getString("SiginUpListModel", "").isNullOrEmpty()) {
+//            var data =
+//                JSON.parseObject(kv.getString("SiginUpListModel", ""), SiginUpListModel::class.java)
+//            selectList.clear()
+//
+//            selectList.addAll(data.list)
+//            selectList[0].isMyselect = true
+//            signUpId = selectList[0].id
+//            type = selectList[0].type
+//
+//            binding.nameTv.text = selectList[0].name
+//            adapterSelect?.notifyDataSetChanged()
+//            getList()
+//        }
+        getDatasign_up_app_list()
+    }
 
-            selectList.addAll(data.list)
-            selectList[0].isMyselect = true
-            signUpId = selectList[0].id
-            type = selectList[0].type
+    private fun getDatasign_up_app_list() {
 
-            binding.nameTv.text = selectList[0].name
-            adapterSelect?.notifyDataSetChanged()
-            getList()
-        }
+        OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid + "f4")
+            .headers("Authorization", kv.getString("token", ""))
+            .execute(object : RequestCallback<List<SiginUpListData>>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
+
+                }
+
+                override fun onMySuccess(data: List<SiginUpListData>) {
+                    super.onMySuccess(data)
+                    selectList.clear()
+
+                    selectList.addAll(data)
+                    if(selectList.size>0){
+                        selectList[0].isMyselect = true
+                        signUpId = selectList[0].id
+                        type = selectList[0].type
+
+                        binding.nameTv.text = selectList[0].name
+                        adapterSelect?.notifyDataSetChanged()
+                        getList()
+
+                    }
+
+
+                }
+
+                override fun onError(response: Response<List<SiginUpListData>>) {
+                    super.onError(response)
+
+
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+
+                }
+
+
+            })
     }
 
     private fun getList() {
@@ -641,7 +699,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                         }
                         binding.roundProgress.maxProgress = 5000
                         userData?.let {
-                            if (it.userType.equals("01")||it.userType.equals("04")) {
+                            if (it.userType.equals("01") || it.userType.equals("04")) {
                                 binding.ztname.text = "当前对讲处于开启状态"
                                 binding.ztname.setTextColor(Color.parseColor("#3974f6"))
                                 binding.ztiv.setImageResource(R.drawable.ov_3974f6)
@@ -667,10 +725,11 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
             })
     }
+
     var talkTime = 0
     private fun getSiginData() {
-        OkGo.get<Balance>(PageRoutes.Api_balance +  businessId)
-            .tag(PageRoutes.Api_balance )
+        OkGo.get<Balance>(PageRoutes.Api_balance + businessId)
+            .tag(PageRoutes.Api_balance)
             .headers("Authorization", kv.getString("token", ""))
             .execute(object : RequestCallback<Balance>() {
                 override fun onSuccessNullData() {
@@ -685,10 +744,10 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                     binding.roundProgress.progress = 100
                     binding.roundProgress.maxProgress = 100
 //                    binding.roundProgress.maxProgress = (data.talkTime/1000)/60
-                    if(data.talkTime>60000){
-                        binding.time.text = ""+(data.talkTime/1000)/60 + "分钟"
-                    }else{
-                        binding.time.text = ""+(data.talkTime/1000) + "秒"
+                    if (data.talkTime > 60000) {
+                        binding.time.text = "" + (data.talkTime / 1000) / 60 + "分钟"
+                    } else {
+                        binding.time.text = "" + (data.talkTime / 1000) + "秒"
                     }
 
 

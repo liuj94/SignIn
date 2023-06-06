@@ -21,21 +21,29 @@ public class MeetingStatisticsData implements Serializable {
      * yesterdayLeaveCount : 0
      */
 
-    private String browseCount= "0";
+    private int browseCount= 0;
     private int leaveCount= 0;//请假
     private int todayBeReviewedCount= 0;//待审核
     private int todayInsertUserCount= 0;//报名
     private String totalAmount = "0";//金额
-    private String userMeetingCount= "0";//会议报名
+    private int userMeetingCount= 0;//会议报名
     private int yesterdayBeReviewedCount= 0;//昨天待审核
     private int yesterdayInsertUserCount= 0;
     private int yesterdayLeaveCount= 0;//昨日请假
 
-    public String getBrowseCount() {
+    public int getUserMeetingCount() {
+        return userMeetingCount;
+    }
+
+    public void setUserMeetingCount(int userMeetingCount) {
+        this.userMeetingCount = userMeetingCount;
+    }
+
+    public int getBrowseCount() {
         return browseCount;
     }
 
-    public void setBrowseCount(String browseCount) {
+    public void setBrowseCount(int browseCount) {
         this.browseCount = browseCount;
     }
 
@@ -71,13 +79,7 @@ public class MeetingStatisticsData implements Serializable {
         this.totalAmount = totalAmount;
     }
 
-    public String getUserMeetingCount() {
-        return userMeetingCount;
-    }
 
-    public void setUserMeetingCount(String userMeetingCount) {
-        this.userMeetingCount = userMeetingCount;
-    }
 
     public int getYesterdayBeReviewedCount() {
         return yesterdayBeReviewedCount;

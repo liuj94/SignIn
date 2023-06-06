@@ -21,17 +21,16 @@
         <RelativeLayout
 
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            >
+            android:layout_height="50dp">
 
             <ImageView
                 android:id="@+id/goback"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:paddingLeft="13dp"
+                android:paddingTop="13dp"
                 android:paddingRight="13dp"
                 android:paddingBottom="13dp"
-                android:paddingTop="13dp"
                 android:src="@mipmap/fh" />
 
             <TextView
@@ -65,70 +64,105 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:background="@mipmap/topbg"
                         android:id="@+id/name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="5dp"
+                        android:background="@mipmap/topbg"
                         android:gravity="center"
+                        android:padding="5dp"
                         android:text="签到点名称"
                         android:textColor="#ff3974f6"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
-                        android:id="@+id/infoLl"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/fpxxxq"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
-                        <TextView
-                            android:layout_marginTop="5dp"
-                            android:id="@+id/userName"
+                        <LinearLayout
+                            android:id="@+id/infoLl"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                            android:text="陈淼淼"
-                            android:textColor="#ff333333"
-                            android:textSize="27sp" />
+                            <TextView
+                                android:id="@+id/userName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+
+                                android:text=""
+                                android:textColor="#ff333333"
+                                android:textSize="27sp" />
+
+                            <TextView
+                                android:id="@+id/companyName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="5dp"
+                                android:paddingBottom="10dp"
+                                android:text=""
+                                android:textColor="#ff333333"
+                                android:textSize="16sp" />
+
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/stateIv"
+                            android:layout_width="180dp"
+                            android:layout_height="180dp"
+                            android:src="@mipmap/qrcodeopy" />
 
                         <TextView
-                            android:id="@+id/companyName"
+                            android:id="@+id/invoiceType"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="10dp"
-                            android:text="公司名称公司名称"
-                            android:textColor="#ff333333"
+                            android:layout_marginTop="10dp"
+                            android:text=""
+                            android:textColor="#ff666666"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text=""
+                            android:textColor="#ff666666"
                             android:textSize="16sp" />
-
-
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/stateIv"
-                        android:layout_width="180dp"
-                        android:layout_height="180dp"
-                        android:src="@mipmap/qrcodeopy" />
-
-                    <TextView
-                        android:id="@+id/invoiceType"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/zwsj"
+                        android:visibility="invisible"
+                        android:gravity="center_horizontal"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="普通增值税发票"
-                        android:textColor="#ff666666"
-                        android:textSize="12sp" />
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/amount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="开票金额5800元"
-                        android:textColor="#ff666666"
-                        android:textSize="16sp" />
+                        <ImageView
+                            android:layout_width="190dp"
+                            android:layout_height="160dp"
+                            android:layout_margin="20dp"
+                            android:src="@mipmap/jg_hs" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:maxLines="1"
+                            android:text="未填写发票信息"
+                            android:textColor="#D43030"
+                            android:textSize="40sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
 
                     <TextView
                         android:id="@+id/btn"
@@ -143,12 +177,14 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/fpxx"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="13dp"
                     android:background="@drawable/shape_bg_12"
                     android:orientation="vertical"
-                    android:paddingBottom="10dp">
+                    android:paddingBottom="10dp"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -202,18 +238,18 @@
                                     android:textSize="14sp" />
 
                                 <EditText
-                                    android:windowSoftInputMode="adjustPan"
-                                    android:hint="请输入发票代码"
-                                    android:singleLine="true"
-                                    android:maxLines="1"
-                                    android:background="#fff"
                                     android:id="@+id/invoiceNumber"
                                     android:layout_width="match_parent"
                                     android:layout_height="25dp"
                                     android:layout_marginLeft="20dp"
+                                    android:background="#fff"
+                                    android:hint="请输入发票代码"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
                                     android:text=""
                                     android:textColor="#ff4d4d4d"
-                                    android:textSize="14sp" />
+                                    android:textSize="14sp"
+                                    android:windowSoftInputMode="adjustPan" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -232,14 +268,14 @@
                                     android:textSize="14sp" />
 
                                 <EditText
-                                    android:hint="请输入发票号码"
-                                    android:singleLine="true"
-                                    android:maxLines="1"
-                                    android:background="#fff"
                                     android:id="@+id/invoiceNo"
                                     android:layout_width="match_parent"
                                     android:layout_height="25dp"
                                     android:layout_marginLeft="20dp"
+                                    android:background="#fff"
+                                    android:hint="请输入发票号码"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
                                     android:text=""
                                     android:textColor="#ff4d4d4d"
                                     android:textSize="14sp" />
@@ -256,6 +292,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/submit"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
@@ -267,7 +304,19 @@
                     android:text="确认开票完成"
                     android:textColor="#ff3974f6"
                     android:textSize="16sp" />
-
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/submitfh"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="13dp"
+                    android:background="@drawable/shape_bg_12"
+                    android:gravity="center"
+                    android:text="返回"
+                    android:textColor="#666666"
+                    android:textSize="16sp" />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="20dp" />

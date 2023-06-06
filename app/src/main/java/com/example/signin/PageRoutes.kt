@@ -36,6 +36,7 @@ interface PageRoutes {
         //        val Api_meetinguser = "$BaseUrlApi/manager/meeting/user/list?meetingId="
 //        val Api_meetinguser_data = "$BaseUrlApi/manager/meeting/user/35?id=35"
         val Api_meetinguser_data = "$BaseUrlApi/manager/meeting/user/"
+        val Api_meetingCode = "$BaseUrlApi/manager/meeting/user/meetingCode?meetingCode="
         val Api_meeting_sign_up_data_list =
             "$BaseUrlApi/manager/meeting/user/sign/up/data/list?meetingId="
 

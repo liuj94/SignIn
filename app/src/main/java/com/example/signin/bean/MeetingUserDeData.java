@@ -35,6 +35,7 @@ public class MeetingUserDeData implements Serializable {
      * userMeetingGift : null
      * meetingSignUps : [{"searchValue":null,"createBy":null,"createTime":null,"updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":null,"beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":92,"name":"注册签到","type":1,"address":null,"addressStatus":1,"startTime":null,"endTime":null,"signUpType":null,"signUpLimitStatus":1,"limitNum":1,"signUpString":null,"cardStatus":2,"avatarStatus":2,"meetingSignUpFormList":null,"meetingId":20,"meetingName":"启迪测试","createUserId":null,"select":3,"status":1,"modelType":"1","personChargeId":344,"personChargeName":"签到站NRJUUP","personChargeMobile":"","personChargeUsername":null,"delTf":0,"userMeetingSignUp":{"searchValue":null,"createBy":null,"createTime":"2023-02-19 13:50:24","updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":"2023-02-23 17:50:40","beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":64,"meetingId":20,"businessId":null,"pointId":92,"userId":1905,"status":3,"createUserId":null,"userMeetingId":35,"locationId":67,"signUpName":null,"signUpLocationName":null,"pointPersonChargeId":null,"locationPersonChargeId":null,"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"date":null,"location":null,"levelStatus":null,"startTime":null,"endTime":null},"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"meetingSignUpLocation":{"searchValue":null,"createBy":null,"createTime":"2023-02-18 13:29:11","updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":"2023-02-23 09:59:54","beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":67,"signUpId":92,"name":"注册签到","delTf":0,"personChargeId":344,"personChargeName":"","personChargeMobile":null,"status":1,"voiceStatus":1,"location":null,"startTime":"2023-02-18 00:00","endTime":"2023-02-18 14:30","address":"B3三楼","addressStatus":"2","signUpType":1,"userMeetingTypes":null,"leveStatus":null,"meetingId":20,"loginTimeStatus":null,"insertUserInfoStatus":null,"signUpNumStatus":1,"signUpNum":1,"useAllStatus":null,"totalUserCount":null,"currentUserCount":null,"signUpStatus":1,"ticketIds":null,"shockStatus":1,"autoStatus":1,"okMsg":"成功签到","repeatMsg":"重复签到","failedMsg":"识别失败","timeLong":1,"type":1,"businessId":null,"percent":null,"signUpCount":null,"levelCount":null,"siteName":null,"personChargeUsername":null,"userType":null,"userId":null},"userType":null,"userId":null,"localPersonChargeId":null,"localPersonCharge":null,"localPersonChargeMobile":null},{"searchValue":null,"createBy":null,"createTime":null,"updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":null,"beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":93,"name":"来程签到","type":2,"address":null,"addressStatus":1,"startTime":null,"endTime":null,"signUpType":null,"signUpLimitStatus":1,"limitNum":1,"signUpString":null,"cardStatus":2,"avatarStatus":2,"meetingSignUpFormList":null,"meetingId":20,"meetingName":"启迪测试","createUserId":null,"select":2,"status":1,"modelType":"1","personChargeId":345,"personChargeName":"签到站KEQ9RY","personChargeMobile":"","personChargeUsername":null,"delTf":0,"userMeetingSignUp":{"searchValue":null,"createBy":null,"createTime":"2023-02-19 13:50:24","updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":"2023-02-23 18:14:06","beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":65,"meetingId":20,"businessId":null,"pointId":93,"userId":1905,"status":2,"createUserId":null,"userMeetingId":35,"locationId":66,"signUpName":null,"signUpLocationName":null,"pointPersonChargeId":null,"locationPersonChargeId":null,"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"date":null,"location":null,"levelStatus":null,"startTime":null,"endTime":null},"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"meetingSignUpLocation":{"searchValue":null,"createBy":null,"createTime":"2023-02-18 13:29:11","updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":"2023-02-23 17:28:21","beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":66,"signUpId":93,"name":"来程签到","delTf":0,"personChargeId":345,"personChargeName":"","personChargeMobile":null,"status":1,"voiceStatus":1,"location":null,"startTime":"2023-02-18 00:00","endTime":"2023-02-19 00:00","address":"B3三楼","addressStatus":"2","signUpType":1,"userMeetingTypes":null,"leveStatus":null,"meetingId":20,"loginTimeStatus":null,"insertUserInfoStatus":null,"signUpNumStatus":1,"signUpNum":1,"useAllStatus":null,"totalUserCount":null,"currentUserCount":null,"signUpStatus":2,"ticketIds":null,"shockStatus":1,"autoStatus":2,"okMsg":"成功签到1","repeatMsg":"重复签到2","failedMsg":"识别失败3","timeLong":3,"type":2,"businessId":null,"percent":null,"signUpCount":null,"levelCount":null,"siteName":null,"personChargeUsername":null,"userType":null,"userId":null},"userType":null,"userId":null,"localPersonChargeId":null,"localPersonCharge":null,"localPersonChargeMobile":null},{"searchValue":null,"createBy":null,"createTime":null,"updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":null,"beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":94,"name":"入住签到","type":3,"address":null,"addressStatus":1,"startTime":null,"endTime":null,"signUpType":null,"signUpLimitStatus":1,"limitNum":1,"signUpString":null,"cardStatus":2,"avatarStatus":2,"meetingSignUpFormList":null,"meetingId":20,"meetingName":"启迪测试","createUserId":null,"select":2,"status":1,"modelType":"1","personChargeId":346,"personChargeName":"签到站GJC1EQ","personChargeMobile":"","personChargeUsername":null,"delTf":0,"userMeetingSignUp":{"searchValue":null,"createBy":null,"createTime":"2023-02-19 14:00:04","updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":"2023-02-19 14:15:16","beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":71,"meetingId":20,"businessId":null,"pointId":94,"userId":1905,"status":2,"createUserId":null,"userMeetingId":35,"locationId":68,"signUpName":null,"signUpLocationName":null,"pointPersonChargeId":null,"locationPersonChargeId":null,"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"date":null,"location":"12311","levelStatus":null,"startTime":null,"endTime":null},"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"meetingSignUpLocation":{"searchValue":null,"createBy":null,"createTime":"2023-02-18 13:29:11","updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":"2023-02-21 15:21:06","beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":68,"signUpId":94,"name":"入住签到","delTf":0,"personChargeId":346,"personChargeName":"","personChargeMobile":null,"status":1,"voiceStatus":1,"location":"12311","startTime":"2023-02-19 11:22","endTime":"2023-02-20 18:00","address":"XX酒店大堂","addressStatus":"2","signUpType":1,"userMeetingTypes":null,"leveStatus":null,"meetingId":20,"loginTimeStatus":null,"insertUserInfoStatus":null,"signUpNumStatus":1,"signUpNum":1,"useAllStatus":null,"totalUserCount":null,"currentUserCount":null,"signUpStatus":2,"ticketIds":null,"shockStatus":2,"autoStatus":1,"okMsg":"成功签到","repeatMsg":"重复签到","failedMsg":"识别失败","timeLong":2,"type":3,"businessId":null,"percent":null,"signUpCount":null,"levelCount":null,"siteName":null,"personChargeUsername":null,"userType":null,"userId":null},"userType":null,"userId":null,"localPersonChargeId":null,"localPersonCharge":null,"localPersonChargeMobile":null},{"searchValue":null,"createBy":null,"createTime":null,"updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":null,"beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":95,"name":"会场签到","type":4,"address":null,"addressStatus":1,"startTime":null,"endTime":null,"signUpType":null,"signUpLimitStatus":1,"limitNum":1,"signUpString":null,"cardStatus":2,"avatarStatus":2,"meetingSignUpFormList":null,"meetingId":20,"meetingName":"启迪测试","createUserId":null,"select":2,"status":1,"modelType":"1","personChargeId":347,"personChargeName":"签到站SS9U0V","personChargeMobile":"","personChargeUsername":null,"delTf":0,"userMeetingSignUp":{"searchValue":null,"createBy":null,"createTime":"2023-02-20 09:02:45","updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":null,"beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":89,"meetingId":20,"businessId":null,"pointId":95,"userId":1905,"status":2,"createUserId":null,"userMeetingId":35,"locationId":69,"signUpName":null,"signUpLocationName":null,"pointPersonChargeId":null,"locationPersonChargeId":null,"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"date":null,"location":"1155","levelStatus":null,"startTime":null,"endTime":null},"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"meetingSignUpLocation":{"searchValue":null,"createBy":null,"createTime":"2023-02-18 13:29:11","updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":"2023-02-21 15:23:13","beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":69,"signUpId":95,"name":"会场签到","delTf":0,"personChargeId":347,"personChargeName":"","personChargeMobile":null,"status":1,"voiceStatus":1,"location":"1155","startTime":"2023-02-19 00:00","endTime":"2023-02-18 14:35","address":"XX会场","addressStatus":"2","signUpType":1,"userMeetingTypes":null,"leveStatus":null,"meetingId":20,"loginTimeStatus":null,"insertUserInfoStatus":null,"signUpNumStatus":1,"signUpNum":1,"useAllStatus":null,"totalUserCount":null,"currentUserCount":null,"signUpStatus":1,"ticketIds":null,"shockStatus":2,"autoStatus":1,"okMsg":"成功签到","repeatMsg":"重复签到","failedMsg":"识别失败","timeLong":2,"type":4,"businessId":null,"percent":null,"signUpCount":null,"levelCount":null,"siteName":null,"personChargeUsername":null,"userType":null,"userId":null},"userType":null,"userId":null,"localPersonChargeId":null,"localPersonCharge":null,"localPersonChargeMobile":null},{"searchValue":null,"createBy":null,"createTime":null,"updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":null,"beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":96,"name":"餐饮签到","type":5,"address":null,"addressStatus":1,"startTime":null,"endTime":null,"signUpType":null,"signUpLimitStatus":1,"limitNum":1,"signUpString":null,"cardStatus":2,"avatarStatus":2,"meetingSignUpFormList":null,"meetingId":20,"meetingName":"启迪测试","createUserId":null,"select":3,"status":1,"modelType":"1","personChargeId":348,"personChargeName":"签到站6JIPR5","personChargeMobile":"","personChargeUsername":null,"delTf":0,"userMeetingSignUp":{"searchValue":null,"createBy":null,"createTime":"2023-02-19 14:04:22","updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":null,"beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":72,"meetingId":20,"businessId":null,"pointId":96,"userId":1905,"status":3,"createUserId":null,"userMeetingId":35,"locationId":70,"signUpName":null,"signUpLocationName":null,"pointPersonChargeId":null,"locationPersonChargeId":null,"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"date":null,"location":null,"levelStatus":null,"startTime":null,"endTime":null},"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"meetingSignUpLocation":{"searchValue":null,"createBy":null,"createTime":"2023-02-18 13:29:11","updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":"2023-02-18 14:37:23","beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":70,"signUpId":96,"name":"餐饮签到","delTf":0,"personChargeId":348,"personChargeName":"","personChargeMobile":null,"status":1,"voiceStatus":1,"location":null,"startTime":"2023-02-19 00:00","endTime":"2023-02-19 14:36","address":"XX大堂","addressStatus":"2","signUpType":1,"userMeetingTypes":null,"leveStatus":null,"meetingId":20,"loginTimeStatus":null,"insertUserInfoStatus":null,"signUpNumStatus":1,"signUpNum":1,"useAllStatus":null,"totalUserCount":null,"currentUserCount":null,"signUpStatus":2,"ticketIds":null,"shockStatus":2,"autoStatus":2,"okMsg":"成功签到","repeatMsg":"重复签到","failedMsg":"识别失败","timeLong":1,"type":5,"businessId":null,"percent":null,"signUpCount":null,"levelCount":null,"siteName":null,"personChargeUsername":null,"userType":null,"userId":null},"userType":null,"userId":null,"localPersonChargeId":null,"localPersonCharge":null,"localPersonChargeMobile":null},{"searchValue":null,"createBy":null,"createTime":null,"updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":null,"beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":107,"name":"9餐饮","type":5,"address":null,"addressStatus":1,"startTime":null,"endTime":null,"signUpType":null,"signUpLimitStatus":1,"limitNum":1,"signUpString":null,"cardStatus":2,"avatarStatus":2,"meetingSignUpFormList":null,"meetingId":20,"meetingName":"启迪测试","createUserId":null,"select":1,"status":1,"modelType":"1","personChargeId":362,"personChargeName":"签到站NXVIS5","personChargeMobile":"","personChargeUsername":null,"delTf":0,"userMeetingSignUp":null,"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"meetingSignUpLocation":null,"userType":null,"userId":null,"localPersonChargeId":null,"localPersonCharge":null,"localPersonChargeMobile":null},{"searchValue":null,"createBy":null,"createTime":null,"updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":null,"beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":98,"name":"礼物签到","type":6,"address":null,"addressStatus":1,"startTime":null,"endTime":null,"signUpType":null,"signUpLimitStatus":1,"limitNum":1,"signUpString":null,"cardStatus":2,"avatarStatus":2,"meetingSignUpFormList":null,"meetingId":20,"meetingName":"启迪测试","createUserId":null,"select":1,"status":1,"modelType":"1","personChargeId":350,"personChargeName":"签到站SWTCFY","personChargeMobile":"","personChargeUsername":null,"delTf":0,"userMeetingSignUp":{"searchValue":null,"createBy":null,"createTime":"2023-02-19 13:50:25","updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":"2023-02-20 09:01:07","beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":69,"meetingId":20,"businessId":null,"pointId":98,"userId":1905,"status":1,"createUserId":null,"userMeetingId":35,"locationId":72,"signUpName":null,"signUpLocationName":null,"pointPersonChargeId":null,"locationPersonChargeId":null,"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"date":null,"location":null,"levelStatus":null,"startTime":null,"endTime":null},"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"meetingSignUpLocation":{"searchValue":null,"createBy":null,"createTime":"2023-02-18 13:29:11","updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":"2023-02-18 14:37:39","beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":72,"signUpId":98,"name":"礼物签到","delTf":0,"personChargeId":350,"personChargeName":"","personChargeMobile":null,"status":1,"voiceStatus":1,"location":null,"startTime":"2023-02-20 00:00","endTime":"2023-02-20 14:36","address":"XX礼物领取中心","addressStatus":"2","signUpType":1,"userMeetingTypes":null,"leveStatus":null,"meetingId":20,"loginTimeStatus":null,"insertUserInfoStatus":null,"signUpNumStatus":1,"signUpNum":1,"useAllStatus":null,"totalUserCount":null,"currentUserCount":null,"signUpStatus":2,"ticketIds":null,"shockStatus":2,"autoStatus":2,"okMsg":"成功签到","repeatMsg":"重复签到","failedMsg":"识别失败","timeLong":1,"type":6,"businessId":null,"percent":null,"signUpCount":null,"levelCount":null,"siteName":null,"personChargeUsername":null,"userType":null,"userId":null},"userType":null,"userId":null,"localPersonChargeId":null,"localPersonCharge":null,"localPersonChargeMobile":null},{"searchValue":null,"createBy":null,"createTime":null,"updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":null,"beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":97,"name":"返程签到","type":7,"address":null,"addressStatus":1,"startTime":null,"endTime":null,"signUpType":null,"signUpLimitStatus":1,"limitNum":1,"signUpString":null,"cardStatus":2,"avatarStatus":2,"meetingSignUpFormList":null,"meetingId":20,"meetingName":"启迪测试","createUserId":null,"select":1,"status":1,"modelType":"1","personChargeId":349,"personChargeName":"签到站477FPK","personChargeMobile":"","personChargeUsername":null,"delTf":0,"userMeetingSignUp":{"searchValue":null,"createBy":null,"createTime":"2023-02-19 13:50:25","updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":null,"beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":70,"meetingId":20,"businessId":null,"pointId":97,"userId":1905,"status":1,"createUserId":null,"userMeetingId":35,"locationId":71,"signUpName":null,"signUpLocationName":null,"pointPersonChargeId":null,"locationPersonChargeId":null,"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"date":null,"location":null,"levelStatus":null,"startTime":null,"endTime":null},"userMeetingTrip":null,"backUserMeetingTrip":null,"userMeetingAccommodation":null,"meetingSignUpLocation":{"searchValue":null,"createBy":null,"createTime":"2023-02-18 13:29:11","updateBy":null,"groupBy":null,"dateFormat":null,"dateType":null,"updateTime":"2023-02-18 19:06:21","beginCreateTime":null,"endCreateTime":null,"beginCreateDate":null,"endCreateDate":null,"remark":null,"params":{},"id":71,"signUpId":97,"name":"返程签到","delTf":0,"personChargeId":349,"personChargeName":"","personChargeMobile":null,"status":1,"voiceStatus":1,"location":null,"startTime":null,"endTime":null,"address":null,"addressStatus":"2","signUpType":1,"userMeetingTypes":null,"leveStatus":null,"meetingId":20,"loginTimeStatus":null,"insertUserInfoStatus":null,"signUpNumStatus":1,"signUpNum":1,"useAllStatus":null,"totalUserCount":null,"currentUserCount":null,"signUpStatus":1,"ticketIds":null,"shockStatus":2,"autoStatus":2,"okMsg":"成功签到","repeatMsg":"重复签到","failedMsg":"识别失败","timeLong":1,"type":7,"businessId":null,"percent":null,"signUpCount":null,"levelCount":null,"siteName":null,"personChargeUsername":null,"userType":null,"userId":null},"userType":null,"userId":null,"localPersonChargeId":null,"localPersonCharge":null,"localPersonChargeMobile":null}]
      * userMeetingTypeName : 媒体
+     * "id":"435","meetingId":84,"orderId":487
      */
 
     private String id= "";
@@ -114,6 +115,8 @@ public class MeetingUserDeData implements Serializable {
     private String meetingSignUpLocation= "";
     private String userSignUpLogDTOS= "";
     private UserOrderBean userOrder;
+    private UserOrderBean userInvoice;
+    private UserOrderBean userMeeting;
     private String startTime= "";
     private int travelStatus;
     private int backTravelStatus;
@@ -124,6 +127,14 @@ public class MeetingUserDeData implements Serializable {
     private UserMeetingGift userMeetingGift;
     private String userMeetingTypeName= "";
     private List<MeetingSignUpsBean> meetingSignUps;
+
+    public UserOrderBean getUserMeeting() {
+        return userMeeting;
+    }
+
+    public void setUserMeeting(UserOrderBean userMeeting) {
+        this.userMeeting = userMeeting;
+    }
 
     public String getId() {
         return id;
@@ -219,6 +230,14 @@ public class MeetingUserDeData implements Serializable {
 
     public void setUserSignUpLogDTOS(String userSignUpLogDTOS) {
         this.userSignUpLogDTOS = userSignUpLogDTOS;
+    }
+
+    public UserOrderBean getUserInvoice() {
+        return userInvoice;
+    }
+
+    public void setUserInvoice(UserOrderBean userInvoice) {
+        this.userInvoice = userInvoice;
     }
 
     public UserOrderBean getUserOrder() {
@@ -359,6 +378,8 @@ public class MeetingUserDeData implements Serializable {
 
         private String searchValue= "";
         private String qr= "";
+        private String no= "";
+        private String status= "";
         private String supplement= "";
         private String createBy= "";
         private String createTime= "";
@@ -367,13 +388,31 @@ public class MeetingUserDeData implements Serializable {
         private String dateFormat= "";
         private String dateType= "";
         private String updateTime= "";
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getInvoiceTypes() {
+            return invoiceTypes;
+        }
+
+        public void setInvoiceTypes(String invoiceTypes) {
+            this.invoiceTypes = invoiceTypes;
+        }
+
+        private String invoiceTypes= "";
         private String beginCreateTime= "";
         private String endCreateTime= "";
         private String beginCreateDate= "";
         private String endCreateDate= "";
         private String remark= "";
         private ParamsBean params;
-        private int id;
+        private String id;
         private int userId;
         private String orderNo= "";
         private int businessId;
@@ -415,7 +454,13 @@ public class MeetingUserDeData implements Serializable {
         }
 
         private String mobile;
+        public String getNo() {
+            return no;
+        }
 
+        public void setNo(String no) {
+            this.no = no;
+        }
         public String getQr() {
             return qr;
         }
@@ -560,11 +605,11 @@ public class MeetingUserDeData implements Serializable {
             this.params = params;
         }
 
-        public int getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(String id) {
             this.id = id;
         }
 

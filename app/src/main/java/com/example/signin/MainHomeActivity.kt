@@ -40,14 +40,21 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 //                type=="delete_location"
 //                type=="add_location" 刷新站点数据
                 //message就是接收到的消息 {"code":"200","count":1,"type":"refresh"}
+                Log.d("JWebSocketClient",message)
                 try {
                     var data =  JSON.parseObject(message, SocketData::class.java)
                     if(data.code.equals("200")){
-                        if(data.type.equals("refresh")){
-                            LiveDataBus.get().with("JWebSocketClientRefresh").postValue(data.type)
-                        }else if(data.type.equals("delete_location")||data.type.equals("add_location")){
-                            LiveDataBus.get().with("JWebSocketClientlocation").postValue(data.type)
+                        if(data.type.equals("refresh")||data.type.equals("delete_location")||data.type.equals("add_location")){
+                            LiveDataBus.get().with("JWebSocketClientlocation").postValue("1")
                         }
+
+
+//                        if(data.type.equals("refresh")){
+//                            LiveDataBus.get().with("JWebSocketClientRefresh").postValue(data.type)
+////                            LiveDataBus.get().with("JWebSocketClientlocation").postValue(data.type)
+//                        }else if(data.type.equals("delete_location")||data.type.equals("add_location")){
+//                            LiveDataBus.get().with("JWebSocketClientlocation").postValue(data.type)
+//                        }
                     }
                 }catch (e:Exception){
 
@@ -104,32 +111,32 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
             }
         }
 
-        LiveDataBus.get().with("voiceStatus", String::class.java)
-            .observeForever {
-
-               if(!isMainHome){
-
-                   if(SpeechUtils.getInstance(this@MainHomeActivity).isSpeech){
-                       SpeechUtils.getInstance(this@MainHomeActivity).speakText(it);
-                   }else{
-                       var mRingPlayer: MediaPlayer? = null
-                       if (it.contains("成功")) {
-                           mRingPlayer = MediaPlayer.create(this@MainHomeActivity, R.raw.cg);
-                           mRingPlayer?.start();
-                       } else  if (it.contains("重复")){
-                           mRingPlayer = MediaPlayer.create(this@MainHomeActivity, R.raw.cf);
-                           mRingPlayer?.start();
-                       }else {
-                           mRingPlayer = MediaPlayer.create(this@MainHomeActivity, R.raw.qdsb);
-                           mRingPlayer?.start();
-                       }
-                   }
-
-
-               }
-
-
-            }
+//        LiveDataBus.get().with("voiceStatus", String::class.java)
+//            .observeForever {
+//
+//               if(!isMainHome){
+//
+//                   if(SpeechUtils.getInstance(this@MainHomeActivity).isSpeech){
+//                       SpeechUtils.getInstance(this@MainHomeActivity).speakText(it);
+//                   }else{
+//                       var mRingPlayer: MediaPlayer? = null
+//                       if (it.contains("成功")) {
+//                           mRingPlayer = MediaPlayer.create(this@MainHomeActivity, R.raw.cg);
+//                           mRingPlayer?.start();
+//                       } else  if (it.contains("重复")){
+//                           mRingPlayer = MediaPlayer.create(this@MainHomeActivity, R.raw.cf);
+//                           mRingPlayer?.start();
+//                       }else {
+//                           mRingPlayer = MediaPlayer.create(this@MainHomeActivity, R.raw.qdsb);
+//                           mRingPlayer?.start();
+//                       }
+//                   }
+//
+//
+//               }
+//
+//
+//            }
         LiveDataBus.get().with("voiceTime", String::class.java)
             .observeForever {
                 setState(it)

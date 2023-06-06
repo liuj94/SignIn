@@ -88,7 +88,9 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
 //                binding.type.visibility = View.VISIBLE}
             it.timeLong?.let { t -> timeLong = t }
             it.voiceStatus?.let { t -> voiceStatus = t }
-
+            it.failedMsg?.let {it-> failedMsg = it }
+            it.okMsg?.let {it-> okMsg = it }
+            it.repeatMsg?.let {it-> repeatMsg = it }
 //            if(it.name.isNullOrEmpty()){
 //                if(it.corporateName.isNullOrEmpty()){
 //                    if(it.userMeetingTypeName.isNullOrEmpty()){
@@ -255,8 +257,11 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                                 if (SpeechUtils.getInstance(this@SiginReActivity).isSpeech) {
                                     SpeechUtils.getInstance(this@SiginReActivity).speakText(okMsg);
                                 } else {
-                                    mRingPlayer =
-                                        MediaPlayer.create(this@SiginReActivity, R.raw.cg);
+                                    if(okMsg.contains("签出")){
+                                        mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.dccg);
+                                    }else{
+                                        mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.cg);
+                                    }
                                     mRingPlayer?.start();
                                 }
                             } else if (data.equals("2")) {
@@ -268,8 +273,11 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                                     SpeechUtils.getInstance(this@SiginReActivity)
                                         .speakText(repeatMsg);
                                 } else {
-                                    mRingPlayer =
-                                        MediaPlayer.create(this@SiginReActivity, R.raw.cf);
+                                    if(repeatMsg.contains("签出")){
+                                        mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.dccf);
+                                    }else{
+                                        mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.cf);
+                                    }
                                     mRingPlayer?.start();
                                 }
                             } else {
@@ -287,8 +295,12 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                                     SpeechUtils.getInstance(this@SiginReActivity)
                                         .speakText(failedMsg);
                                 } else {
-                                    mRingPlayer =
-                                        MediaPlayer.create(this@SiginReActivity, R.raw.qdsb);
+
+                                    if(failedMsg.contains("签出")){
+                                        mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.dcsb);
+                                    }else{
+                                        mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.qdsb);
+                                    }
                                     mRingPlayer?.start();
                                 }
                             }
@@ -316,8 +328,12 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                         SpeechUtils.getInstance(this@SiginReActivity)
                             .speakText(failedMsg);
                     } else {
-                        mRingPlayer =
-                            MediaPlayer.create(this@SiginReActivity, R.raw.qdsb);
+
+                        if(failedMsg.contains("签出")){
+                            mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.dcsb);
+                        }else{
+                            mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.qdsb);
+                        }
                         mRingPlayer?.start();
                     }
                 }

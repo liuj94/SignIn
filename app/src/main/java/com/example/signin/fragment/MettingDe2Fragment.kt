@@ -7,9 +7,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
-import com.example.signin.LiveDataBus
-import com.example.signin.MeetingSiginDectivity
-import com.example.signin.PageRoutes
+import com.example.signin.*
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.SiginData
@@ -21,6 +19,9 @@ import com.example.signin.bean.SiginUpListModel
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  *   author : LiuJie
@@ -40,7 +41,6 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
 
-    private var isVisibleFirst: Boolean = true
     private var adapter: FMeetingDeList2Adapter? = null
     private var adapterSelect: SelectMeetingAdapter? = null
     private var list: MutableList<SiginData> = ArrayList()
@@ -51,87 +51,113 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
 
-            meetingid = arguments?.getString("meetingid", "")
-            binding.srecyclerview.layoutManager = LinearLayoutManager(activity)
-            adapterSelect = SelectMeetingAdapter().apply {
-                submitList(selectList)
-                setOnItemClickListener { _, _, position ->
-                    for (item in selectList) {
-                        item.isMyselect = false
-                    }
-                    selectList[position].isMyselect = true
-                    signUpId = "" + selectList[position].id
-                    binding.nameTv.text = selectList[position].name
-                    adapterSelect?.notifyDataSetChanged()
-                    binding.selectLl.visibility = View.GONE
-                    LiveDataBus.get().with("selectLlGONE").postValue("1")
-                    getList()
+        meetingid = arguments?.getString("meetingid", "")
+        binding.srecyclerview.layoutManager = LinearLayoutManager(activity)
+        adapterSelect = SelectMeetingAdapter().apply {
+            submitList(selectList)
+            setOnItemClickListener { _, _, position ->
+                for (item in selectList) {
+                    item.isMyselect = false
                 }
+                selectList[position].isMyselect = true
+                signUpId = "" + selectList[position].id
+                binding.nameTv.text = selectList[position].name
+                adapterSelect?.notifyDataSetChanged()
+                binding.selectLl.visibility = View.GONE
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                getList()
             }
-            binding.srecyclerview.adapter = adapterSelect
+        }
+        binding.srecyclerview.adapter = adapterSelect
 
-            binding.recyclerview.layoutManager = LinearLayoutManager(activity)
-            adapter = FMeetingDeList2Adapter().apply {
-                submitList(list)
-                setOnItemClickListener { _, _, position ->
-                    var params =meetingid + "&signUpId=" + list[position].signUpId+"&signUpLocationId="+list[position].id
-                    com.dylanc.longan.startActivity<MeetingSiginDectivity>("id" to ""+list[position].id,
-                        "name" to ""+list[position].name,"params" to ""+params,
-                        "meetingid" to ""+meetingid,
-                        "autoStatus" to ""+list[position].autoStatus,
-                        "voiceStatus" to ""+list[position].speechStatus,
-                        "timeLong" to list[position].timeLong,
-                        "showType" to list[position].type,
-                        "okMsg" to ""+list[position].okMsg,
-                        "failedMsg" to ""+list[position].failedMsg,
-                        "repeatMsg" to ""+list[position].repeatMsg,
-                        "signUpId" to ""+list[position].signUpId)
-
-                }
-            }
-            binding.recyclerview.adapter = adapter
-
-
-            binding.nameLl.setOnClickListener {
-                if(binding.selectLl.visibility == View.VISIBLE){
-                    LiveDataBus.get().with("selectLlGONE").postValue("1")
-                    binding.selectLl.visibility = View.GONE
-                }else{
-                    LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
-                    binding.selectLl.visibility = View.VISIBLE
-                }
-            }
-            binding.selectLl.setOnClickListener {
-
-                if(binding.selectLl.visibility == View.VISIBLE){
-                    LiveDataBus.get().with("selectLlGONE").postValue("1")
-                    binding.selectLl.visibility = View.GONE
-                }
+        binding.recyclerview.layoutManager = LinearLayoutManager(activity)
+        adapter = FMeetingDeList2Adapter().apply {
+            submitList(list)
+            setOnItemClickListener { _, _, position ->
+                var params =
+                    meetingid + "&signUpId=" + list[position].signUpId + "&signUpLocationId=" + list[position].id
+                com.dylanc.longan.startActivity<MeetingSiginDectivity>(
+                    "id" to "" + list[position].id,
+                    "name" to "" + list[position].name, "params" to "" + params,
+                    "meetingid" to "" + meetingid,
+                    "autoStatus" to "" + list[position].autoStatus,
+                    "voiceStatus" to "" + list[position].speechStatus,
+                    "timeLong" to list[position].timeLong,
+                    "showType" to list[position].type,
+                    "okMsg" to "" + list[position].okMsg,
+                    "failedMsg" to "" + list[position].failedMsg,
+                    "repeatMsg" to "" + list[position].repeatMsg,
+                    "signUpId" to "" + list[position].signUpId
+                )
 
             }
+        }
+        binding.recyclerview.adapter = adapter
 
-        getData()
-//        getList()
+
+        binding.nameLl.setOnClickListener {
+            if (binding.selectLl.visibility == View.VISIBLE) {
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                binding.selectLl.visibility = View.GONE
+            } else {
+                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
+                binding.selectLl.visibility = View.VISIBLE
+            }
+        }
+        binding.selectLl.setOnClickListener {
+
+            if (binding.selectLl.visibility == View.VISIBLE) {
+                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                binding.selectLl.visibility = View.GONE
+            }
+
+        }
+
         binding.refresh.setEnableLoadMore(false)
         binding.refresh.setOnRefreshListener {
             getList()
         }
         LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
             .observeForever {
-                signUpId = ""
-                getDatasign_up_app_list()
-                getList()
+                try {
+                    if (AppManager.getAppManager().activityInstanceIsLive(activity)) {
+                        signUpId = ""
+                        getDatasign_up_app_list()
+                        getList()
+                    }
+                } catch (e: java.lang.Exception) {
+                }
+
             }
+
+//        GlobalScope.launch {
+//            delay(1000) // 延时1秒
+//            // 在这里执行需要延时的操作
+//            getData()
+//            getList()
+//        }
+        delayed()
+
     }
 
-    override fun onResume() {
-        super.onResume()
-//        binding.refresh.autoRefresh()
-        getList()
+    private val delayedLoad = SubstepDelayedLoad()
+    private fun delayed() {
+        delayedLoad
+            .delayed(1000)
+            .run {
+                //延时加载布局
+                getData()
+                getList()
+
+            }
+            .start()
     }
+
+
+
     private fun getList() {
         OkGo.get<List<SiginData>>(PageRoutes.Api_meetingSignUpLocation + meetingid + "&signUpId=" + signUpId)
-            .tag(PageRoutes.Api_meetingSignUpLocation + meetingid+2)
+            .tag(PageRoutes.Api_meetingSignUpLocation + meetingid + 2)
             .headers("Authorization", kv.getString("token", ""))
             .execute(object : RequestCallback<List<SiginData>>() {
                 override fun onSuccessNullData() {
@@ -147,7 +173,8 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
                         list.addAll(data)
                         adapter?.notifyDataSetChanged()
 
-                    }catch(e:Exception){}
+                    } catch (e: Exception) {
+                    }
 
                 }
 
@@ -158,7 +185,10 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
 
                 override fun onFinish() {
                     super.onFinish()
-                    binding.refresh.finishRefresh()
+                    try {
+                        binding.refresh.finishRefresh()
+                    } catch (e: Exception) {
+                    }
                 }
 
 
@@ -178,14 +208,15 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
 //            selectList.addAll(data.list)
 //            adapterSelect?.notifyDataSetChanged()
 //        }else{
-            getDatasign_up_app_list()
+        getDatasign_up_app_list()
 //        }
 
     }
+
     private fun getDatasign_up_app_list() {
 
         OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
-            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid + "f3")
             .headers("Authorization", kv.getString("token", ""))
             .execute(object : RequestCallback<List<SiginUpListData>>() {
                 override fun onSuccessNullData() {
@@ -195,19 +226,23 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
 
                 override fun onMySuccess(data: List<SiginUpListData>) {
                     super.onMySuccess(data)
-                    var list = SiginUpListModel()
-                    list.list = data
-                    kv.putString("SiginUpListModel", JSON.toJSONString(list))
-                    selectList.clear()
+                    try {
 
-                    var all = SiginUpListData()
-                    all.name = "全部签到站点"
-                    all.id = ""
-                    all.isMyselect = true
-                    selectList.add(all)
-                    selectList.addAll(data)
-                    adapterSelect?.notifyDataSetChanged()
 
+                        var list = SiginUpListModel()
+                        list.list = data
+                        kv.putString("SiginUpListModel", JSON.toJSONString(list))
+                        selectList.clear()
+
+                        var all = SiginUpListData()
+                        all.name = "全部签到站点"
+                        all.id = ""
+                        all.isMyselect = true
+                        selectList.add(all)
+                        selectList.addAll(data)
+                        adapterSelect?.notifyDataSetChanged()
+                    } catch (e: java.lang.Exception) {
+                    }
                 }
 
                 override fun onError(response: Response<List<SiginUpListData>>) {

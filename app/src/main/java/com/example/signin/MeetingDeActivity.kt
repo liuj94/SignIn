@@ -66,14 +66,19 @@ var businessId = ""
         }
         LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
             .observeForever {
-                getData()
+               try {
+                   if(AppManager.getAppManager().activityInstanceIsLive(MeetingDeActivity@this)){
+                       getData2()
+                   }
+               }catch (e:java.lang.Exception){}
+
 
             }
     }
     private fun getData() {
 
         OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingId)
-            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingId)
+            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingId+"d1")
             .headers("Authorization", kv.getString("token", ""))
             .execute(object : RequestCallback<List<SiginUpListData>>() {
                 override fun onSuccessNullData() {
@@ -104,23 +109,61 @@ var businessId = ""
 
             })
     }
+    private fun getData2() {
 
+        OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingId)
+            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingId)
+            .headers("Authorization", kv.getString("token", ""))
+            .execute(object : RequestCallback<List<SiginUpListData>>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
+
+                }
+
+                override fun onMySuccess(data: List<SiginUpListData>) {
+                    super.onMySuccess(data)
+                    var list = SiginUpListModel()
+                    list.list = data
+                    kv.putString("SiginUpListModel", JSON.toJSONString(list))
+
+                }
+
+                override fun onError(response: Response<List<SiginUpListData>>) {
+                    super.onError(response)
+
+
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+
+
+                }
+
+
+            })
+    }
     fun getFragmentLists() {
-        val fragmentLists: MutableList<Fragment> = ArrayList<Fragment>()
+//        val fragmentLists: MutableList<Fragment> = ArrayList<Fragment>()
         binding.mRb1.visibility = View.GONE
-        fragmentLists.add(MettingDe1Fragment.newInstance(meetingId,meetingName))
-        fragmentLists.add(MettingDe2Fragment.newInstance(meetingId))
-        fragmentLists.add(MettingDe3Fragment.newInstance(meetingId))
-        fragmentLists.add(MettingDe4Fragment.newInstance(meetingId,businessId))
+
         if (!kv.getString("userData", "").isNullOrEmpty()) {
            var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
             userData?.let {
                 if (it.userType.equals("01")||it.userType.equals("04")){
 //                if (it.userType.equals("00")||it.userType.equals("00")){
                     binding.mRb1.visibility = View.VISIBLE
-                    initAdapter(fragmentLists,0)
+                    fragments.add(MettingDe1Fragment.newInstance(meetingId,meetingName))
+                    fragments.add(MettingDe2Fragment.newInstance(meetingId))
+                    fragments.add(MettingDe3Fragment.newInstance(meetingId))
+                    fragments.add(MettingDe4Fragment.newInstance(meetingId,businessId))
+                    initAdapter()
                 }else{
-                    initAdapter(fragmentLists,1)
+                    binding.mRb1.visibility = View.GONE
+                    fragments.add(MettingDe2Fragment.newInstance(meetingId))
+                    fragments.add(MettingDe3Fragment.newInstance(meetingId))
+                    fragments.add(MettingDe4Fragment.newInstance(meetingId,businessId))
+                    initAdapter()
                 }
 
 
@@ -134,20 +177,20 @@ var businessId = ""
 
     }
 
-
-    private fun initAdapter(fragments: MutableList<Fragment>,index:Int) {
+var fragments: MutableList<Fragment> = ArrayList<Fragment>()
+    private fun initAdapter() {
         val mAdapter = MainViewPagerAdapter(supportFragmentManager, fragments)
         binding.mViewPager.adapter = mAdapter
-        binding.mViewPager.offscreenPageLimit = 4
+        binding.mViewPager.offscreenPageLimit = 1
         initListener()
-        binding.mViewPager.currentItem = index
-        if(index==0){
-            binding.title.text = "数据统计"
-            binding.mRb1.isChecked = true
-        }else{
-            binding.title.text = "选签到点"
-            binding.mRb2.isChecked = true
-        }
+        binding.mViewPager.currentItem = 0
+//        if(index==0){
+//            binding.title.text = "数据统计"
+//            binding.mRb1.isChecked = true
+//        }else{
+//            binding.title.text = "选签到点"
+//            binding.mRb2.isChecked = true
+//        }
 
     }
 
@@ -161,19 +204,32 @@ var businessId = ""
                 }
                 R.id.mRb2 -> {
                     binding.title.text = "选签到点"
-                    binding.mViewPager?.currentItem = 1
+                    if(fragments.size==3){
+                        binding.mViewPager?.currentItem = 0
+                    }else{
+                        binding.mViewPager?.currentItem = 1
+                    }
+
 
 
                 }
                 R.id.mRb3 -> {
                     binding.title.text = "参会名单"
-                    binding.mViewPager?.currentItem = 2
+                    if(fragments.size==3){
+                        binding.mViewPager?.currentItem = 1
+                    }else{
+                        binding.mViewPager?.currentItem = 2
+                    }
 
 
                 }
                 R.id.mRb4 -> {
                     binding.title.text = "实时对讲"
-                    binding.mViewPager?.currentItem = 3
+                    if(fragments.size==3){
+                        binding.mViewPager?.currentItem = 2
+                    }else{
+                        binding.mViewPager?.currentItem = 3
+                    }
 
 
                 }
@@ -185,17 +241,12 @@ var businessId = ""
 
 
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-    }
+
 
     override fun onResume() {
         super.onResume()
         XUpdate.newBuild(this)
             .updateUrl(PageRoutes.Api_appVersion)
-//            .promptThemeColor(ResUtils.getColor(R.color.text4c93fd))
-//            .promptButtonTextColor(Color.WHITE)
-//            .promptTopResId(R.mipmap.bg_update_top)
             .updateParser( CustomUpdateParser(this))
             .update();
     }

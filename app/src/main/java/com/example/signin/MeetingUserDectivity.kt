@@ -91,7 +91,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             )
         }
         binding.itemDdxx.ll.setOnClickListener {
-            startActivity<ExamineActivity>("order" to order)
+            if (!examineStatus.equals("-1")){
+                startActivity<ExamineActivity>("order" to order)
+            }
+
         }
         binding.itemDdxx.ddBtn.setOnClickListener {
             if (examineStatus.equals("2")) {
@@ -106,12 +109,15 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
             } else if (examineStatus.equals("1")) {
                 startActivity<ExamineActivity>("order" to order)
-            }else{
+            }else if (examineStatus.equals("-1")){
+
+            }
+            else{
                 startActivity<ExamineActivity>("order" to order)
             }
-            if (invoiceStatus.equals("5")) {
-                startActivity<ExamineKPActivity>("order" to order)
-            }
+//            if (invoiceStatus.equals("5")) {
+//                startActivity<ExamineKPActivity>("order" to order)
+//            }
 
         }
         binding.itemLcxx.lcBtn.setOnClickListener {
@@ -359,11 +365,11 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
             if (cAmount > 0) {
                 binding.itemDdxx.ddType.text =
-                    "开票类型:"
+                    ""
                 if (order.invoiceType.equals("1")) {
-                    binding.itemDdxx.ddType.text = "开票类型:" + "增值税普通发票"
+                    binding.itemDdxx.ddType.text = "" + "增值税普通发票"
                 } else {
-                    binding.itemDdxx.ddType.text = "开票类型:" + "增值税专用发票"
+                    binding.itemDdxx.ddType.text = "" + "增值税专用发票"
                 }
                 //invoiceType	1 普票 2专票
 //                for (item in model.sys_invoice_type) {
@@ -372,7 +378,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 //                            "开票类型:" + item.dictLabel
 //                    }
 //                }
-                it.invoiceNo?.let { invoiceNo -> binding.itemDdxx.ddNum.text = "发票票号:$invoiceNo" }
+
 
             }
 
@@ -412,6 +418,11 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             }else{
                 binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
                 binding.itemDdxx.ddBtn.text = "待审核"
+            }
+            if(data.userMeeting.status.equals("-1")){
+                binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
+                binding.itemDdxx.ddBtn.text = "待付款"
+                examineStatus = "-1"
             }
 //            for (item in model.sys_invoice_status) {
 //                if (examineStatus.equals(item.dictValue.trim())) {
@@ -453,6 +464,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 //            }
 
         }
+        data.userInvoice?.let{
+            it.no?.let { invoiceNo -> binding.itemDdxx.ddNum.text = invoiceNo }
+        }
+
 
         if (data.userOrder == null) {
             binding.itemDdxx.root.visibility = View.GONE
@@ -465,6 +480,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         binding.itemCyxi.root.visibility = View.GONE
         binding.itemFcxx.root.visibility = View.GONE
         binding.itemLcxx.root.visibility = View.GONE
+//        var signUpType = kv.getString("signUpType","0")
         for (item in data.meetingSignUps) {
             when (item.type) {
                 8 -> {
@@ -473,8 +489,8 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     }
                 }
                 1 -> {
+
                     try {
-                        binding.itemZcbd.root.visibility = View.VISIBLE
                         //注册报到
                         binding.itemZcbd.kong.visibility = View.GONE
                         binding.itemZcbd.ll.visibility = View.VISIBLE
@@ -514,7 +530,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
                 6 -> {
                     try {
-                        binding.itemLpff.root.visibility = View.VISIBLE
+
                         binding.itemLpff.kong.visibility = View.GONE
                         binding.itemLpff.ll.visibility = View.VISIBLE
                         //礼品发放
@@ -555,7 +571,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
                 3 -> {
                     try {
-                        binding.itemRzxx.root.visibility = View.VISIBLE
+
                         binding.itemRzxx.kong.visibility = View.VISIBLE
                         binding.itemRzxx.ll.visibility = View.GONE
                         item.userMeetingAccommodation?.let { userMeetingAccommodation ->
@@ -629,7 +645,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
                 4 -> {
                     try {
-                        binding.itemHcqd.root.visibility = View.VISIBLE
+
                         setStateColor(
                             model.sys_huichang,
                             "1",
@@ -698,7 +714,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
                 5 -> {
                     try {
-                        binding.itemCyxi.root.visibility = View.VISIBLE
+
                         //餐饮签到
                         setStateColor(model.sys_canyin, "1", binding.itemCyxi.zcBtn)
                         setStateColor(
@@ -768,7 +784,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
                 7 -> {
                     try {
-                        binding.itemFcxx.root.visibility = View.VISIBLE
+
                         //返程签到
                         setStateColor(
                             model.sys_fancheng,
@@ -854,7 +870,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
                 2 -> {
                     try {
-                        binding.itemLcxx.root.visibility = View.VISIBLE
+
                         setStateColor(
                             model.sys_laicheng,
                             "1",
@@ -943,6 +959,37 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 }
             }
         }
+        var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
+        userData?.let {uDara->
+            if(uDara.userType=="06"){
+                for (type in uDara.types) {
+                    when(type){
+                        "1" -> {binding.itemZcbd.root.visibility = View.VISIBLE}
+                        "2" -> { binding.itemLcxx.root.visibility = View.VISIBLE}
+                        "3" -> { binding.itemRzxx.root.visibility = View.VISIBLE}
+                        "4" -> { binding.itemHcqd.root.visibility = View.VISIBLE}
+                        "5" -> {binding.itemCyxi.root.visibility = View.VISIBLE}
+                        "6" -> {binding.itemLpff.root.visibility = View.VISIBLE}
+                        "7" -> {binding.itemFcxx.root.visibility = View.VISIBLE}
+                    }
+                }
+
+            }else{
+                for (item in data.meetingSignUps) {
+                    when (item.type) {
+                        1 -> {binding.itemZcbd.root.visibility = View.VISIBLE}
+                        2-> { binding.itemLcxx.root.visibility = View.VISIBLE}
+                        3 -> {   binding.itemRzxx.root.visibility = View.VISIBLE}
+                        4-> { binding.itemHcqd.root.visibility = View.VISIBLE}
+                        5 -> {binding.itemCyxi.root.visibility = View.VISIBLE}
+                        6 -> {binding.itemLpff.root.visibility = View.VISIBLE}
+                        7 -> {binding.itemFcxx.root.visibility = View.VISIBLE}
+                    }
+                }
+            }
+        }
+
+
     }
 
     override fun onResume() {

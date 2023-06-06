@@ -48,9 +48,12 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     var signUpStatus = ""
     var nameMobile: String? = ""
     var params: String? = ""
-    var failedMsg: String = "签到失败"
-    var okMsg: String = "签到成功"
-    var repeatMsg: String = "重复签到"
+    var failedMsg: String = if (signUpStatus == "2") "签出失败" else "签到失败"
+    var okMsg: String = if (signUpStatus == "2") "签出成功" else "签到成功"
+    var repeatMsg: String = if (signUpStatus == "2") "重复签出" else "重复签到 "
+
+    //    var okMsg: String = "签到成功"
+//    var repeatMsg: String = "重复签到"
     var voiceStatus: String = "2"
     private var list: MutableList<MeetingUserData> = ArrayList()
     private var adapter: FMeetingDeList3Adapter? = null
@@ -75,9 +78,18 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         intent.getStringExtra("voiceStatus")?.let { voiceStatus = it }
         intent.getIntExtra("timeLong", 3)?.let { timeLong = it }
         intent.getIntExtra("showType", 0)?.let { showType = it }
-        LiveDataBus.get().with("JWebSocketClientRefresh", String::class.java)
+//        LiveDataBus.get().with("JWebSocketClientRefresh", String::class.java)
+        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
             .observeForever {
-                getSiginData()
+                try {
+                    if (AppManager.getAppManager()
+                            .activityInstanceIsLive(MeetingSiginDectivity@ this)
+                    ) {
+                        getSiginData()
+                    }
+                } catch (e: java.lang.Exception) {
+                }
+
             }
         var num = ""
         if (showType == 1) {
@@ -266,7 +278,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             }
             false
         })
-        setState()
+        getSiginData()
 
         binding.sm.setOnClickListener {
             if (moshi.equals("识别模式")) {
@@ -298,7 +310,8 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                                     "okMsg" to "" + okMsg,
                                     "failedMsg" to "" + failedMsg,
                                     "repeatMsg" to "" + repeatMsg,
-                                    "signUpId" to "" + signUpId
+                                    "signUpId" to "" + signUpId,
+                                    "meetingSignUpLocationName" to "" + binding.name.text.toString()
                                 )
 //                                    var intent = Intent(it,ScanActivity::class.java)
 //                                    startActivityForResult(intent,1000)
@@ -347,7 +360,8 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                                     "okMsg" to "" + okMsg,
                                     "failedMsg" to "" + failedMsg,
                                     "repeatMsg" to "" + repeatMsg,
-                                    "signUpId" to "" + signUpId
+                                    "signUpId" to "" + signUpId,
+                                    "meetingSignUpLocationName" to "" + binding.name.text.toString()
                                 )
 //                                    var intent = Intent(it,ScanActivity::class.java)
 //                                    startActivityForResult(intent,1000)
@@ -456,56 +470,70 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
     }
 
-    var addressStatus = "2"
+    //    var addressStatus = "2"
     fun setState() {
 
-        val params = HashMap<String, String>()
-        params["id"] = id
-        if (addressStatus.equals("1")) {
-            addressStatus = "2"
-//            params["addressStatus"] = "2"
-            params["signUpStatus"] = "2"
+        if (kv.getString("zd_signUpStatus_" + id, "1").equals("1")) {
+            kv.putString("zd_signUpStatus_"+meetingid + id, "2")
         } else {
-            addressStatus = "1"
-//            params["addressStatus"] = "1"
-            params["signUpStatus"] = "1"
+            kv.putString("zd_signUpStatus_"+meetingid + id, "1")
+        }
+        signUpStatus = ""+ kv.getString("zd_signUpStatus_"+meetingid + id, "1")
+        if (signUpStatus == "2") {
+            binding.moshitv.text = "签出模式"
+            binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
+        } else {
+            binding.moshitv.text = "签入模式"
+            binding.moshiiv.setImageResource(R.mipmap.kaiguank)
         }
 
+//        getSiginData()
+//        val params = HashMap<String, String>()
+//        params["id"] = id
+//        if (addressStatus.equals("1")) {
+//            addressStatus = "2"
+////            params["addressStatus"] = "2"
+//            params["signUpStatus"] = "2"
+//        } else {
+//            addressStatus = "1"
+////            params["addressStatus"] = "1"
+//            params["signUpStatus"] = "1"
+//        }
 
 
-        OkGo.put<String>(PageRoutes.Api_ed_meetingSignUpLocation)
-            .tag(PageRoutes.Api_ed_meetingSignUpLocation)
-            .upJson(JSON.toJSONString(params))
-            .headers(
-                "Authorization", MMKV.mmkvWithID("MyDataMMKV")
-                    .getString("token", "")
-            )
-            .execute(object : RequestCallback<String>() {
-
-                override fun onSuccess(response: Response<String>?) {
-                    super.onSuccess(response)
-//                    if(addressStatus == "1"){
-//                        binding.moshitv.text = "签入模式"
-//                        binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
-//                    }else{
-//                        binding.moshitv.text = "签出模式"
-//                        binding.moshiiv.setImageResource(R.mipmap.kaiguank)
-//                    }
-
-                }
-
-                override fun onError(response: Response<String>) {
-                    super.onError(response)
-
-                }
-
-                override fun onFinish() {
-                    super.onFinish()
-                    getSiginData()
-                }
-
-
-            })
+//        OkGo.put<String>(PageRoutes.Api_ed_meetingSignUpLocation)
+//            .tag(PageRoutes.Api_ed_meetingSignUpLocation)
+//            .upJson(JSON.toJSONString(params))
+//            .headers(
+//                "Authorization", MMKV.mmkvWithID("MyDataMMKV")
+//                    .getString("token", "")
+//            )
+//            .execute(object : RequestCallback<String>() {
+//
+//                override fun onSuccess(response: Response<String>?) {
+//                    super.onSuccess(response)
+////                    if(addressStatus == "1"){
+////                        binding.moshitv.text = "签入模式"
+////                        binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
+////                    }else{
+////                        binding.moshitv.text = "签出模式"
+////                        binding.moshiiv.setImageResource(R.mipmap.kaiguank)
+////                    }
+//
+//                }
+//
+//                override fun onError(response: Response<String>) {
+//                    super.onError(response)
+//
+//                }
+//
+//                override fun onFinish() {
+//                    super.onFinish()
+//                    getSiginData()
+//                }
+//
+//
+//            })
     }
 
     var meetingFormData: MeetingFormData? = null
@@ -521,22 +549,31 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
                 override fun onMySuccess(data: SiginData) {
                     super.onMySuccess(data)
-                    meetingFormData = MeetingFormData()
-                    meetingFormData?.meetingFormList = data.meetingFormList
-                    kv.putString("MeetingFormData", JSON.toJSONString(meetingFormData))
-                    binding.num1.text = "" + data.beUserCount
-                    binding.num2.text = "" + data.signUpCount
-                    binding.num3.text = "" + data.localSignUpCount
-                    //01 签入模式 02 签入签出模式
+                    try {
+                        meetingFormData = MeetingFormData()
+                        meetingFormData?.meetingFormList = data.meetingFormList
+                        kv.putString("MeetingFormData", JSON.toJSONString(meetingFormData))
+                        binding.num1.text = "" + data.beUserCount
+                        binding.num2.text = "" + data.signUpCount
+                        binding.num3.text = "" + data.localSignUpCount
+                        //01 签入模式 02 签入签出模式
 //                    signUpStatus	签到模式 1签入模式 2签出模式
-                    signUpStatus = "" + data.signUpStatus
-                    if (signUpStatus == "2") {
-                        binding.moshitv.text = "签出模式"
-                        binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
-                    } else {
-                        binding.moshitv.text = "签入模式"
-                        binding.moshiiv.setImageResource(R.mipmap.kaiguank)
+
+//                        signUpStatus = "" + data.signUpStatus
+                        signUpStatus = "" + kv.getString("zd_signUpStatus_"+meetingid+id, "1")
+                        if (signUpStatus == "2") {
+                            binding.moshitv.text = "签出模式"
+                            binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
+                        } else {
+                            binding.moshitv.text = "签入模式"
+                            binding.moshiiv.setImageResource(R.mipmap.kaiguank)
+                        }
+                        failedMsg = if (signUpStatus == "2") "签出失败" else "签到失败"
+                        okMsg = if (signUpStatus == "2") "签出成功" else "签到成功"
+                        repeatMsg = if (signUpStatus == "2") "重复签出" else "重复签到 "
+                    } catch (e: java.lang.Exception) {
                     }
+
 
                 }
 
@@ -547,7 +584,10 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
                 override fun onFinish() {
                     super.onFinish()
-                    mViewModel.isShowLoading.value = false
+                    try {
+                        mViewModel.isShowLoading.value = false
+                    } catch (e: java.lang.Exception) {
+                    }
                 }
 
 
@@ -559,15 +599,15 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         if ("Virtual" == event.device.name) {
             return super.dispatchKeyEvent(event)
         }
-        if (moshi.equals("激光头识别")) {
-            mDecodeReader?.open(115200)
-        } else {
-            toast("请选择激光头识别模式")
-        }
+//        if (moshi.equals("激光头识别")) {
+//            mDecodeReader?.open(115200)
+//        } else {
+//            toast("请选择激光头识别模式")
+//        }
         return true
     }
 
-    //    var isShiBieZ = false
+    var isShiBieZ = false
     private fun openHardreader() {
         if (mDecodeReader == null) {
             mDecodeReader = DecodeReader(this) //初始化
@@ -575,12 +615,15 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 if (isPause) {
                     return@setDecodeReaderListener
                 }
+                if (isShiBieZ) {
+                    return@setDecodeReaderListener
+                }
+                isShiBieZ = true
+//                mDecodeReader?.close()
+//                mDecodeReader = null
                 var mRingPlayer =
                     MediaPlayer.create(this@MeetingSiginDectivity, R.raw.ddd)
                 mRingPlayer?.start()
-//            if (!isShiBieZ){
-//                isShiBieZ = true
-                mDecodeReader?.close()
                 try {
                     val str = String(data, StandardCharsets.UTF_8)
                     runOnUiThread {
@@ -589,61 +632,40 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                     }
                 } catch (e: UnsupportedEncodingException) {
                     e.printStackTrace()
-//                    isShiBieZ = false
-                    var signUpUser = SignUpUser()
-                    signUpUser.signUpLocationId = id
-                    signUpUser.meetingName = name
-                    signUpUser.signUpId = signUpId
-                    signUpUser.userMeetingId = ""
-                    signUpUser.meetingId = ""
-                    signUpUser.userMeetingTypeName = ""
-                    signUpUser.autoStatus = autoStatus
-                    signUpUser.timeLong = timeLong
-                    signUpUser.okMsg = okMsg
-                    signUpUser.failedMsg = failedMsg
-                    signUpUser.repeatMsg = repeatMsg
-                    signUpUser.voiceStatus = voiceStatus
-                    signUpUser.success = "500"
-                    startActivity<SiginReAutoActivity>(
-                        "type" to showType,
-                        "data" to signUpUser
-                    )
+                    goshibai(SignUpUser())
                 }
 //            }
 
             }
         }
-
+        mDecodeReader?.open(115200)
 
     }
 
     var isPause = true
     override fun onResume() {
         super.onResume()
+        mViewModel.isShowLoading.value = false
+        isShiBieZ = false
         isPause = false
         if (moshi.equals("二维码识别")) {
-//            val deviceon = File("/sys/class/leds/led-blue")
-//            if (deviceon.canRead()) {
-//                FaceUtil.LedSet("led-blue", 1);
-//            }
+            ScanTool.GET.playSound(true)
+            closeBlue()
+            closeRed()
         }
         if (moshi.equals("激光头识别")) {
             openHardreader()
         }
         binding.et.setText("")
         nameMobile = ""
-        closeBlue()
-        closeRed()
+
     }
 
     override fun onPause() {
         super.onPause()
         isPause = true
         if (moshi.equals("二维码识别")) {
-//            val deviceon = File("/sys/class/leds/led-white")
-//            if (deviceon.canRead()) {
-//                FaceUtil.LedSet("led-white", 0);
-//            }
+
         }
         if (moshi.equals("激光头识别")) {
             mDecodeReader?.close()
@@ -660,32 +682,15 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     }
 
     override fun onScanCallBack(data: String?) {
-//        if( AppManager.getAppManager().topActivity!=this@MeetingSiginDectivity){
-//            return
-//        }
+        if (isShiBieZ) {
+            return
+        }
+        ScanTool.GET.playSound(false)
+        isShiBieZ = true
         try {
             goRe(data)
-
         } catch (e: Exception) {
-//            isShiBieZ = false
-            var signUpUser = SignUpUser()
-            signUpUser.signUpLocationId = id
-            signUpUser.meetingName = name
-            signUpUser.signUpId = signUpId
-            signUpUser.userMeetingId = ""
-            signUpUser.meetingId = ""
-            signUpUser.userMeetingTypeName = ""
-            signUpUser.autoStatus = autoStatus
-            signUpUser.timeLong = timeLong
-            signUpUser.okMsg = okMsg
-            signUpUser.failedMsg = failedMsg
-            signUpUser.repeatMsg = repeatMsg
-            signUpUser.voiceStatus = voiceStatus
-            signUpUser.success = "500"
-            startActivity<SiginReAutoActivity>(
-                "type" to showType,
-                "data" to signUpUser
-            )
+            goshibai(SignUpUser())
         }
     }
 
@@ -694,57 +699,17 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 //            isShiBieZ = false
             return
         }
+        if (data.isNullOrEmpty()) {
+            goshibai(SignUpUser())
+        } else {
+            getmeetingCode(data)
 
 
-        try {
-            var signUpUser = JSON.parseObject(data, SignUpUser::class.java)
-
-            if (!signUpUser.meetingId.equals(meetingid)) {
-                goshibai(signUpUser)
-                return
-            }
-            if (showType == 8) {
-                if (signUpUser.orderId.equals("")) {
-                    goshibai(signUpUser)
-                    return
-                }
-            }
-
-            if (signUpUser.id.isNullOrEmpty()) {
-                goshibai(signUpUser)
-                return
-            }
-            getData(signUpUser.id)
-
-
-        } catch (e: Exception) {
-            if (moshi.equals("二维码识别")) {
-                openRed()
-            }
-//            isShiBieZ = false
-//            toast("二维码解析失败")
-            var signUpUser = SignUpUser()
-            signUpUser.signUpLocationId = id
-            signUpUser.meetingName = name
-            signUpUser.signUpId = signUpId
-            signUpUser.userMeetingId = ""
-            signUpUser.meetingId = ""
-            signUpUser.userMeetingTypeName = ""
-            signUpUser.autoStatus = autoStatus
-            signUpUser.timeLong = timeLong
-            signUpUser.okMsg = okMsg
-            signUpUser.failedMsg = failedMsg
-            signUpUser.repeatMsg = repeatMsg
-            signUpUser.voiceStatus = voiceStatus
-            signUpUser.success = "500"
-            startActivity<SiginReAutoActivity>(
-                "type" to showType,
-                "data" to signUpUser
-            )
         }
+
     }
 
-    private fun MeetingSiginDectivity.goshibai(signUpUser: SignUpUser) {
+    private fun goshibai(signUpUser: SignUpUser) {
         if (moshi.equals("二维码识别")) {
             openRed()
         }
@@ -761,6 +726,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         signUpUser.failedMsg = failedMsg
         signUpUser.repeatMsg = repeatMsg
         signUpUser.voiceStatus = voiceStatus
+        signUpUser.signUpStatus = signUpStatus
         signUpUser.success = "500"
         startActivity<SiginReAutoActivity>(
             "type" to showType,
@@ -768,8 +734,65 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         )
     }
 
-    private fun getData(userid: String) {
+    private fun getmeetingCode(meetingCode: String) {
         mViewModel.isShowLoading.value = true
+        OkGo.get<SignUpUser>(PageRoutes.Api_meetingCode + meetingCode)
+            .tag(PageRoutes.Api_meetingCode + meetingCode)
+            .headers("Authorization", kv.getString("token", ""))
+            .execute(object : RequestCallback<SignUpUser>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
+
+                }
+
+                override fun onMySuccess(data: SignUpUser) {
+                    super.onMySuccess(data)
+                    try {
+                        var signUpUser = data
+
+                        if (!signUpUser.meetingId.equals(meetingid)) {
+                            goshibai(signUpUser)
+                            return
+                        }
+                        if (showType == 8) {
+                            if (signUpUser.orderId.isNullOrEmpty()) {
+                                goshibai(signUpUser)
+                                return
+                            }
+                        }
+
+                        if (signUpUser.id.isNullOrEmpty()) {
+                            goshibai(signUpUser)
+                            return
+                        }
+                        getData(signUpUser.id)
+
+
+                    } catch (e: Exception) {
+                        goshibai(SignUpUser())
+
+                    }
+
+
+                }
+
+                override fun onError(response: Response<SignUpUser>) {
+                    super.onError(response)
+                    mViewModel.isShowLoading.value = false
+                    goshibai(SignUpUser())
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+
+                }
+
+
+            })
+    }
+
+    private fun getData(userid: String) {
+
         OkGo.get<MeetingUserDeData>(PageRoutes.Api_meetinguser_data + userid + "?id=" + userid)
             .tag(PageRoutes.Api_meetinguser_data + userid + "?id=" + userid)
             .headers("Authorization", kv.getString("token", ""))
@@ -795,7 +818,6 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                         }
                         kv.putString("MeetingFormData", JSON.toJSONString(meetingFormData))
                     }
-                    Log.d("MeetingFormData", JSON.toJSONString(meetingFormData))
                     var signUpUser = SignUpUser()
                     signUpUser.signUpLocationId = id
                     signUpUser.meetingName = name
@@ -821,16 +843,12 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                             order.supplement = data.userMeetingTypeName
                             order.userName = data.name
                             order.corporateName = data.corporateName
-                            for (item in data.meetingSignUps) {
-                                if (item.type == 8) {
-                                    item.meetingSignUpLocation?.let {
-                                        it.name?.let { name ->
-                                            order.meetingSignUpLocationName = name
-                                        }
-                                    }
-                                }
-                            }
-                            startActivity<ExamineKPActivity>("order" to order)
+                            order.meetingSignUpLocationName = binding.name.text.toString()
+                            startActivity<ExamineKPActivity>(
+                                "order" to order,
+                                "timeLong" to timeLong,
+                                "autoStatus" to "" + autoStatus
+                            )
                             return
                         }
 
@@ -890,28 +908,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
                 override fun onError(response: Response<MeetingUserDeData>) {
                     super.onError(response)
-                    if (moshi.equals("二维码识别")) {
-                        openRed()
-                    }
-                    var signUpUser = SignUpUser()
-                    signUpUser.signUpLocationId = id
-                    signUpUser.meetingName = name
-                    signUpUser.signUpId = signUpId
-                    signUpUser.userMeetingId = ""
-                    signUpUser.meetingId = ""
-                    signUpUser.userMeetingTypeName = ""
-                    signUpUser.autoStatus = autoStatus
-                    signUpUser.timeLong = timeLong
-                    signUpUser.okMsg = okMsg
-                    signUpUser.failedMsg = failedMsg
-                    signUpUser.repeatMsg = repeatMsg
-                    signUpUser.voiceStatus = voiceStatus
-                    signUpUser.success = "500"
-                    com.dylanc.longan.startActivity<SiginReAutoActivity>(
-                        "type" to showType,
-                        "data" to signUpUser,
-                        "avatar" to "avatar"
-                    )
+                    goshibai(SignUpUser())
                 }
 
                 override fun onFinish() {

@@ -76,6 +76,9 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             params["userMeetingId"] = it.userMeetingId//用户参与会议id
             params["status"] = "2"//用户参与会议id
             it.meetingName?.let {meetingName-> binding.name.text = meetingName }
+            it.failedMsg?.let {it-> failedMsg = it }
+            it.okMsg?.let {it-> okMsg = it }
+            it.repeatMsg?.let {it-> repeatMsg = it }
 //            it.name?.let { name-> binding.userName.text = encode(name)
 //                binding.userName.visibility = View.VISIBLE}
 //            it.corporateName?.let {companyName-> binding.companyName.text = encode(companyName)
@@ -163,7 +166,12 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                 if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
                     SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(okMsg);
                 }else{
-                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.cg);
+                    if(okMsg.contains("签出")){
+                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.dccg);
+                    }else{
+                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.cg);
+                    }
+
                     mRingPlayer?.start();
                 }
             }
@@ -188,7 +196,11 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                 if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
                     SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(repeatMsg);
                 }else{
-                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.cf);
+                    if(repeatMsg.contains("签出")){
+                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.dccf);
+                    }else{
+                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.cf);
+                    }
                     mRingPlayer?.start();
                 }
             }
@@ -210,7 +222,11 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                 if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
                     SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(failedMsg);
                 }else{
-                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.qdsb);
+                    if(failedMsg.contains("签出")){
+                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.dcsb);
+                    }else{
+                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.qdsb);
+                    }
                     mRingPlayer?.start();
                 }
             }
@@ -229,7 +245,12 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                 if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
                     SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(failedMsg);
                 }else{
-                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.qdsb);
+                    if(failedMsg.contains("签出")){
+                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.dcsb);
+                    }else{
+                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.qdsb);
+                    }
+
                     mRingPlayer?.start();
                 }
             }

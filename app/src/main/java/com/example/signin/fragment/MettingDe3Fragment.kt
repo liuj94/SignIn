@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSON
 import com.example.signin.LiveDataBus
 import com.example.signin.MeetingUserDectivity
 import com.example.signin.PageRoutes
+import com.example.signin.SubstepDelayedLoad
 import com.example.signin.adapter.FMeetingDeList3Adapter
 import com.example.signin.adapter.SelectMeetingAdapter
 import com.example.signin.adapter.SelectMeetingAdapter2
@@ -23,6 +24,9 @@ import com.example.signin.net.JsonCallback
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  *   author : LiuJie
@@ -111,7 +115,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                     item.isMyselect = false
                 }
                 siginUp2List[position].isMyselect = true
-                if (siginUp2List[position].dictValue.equals("-1")) {
+                if (siginUp2List[position].dictValue.equals("-999")) {
 
                     status = ""
 //                    binding.name2Tv.text = "筛选"
@@ -141,8 +145,8 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             }
         }
         binding.recyclerview.adapter = adapter
-        getData()
 
+        delayed()
 
         binding.nameLl.setOnClickListener {
             binding.select2Ll.visibility = View.GONE
@@ -234,6 +238,18 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         }
 
     }
+    private val delayedLoad = SubstepDelayedLoad()
+    private fun delayed() {
+        delayedLoad
+            .delayed(1000)
+            .run {
+                //延时加载布局
+                getData()
+
+
+            }
+            .start()
+    }
 
     var pageNum = 1
     private fun getList() {
@@ -318,7 +334,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
     private fun getDatasign_up_app_list() {
 
         OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
-            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid+"f4")
             .headers("Authorization", kv.getString("token", ""))
             .execute(object : RequestCallback<List<SiginUpListData>>() {
                 override fun onSuccessNullData() {
@@ -367,7 +383,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             siginUp2List.clear()
             var all: TypeData = TypeData()
             all.dictLabel = "全部"
-            all.dictValue = "-1"
+            all.dictValue = "-999"
             siginUp2List.add(all)
             when (type) {
                 1 -> {
@@ -444,4 +460,6 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
             })
     }
+
+
 }

@@ -3,10 +3,12 @@ package com.example.signin.fragment
 
 import android.graphics.Color
 import android.os.Build
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.alibaba.fastjson.JSON
 import com.dylanc.longan.startActivity
 import com.example.signin.MeetingDeActivity
 import com.example.signin.PageRoutes
@@ -18,6 +20,8 @@ import com.example.signin.bean.MeetingData
 
 import com.example.signin.databinding.FragHomeBinding
 import com.example.signin.adapter.HomeListAdapter
+import com.example.signin.bean.SiginUpListData
+import com.example.signin.bean.SiginUpListModel
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
@@ -135,7 +139,11 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
 //                    "meetingName" to "" + list[position].name,
 //                    "businessId" to "" + list[position].businessId
 //                )
-                goto("" + list[position].id,"" + list[position].name,"" + list[position].businessId)
+                goto(
+                    "" + list[position].id,
+                    "" + list[position].name,
+                    "" + list[position].businessId
+                )
             }
         }
 
@@ -152,7 +160,8 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
         }
 
     }
-    private fun goto( meetingId :String,meetingName :String,businessId:String) {
+
+    private fun goto(meetingId: String, meetingName: String, businessId: String) {
         startActivity<MeetingDeActivity>(
             "meetingId" to meetingId,
             "meetingName" to meetingName,
@@ -197,6 +206,7 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
 //            })
     }
 
+    var isFrist = true;
     private fun getData() {
         mViewModel.isShowLoading.value = true
         var url =
@@ -228,6 +238,13 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
                     } else {
                         binding.recyclerview.visibility = View.VISIBLE
                         binding.kong.visibility = View.GONE
+//                        if(isFrist){
+//                            isFrist = false
+//                            for (item in list) {
+//                                getList("" + item.id)
+//                            }
+//                        }
+
                     }
 
 
@@ -249,5 +266,44 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
             })
     }
 
+    private fun getList(meetingid: String) {
+        Log.d("getList", "接口开始调用===up/app/list")
+        mViewModel.isShowLoading.value = true
+        OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+            .headers("Authorization", kv.getString("token", ""))
+            .execute(object : RequestCallback<List<SiginUpListData>>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
+
+                }
+
+                override fun onMySuccess(data: List<SiginUpListData>) {
+                    super.onMySuccess(data)
+                    var a = SiginUpListModel()
+                    a.list = data
+                    kv.putString("SiginUpListModel", JSON.toJSONString(a))
+                    Log.d("getList", "接口返回结束===up/app/list")
+
+                }
+
+                override fun onError(response: Response<List<SiginUpListData>>) {
+                    super.onError(response)
+
+
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+
+
+                }
+
+
+            })
+
+//        }
+
+    }
 
 }
