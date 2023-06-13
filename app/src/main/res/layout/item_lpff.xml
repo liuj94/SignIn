@@ -110,16 +110,17 @@
                     <TextView
                         android:id="@+id/address"
                         android:layout_weight="1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text=""
                         android:textColor="#ff7d8592"
                         android:textSize="12sp"
                         />
                     <TextView
+                        android:id="@+id/location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
+                        android:text="待分配"
                         android:textColor="#ff7d8592"
                         android:textSize="12sp"
                         />

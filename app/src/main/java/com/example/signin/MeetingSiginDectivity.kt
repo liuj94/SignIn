@@ -148,7 +148,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 115200,
                 this@MeetingSiginDectivity
             )
-            ScanTool.GET.playSound(true)
+            ScanTool.GET.playSound(false)
         } else if (moshi.equals("摄像头识别")) {
             var a = SiginData()
             a.name = "二维码识别"
@@ -207,7 +207,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                         115200,
                         this@MeetingSiginDectivity
                     )
-                    ScanTool.GET.playSound(true)
+                    ScanTool.GET.playSound(false)
                 } else {
                     mDecodeReader?.close()
                     mDecodeReader = null
@@ -278,6 +278,17 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             }
             false
         })
+        signUpStatus = ""+ kv.getString("zd_signUpStatus_"+meetingid + id, "1")
+        if (signUpStatus == "2") {
+            binding.moshitv.text = "签出模式"
+            binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
+        } else {
+            binding.moshitv.text = "签入模式"
+            binding.moshiiv.setImageResource(R.mipmap.kaiguank)
+        }
+        failedMsg = if (signUpStatus == "2") "签出失败" else "签到失败"
+        okMsg = if (signUpStatus == "2") "签出成功" else "签到成功"
+        repeatMsg = if (signUpStatus == "2") "重复签出" else "重复签到 "
         getSiginData()
 
         binding.sm.setOnClickListener {
@@ -472,13 +483,15 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
     //    var addressStatus = "2"
     fun setState() {
-
-        if (kv.getString("zd_signUpStatus_" + id, "1").equals("1")) {
+        signUpStatus = ""+ kv.getString("zd_signUpStatus_"+meetingid + id, "1")
+        if (signUpStatus.equals("1")) {
             kv.putString("zd_signUpStatus_"+meetingid + id, "2")
+            signUpStatus = "2"
         } else {
             kv.putString("zd_signUpStatus_"+meetingid + id, "1")
+            signUpStatus = "1"
         }
-        signUpStatus = ""+ kv.getString("zd_signUpStatus_"+meetingid + id, "1")
+
         if (signUpStatus == "2") {
             binding.moshitv.text = "签出模式"
             binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
@@ -486,6 +499,9 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             binding.moshitv.text = "签入模式"
             binding.moshiiv.setImageResource(R.mipmap.kaiguank)
         }
+        failedMsg = if (signUpStatus == "2") "签出失败" else "签到失败"
+        okMsg = if (signUpStatus == "2") "签出成功" else "签到成功"
+        repeatMsg = if (signUpStatus == "2") "重复签出" else "重复签到"
 
 //        getSiginData()
 //        val params = HashMap<String, String>()
@@ -538,6 +554,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 
     var meetingFormData: MeetingFormData? = null
     private fun getSiginData() {
+        mViewModel.isShowLoading.value = true
         OkGo.get<SiginData>(PageRoutes.Api_meetingSignUpLocationDe + id)
             .tag(PageRoutes.Api_meetingSignUpLocationDe)
             .headers("Authorization", kv.getString("token", ""))
@@ -560,14 +577,14 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
 //                    signUpStatus	签到模式 1签入模式 2签出模式
 
 //                        signUpStatus = "" + data.signUpStatus
-                        signUpStatus = "" + kv.getString("zd_signUpStatus_"+meetingid+id, "1")
-                        if (signUpStatus == "2") {
-                            binding.moshitv.text = "签出模式"
-                            binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
-                        } else {
-                            binding.moshitv.text = "签入模式"
-                            binding.moshiiv.setImageResource(R.mipmap.kaiguank)
-                        }
+//                        signUpStatus = "" + kv.getString("zd_signUpStatus_"+meetingid+id, "1")
+//                        if (signUpStatus == "2") {
+//                            binding.moshitv.text = "签出模式"
+//                            binding.moshiiv.setImageResource(R.mipmap.kaiguanguan)
+//                        } else {
+//                            binding.moshitv.text = "签入模式"
+//                            binding.moshiiv.setImageResource(R.mipmap.kaiguank)
+//                        }
                         failedMsg = if (signUpStatus == "2") "签出失败" else "签到失败"
                         okMsg = if (signUpStatus == "2") "签出成功" else "签到成功"
                         repeatMsg = if (signUpStatus == "2") "重复签出" else "重复签到 "
@@ -649,7 +666,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         isShiBieZ = false
         isPause = false
         if (moshi.equals("二维码识别")) {
-            ScanTool.GET.playSound(true)
+//            ScanTool.GET.playSound(true)
             closeBlue()
             closeRed()
         }
@@ -685,8 +702,11 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         if (isShiBieZ) {
             return
         }
-        ScanTool.GET.playSound(false)
+//        ScanTool.GET.playSound(false)
         isShiBieZ = true
+        var mRingPlayer =
+            MediaPlayer.create(this@MeetingSiginDectivity, R.raw.ddd)
+        mRingPlayer?.start()
         try {
             goRe(data)
         } catch (e: Exception) {
@@ -853,14 +873,24 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                         }
 
                     }
+                    var avatar = ""
+                    data.avatar?.let { avatar = it }
                     if (showType == 3) {
+                        var ruzhustatus = "1"
+                        for (item in data.meetingSignUps) {
+                            when (item.type) {
+                                3 -> {
+                                    ruzhustatus =  "" + item.select
+                                }
+                            }}
+
                         com.dylanc.longan.startActivity<SiginReActivity>(
+                            "ruzhustatus" to ruzhustatus,
                             "type" to showType,
-                            "data" to signUpUser
+                            "data" to signUpUser,
+                            "avatar" to avatar
                         )
                     } else {
-                        var avatar = ""
-                        data.avatar?.let { avatar = it }
                         if (showType != 8) {
                             var params = java.util.HashMap<String, String>()
                             params["meetingId"] = signUpUser.meetingId//会议id

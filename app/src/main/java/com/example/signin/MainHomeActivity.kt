@@ -37,10 +37,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
         val uri: URI = URI.create("wss://meeting.nbqichen.com/websocket/user?source=sys&Authorization="+kv.getString("token", ""))
         val client: JWebSocketClient = object : JWebSocketClient(uri) {
             override fun onMessage(message: String) {
-//                type=="delete_location"
-//                type=="add_location" 刷新站点数据
-                //message就是接收到的消息 {"code":"200","count":1,"type":"refresh"}
-                Log.d("JWebSocketClient",message)
+
                 try {
                     var data =  JSON.parseObject(message, SocketData::class.java)
                     if(data.code.equals("200")){
@@ -48,19 +45,12 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                             LiveDataBus.get().with("JWebSocketClientlocation").postValue("1")
                         }
 
-
-//                        if(data.type.equals("refresh")){
-//                            LiveDataBus.get().with("JWebSocketClientRefresh").postValue(data.type)
-////                            LiveDataBus.get().with("JWebSocketClientlocation").postValue(data.type)
-//                        }else if(data.type.equals("delete_location")||data.type.equals("add_location")){
-//                            LiveDataBus.get().with("JWebSocketClientlocation").postValue(data.type)
-//                        }
                     }
                 }catch (e:Exception){
 
                 }
 
-                Log.e("JWebSClientService", message)
+
 
             }
         }
@@ -181,7 +171,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
     private fun initAdapter(fragments: MutableList<Fragment>) {
         val mAdapter = MainViewPagerAdapter(supportFragmentManager, fragments)
         binding.mViewPager.adapter = mAdapter
-        binding.mViewPager.offscreenPageLimit = 4
+        binding.mViewPager.offscreenPageLimit = 1
         initListener()
 
     }

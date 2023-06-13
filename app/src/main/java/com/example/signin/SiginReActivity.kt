@@ -45,6 +45,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
     var mRingPlayer: MediaPlayer? = null
     var avatar: String = ""
     var signUpStatus: String = "1"
+    var ruzhustatus: String = "1"
     var isShowAvatar: Boolean = false
     var meetingFormList: MutableList<MeetingFormList> = ArrayList()
     override fun initData() {
@@ -56,10 +57,10 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                     for (list in it.meetingFormList) {
                         if (list.type.equals("avatar")) {
                             isShowAvatar = list.showStatus == 1
-                        }else{
-                           if(list.showStatus == 1) {
-                               meetingFormList.add(list)
-                           }
+                        } else {
+                            if (list.showStatus == 1) {
+                                meetingFormList.add(list)
+                            }
                         }
                     }
                 }
@@ -69,6 +70,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
         }
         intent.getIntExtra("type", 0)?.let { type = it }
         intent.getStringExtra("avatar")?.let { avatar = it }
+        intent.getStringExtra("ruzhustatus")?.let { ruzhustatus = it }
         intent.getSerializableExtra("data")?.let {
             signUpUser = it as SignUpUser
         }
@@ -88,49 +90,10 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
 //                binding.type.visibility = View.VISIBLE}
             it.timeLong?.let { t -> timeLong = t }
             it.voiceStatus?.let { t -> voiceStatus = t }
-            it.failedMsg?.let {it-> failedMsg = it }
-            it.okMsg?.let {it-> okMsg = it }
-            it.repeatMsg?.let {it-> repeatMsg = it }
-//            if(it.name.isNullOrEmpty()){
-//                if(it.corporateName.isNullOrEmpty()){
-//                    if(it.userMeetingTypeName.isNullOrEmpty()){
-//                        binding.userName.text = ""
-//                        binding.companyName.text = ""
-//                        binding.type.text = ""
-//                    }else{
-//                        binding.userName.text = it.userMeetingTypeName
-//                    }
-//
-//                }else{
-//                    binding.userName.text = it.corporateName
-//                    if(it.userMeetingTypeName.isNullOrEmpty()){
-//                        binding.companyName.text = ""
-//                        binding.type.text = ""
-//                    }else{
-//                        binding.companyName.text = it.userMeetingTypeName
-//                    }
-//                }
-//
-//            }else{
-//                binding.userName.text = it.name
-//                if(it.corporateName.isNullOrEmpty()){
-//                    if(it.userMeetingTypeName.isNullOrEmpty()){
-//                        binding.companyName.text = ""
-//                        binding.type.text = ""
-//                    }else{
-//                        binding.companyName.text = it.userMeetingTypeName
-//                    }
-//
-//                }else{
-//                    binding.companyName.text = it.corporateName
-//                    if(it.userMeetingTypeName.isNullOrEmpty()){
-//                        binding.type.text = ""
-//                    }else{
-//                        binding.type.text = it.userMeetingTypeName
-//
-//                    }
-//                }
-//            }
+            it.failedMsg?.let { it -> failedMsg = it }
+            it.okMsg?.let { it -> okMsg = it }
+            it.repeatMsg?.let { it -> repeatMsg = it }
+
         }
 //        1 注册签到2 来程签到3 入住签到4 会场签到5 餐饮签到6 礼品签到7 返程签到
         binding.numEt.visibility = View.INVISIBLE
@@ -142,6 +105,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                 binding.numEt.visibility = View.VISIBLE
                 binding.stateTv.text = "入住办理"
                 binding.submit.text = "确认入住"
+                setInfo()
             }
             4 -> {
                 binding.title.text = "会场签到"
@@ -169,7 +133,42 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
         if (autoStatus.equals("1")) {
             timer()
         }
+        if (!ruzhustatus.equals("1")) {
+            binding.numEt.visibility = View.INVISIBLE
+            setInfo()
+            binding.stateTv.text = repeatMsg
+            binding.stateTv.setTextColor(Color.parseColor("#FFC300"))
+            binding.stateIv.setImageResource(R.mipmap.qd3)
+            signUpUser?.let {
+                if (it.autoStatus.equals("1")) {
+                    binding.submit.text = "返回（3）"
+                    timer?.start()
+                } else {
+                    binding.submit.text = "返回"
+                }
+                if (voiceStatus.equals("1")) {
 
+                    binding.stateTv.text = repeatMsg
+                    binding.stateTv.setTextColor(Color.parseColor("#FFC300"))
+                    binding.stateIv.setImageResource(R.mipmap.qd3)
+                    if (SpeechUtils.getInstance(this@SiginReActivity).isSpeech) {
+                        SpeechUtils.getInstance(this@SiginReActivity)
+                            .speakText(repeatMsg);
+                    } else {
+                        if (repeatMsg.contains("签出")) {
+                            mRingPlayer =
+                                MediaPlayer.create(this@SiginReActivity, R.raw.dccf);
+                        } else {
+                            mRingPlayer =
+                                MediaPlayer.create(this@SiginReActivity, R.raw.cf);
+                        }
+                        mRingPlayer?.start();
+                    }
+
+
+                }
+            }
+        }
 
     }
 
@@ -188,12 +187,6 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                 if (type == 3) {
                     toast("请输入房号")
                 }
-//                else if (type == 5) {
-//                    toast("请输入桌号")
-//                }else{
-//                    toast("请输入座位号")
-//                }
-
                 return
             }
             params["location"] = binding.numEt.text.toString().trim()
@@ -211,6 +204,9 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
 
                 override fun onMySuccess(data: String) {
                     super.onMySuccess(data)
+                    if (autoStatus.equals("1")) {
+                        timer()
+                    }
                     //1成功 2重复
                     if (data.equals("1")) {
                         setInfo()
@@ -228,7 +224,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                                 )
                                 .error(R.mipmap.qd2).into(binding.stateIv)
                         }
-                        if(!isShowAvatar){
+                        if (!isShowAvatar) {
                             binding.stateIv.setImageResource(R.mipmap.qd2)
                         }
                     } else if (data.equals("2")) {
@@ -257,10 +253,12 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                                 if (SpeechUtils.getInstance(this@SiginReActivity).isSpeech) {
                                     SpeechUtils.getInstance(this@SiginReActivity).speakText(okMsg);
                                 } else {
-                                    if(okMsg.contains("签出")){
-                                        mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.dccg);
-                                    }else{
-                                        mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.cg);
+                                    if (okMsg.contains("签出")) {
+                                        mRingPlayer =
+                                            MediaPlayer.create(this@SiginReActivity, R.raw.dccg);
+                                    } else {
+                                        mRingPlayer =
+                                            MediaPlayer.create(this@SiginReActivity, R.raw.cg);
                                     }
                                     mRingPlayer?.start();
                                 }
@@ -273,10 +271,12 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                                     SpeechUtils.getInstance(this@SiginReActivity)
                                         .speakText(repeatMsg);
                                 } else {
-                                    if(repeatMsg.contains("签出")){
-                                        mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.dccf);
-                                    }else{
-                                        mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.cf);
+                                    if (repeatMsg.contains("签出")) {
+                                        mRingPlayer =
+                                            MediaPlayer.create(this@SiginReActivity, R.raw.dccf);
+                                    } else {
+                                        mRingPlayer =
+                                            MediaPlayer.create(this@SiginReActivity, R.raw.cf);
                                     }
                                     mRingPlayer?.start();
                                 }
@@ -296,10 +296,12 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                                         .speakText(failedMsg);
                                 } else {
 
-                                    if(failedMsg.contains("签出")){
-                                        mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.dcsb);
-                                    }else{
-                                        mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.qdsb);
+                                    if (failedMsg.contains("签出")) {
+                                        mRingPlayer =
+                                            MediaPlayer.create(this@SiginReActivity, R.raw.dcsb);
+                                    } else {
+                                        mRingPlayer =
+                                            MediaPlayer.create(this@SiginReActivity, R.raw.qdsb);
                                     }
                                     mRingPlayer?.start();
                                 }
@@ -313,12 +315,6 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
 
                 override fun onError(response: Response<String>) {
                     super.onError(response)
-//                    binding.userName.visibility = View.GONE
-//                    binding.companyName.visibility = View.GONE
-//                    binding.type.visibility = View.GONE
-//                    binding.userName.text = ""
-//                    binding.companyName.text = ""
-//                    binding.type.text = ""
                     mViewModel.isShowLoading.value = false
                     binding.stateTv.text = failedMsg
                     binding.stateTv.setTextColor(Color.parseColor("#D43030"))
@@ -329,9 +325,9 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                             .speakText(failedMsg);
                     } else {
 
-                        if(failedMsg.contains("签出")){
+                        if (failedMsg.contains("签出")) {
                             mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.dcsb);
-                        }else{
+                        } else {
                             mRingPlayer = MediaPlayer.create(this@SiginReActivity, R.raw.qdsb);
                         }
                         mRingPlayer?.start();
@@ -340,6 +336,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
 
                 override fun onFinish() {
                     super.onFinish()
+                    binding.numEt.visibility = View.GONE
                     mViewModel.isShowLoading.value = false
                 }
 

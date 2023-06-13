@@ -588,7 +588,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             .run {
                 //延时加载布局
                 getData()
-
+                delayedLoad.clearAllRunable()
 
             }
             .start()

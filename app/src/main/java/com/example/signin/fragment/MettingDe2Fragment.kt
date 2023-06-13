@@ -148,6 +148,7 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
                 //延时加载布局
                 getData()
                 getList()
+                delayedLoad.clearAllRunable()
 
             }
             .start()

@@ -245,7 +245,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             .run {
                 //延时加载布局
                 getData()
-
+                delayedLoad.clearAllRunable()
 
             }
             .start()

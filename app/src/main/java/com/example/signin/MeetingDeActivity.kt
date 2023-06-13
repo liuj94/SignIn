@@ -181,16 +181,16 @@ var fragments: MutableList<Fragment> = ArrayList<Fragment>()
     private fun initAdapter() {
         val mAdapter = MainViewPagerAdapter(supportFragmentManager, fragments)
         binding.mViewPager.adapter = mAdapter
-        binding.mViewPager.offscreenPageLimit = 1
+        binding.mViewPager.offscreenPageLimit = 4
         initListener()
         binding.mViewPager.currentItem = 0
-//        if(index==0){
-//            binding.title.text = "数据统计"
-//            binding.mRb1.isChecked = true
-//        }else{
-//            binding.title.text = "选签到点"
-//            binding.mRb2.isChecked = true
-//        }
+        if(fragments.size==4){
+            binding.title.text = "数据统计"
+            binding.mRb1.isChecked = true
+        }else{
+            binding.title.text = "选签到点"
+            binding.mRb2.isChecked = true
+        }
 
     }
 

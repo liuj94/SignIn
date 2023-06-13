@@ -49,10 +49,23 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
     private var list: MutableList<SiginUpListData> = ArrayList()
     var meetingid: String? = ""
     var meetingName: String? = ""
+    var isOnPause = false
+    override fun onPause() {
+        super.onPause()
+        isOnPause = true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        isOnPause = false
+    }
     override fun onResume() {
         super.onResume()
-        getData()
-        getList()
+        if (isOnPause){
+            isOnPause = false
+            getData()
+            getList()
+        }
     }
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
@@ -94,6 +107,9 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
 
             }
+
+        getData()
+        getList()
     }
 
     private fun getList() {
@@ -167,9 +183,6 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
                 override fun onMySuccess(data: MeetingStatisticsData) {
                     super.onMySuccess(data)
-//                    binding.num1.text = data.browseCount
-//                    binding.num2.text = data.userMeetingCount
-//                    binding.num2.text = data.userMeetingCount
                     try {
 
                         binding.num1.text = toNum("" + data.browseCount)
@@ -201,7 +214,10 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
                 override fun onFinish() {
                     super.onFinish()
+                    try {
                     mViewModel.isShowLoading.value = false
+                    } catch (e: java.lang.Exception) {
+                    }
                 }
 
 

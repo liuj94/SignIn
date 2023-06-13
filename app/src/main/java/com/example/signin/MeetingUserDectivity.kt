@@ -138,6 +138,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             if (state_ruzhu.status.equals("1")) {
 //                gotoSigin(state_ruzhu,3)
                 startActivity<SiginReActivity>(
+                    "ruzhustatus" to "1",
                     "type" to 3,
                     "data" to state_ruzhu,
                     "avatar" to avatar
@@ -561,6 +562,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
                             }
                             it.address?.let { address -> binding.itemLpff.address.text = address }
+                            it.location?.let { location -> binding.itemLpff.location.text = location }
 
 
                         }
@@ -578,8 +580,9 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemRzxx.kong.visibility = View.GONE
                             binding.itemRzxx.ll.visibility = View.VISIBLE
                             //入住签到
-                            setStateColor(model.sys_ruzhu, "1", binding.itemRzxx.ddBtn)
+
                             state_ruzhu.status =  "" + item.select
+                            setStateColor(model.sys_ruzhu, state_ruzhu.status, binding.itemRzxx.ddBtn)
                             item.userMeetingSignUp?.let {
 
 
@@ -658,22 +661,17 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemHcqd.zcBtn
                         )
                         state_huichang.status = "" + item.select
-                        item.userMeetingSignUp?.let {
-
-
-                            for (list in model.sys_huichang) {
-                                if (list.dictValue.equals("" + item.select)) {
-
-                                    if (list.dictValue.equals("1")) {
-                                        binding.itemHcqd.location.text =
-                                            "签到后分配"
-                                    } else {
-                                        binding.itemHcqd.location.text =
-                                            "待分配"
-                                    }
-                                }
-                            }
-                        }
+//                        item.userMeetingSignUp?.let {
+//
+//
+//                            for (list in model.sys_huichang) {
+//                                if (list.dictValue.equals("" + item.select)) {
+//
+//                                    binding.itemHcqd.location.text =
+//                                        "待分配"
+//                                }
+//                            }
+//                        }
                         item.meetingSignUpLocation?.let {
                             eData(state_huichang, it)
                             state_huichang.userMeetingId = data.id
@@ -723,21 +721,16 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemCyxi.zcBtn
                         )
                         state_chanyin.status = "" + item.select
-                        item.userMeetingSignUp?.let {
-
-                            for (list in model.sys_canyin) {
-                                if (list.dictValue.equals("" + item.select)) {
-
-                                    if (list.dictValue.equals("1")) {
-                                        binding.itemCyxi.location.text =
-                                            "签到后分配"
-                                    } else {
-                                        binding.itemCyxi.location.text =
-                                            "待分配"
-                                    }
-                                }
-                            }
-                        }
+//                        item.userMeetingSignUp?.let {
+//
+//                            for (list in model.sys_canyin) {
+//                                if (list.dictValue.equals("" + item.select)) {
+//
+//                                    binding.itemCyxi.location.text =
+//                                        "待分配"
+//                                }
+//                            }
+//                        }
                         binding.itemCyxi.kong.visibility = View.GONE
                         binding.itemCyxi.ll.visibility = View.VISIBLE
                         item.meetingSignUpLocation?.let {

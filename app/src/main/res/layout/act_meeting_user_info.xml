@@ -75,14 +75,14 @@
                 <include
                     android:id="@+id/item_cyxi"
                     layout="@layout/item_cyxi" />
-                <include
-                    android:id="@+id/item_fcxx"
-                    layout="@layout/item_fcxx" />
+
                 <include
                     android:id="@+id/item_lpff"
                     layout="@layout/item_lpff" />
                 <!-- 礼品发放-->
-
+                <include
+                    android:id="@+id/item_fcxx"
+                    layout="@layout/item_fcxx" />
             </LinearLayout>
 <View
     android:layout_width="match_parent"
