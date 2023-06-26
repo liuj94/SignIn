@@ -32,8 +32,8 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
         if (!msg.isNullOrEmpty()){
             toast(msg)
         }
+        binding.userName.setText(kv.getString("loginusername",""))
         binding.login.setOnClickListener {
-
             mViewModel.isShowLoading.value = true
             val params = HashMap<String, String>()
             params["username"] = binding.userName.text.toString().trim()
@@ -53,7 +53,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                     override fun onMySuccess(data: Token) {
                         super.onMySuccess(data)
                         kv.putString("token",data.token)
-
+                        kv.putString("loginusername", binding.userName.text.toString().trim())
                         OkGo.get<User>(PageRoutes.Api_getUserInfo)
                             .tag(PageRoutes.Api_getUserInfo)
                             .headers("Authorization",data.token)
