@@ -19,9 +19,6 @@ import com.example.signin.bean.SiginUpListModel
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 /**
  *   author : LiuJie
@@ -197,20 +194,22 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
     }
 
     private fun getData() {
-//        if(!kv.getString("SiginUpListModel","").isNullOrEmpty()){
-//            var data = JSON.parseObject(kv.getString("SiginUpListModel",""), SiginUpListModel::class.java)
-//            selectList.clear()
-//
-//            var all = SiginUpListData()
-//            all.name = "全部签到站点"
-//            all.id = ""
-//            all.isMyselect = true
-//            selectList.add(all)
-//            selectList.addAll(data.list)
-//            adapterSelect?.notifyDataSetChanged()
-//        }else{
+        if(!kv.getString("SiginUpListModelmeetingId"+meetingid,"").isNullOrEmpty()){
+            var data = JSON.parseObject(kv.getString("SiginUpListModelmeetingId"+meetingid,""), SiginUpListModel::class.java)
+            try {
+                selectList.clear()
+                var all = SiginUpListData()
+                all.name = "全部签到站点"
+                all.id = ""
+                all.isMyselect = true
+                selectList.add(all)
+                selectList.addAll(data.list)
+                adapterSelect?.notifyDataSetChanged()
+            } catch (e: java.lang.Exception) {
+            }
+        }else{
         getDatasign_up_app_list()
-//        }
+        }
 
     }
 
@@ -228,11 +227,11 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
                 override fun onMySuccess(data: List<SiginUpListData>) {
                     super.onMySuccess(data)
                     try {
+                        var allList = SiginUpListModel()
+                        allList.list = data
+                        kv.putString("SiginUpListModelmeetingId"+meetingid, JSON.toJSONString(allList))
 
 
-                        var list = SiginUpListModel()
-                        list.list = data
-                        kv.putString("SiginUpListModel", JSON.toJSONString(list))
                         selectList.clear()
 
                         var all = SiginUpListData()

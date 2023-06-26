@@ -8,6 +8,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
+import com.example.signin.AppManager
 import com.example.signin.LiveDataBus
 import com.example.signin.MeetingUserDectivity
 import com.example.signin.PageRoutes
@@ -234,6 +235,17 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             getList()
         }
 
+        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
+            .observeForever {
+                try {
+                    if (AppManager.getAppManager().activityInstanceIsLive(activity)) {
+                        getDatasign_up_app_list()
+                    }
+                } catch (e: java.lang.Exception) {
+                }
+
+            }
+
     }
 
     private val delayedLoad = SubstepDelayedLoad()
@@ -314,24 +326,29 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
     }
 
     private fun getData() {
-        getDatasign_up_app_list()
-//        if (!kv.getString("SiginUpListModel", "").isNullOrEmpty()) {
-//            var data =
-//                JSON.parseObject(kv.getString("SiginUpListModel", ""), SiginUpListModel::class.java)
-//            siginUpList.clear()
-//            if (data.list.size > 0) {
-//                data.list[0].isMyselect = true
-//                signUpId = data.list[0].id
-//                binding.nameTv.text = data.list[0].name
-//                siginUpList.addAll(data.list)
-//                adapterSelect?.notifyDataSetChanged()
-//                setSelect2Data(data.list[0].type)
-//                getqddList()
-//
-//
-//            }
-//
-//        }
+
+        if (!kv.getString("SiginUpListModelmeetingId"+meetingid, "").isNullOrEmpty()) {
+            var data =
+                JSON.parseObject(kv.getString("SiginUpListModelmeetingId"+meetingid, ""), SiginUpListModel::class.java)
+            siginUpList.clear()
+            try {
+
+                if (data.list.size > 0) {
+                    data.list[0].isMyselect = true
+                    signUpId = data.list[0].id
+                    binding.nameTv.text = data.list[0].name
+                    siginUpList.addAll(data.list)
+                    adapterSelect?.notifyDataSetChanged()
+                    setSelect2Data(data.list[0].type)
+                    getqddList()
+
+
+                }
+            }catch (e:Exception){}
+
+        }else{
+            getDatasign_up_app_list()
+        }
 
     }
 
@@ -348,6 +365,9 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
                 override fun onMySuccess(data: List<SiginUpListData>) {
                     super.onMySuccess(data)
+                    var allList = SiginUpListModel()
+                    allList.list = data
+                    kv.putString("SiginUpListModelmeetingId"+meetingid, JSON.toJSONString(allList))
                     try {
                         siginUpList.clear()
                         if (data.size > 0) {

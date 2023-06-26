@@ -1,7 +1,6 @@
 package com.example.signin
 
 
-import android.content.Intent
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.alibaba.fastjson.JSON
@@ -12,7 +11,6 @@ import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.CustomUpdateParser
 import com.example.signin.bean.SiginUpListData
 import com.example.signin.bean.SiginUpListModel
-import com.example.signin.bean.User
 import com.example.signin.databinding.ActMeetdaBinding
 import com.example.signin.fragment.MettingDe1Fragment
 import com.example.signin.fragment.MettingDe2Fragment
@@ -39,6 +37,7 @@ class MeetingDeActivity : BaseBindingActivity<ActMeetdaBinding, BaseViewModel>()
 var meetingId = ""
 var meetingName = ""
 var businessId = ""
+var userType = "00"
     override fun initData() {
         binding.titlell.addStatusBarHeightToMarginTop()
         intent.getStringExtra("meetingId")?.let {
@@ -50,6 +49,10 @@ var businessId = ""
         intent.getStringExtra("businessId")?.let {
             businessId = it
         }
+        intent.getStringExtra("userType")?.let {
+            userType = it
+        }
+
 //        mViewModel.isShowLoading.value = true
 //        getData()
         getFragmentLists()
@@ -64,16 +67,16 @@ var businessId = ""
         binding.zhez.setOnClickListener {
 
         }
-        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
-            .observeForever {
-               try {
-                   if(AppManager.getAppManager().activityInstanceIsLive(MeetingDeActivity@this)){
-                       getData2()
-                   }
-               }catch (e:java.lang.Exception){}
-
-
-            }
+//        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
+//            .observeForever {
+//               try {
+//                   if(AppManager.getAppManager().activityInstanceIsLive(MeetingDeActivity@this)){
+//                       getData2()
+//                   }
+//               }catch (e:java.lang.Exception){}
+//
+//
+//            }
     }
     private fun getData() {
 
@@ -109,68 +112,23 @@ var businessId = ""
 
             })
     }
-    private fun getData2() {
-
-        OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingId)
-            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingId)
-            .headers("Authorization", kv.getString("token", ""))
-            .execute(object : RequestCallback<List<SiginUpListData>>() {
-                override fun onSuccessNullData() {
-                    super.onSuccessNullData()
-
-                }
-
-                override fun onMySuccess(data: List<SiginUpListData>) {
-                    super.onMySuccess(data)
-                    var list = SiginUpListModel()
-                    list.list = data
-                    kv.putString("SiginUpListModel", JSON.toJSONString(list))
-
-                }
-
-                override fun onError(response: Response<List<SiginUpListData>>) {
-                    super.onError(response)
-
-
-                }
-
-                override fun onFinish() {
-                    super.onFinish()
-
-
-                }
-
-
-            })
-    }
+//    kv.putString("SiginUpListModelmeetingId"+meetingId, JSON.toJSONString(list))
     fun getFragmentLists() {
-//        val fragmentLists: MutableList<Fragment> = ArrayList<Fragment>()
         binding.mRb1.visibility = View.GONE
-
-        if (!kv.getString("userData", "").isNullOrEmpty()) {
-           var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
-            userData?.let {
-                if (it.userType.equals("01")||it.userType.equals("04")){
-//                if (it.userType.equals("00")||it.userType.equals("00")){
-                    binding.mRb1.visibility = View.VISIBLE
-                    fragments.add(MettingDe1Fragment.newInstance(meetingId,meetingName))
-                    fragments.add(MettingDe2Fragment.newInstance(meetingId))
-                    fragments.add(MettingDe3Fragment.newInstance(meetingId))
-                    fragments.add(MettingDe4Fragment.newInstance(meetingId,businessId))
-                    initAdapter()
-                }else{
-                    binding.mRb1.visibility = View.GONE
-                    fragments.add(MettingDe2Fragment.newInstance(meetingId))
-                    fragments.add(MettingDe3Fragment.newInstance(meetingId))
-                    fragments.add(MettingDe4Fragment.newInstance(meetingId,businessId))
-                    initAdapter()
-                }
-
-
-            }
-
-
-        }
+    if (userType.equals("01")||userType.equals("04")){
+        binding.mRb1.visibility = View.VISIBLE
+        fragments.add(MettingDe1Fragment.newInstance(meetingId,meetingName))
+        fragments.add(MettingDe2Fragment.newInstance(meetingId))
+        fragments.add(MettingDe3Fragment.newInstance(meetingId))
+        fragments.add(MettingDe4Fragment.newInstance(meetingId,businessId))
+        initAdapter()
+    }else{
+        binding.mRb1.visibility = View.GONE
+        fragments.add(MettingDe2Fragment.newInstance(meetingId))
+        fragments.add(MettingDe3Fragment.newInstance(meetingId))
+        fragments.add(MettingDe4Fragment.newInstance(meetingId,businessId))
+        initAdapter()
+    }
 
 
 

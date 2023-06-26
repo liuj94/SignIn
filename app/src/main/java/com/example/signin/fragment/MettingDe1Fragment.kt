@@ -113,13 +113,16 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
     }
 
     private fun getList() {
-//        if (!kv.getString("SiginUpListModel", "").isNullOrEmpty()) {
-//            var data =
-//                JSON.parseObject(kv.getString("SiginUpListModel", ""), SiginUpListModel::class.java)
-//            list.clear()
-//            list.addAll(data.list)
-//            adapter?.notifyDataSetChanged()
-//        }else{
+        if (!kv.getString("SiginUpListModelmeetingId"+meetingid, "").isNullOrEmpty()) {
+            var data =
+                JSON.parseObject(kv.getString("SiginUpListModelmeetingId"+meetingid, ""), SiginUpListModel::class.java)
+            try {
+                list.clear()
+                list.addAll(data.list)
+                adapter?.notifyDataSetChanged()
+            } catch (e: java.lang.Exception) {
+            }
+        }else{
         Log.d("getList","接口开始调用===up/app/list")
         mViewModel.isShowLoading.value = true
         OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
@@ -133,15 +136,15 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
                 override fun onMySuccess(data: List<SiginUpListData>) {
                     super.onMySuccess(data)
+                    var allList = SiginUpListModel()
+                    allList.list = data
+                    kv.putString("SiginUpListModelmeetingId"+meetingid, JSON.toJSONString(allList))
                     try {
 
                         list.clear()
                         list.addAll(data)
                         adapter?.notifyDataSetChanged()
                         Log.d("getList","接口返回结束===up/app/list")
-                        var a = SiginUpListModel()
-                        a.list = data
-                        kv.putString("SiginUpListModel", JSON.toJSONString(a))
                     } catch (e: java.lang.Exception) {
                     }
 
@@ -166,7 +169,7 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
             })
 
-//        }
+         }
 
     }
 

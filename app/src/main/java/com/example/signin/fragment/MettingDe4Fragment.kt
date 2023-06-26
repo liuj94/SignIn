@@ -321,6 +321,17 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             mRtcEngine = TokenUtils.initializeAndJoinChannel(it, mRtcEventHandler)
         }
 //        getSiginData()
+
+        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
+            .observeForever {
+                try {
+                    if (AppManager.getAppManager().activityInstanceIsLive(activity)) {
+                        getDatasign_up_app_list()
+                    }
+                } catch (e: java.lang.Exception) {
+                }
+
+            }
     }
 
     private fun voice() {
@@ -595,27 +606,29 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
     }
 
     private fun getData() {
-//        if (!kv.getString("SiginUpListModel", "").isNullOrEmpty()) {
-//            var data =
-//                JSON.parseObject(kv.getString("SiginUpListModel", ""), SiginUpListModel::class.java)
-//            selectList.clear()
-//
-//            selectList.addAll(data.list)
-//            selectList[0].isMyselect = true
-//            signUpId = selectList[0].id
-//            type = selectList[0].type
-//
-//            binding.nameTv.text = selectList[0].name
-//            adapterSelect?.notifyDataSetChanged()
-//            getList()
-//        }
-        getDatasign_up_app_list()
+        if (!kv.getString("SiginUpListModelmeetingId"+meetingid, "").isNullOrEmpty()) {
+            var data =
+                JSON.parseObject(kv.getString("SiginUpListModelmeetingId"+meetingid, ""), SiginUpListModel::class.java)
+            selectList.clear()
+
+            selectList.addAll(data.list)
+            selectList[0].isMyselect = true
+            signUpId = selectList[0].id
+            type = selectList[0].type
+
+            binding.nameTv.text = selectList[0].name
+            adapterSelect?.notifyDataSetChanged()
+            getList()
+        }else{
+            getDatasign_up_app_list()
+        }
+
     }
 
     private fun getDatasign_up_app_list() {
 
         OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
-            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid + "f4")
+            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid + "f5")
             .headers("Authorization", kv.getString("token", ""))
             .execute(object : RequestCallback<List<SiginUpListData>>() {
                 override fun onSuccessNullData() {
@@ -625,6 +638,9 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
                 override fun onMySuccess(data: List<SiginUpListData>) {
                     super.onMySuccess(data)
+                    var allList = SiginUpListModel()
+                    allList.list = data
+                    kv.putString("SiginUpListModelmeetingId"+meetingid, JSON.toJSONString(allList))
                     try {
                         selectList.clear()
                         selectList.addAll(data)
@@ -771,60 +787,11 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             })
     }
 
-//    private fun getUserList() {
-//        if (nameMobile.isNullOrEmpty()) {
-//            list.clear()
-//            adapter?.notifyDataSetChanged()
-//            binding.recyclerview.visibility = View.GONE
-//            binding.kong.visibility = View.GONE
-//            binding.thrl.visibility = View.VISIBLE
-//
-//            return
-//        }
-//        var url =
-//            PageRoutes.Api_meetinguser + meetingid + "&signUpId=" + signUpId + "&signUpLocationId=" + siginlocationId
-//        if (!nameMobile.isNullOrEmpty()) {
-//            url = "$url&nameMobile=$nameMobile"
-//        }
-//        OkGo.get<MeetingUserModel>(url)
-//            .tag(url)
-//            .headers("Authorization", kv.getString("token", ""))
-//            .execute(object : JsonCallback<MeetingUserModel>(MeetingUserModel::class.java) {
-//
-//                override fun onSuccess(response: Response<MeetingUserModel>) {
-//                    list.clear()
-//                    response?.let {
-//                        list.addAll(response.body().data)
-//                        adapter?.notifyDataSetChanged()
-//                        if (!nameMobile.isNullOrEmpty()) {
-//                            binding.thrl.visibility = View.GONE
-//                            if (list.size > 0) {
-//                                binding.kong.visibility = View.GONE
-//                                binding.recyclerview.visibility = View.VISIBLE
-//                            } else {
-//                                binding.kong.visibility = View.VISIBLE
-//                                binding.recyclerview.visibility = View.GONE
-//                            }
-//
-//                        } else {
-//                            binding.kong.visibility = View.GONE
-//                            binding.recyclerview.visibility = View.GONE
-//                            binding.thrl.visibility = View.VISIBLE
-//                        }
-//                    }
-//                }
-//
-//                override fun onError(response: Response<MeetingUserModel>?) {
-//                    super.onError(response)
-//
-//                }
-//
-//                override fun onFinish() {
-//
-//                }
-//            })
-//
-//    }
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+//        OkGo.getInstance().cancelTag(PageRoutes.Api_balance)
+//        OkGo.getInstance().cancelTag(PageRoutes.Api_balance + businessId)
+//        OkGo.getInstance().cancelTag(PageRoutes.Api_meetingSignUpLocation + meetingid + 2)
+    }
 
 }
