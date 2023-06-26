@@ -669,6 +669,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
                 override fun onMySuccess(data: List<SiginData>) {
                     super.onMySuccess(data)
+                    try {
                     selectList2.clear()
                     selectList2.addAll(data)
                     adapterSelect2?.notifyDataSetChanged()
@@ -708,7 +709,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                             }
                         }
                     }
-
+                    }catch (e:Exception){}
 
                 }
 
@@ -739,16 +740,19 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
                 override fun onMySuccess(data: Balance) {
                     super.onMySuccess(data)
-                    talkTime = data.talkTime
+                    try {
+                        talkTime = data.talkTime
 //                    binding.roundProgress.progress = (data.talkTime/1000)/60
-                    binding.roundProgress.progress = 100
-                    binding.roundProgress.maxProgress = 100
+                        binding.roundProgress.progress = 100
+                        binding.roundProgress.maxProgress = 100
 //                    binding.roundProgress.maxProgress = (data.talkTime/1000)/60
-                    if (data.talkTime > 60000) {
-                        binding.time.text = "" + (data.talkTime / 1000) / 60 + "分钟"
-                    } else {
-                        binding.time.text = "" + (data.talkTime / 1000) + "秒"
-                    }
+                        if (data.talkTime > 60000) {
+                            binding.time.text = "" + (data.talkTime / 1000) / 60 + "分钟"
+                        } else {
+                            binding.time.text = "" + (data.talkTime / 1000) + "秒"
+                        }
+                    }catch (e:Exception){}
+
 
 
                 }

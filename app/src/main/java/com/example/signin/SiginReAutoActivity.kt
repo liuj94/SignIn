@@ -45,6 +45,15 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
     var meetingFormList: MutableList<MeetingFormList> = ArrayList()
     override fun initData() {
         var d = kv.getString("MeetingFormData","")
+        var isPrint = kv.getBoolean("printkaiguan", false)
+        if(isPrint){
+            binding.print.visibility = View.VISIBLE
+        }else{
+            binding.print.visibility = View.GONE
+        }
+        binding.print.setOnClickListener {
+            LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("JWebSocketClientlocationPrint")
+        }
         if(!d.isNullOrEmpty()){
             try {
                 var meetingFormData = JSON.parseObject(d, MeetingFormData::class.java)

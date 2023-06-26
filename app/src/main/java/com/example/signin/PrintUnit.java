@@ -1,0 +1,391 @@
+package com.example.signin;
+
+import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.location.LocationManager;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Parcelable;
+import android.text.TextUtils;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import static android.content.Context.LOCATION_SERVICE;
+
+public class PrintUnit {
+    /**
+     * 203DPI的dot = 8
+     * 300DPI的dot = 12
+     * 600DPI的dot = 24
+     * 打印机220B是203DPI
+     */
+    private static final int printerDot = 8;
+    private final UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private static final int CONN_SUCC = 1000;
+    private static final int CONN_FAIL = 1001;
+    private volatile BluetoothSocket sppSocket = null;
+    private int connStatus = -1;
+    private BroadcastReceiver receiver = null;
+    public boolean isConPrint = false;
+    private Handler mainHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            String toastStr = msg.what == CONN_SUCC ? "连接成功" : "连接失败";
+            if(msg.what == CONN_SUCC){
+                isConPrint = true;
+            }else {
+                isConPrint = false;
+            }
+//            Toast.makeText(context, toastStr, Toast.LENGTH_SHORT).show();
+        }
+    };
+    Context context;
+    List<String> list = new ArrayList<>();
+
+    public PrintUnit(Context context) {
+        this.context = context;
+    }
+
+    public void PrintUnregisterReceiver() {
+        if (receiver != null) {
+            context.unregisterReceiver(receiver);
+        }
+
+    }
+
+    public void PrintRegisterReceiver() {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);//蓝牙开关
+        intentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);//蓝牙连接状态
+        intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);//蓝牙连接状态
+
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);//搜索设备
+        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {//此处处理逻辑
+                String action = intent.getAction();
+                switch (action) {
+                    case BluetoothAdapter.ACTION_DISCOVERY_STARTED:
+                        Log.d("123456", "ACTION_DISCOVERY_STARTED");
+//                        adapter.clear();
+//                        selectedDevice = null;
+//                        TextView tv = findViewById(R.id.selected);
+//                        tv.setText("选中设备:");
+
+                        break;
+                    case BluetoothDevice.ACTION_FOUND:
+                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                            return;
+                        }
+                        Parcelable parcelable = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);//得到该设备
+                        if (!(parcelable instanceof BluetoothDevice))
+                            return;
+                        BluetoothDevice device = (BluetoothDevice) parcelable;
+                        Log.d("123456", "ACTION_FOUND device addr =" + device.getAddress());
+                        boolean isPrinter = BluetoothClass.Device.Major.IMAGING == device.getBluetoothClass().getMajorDeviceClass();
+
+                        if (isPrinter && !TextUtils.isEmpty(device.getName()) && device.getName().startsWith("CT")) {
+                            //系统搜索会有重复的对象,需要自行过滤
+                            list.add(device.getName() + "\n\n" + device.getAddress());
+                            if(listPrinter!=null){
+                                listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
+                            }
+                        }
+                        break;
+                }
+            }
+        };
+        context.registerReceiver(receiver, intentFilter);
+    }
+    public void OnePrintRegisterReceiver() {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);//蓝牙开关
+        intentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);//蓝牙连接状态
+        intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);//蓝牙连接状态
+
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);//搜索设备
+        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {//此处处理逻辑
+                String action = intent.getAction();
+                switch (action) {
+                    case BluetoothAdapter.ACTION_DISCOVERY_STARTED:
+                        Log.d("123456", "ACTION_DISCOVERY_STARTED");
+//                        adapter.clear();
+//                        selectedDevice = null;
+//                        TextView tv = findViewById(R.id.selected);
+//                        tv.setText("选中设备:");
+
+                        break;
+                    case BluetoothDevice.ACTION_FOUND:
+                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                            return;
+                        }
+                        Parcelable parcelable = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);//得到该设备
+                        if (!(parcelable instanceof BluetoothDevice))
+                            return;
+                        BluetoothDevice device = (BluetoothDevice) parcelable;
+                        Log.d("123456", "ACTION_FOUND device addr =" + device.getAddress());
+                        boolean isPrinter = BluetoothClass.Device.Major.IMAGING == device.getBluetoothClass().getMajorDeviceClass();
+
+                        if (isPrinter && !TextUtils.isEmpty(device.getName()) && device.getName().startsWith("CT")) {
+                            //系统搜索会有重复的对象,需要自行过滤
+                            if(list.size()<1){
+                                list.add(device.getName() + "\n\n" + device.getAddress());
+                                if(listPrinter!=null){
+                                    listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
+                                }
+                            }
+
+                        }
+                        break;
+                }
+            }
+        };
+        context.registerReceiver(receiver, intentFilter);
+    }
+    ListPrinter listPrinter;
+
+    public ListPrinter getListPrinter() {
+        return listPrinter;
+    }
+
+    public void setListPrinter(ListPrinter listPrinter) {
+        this.listPrinter = listPrinter;
+    }
+
+    public interface ListPrinter{
+        void printer(String p);
+        void conPrint(boolean p);
+}
+
+    public void searchDeviceSPP(Context context) {
+        BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
+            if (defaultAdapter.isDiscovering()) {
+                return;
+            }
+            defaultAdapter.startDiscovery();
+        }
+
+    }
+
+    public void print( Bitmap bitmap) throws Exception {
+//        int widthPX = Math.max(0, bitmap.getWidth() % 8 != 0 ?
+//                Math.max(0, bitmap.getWidth() + 8 - (bitmap.getWidth() % 8)) : bitmap.getWidth());//只希望多,不希望裁剪
+
+//        byte[] bytes1 = printReceipt(widthPX / printerDot, bitmap.getHeight() / printerDot, bitmap);
+        byte[] bytes1 = printReceipt( bitmap);
+        if (bytes1 != null&&sppSocket!=null) {
+            sppSocket.getOutputStream().write(bytes1);
+        }
+    }
+
+    private @Nullable byte[] printReceipt(
+                                          @NonNull Bitmap bitmap) throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        if (bitmap.getWidth() % 8 != 0) {
+//            int w = bitmap.getWidth();
+            int w = bitmap.getWidth();
+            w = Math.max(0, w % 8 != 0 ? Math.max(0, w + 8 - (w % 8)) : w);//只希望多,不希望裁剪
+            Bitmap b = Bitmap.createBitmap(w, bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(b);
+            c.drawColor(Color.WHITE);
+            c.drawBitmap(bitmap,
+                    new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()),
+                    new Rect(0, 0, w, bitmap.getHeight()),
+                    null);
+            bitmap = b;
+        }
+        int black = 0, white = 1;
+        int quality = 150;//值越大,越能打印越浅的颜色
+
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        int[] pixels = new int[bitmap.getWidth() * bitmap.getHeight()];
+        byte[] src = new byte[bitmap.getWidth() * bitmap.getHeight()];
+        Bitmap grayBitmap = toGrayscale(bitmap);
+        grayBitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+        format_K_dither16x16(pixels, grayBitmap.getWidth(), grayBitmap.getHeight(), src);
+
+        //清空缓存
+        baos.write(new byte[]{27, 64});
+        //定位走纸
+        baos.write(new byte[]{0x1D, 0X0E});
+
+        byte[] command = new byte[8];
+        height = src.length / width;
+        command[0] = 29;
+        command[1] = 118;
+        command[2] = 48;
+        command[3] = (byte) (0 & 1);
+        command[4] = (byte) (width / 8 % 256);
+        command[5] = (byte) (width / 8 / 256);
+        command[6] = (byte) (height % 256);
+        command[7] = (byte) (height / 256);
+        baos.write(command);
+
+        byte[] cmd = new byte[width / 8 * height];
+        int index = 0, temp = 0;
+        int part[] = new int[8];
+        for (int j = 0; j < grayBitmap.getHeight(); j++) {
+            for (int i = 0; i < grayBitmap.getWidth(); i += 8) {
+                for (int k = 0; k < 8; k++) {//横向每8个像素点组成一个字节。
+                    int pixel = grayBitmap.getPixel(i + k, j);
+                    int red = (pixel & 0x00ff0000) >> 16;//获取r分量
+                    int green = (pixel & 0x0000ff00) >> 8;//获取g分量
+                    int blue = pixel & 0x000000ff;//获取b分量
+                    int gray = (int) (0.29900 * red + 0.58700 * green + 0.11400 * blue); // 灰度转化公式
+
+                    part[k] = gray > quality ? black : white;//灰度值大于128位   白色 为第k位0不打印
+                }
+                temp = part[0] * 128 +
+                        part[1] * 64 +
+                        part[2] * 32 +
+                        part[3] * 16 +
+                        part[4] * 8 +
+                        part[5] * 4 +
+                        part[6] * 2 +
+                        part[7] * 1;
+                cmd[index++] = (byte) temp;
+            }
+        }
+        baos.write(cmd);
+        return baos.toByteArray();
+    }
+
+    private Bitmap toGrayscale(Bitmap bmpOriginal) {
+        int height = bmpOriginal.getHeight();
+        int width = bmpOriginal.getWidth();
+        Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        Canvas c = new Canvas(bmpGrayscale);
+        Paint paint = new Paint();
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0.0F);
+        ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+        paint.setColorFilter(f);
+        c.drawBitmap(bmpOriginal, 0.0F, 0.0F, paint);
+        return bmpGrayscale;
+    }
+
+    private static void format_K_dither16x16(int[] orgpixels, int xsize, int ysize, byte[] despixels) {
+        int k = 0;
+        for (int y = 0; y < ysize; ++y) {
+            for (int x = 0; x < xsize; ++x) {
+                if ((orgpixels[k] & 255) > Floyd16x16[x & 15][y & 15]) {
+                    despixels[k] = 0;
+                } else {
+                    despixels[k] = 1;
+                }
+                ++k;
+            }
+        }
+    }
+
+    private static int[][] Floyd16x16 = new int[][]{
+            {0, 128, 32, 160, 8, 136, 40, 168, 2, 130, 34, 162, 10, 138, 42, 170},
+            {192, 64, 224, 96, 200, 72, 232, 104, 194, 66, 226, 98, 202, 74, 234, 106},
+            {48, 176, 16, 144, 56, 184, 24, 152, 50, 178, 18, 146, 58, 186, 26, 154},
+            {240, 112, 208, 80, 248, 120, 216, 88, 242, 114, 210, 82, 250, 122, 218, 90},
+            {12, 140, 44, 172, 4, 132, 36, 164, 14, 142, 46, 174, 6, 134, 38, 166},
+            {204, 76, 236, 108, 196, 68, 228, 100, 206, 78, 238, 110, 198, 70, 230, 102},
+            {60, 188, 28, 156, 52, 180, 20, 148, 62, 190, 30, 158, 54, 182, 22, 150},
+            {252, 124, 220, 92, 244, 116, 212, 84, 254, 126, 222, 94, 246, 118, 214, 86},
+            {3, 131, 35, 163, 11, 139, 43, 171, 1, 129, 33, 161, 9, 137, 41, 169},
+            {195, 67, 227, 99, 203, 75, 235, 107, 193, 65, 225, 97, 201, 73, 233, 105},
+            {51, 179, 19, 147, 59, 187, 27, 155, 49, 177, 17, 145, 57, 185, 25, 153},
+            {243, 115, 211, 83, 251, 123, 219, 91, 241, 113, 209, 81, 249, 121, 217, 89},
+            {15, 143, 47, 175, 7, 135, 39, 167, 13, 141, 45, 173, 5, 133, 37, 165},
+            {207, 79, 239, 111, 199, 71, 231, 103, 205, 77, 237, 109, 197, 69, 229, 101},
+            {63, 191, 31, 159, 55, 183, 23, 151, 61, 189, 29, 157, 53, 181, 21, 149},
+            {254, 127, 223, 95, 247, 119, 215, 87, 253, 125, 221, 93, 245, 117, 213, 85}
+    };
+
+    public void connectSPP(String macAddr) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        if (TextUtils.isEmpty(macAddr) || !BluetoothAdapter.checkBluetoothAddress(macAddr)) {
+            return;
+        }
+        if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
+            return;
+        }
+        LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            return;
+        }
+        BluetoothDevice device = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(macAddr);
+
+        if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+            device.createBond();
+            return;
+        }
+        new Thread(() -> {
+            connStatus = -1;
+            try {
+                sppSocket = device.createInsecureRfcommSocketToServiceRecord(SPP_UUID);
+                sppSocket.connect();
+            } catch (IOException e) {
+                sppSocket = null;
+                e.printStackTrace();
+                mainHandler.sendEmptyMessage(CONN_FAIL);
+                return;
+            }
+            connStatus = 1;
+            mainHandler.sendEmptyMessage(CONN_SUCC);
+        }).start();
+    }
+
+    public static boolean hasPermission(Context c) {
+        boolean bt = PackageManager.PERMISSION_GRANTED == c.checkPermission(
+                Manifest.permission.BLUETOOTH, android.os.Process.myPid(), android.os.Process.myUid());
+        boolean toggle = PackageManager.PERMISSION_GRANTED == c.checkPermission(
+                Manifest.permission.BLUETOOTH_ADMIN, android.os.Process.myPid(), android.os.Process.myUid());
+        boolean location = PackageManager.PERMISSION_GRANTED == c.checkPermission(
+                Manifest.permission.ACCESS_COARSE_LOCATION, android.os.Process.myPid(), android.os.Process.myUid());
+        boolean location2 = PackageManager.PERMISSION_GRANTED == c.checkPermission(
+                Manifest.permission.ACCESS_FINE_LOCATION, android.os.Process.myPid(), android.os.Process.myUid());
+        return bt && toggle && location && location2;
+    }
+
+}

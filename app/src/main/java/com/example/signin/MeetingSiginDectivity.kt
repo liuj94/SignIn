@@ -1,12 +1,14 @@
 package com.example.signin
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.media.MediaPlayer
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
-import com.common.apiutil.decode.DecodeReader
 import com.common.face.api.FaceUtil
 import com.dylanc.longan.activity
 import com.dylanc.longan.startActivity
@@ -16,10 +18,8 @@ import com.example.signin.adapter.SelectMeetingAdapter2
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.*
-
 import com.example.signin.databinding.ActMeetingSigindeBinding
 import com.example.signin.net.JsonCallback
-
 import com.example.signin.net.RequestCallback
 import com.hello.scan.ScanCallBack
 import com.hello.scan.ScanTool
@@ -28,11 +28,10 @@ import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
-import com.tencent.mmkv.MMKV
 import sigin
 import java.io.File
 import java.io.UnsupportedEncodingException
-import java.nio.charset.StandardCharsets
+
 
 class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, BaseViewModel>(),
     ScanCallBack {
@@ -59,7 +58,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     private var adapter: FMeetingDeList3Adapter? = null
     private var adapterSelect3: SelectMeetingAdapter2? = null
     private var selectList3: MutableList<SiginData> = ArrayList()
-    private var mDecodeReader: DecodeReader? = null
+//    private var mDecodeReader: DecodeReader? = null
     var moshi: String? = ""
     override fun initData() {
         mViewModel.isShowLoading.value = true
@@ -110,6 +109,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             num = "发票签到"
         }
         binding.title.text = num
+        registerReceiver()
         moshi = kv.getString("shaomamoshi", "")
         if (moshi.equals("激光头识别")) {
             var a = SiginData()
@@ -125,7 +125,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             a2.isMyselect = true
             a2.isKuan = true
             selectList3.add(a2)
-            openHardreader()
+//            openHardreader()
 
         } else if (moshi.equals("二维码识别")) {
             var a = SiginData()
@@ -197,10 +197,10 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                 adapterSelect3?.notifyDataSetChanged()
                 if (moshi.equals("激光头识别")) {
                     ScanTool.GET.release()
-                    openHardreader()
+//                    openHardreader()
                 } else if (moshi.equals("二维码识别")) {
-                    mDecodeReader?.close()
-                    mDecodeReader = null
+//                    mDecodeReader?.close()
+//                    mDecodeReader = null
                     ScanTool.GET.initSerial(
                         this@MeetingSiginDectivity,
                         "/dev/ttyACM0",
@@ -209,8 +209,8 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                     )
                     ScanTool.GET.playSound(false)
                 } else {
-                    mDecodeReader?.close()
-                    mDecodeReader = null
+//                    mDecodeReader?.close()
+//                    mDecodeReader = null
                     ScanTool.GET.release()
                 }
             }
@@ -625,39 +625,39 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     }
 
     var isShiBieZ = false
-    private fun openHardreader() {
-        if (mDecodeReader == null) {
-            mDecodeReader = DecodeReader(this) //初始化
-            mDecodeReader?.setDecodeReaderListener { data ->
-                if (isPause) {
-                    return@setDecodeReaderListener
-                }
-                if (isShiBieZ) {
-                    return@setDecodeReaderListener
-                }
-                isShiBieZ = true
-//                mDecodeReader?.close()
-//                mDecodeReader = null
-                var mRingPlayer =
-                    MediaPlayer.create(this@MeetingSiginDectivity, R.raw.ddd)
-                mRingPlayer?.start()
-                try {
-                    val str = String(data, StandardCharsets.UTF_8)
-                    runOnUiThread {
-                        goRe(str)
-
-                    }
-                } catch (e: UnsupportedEncodingException) {
-                    e.printStackTrace()
-                    goshibai(SignUpUser())
-                }
+//    private fun openHardreader() {
+//        if (mDecodeReader == null) {
+//            mDecodeReader = DecodeReader(this) //初始化
+//            mDecodeReader?.setDecodeReaderListener { data ->
+//                if (isPause) {
+//                    return@setDecodeReaderListener
+//                }
+//                if (isShiBieZ) {
+//                    return@setDecodeReaderListener
+//                }
+//                isShiBieZ = true
+////                mDecodeReader?.close()
+////                mDecodeReader = null
+//                var mRingPlayer =
+//                    MediaPlayer.create(this@MeetingSiginDectivity, R.raw.ddd)
+//                mRingPlayer?.start()
+//                try {
+//                    val str = String(data, StandardCharsets.UTF_8)
+//                    runOnUiThread {
+//                        goRe(str)
+//
+//                    }
+//                } catch (e: UnsupportedEncodingException) {
+//                    e.printStackTrace()
+//                    goshibai(SignUpUser())
+//                }
+////            }
+//
 //            }
-
-            }
-        }
-        mDecodeReader?.open(115200)
-
-    }
+//        }
+//        mDecodeReader?.open(115200)
+//
+//    }
 
     var isPause = true
     override fun onResume() {
@@ -670,9 +670,9 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             closeBlue()
             closeRed()
         }
-        if (moshi.equals("激光头识别")) {
-            openHardreader()
-        }
+//        if (moshi.equals("激光头识别")) {
+//            openHardreader()
+//        }
         binding.et.setText("")
         nameMobile = ""
 
@@ -681,18 +681,18 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
     override fun onPause() {
         super.onPause()
         isPause = true
-        if (moshi.equals("二维码识别")) {
-
-        }
-        if (moshi.equals("激光头识别")) {
-            mDecodeReader?.close()
-            mDecodeReader = null
-        }
+//        if (moshi.equals("二维码识别")) {
+//
+//        }
+//        if (moshi.equals("激光头识别")) {
+//            mDecodeReader?.close()
+//            mDecodeReader = null
+//        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mDecodeReader?.close()
+        unregisterReceiver(receiver)
         ScanTool.GET.release()
         closeBlue()
         closeRed()
@@ -976,6 +976,46 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         if (deviceon.canRead()) {
             FaceUtil.LedSet("led-blue", 0);
         }
+    }
+    private val ACTION_DATA_CODE_RECEIVED = "com.sunmi.scanner.ACTION_DATA_CODE_RECEIVED"
+    private val DATA = "data"
+    private val SOURCE = "source_byte"
+    private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            if (moshi.equals("激光头识别")) {
+                if (isPause) {
+                    return
+                }
+                if (isShiBieZ) {
+                    return
+                }
+                isShiBieZ = true
+                var mRingPlayer =
+                    MediaPlayer.create(this@MeetingSiginDectivity, R.raw.ddd)
+                mRingPlayer?.start()
+                try {
+                    val code = intent.getStringExtra(DATA)
+                    /* val data: ByteArray? = intent.getByteArrayExtra(SOURCE)*/
+                    if (code != null && !code.isEmpty()) {
+                        goRe(code)
+                    }else{
+                        goshibai(SignUpUser())
+                    }
+                } catch (e: UnsupportedEncodingException) {
+                    e.printStackTrace()
+                    goshibai(SignUpUser())
+                }
+
+            }
+
+
+        }
+    }
+
+    private fun registerReceiver() {
+        val filter = IntentFilter()
+        filter.addAction(ACTION_DATA_CODE_RECEIVED)
+        registerReceiver(receiver, filter)
     }
 
 }

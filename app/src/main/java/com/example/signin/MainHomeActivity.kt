@@ -1,10 +1,14 @@
 package com.example.signin
 
 
-import android.media.MediaPlayer
-import android.util.Log
+import android.graphics.Bitmap
 import androidx.fragment.app.Fragment
 import com.alibaba.fastjson.JSON
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.dylanc.longan.toast
 import com.example.signin.PageRoutes.Companion.Api_appVersion
 import com.example.signin.adapter.MainViewPagerAdapter
@@ -16,6 +20,9 @@ import com.example.signin.databinding.ActivityMainBinding
 import com.example.signin.fragment.HomeMainFragment
 import com.example.signin.fragment.MyFragment
 import com.example.signin.net.RequestCallback
+import com.hjq.permissions.OnPermissionCallback
+import com.hjq.permissions.Permission
+import com.hjq.permissions.XXPermissions
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
@@ -25,130 +32,205 @@ import java.net.URI
 
 
 class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>()
-//    ,
-//    KeyEventResolver.OnScanSuccessListener
 {
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
     var isMainHome = true
-
+    var client: JWebSocketClient? = null
+    var printUnit: PrintUnit? = null
     override fun initData() {
         SpeechUtils.getInstance(this@MainHomeActivity)
-        val uri: URI = URI.create("wss://meeting.nbqichen.com/websocket/user?source=sys&Authorization="+kv.getString("token", ""))
-        val client: JWebSocketClient = object : JWebSocketClient(uri) {
+        val uri: URI = URI.create(
+            "wss://meeting.nbqichen.com/websocket/user?source=sys&Authorization=" + kv.getString(
+                "token",
+                ""
+            )
+        )
+
+
+        client = object : JWebSocketClient(uri) {
             override fun onMessage(message: String) {
 
                 try {
-                    var data =  JSON.parseObject(message, SocketData::class.java)
-                    if(data.code.equals("200")){
-                        if(data.type.equals("refresh")||data.type.equals("delete_location")||data.type.equals("add_location")){
+                    var data = JSON.parseObject(message, SocketData::class.java)
+                    if (data.code.equals("200")) {
+                        if (data.type.equals("refresh") || data.type.equals("delete_location") || data.type.equals(
+                                "add_location"
+                            )
+                        ) {
                             LiveDataBus.get().with("JWebSocketClientlocation").postValue("1")
+                        } else if (data.type.equals("print")) {
+                            kv.putString(message, "printData")
+                            var printZd = kv.getBoolean("printZd", false)
+                            if (printZd) {
+                                printImg(data)
+                            }
                         }
 
                     }
-                }catch (e:Exception){
+                } catch (e: Exception) {
 
                 }
-
 
 
             }
         }
         try {
-            client.connectBlocking()
+            client?.connectBlocking()
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-    getFragmentLists()
+        getFragmentLists()
 
         getDataType("sys_zhuce") {
             getDataType("sys_ruzhu") {
                 getDataType("sys_huichang") {
-                    getDataType("sys_laicheng") {
-                        getDataType("sys_liping") {
-                            getDataType("sys_fancheng") {
-                                getDataType("sys_canyin") {
-                                    getDataType("user_meeting_sign_up_status") {
-                                        getDataType("user_meeting_type") {
-                                            getDataType("sys_invoice_status") {
-                                                getDataType("sys_invoice_type") {
-                                                    getDataType("transport_type") {
-                                                        getDataType("sys_examine_reason") {
-                                                            getDataType("pay_status") {
-                                                                getDataType("user_type") {
-//                                                                    getDataType("signSiteType") {}
-                                                                    getDataType("sys_fapiao") {}
-                                                                }
 
-                                                            }
-
-                                                        }
-
-
-                                                    }
-
-                                                }
-
-                                            }
-
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
             }
         }
+        getDataType("sys_laicheng") {
+            getDataType("sys_liping") {
+                getDataType("sys_fancheng") {
 
-//        LiveDataBus.get().with("voiceStatus", String::class.java)
-//            .observeForever {
-//
-//               if(!isMainHome){
-//
-//                   if(SpeechUtils.getInstance(this@MainHomeActivity).isSpeech){
-//                       SpeechUtils.getInstance(this@MainHomeActivity).speakText(it);
-//                   }else{
-//                       var mRingPlayer: MediaPlayer? = null
-//                       if (it.contains("成功")) {
-//                           mRingPlayer = MediaPlayer.create(this@MainHomeActivity, R.raw.cg);
-//                           mRingPlayer?.start();
-//                       } else  if (it.contains("重复")){
-//                           mRingPlayer = MediaPlayer.create(this@MainHomeActivity, R.raw.cf);
-//                           mRingPlayer?.start();
-//                       }else {
-//                           mRingPlayer = MediaPlayer.create(this@MainHomeActivity, R.raw.qdsb);
-//                           mRingPlayer?.start();
-//                       }
-//                   }
-//
-//
-//               }
-//
-//
-//            }
+                }
+            }
+        }
+        getDataType("sys_canyin") {
+            getDataType("user_meeting_sign_up_status") {
+                getDataType("user_meeting_type") {
+
+
+                }
+            }
+        }
+        getDataType("sys_invoice_status") {
+            getDataType("sys_invoice_type") {
+                getDataType("transport_type") {
+
+
+                }
+
+            }
+
+        }
+        getDataType("sys_examine_reason") {
+            getDataType("pay_status") {
+                getDataType("user_type") {
+//                                                                    getDataType("signSiteType") {}
+                    getDataType("sys_fapiao") {}
+                }
+
+            }
+
+        }
+
         LiveDataBus.get().with("voiceTime", String::class.java)
             .observeForever {
                 setState(it)
 
             }
+        LiveDataBus.get().with("JWebSocketClientlocationPrint", String::class.java)
+            .observeForever {
+              var message =  kv.getString( "printData","")
+                if(message.isNullOrEmpty()){
+                    try {
+                        var data = JSON.parseObject(message, SocketData::class.java)
+                        printImg(data)
+                    }catch (e:Exception){}
 
+                }
+
+
+            }
+
+        XXPermissions.with(this@MainHomeActivity)
+            .permission(Permission.BLUETOOTH_SCAN)
+            .permission(Permission.BLUETOOTH_CONNECT)
+            .permission(Permission.BLUETOOTH_ADVERTISE)
+            .request(object : OnPermissionCallback {
+
+                override fun onGranted(permissions: MutableList<String>, all: Boolean) {
+                    if (all) {
+                        printUnit = PrintUnit(this@MainHomeActivity)
+                        printUnit?.OnePrintRegisterReceiver()
+                        printUnit?.setListPrinter(object: PrintUnit.ListPrinter{
+                            override fun printer(p: String) {
+                                var selectedDevice = p.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().get(1)
+                                printUnit?.connectSPP(selectedDevice)
+                            }
+
+                            override fun conPrint(p: Boolean) {
+
+                            }
+
+                        })
+                    } else {
+                        toast("获取蓝牙权限失败")
+                    }
+
+                }
+
+                override fun onDenied(permissions: MutableList<String>, never: Boolean) {
+
+
+                }
+            })
     }
 
+    private fun printImg(data: SocketData) {
+        for (url in data.urls) {
+            Glide.with(this@MainHomeActivity).asBitmap()
+                .load(url)
+                .listener(object : RequestListener<Bitmap> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Bitmap>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
 
-//    override fun onInitScan(isSuccess: Boolean) {
-//        val str = if (isSuccess) "初始化成功" else "初始化失败"
-////        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
-//    }
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Bitmap?,
+                        model: Any?,
+                        target: Target<Bitmap>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        resource?.let { b ->
+                            printUnit?.let {
+                                if (it.isConPrint) {
+                                    try {
+                                        it.print(b)
+                                    }catch (e:Exception){}
+
+                                } else {
+                                    toast("打印机未连接")
+                                }
+                            }
+
+                        }
+                        return false
+                    }
+                }
+                ).submit()
+
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()
         isMainHome = true
         XUpdate.newBuild(this)
-            .updateParser( CustomUpdateParser(this))
+            .updateParser(CustomUpdateParser(this))
             .updateUrl(Api_appVersion)
             .update();
     }
+
     override fun onPause() {
         super.onPause()
         isMainHome = false
@@ -182,6 +264,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                 R.id.mMainHomeRb -> {
                     binding.mViewPager?.currentItem = 0
                 }
+
                 R.id.mMainMineRb -> {
                     binding.mViewPager?.currentItem = 1
                 }
@@ -238,12 +321,15 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
     }
 
 
-
-
-
-
-
-
+    override fun onDestroy() {
+        super.onDestroy()
+        try {
+            client?.close()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+        printUnit?.PrintUnregisterReceiver()
+    }
 
 
 }

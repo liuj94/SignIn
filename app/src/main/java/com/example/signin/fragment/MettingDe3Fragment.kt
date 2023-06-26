@@ -24,9 +24,6 @@ import com.example.signin.net.JsonCallback
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 /**
  *   author : LiuJie
@@ -238,6 +235,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         }
 
     }
+
     private val delayedLoad = SubstepDelayedLoad()
     private fun delayed() {
         delayedLoad
@@ -278,22 +276,25 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             .execute(object : JsonCallback<MeetingUserModel>(MeetingUserModel::class.java) {
 
                 override fun onSuccess(response: Response<MeetingUserModel>) {
-
-                    response.body()?.let {
-                        response.body().data?.let {
-                            list.addAll(response.body().data)
-                            adapter?.notifyDataSetChanged()
-                            binding.num.text = "名单列表（" + response.body().total + "）"
-                            if (pageNum == 1 && list.size <= 0) {
-                                binding.recyclerview.visibility = View.GONE
-                                binding.kong.visibility = View.VISIBLE
-                            } else {
-                                binding.recyclerview.visibility = View.VISIBLE
-                                binding.kong.visibility = View.GONE
+                    try {
+                        response.body()?.let {
+                            response.body().data?.let {
+                                list.addAll(response.body().data)
+                                adapter?.notifyDataSetChanged()
+                                binding.num.text = "名单列表（" + response.body().total + "）"
+                                if (pageNum == 1 && list.size <= 0) {
+                                    binding.recyclerview.visibility = View.GONE
+                                    binding.kong.visibility = View.VISIBLE
+                                } else {
+                                    binding.recyclerview.visibility = View.VISIBLE
+                                    binding.kong.visibility = View.GONE
+                                }
                             }
-                        }
 
+                        }
+                    } catch (e: Exception) {
                     }
+
                 }
 
                 override fun onError(response: Response<MeetingUserModel>?) {
@@ -334,7 +335,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
     private fun getDatasign_up_app_list() {
 
         OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
-            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid+"f4")
+            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid + "f4")
             .headers("Authorization", kv.getString("token", ""))
             .execute(object : RequestCallback<List<SiginUpListData>>() {
                 override fun onSuccessNullData() {
@@ -389,24 +390,31 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 1 -> {
                     siginUp2List.addAll(model.sys_zhuce)
                 }
+
                 2 -> {
                     siginUp2List.addAll(model.sys_laicheng)
                 }
+
                 3 -> {
                     siginUp2List.addAll(model.sys_ruzhu)
                 }
+
                 4 -> {
                     siginUp2List.addAll(model.sys_huichang)
                 }
+
                 5 -> {
                     siginUp2List.addAll(model.sys_canyin)
                 }
+
                 6 -> {
                     siginUp2List.addAll(model.sys_liping)
                 }
+
                 7 -> {
                     siginUp2List.addAll(model.sys_fancheng)
                 }
+
                 8 -> {
                     siginUp2List.addAll(model.sys_fapiao)
                 }

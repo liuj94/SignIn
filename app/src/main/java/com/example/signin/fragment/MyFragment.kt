@@ -65,6 +65,11 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
             com.dylanc.longan.startActivity<AboutActivity>()
 
         }
+        binding.dyj.setOnClickListener {
+            com.dylanc.longan.startActivity<PrintActivity>()
+
+        }
+
         binding.gjrlsz.setOnClickListener {
 
 

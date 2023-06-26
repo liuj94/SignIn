@@ -32,7 +32,8 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
         if (!msg.isNullOrEmpty()){
             toast(msg)
         }
-        binding.userName.setText(kv.getString("loginusername",""))
+        //15310333405
+        binding.userName.setText(kv.getString("loginusername","15310333405"))
         binding.login.setOnClickListener {
             mViewModel.isShowLoading.value = true
             val params = HashMap<String, String>()
