@@ -625,20 +625,20 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
                 override fun onMySuccess(data: List<SiginUpListData>) {
                     super.onMySuccess(data)
-                    selectList.clear()
+                    try {
+                        selectList.clear()
+                        selectList.addAll(data)
+                        if(selectList.size>0){
+                            selectList[0].isMyselect = true
+                            signUpId = selectList[0].id
+                            type = selectList[0].type
 
-                    selectList.addAll(data)
-                    if(selectList.size>0){
-                        selectList[0].isMyselect = true
-                        signUpId = selectList[0].id
-                        type = selectList[0].type
+                            binding.nameTv.text = selectList[0].name
+                            adapterSelect?.notifyDataSetChanged()
+                            getList()
 
-                        binding.nameTv.text = selectList[0].name
-                        adapterSelect?.notifyDataSetChanged()
-                        getList()
-
-                    }
-
+                        }
+                    }catch (e:Exception){}
 
                 }
 

@@ -303,8 +303,11 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 }
 
                 override fun onFinish() {
-                    binding.refresh.finishLoadMore()
-                    binding.refresh.finishRefresh()
+                    try {
+                        binding.refresh.finishLoadMore()
+                        binding.refresh.finishRefresh()
+                    }catch (e:Exception){}
+
                 }
             })
 
@@ -345,18 +348,21 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
                 override fun onMySuccess(data: List<SiginUpListData>) {
                     super.onMySuccess(data)
-                    siginUpList.clear()
-                    if (data.size > 0) {
-                        data[0].isMyselect = true
-                        signUpId = data[0].id
-                        binding.nameTv.text = data[0].name
-                        siginUpList.addAll(data)
-                        adapterSelect?.notifyDataSetChanged()
-                        setSelect2Data(data[0].type)
-                        getqddList()
+                    try {
+                        siginUpList.clear()
+                        if (data.size > 0) {
+                            data[0].isMyselect = true
+                            signUpId = data[0].id
+                            binding.nameTv.text = data[0].name
+                            siginUpList.addAll(data)
+                            adapterSelect?.notifyDataSetChanged()
+                            setSelect2Data(data[0].type)
+                            getqddList()
 
 
-                    }
+                        }
+                    }catch (e:Exception){}
+
 
 
                 }
@@ -462,7 +468,10 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
                 override fun onFinish() {
                     super.onFinish()
-                    binding.refresh.finishRefresh()
+                    try {
+                        binding.refresh.finishRefresh()
+                    }catch (e:Exception){}
+
                 }
 
 

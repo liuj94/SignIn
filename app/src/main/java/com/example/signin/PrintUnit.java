@@ -70,6 +70,7 @@ public class PrintUnit {
 
     public PrintUnit(Context context) {
         this.context = context;
+        searchDeviceSPP(context);
     }
 
     public void PrintUnregisterReceiver() {
@@ -129,9 +130,10 @@ public class PrintUnit {
         context.registerReceiver(receiver, intentFilter);
     }
     public void OnePrintRegisterReceiver() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+//        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+//            Log.d("XXPermissions", "checkSelfPermission");
+//            return;
+//        }
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);//蓝牙开关
         intentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);//蓝牙连接状态
@@ -145,8 +147,9 @@ public class PrintUnit {
             public void onReceive(Context context, Intent intent) {//此处处理逻辑
                 String action = intent.getAction();
                 switch (action) {
+
                     case BluetoothAdapter.ACTION_DISCOVERY_STARTED:
-                        Log.d("123456", "ACTION_DISCOVERY_STARTED");
+                        Log.d("XXPermissions", "ACTION_DISCOVERY_STARTED");
 //                        adapter.clear();
 //                        selectedDevice = null;
 //                        TextView tv = findViewById(R.id.selected);
@@ -154,14 +157,12 @@ public class PrintUnit {
 
                         break;
                     case BluetoothDevice.ACTION_FOUND:
-                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                            return;
-                        }
+
                         Parcelable parcelable = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);//得到该设备
                         if (!(parcelable instanceof BluetoothDevice))
                             return;
                         BluetoothDevice device = (BluetoothDevice) parcelable;
-                        Log.d("123456", "ACTION_FOUND device addr =" + device.getAddress());
+                        Log.d("XXPermissions", "ACTION_FOUND device addr name="+device.getName()+"==Address===" + device.getAddress());
                         boolean isPrinter = BluetoothClass.Device.Major.IMAGING == device.getBluetoothClass().getMajorDeviceClass();
 
                         if (isPrinter && !TextUtils.isEmpty(device.getName()) && device.getName().startsWith("CT")) {
@@ -197,12 +198,29 @@ public class PrintUnit {
 
     public void searchDeviceSPP(Context context) {
         BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
-            if (defaultAdapter.isDiscovering()) {
-                return;
-            }
-            defaultAdapter.startDiscovery();
+        if (defaultAdapter == null) {
+            Log.e("XXPermissions", "--------------- 不支持蓝牙");
+            return;
         }
+        if ( !defaultAdapter.isEnabled()) {
+            boolean res = defaultAdapter.enable();
+            if (res == true) {
+                Log.e("XXPermissions", "--------------- 蓝牙打开成功");
+            } else {
+                Log.e("XXPermissions", "--------------- 蓝牙打开失败");
+            }
+        } else if (defaultAdapter != null && defaultAdapter.isEnabled()) {
+//            myBtResultCallback.showToastMsg("蓝牙已打开");
+            Log.e("XXPermissions", "--------------- 蓝牙已打开");
+        } else {
+            Log.e("XXPermissions", "--------------- 蓝牙打开失败");
+//            myBtResultCallback.showToastMsg("蓝牙打开失败");
+        }
+
+        if (defaultAdapter.isDiscovering()) {
+            return;
+        }
+        defaultAdapter.startDiscovery();
 
     }
 

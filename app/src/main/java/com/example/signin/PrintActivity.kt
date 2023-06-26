@@ -31,7 +31,7 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
     var printUnit: PrintUnit? = null
     override fun initData() {
         printUnit = PrintUnit(this)
-        printkaiguan = kv.getBoolean("printkaiguan", false)
+        printkaiguan = kv.getBoolean("printkaiguan", true)
         printZd = kv.getBoolean("printZd", false)
         if (printZd) {
             binding.kg.setImageResource(R.mipmap.kaiguank)
@@ -48,10 +48,22 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
         binding.kg.setOnClickListener {
             var print = !printZd
             kv.putBoolean("printZd", print)
+            if (print) {
+                binding.kg.setImageResource(R.mipmap.kaiguank)
+            } else {
+                binding.kg.setImageResource(R.mipmap.kaiguanguan)
+            }
         }
         binding.gnkg.setOnClickListener {
             var print = !printkaiguan
             kv.putBoolean("printkaiguan", print)
+            if (print) {
+                binding.gnkg.setImageResource(R.mipmap.kaiguank)
+                binding.llkg.visibility = View.VISIBLE
+            } else {
+                binding.gnkg.setImageResource(R.mipmap.kaiguanguan)
+                binding.llkg.visibility = View.GONE
+            }
         }
         binding.device.setAdapter(ArrayAdapter<String>(
             this, android.R.layout.simple_list_item_1, ArrayList<String>()

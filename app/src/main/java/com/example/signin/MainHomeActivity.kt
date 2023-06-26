@@ -31,8 +31,7 @@ import getDataType
 import java.net.URI
 
 
-class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>()
-{
+class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>() {
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
     var isMainHome = true
@@ -132,12 +131,13 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
             }
         LiveDataBus.get().with("JWebSocketClientlocationPrint", String::class.java)
             .observeForever {
-              var message =  kv.getString( "printData","")
-                if(message.isNullOrEmpty()){
+                var message = kv.getString("printData", "")
+                if (message.isNullOrEmpty()) {
                     try {
                         var data = JSON.parseObject(message, SocketData::class.java)
                         printImg(data)
-                    }catch (e:Exception){}
+                    } catch (e: Exception) {
+                    }
 
                 }
 
@@ -148,15 +148,19 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
             .permission(Permission.BLUETOOTH_SCAN)
             .permission(Permission.BLUETOOTH_CONNECT)
             .permission(Permission.BLUETOOTH_ADVERTISE)
+            .permission(Permission.ACCESS_COARSE_LOCATION)
             .request(object : OnPermissionCallback {
 
                 override fun onGranted(permissions: MutableList<String>, all: Boolean) {
                     if (all) {
+
                         printUnit = PrintUnit(this@MainHomeActivity)
                         printUnit?.OnePrintRegisterReceiver()
-                        printUnit?.setListPrinter(object: PrintUnit.ListPrinter{
+                        printUnit?.setListPrinter(object : PrintUnit.ListPrinter {
                             override fun printer(p: String) {
-                                var selectedDevice = p.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().get(1)
+                                var selectedDevice =
+                                    p.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }
+                                        .toTypedArray().get(1)
                                 printUnit?.connectSPP(selectedDevice)
                             }
 
@@ -205,7 +209,8 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                                 if (it.isConPrint) {
                                     try {
                                         it.print(b)
-                                    }catch (e:Exception){}
+                                    } catch (e: Exception) {
+                                    }
 
                                 } else {
                                     toast("打印机未连接")

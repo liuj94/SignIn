@@ -45,7 +45,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
     var meetingFormList: MutableList<MeetingFormList> = ArrayList()
     override fun initData() {
         var d = kv.getString("MeetingFormData","")
-        var isPrint = kv.getBoolean("printkaiguan", false)
+        var isPrint = kv.getBoolean("printkaiguan", true)
         if(isPrint){
             binding.print.visibility = View.VISIBLE
         }else{
