@@ -1,6 +1,7 @@
 package com.example.signin.bean;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,25 +15,26 @@ public class SocketData implements Serializable {
      */
 
     private String code;
-    private float cardH;
-    private float cardW;
+    private BigDecimal cardH;
+    private BigDecimal cardW;
     private int count;
     private String type;
     private List<String> urls = new ArrayList<>();
 
-    public float getCardH() {
+
+    public BigDecimal getCardH() {
         return cardH;
     }
 
-    public void setCardH(float cardH) {
+    public void setCardH(BigDecimal cardH) {
         this.cardH = cardH;
     }
 
-    public float getCardW() {
+    public BigDecimal getCardW() {
         return cardW;
     }
 
-    public void setCardW(float cardW) {
+    public void setCardW(BigDecimal cardW) {
         this.cardW = cardW;
     }
 

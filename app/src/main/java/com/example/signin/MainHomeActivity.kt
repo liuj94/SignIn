@@ -8,9 +8,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.dylanc.longan.toast
 import com.example.signin.PageRoutes.Companion.Api_appVersion
+import com.example.signin.PageRoutes.Companion.BaseUrl
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
@@ -183,9 +185,12 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
     }
 
     private fun printImg(data: SocketData) {
+        val options = RequestOptions()
+            .override(data.cardW.intValueExact(), data.cardH.intValueExact())
         for (url in data.urls) {
             Glide.with(this@MainHomeActivity).asBitmap()
-                .load(url)
+                .load(BaseUrl+url)
+                .apply(options)
                 .listener(object : RequestListener<Bitmap> {
                     override fun onLoadFailed(
                         e: GlideException?,
@@ -234,6 +239,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
             .updateParser(CustomUpdateParser(this))
             .updateUrl(Api_appVersion)
             .update();
+
     }
 
     override fun onPause() {

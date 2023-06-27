@@ -13,7 +13,6 @@
     android:background="#F3F4F8"
     android:fitsSystemWindows="true">
 
-
     <com.example.signin.view.NoScrollViewPager
         android:id="@+id/mViewPager"
         android:layout_width="match_parent"
