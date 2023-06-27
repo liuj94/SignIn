@@ -109,7 +109,7 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
         binding.btnLl2.setOnClickListener {
             list.clear()
             pageNum = 1
-            state = 2
+            state = 1
             binding.btnTv2.setTextColor(Color.parseColor("#ff333333"))
             binding.btnTv1.setTextColor(Color.parseColor("#5B5B5B"))
             binding.btnTv3.setTextColor(Color.parseColor("#5B5B5B"))
@@ -120,7 +120,7 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
         }
         binding.btnLl3.setOnClickListener {
             list.clear()
-            state = 3
+            state = 2
             pageNum = 1
             binding.btnTv3.setTextColor(Color.parseColor("#ff333333"))
             binding.btnTv2.setTextColor(Color.parseColor("#5B5B5B"))

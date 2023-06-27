@@ -17,6 +17,7 @@ import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.CustomUpdateParser
+import com.example.signin.bean.SiginData
 import com.example.signin.bean.SocketData
 import com.example.signin.databinding.ActivityMainBinding
 import com.example.signin.fragment.HomeMainFragment
@@ -159,11 +160,11 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                         printUnit = PrintUnit(this@MainHomeActivity)
                         printUnit?.OnePrintRegisterReceiver()
                         printUnit?.setListPrinter(object : PrintUnit.ListPrinter {
-                            override fun printer(p: String) {
-                                var selectedDevice =
-                                    p.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }
-                                        .toTypedArray().get(1)
-                                printUnit?.connectSPP(selectedDevice)
+                            override fun printer(p: SiginData) {
+                                var selectedDevice =p.mac
+//                                    p.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }
+//                                        .toTypedArray().get(1)
+                                printUnit?.connectSPP(p.mac)
                             }
 
                             override fun conPrint(p: Boolean) {

@@ -110,7 +110,7 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         }
         binding.title.text = num
         registerReceiver()
-        moshi = kv.getString("shaomamoshi", "")
+        moshi = kv.getString("shaomamoshi", "激光头识别")
         if (moshi.equals("激光头识别")) {
             var a = SiginData()
             a.name = "二维码识别"

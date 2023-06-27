@@ -29,6 +29,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
+import com.example.signin.bean.SiginData;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,7 +69,7 @@ public class PrintUnit {
         }
     };
     Context context;
-    List<String> list = new ArrayList<>();
+    List<SiginData> list = new ArrayList<>();
 
     public PrintUnit(Context context) {
         this.context = context;
@@ -124,10 +126,16 @@ public class PrintUnit {
                         if (isPrinter && !TextUtils.isEmpty(device.getName()) && device.getName().startsWith("CT")) {
                             //系统搜索会有重复的对象,需要自行过滤
                             Log.e("printUnitXXPermissions", "------------搜索--- $device.getName()=="+device.getName());
-                            list.add(device.getName() + "\n\n" + device.getAddress());
+                            SiginData a = new SiginData();
+                            a.setName(device.getName());
+                            a.setMac(device.getAddress());
+                            a.setKuan(true);
+                            list.add(a);
+//                            list.add(device.getName() + "\n\n" + device.getAddress());
                             if(listPrinter!=null){
                                 Log.e("printUnitXXPermissions", "------------istPrinter!=null--- $device.getName()=="+device.getName());
-                                listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
+//                                listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
+                                listPrinter.printer(a);
                             }
                         }
                         break;
@@ -175,9 +183,15 @@ public class PrintUnit {
                         if (isPrinter && !TextUtils.isEmpty(device.getName()) && device.getName().startsWith("CT")) {
                             //系统搜索会有重复的对象,需要自行过滤
                             if(list.size()<1){
-                                list.add(device.getName() + "\n\n" + device.getAddress());
+                                SiginData a = new SiginData();
+                                a.setName(device.getName());
+                                a.setMac(device.getAddress());
+                                a.setKuan(true);
+//                                listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
+                                list.add(a);
                                 if(listPrinter!=null){
-                                    listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
+                                    listPrinter.printer(a);
+//                                    listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
                                 }
                             }
 
@@ -199,7 +213,7 @@ public class PrintUnit {
     }
 
     public interface ListPrinter{
-        void printer(String p);
+        void printer(SiginData p);
         void conPrint(boolean p);
 }
 
@@ -233,10 +247,17 @@ public class PrintUnit {
             if (isPrinter && !TextUtils.isEmpty(bluetoothDevice.getName()) && bluetoothDevice.getName().startsWith("CT")) {
                 //系统搜索会有重复的对象,需要自行过滤
 //                if(list.size()<1){
-                    list.add(bluetoothDevice.getName() + "\n\n" + bluetoothDevice.getAddress());
+                SiginData a = new SiginData();
+                a.setName(bluetoothDevice.getName());
+                a.setMac(bluetoothDevice.getAddress());
+                a.setKuan(true);
+                    list.add(a);
                     if(listPrinter!=null){
                         Log.e("printUnitXXPermissions", "------------kkklbluetoothDevice--- bluetoothDevice.getName()=="+bluetoothDevice.getName());
-                        listPrinter.printer(bluetoothDevice.getName() + "\n\n" + bluetoothDevice.getAddress());
+
+//                                listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
+                        listPrinter.printer(a);
+//                        listPrinter.printer(bluetoothDevice.getName() + "\n\n" + bluetoothDevice.getAddress());
                     }
 //                }
 

@@ -66,6 +66,17 @@ public class SiginData implements Serializable {
      * userId : null
      */
 
+
+    private String mac= "";
+
+    public String getMac() {
+        return mac;
+    }
+
+    public void setMac(String mac) {
+        this.mac = mac;
+    }
+
     private String searchValue= "";
     private List<MeetingFormList> meetingFormList= new ArrayList<>();
     private boolean kuan= false;
