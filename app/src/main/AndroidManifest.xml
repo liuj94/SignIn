@@ -35,9 +35,10 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <meta-data
         android:name="android.webkit.WebView.EnableSafeBrowing"
         android:value="true" />
@@ -68,15 +69,20 @@
         android:theme="@style/AppTheme"
         tools:replace="android:theme"
         tools:targetApi="31">
-        <service android:name=".service.AIDLService"
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".service.AIDLService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.example.signin.AIDLService" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
-
 
         <receiver
             android:name=".BootReceiver"
@@ -89,18 +95,19 @@
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name=".PrintActivity"
             android:exported="false"
-            android:windowSoftInputMode="stateVisible|adjustResize"/>
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".XCActivity"
             android:exported="false"
-            android:windowSoftInputMode="stateVisible|adjustResize"/>
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".SiginReAutoActivity"
             android:exported="false"
-            android:windowSoftInputMode="stateVisible|adjustResize"/>
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".SetActivity"
             android:exported="false" />
@@ -121,7 +128,7 @@
         <activity
             android:name=".ScanActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".MeetingSiginDectivity"
             android:exported="false" />
@@ -154,6 +161,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
