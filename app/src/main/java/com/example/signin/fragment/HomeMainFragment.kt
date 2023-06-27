@@ -227,17 +227,18 @@ var userType = "00"
 
                 override fun onMySuccess(data: List<MeetingData>) {
                     super.onMySuccess(data)
-                    if (pageNum == 1) {
-                        list.clear()
-                    }
-                    list.addAll(data)
-                    adapter?.notifyDataSetChanged()
-                    if (list.size <= 0) {
-                        binding.recyclerview.visibility = View.GONE
-                        binding.kong.visibility = View.VISIBLE
-                    } else {
-                        binding.recyclerview.visibility = View.VISIBLE
-                        binding.kong.visibility = View.GONE
+                    try {
+                        if (pageNum == 1) {
+                            list.clear()
+                        }
+                        list.addAll(data)
+                        adapter?.notifyDataSetChanged()
+                        if (list.size <= 0) {
+                            binding.recyclerview.visibility = View.GONE
+                            binding.kong.visibility = View.VISIBLE
+                        } else {
+                            binding.recyclerview.visibility = View.VISIBLE
+                            binding.kong.visibility = View.GONE
 //                        if(isFrist){
 //                            isFrist = false
                             for (item in list) {
@@ -245,7 +246,9 @@ var userType = "00"
                             }
 //                        }
 
-                    }
+                        }
+                    }catch (e:Exception){}
+
 
 
                 }
@@ -257,9 +260,11 @@ var userType = "00"
 
                 override fun onFinish() {
                     super.onFinish()
+                    try {
                     binding.refresh.finishRefresh()
                     binding.refresh.finishLoadMore()
                     mViewModel.isShowLoading.value = false
+                    }catch (e:Exception){}
                 }
 
 

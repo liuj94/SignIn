@@ -42,14 +42,22 @@ abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActi
         mViewModel.mContext = this
         getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         AppManager.getAppManager().addActivity(this)
-        initProgressDialog()
-        initIntentStringExtra()
-        initTitle()
-        initData()
-        initListener()
-        initRootTitleBar()
-    }
 
+    }
+var isFrist = true;
+    override fun onEnterAnimationComplete() {
+        super.onEnterAnimationComplete()
+        if(isFrist){
+            isFrist = false
+            initProgressDialog()
+            initIntentStringExtra()
+            initTitle()
+            initData()
+            initListener()
+            initRootTitleBar()
+        }
+
+    }
     override fun onDestroy() {
         AppManager.getAppManager().removeActivity(this)
         super.onDestroy()
