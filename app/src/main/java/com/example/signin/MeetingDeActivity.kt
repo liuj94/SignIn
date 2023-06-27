@@ -3,7 +3,6 @@ package com.example.signin
 
 import android.view.View
 import androidx.fragment.app.Fragment
-import com.dylanc.longan.addStatusBarHeightToMarginTop
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
@@ -24,7 +23,7 @@ class MeetingDeActivity : BaseBindingActivity<ActMeetdaBinding, BaseViewModel>()
     var businessId = ""
     var userType = "00"
     override fun initData() {
-        binding.titlell.addStatusBarHeightToMarginTop()
+//        binding.titlell.addStatusBarHeightToMarginTop()
         intent.getStringExtra("meetingId")?.let {
             meetingId = it
         }
