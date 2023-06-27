@@ -133,14 +133,6 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
                 }
 
             }
-
-//        GlobalScope.launch {
-//            delay(1000) // 延时1秒
-//            // 在这里执行需要延时的操作
-//            getData()
-//            getList()
-//        }
-//        delayed()
         getData()
         getList()
     }

@@ -48,24 +48,7 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
     private var list: MutableList<SiginUpListData> = ArrayList()
     var meetingid: String? = ""
     var meetingName: String? = ""
-    var isOnPause = false
-    override fun onPause() {
-        super.onPause()
-        isOnPause = true
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        isOnPause = false
-    }
-    override fun onResume() {
-        super.onResume()
-        if (isOnPause){
-            isOnPause = false
-            getData()
-            getList()
-        }
-    }
     var isShow: Boolean = false
     override fun onDestroyView() {
         super.onDestroyView()
@@ -77,10 +60,6 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
         isShow = true
         meetingid = arguments?.getString("meetingid", "")
         meetingName = arguments?.getString("meetingName", "")
-
-//            setStatusBarHeight(toolbarView)
-
-
         binding.recyclerview.layoutManager = LinearLayoutManager(activity)
         adapter = FMeetingDeListAdapter().apply {
             submitList(list)
@@ -94,6 +73,9 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
             getData()
             getList()
         }
+
+        getData()
+        getList()
         LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
             .observeForever {
                 try {
@@ -114,8 +96,6 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
             }
 
-        getData()
-        getList()
     }
 
     private fun getList() {
@@ -291,46 +271,4 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
         }
     }
 
-//     fun refreshData() {
-//
-//        OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
-//            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
-//            .headers("Authorization", kv.getString("token", ""))
-//            .execute(object : RequestCallback<List<SiginUpListData>>() {
-//                override fun onSuccessNullData() {
-//                    super.onSuccessNullData()
-//
-//                }
-//
-//                override fun onMySuccess(data: List<SiginUpListData>) {
-//                    super.onMySuccess(data)
-//                    try {
-//
-//
-//                        var list = SiginUpListModel()
-//                        list.list = data
-//                        kv.putString("SiginUpListModel", JSON.toJSONString(list))
-//                        getList()
-//                    } catch (e: java.lang.Exception) {
-//                    }
-//                }
-//
-//                override fun onError(response: Response<List<SiginUpListData>>) {
-//                    super.onError(response)
-//
-//
-//                }
-//
-//                override fun onFinish() {
-//                    super.onFinish()
-//                    try {
-//                        binding.refresh.finishRefresh()
-//                    } catch (e: java.lang.Exception) {
-//                    }
-//
-//                }
-//
-//
-//            })
-//    }
 }

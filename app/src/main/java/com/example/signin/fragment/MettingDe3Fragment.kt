@@ -252,18 +252,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
     }
 
-//    private val delayedLoad = SubstepDelayedLoad()
-//    private fun delayed() {
-//        delayedLoad
-//            .delayed(1000)
-//            .run {
-//                //延时加载布局
-//                getData()
-//                delayedLoad.clearAllRunable()
-//
-//            }
-//            .start()
-//    }
+
 
     var pageNum = 1
     private fun getList() {

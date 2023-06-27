@@ -7,9 +7,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.mainThread
@@ -80,93 +78,93 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         meetingid = arguments?.getString("meetingid", "1")
         businessId = arguments?.getString("businessId", "1")
         CHANNEL = "" + meetingid
-        binding.srecyclerview.layoutManager = LinearLayoutManager(activity)
-        adapterSelect = SelectMeetingAdapter().apply {
-            submitList(selectList)
-            setOnItemClickListener { _, _, position ->
-                for (item in selectList) {
-                    item.isMyselect = false
-                }
-                selectList[position].isMyselect = true
-                signUpId = "" + selectList[position].id
-                type = selectList[position].type
-                binding.nameTv.text = selectList[position].name
-                adapterSelect?.notifyDataSetChanged()
-                binding.selectLl.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
-                setStartData()
-                getList()
-            }
-        }
-        binding.srecyclerview.adapter = adapterSelect
-
-        binding.srecyclerview2.layoutManager = LinearLayoutManager(activity)
-        adapterSelect2 = SelectDataAdapter().apply {
-            submitList(selectList2)
-            setOnItemClickListener { _, _, position ->
-                if (selectList2[position].isMyselect) {
+//        binding.srecyclerview.layoutManager = LinearLayoutManager(activity)
+//        adapterSelect = SelectMeetingAdapter().apply {
+//            submitList(selectList)
+//            setOnItemClickListener { _, _, position ->
+//                for (item in selectList) {
+//                    item.isMyselect = false
+//                }
+//                selectList[position].isMyselect = true
+//                signUpId = "" + selectList[position].id
+//                type = selectList[position].type
+//                binding.nameTv.text = selectList[position].name
+//                adapterSelect?.notifyDataSetChanged()
+//                binding.selectLl.visibility = View.GONE
+//                LiveDataBus.get().with("selectLlGONE").postValue("1")
+//                setStartData()
+//                getList()
+//            }
+//        }
+//        binding.srecyclerview.adapter = adapterSelect
+//
+//        binding.srecyclerview2.layoutManager = LinearLayoutManager(activity)
+//        adapterSelect2 = SelectDataAdapter().apply {
+//            submitList(selectList2)
+//            setOnItemClickListener { _, _, position ->
+//                if (selectList2[position].isMyselect) {
+////                    for (item in selectList2) {
+////                        item.isMyselect = false
+////                    }
+////                    siginlocationId = ""
+////                    binding.name2Tv.text = "选择签到点"
+////                    setStartData()
+//                } else {
 //                    for (item in selectList2) {
 //                        item.isMyselect = false
 //                    }
-//                    siginlocationId = ""
-//                    binding.name2Tv.text = "选择签到点"
-//                    setStartData()
-                } else {
-                    for (item in selectList2) {
-                        item.isMyselect = false
-                    }
-                    selectList2[position].isMyselect = true
-                    autoStatus = "" + selectList2[position].autoStatus
-                    okMsg = selectList2[position].okMsg
-                    failedMsg = selectList2[position].failedMsg
-                    repeatMsg = selectList2[position].repeatMsg
-                    voiceStatus = selectList2[position].speechStatus
-                    timeLong = selectList2[position].timeLong
-                    siginlocationId = "" + selectList2[position].id
-                    binding.name2Tv.text = selectList2[position].name
-                }
-
-                adapterSelect2?.notifyDataSetChanged()
-                binding.select2Ll.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
-
-//                binding.time.text = ""+selectList2[position].timeLong+"分钟"
-//                binding.time.text = ""+selectList2[position].timeLong+"分钟"
-
-                if (selectList2[position].voiceStatus == 2) {
-                    binding.ztname.text = "当前对讲处于关闭状态"
-                    binding.ztname.setTextColor(Color.parseColor("#999999"))
-                    binding.thstate.setImageResource(R.mipmap.tonghua1)
-                    binding.ztiv.setImageResource(R.drawable.ov_ccc)
-                    binding.roundProgress.progress = 0
-                } else if (selectList2[position].voiceStatus == 1) {
-                    binding.ztname.text = "当前对讲处于开启状态"
-                    binding.ztname.setTextColor(Color.parseColor("#3974f6"))
-                    binding.thstate.setImageResource(R.mipmap.tonghua3)
-                    binding.ztiv.setImageResource(R.drawable.ov_3974f6)
-                    binding.roundProgress.progress = 5000
-                }
-
-                binding.roundProgress.maxProgress = 5000
-
-
-//                getSiginData()
-            }
-        }
-        binding.srecyclerview2.adapter = adapterSelect2
-
-        binding.recyclerview.layoutManager = LinearLayoutManager(activity)
-        adapter = FMeetingDeList3Adapter().apply {
-            submitList(list)
-            setOnItemClickListener { _, _, position ->
-                com.dylanc.longan.startActivity<MeetingUserDectivity>(
-                    "id" to list[position].id.toString(),
-                    "showType" to type
-                )
-            }
-        }
-
-        binding.recyclerview.adapter = adapter
+//                    selectList2[position].isMyselect = true
+//                    autoStatus = "" + selectList2[position].autoStatus
+//                    okMsg = selectList2[position].okMsg
+//                    failedMsg = selectList2[position].failedMsg
+//                    repeatMsg = selectList2[position].repeatMsg
+//                    voiceStatus = selectList2[position].speechStatus
+//                    timeLong = selectList2[position].timeLong
+//                    siginlocationId = "" + selectList2[position].id
+//                    binding.name2Tv.text = selectList2[position].name
+//                }
+//
+//                adapterSelect2?.notifyDataSetChanged()
+//                binding.select2Ll.visibility = View.GONE
+//                LiveDataBus.get().with("selectLlGONE").postValue("1")
+//
+////                binding.time.text = ""+selectList2[position].timeLong+"分钟"
+////                binding.time.text = ""+selectList2[position].timeLong+"分钟"
+//
+//                if (selectList2[position].voiceStatus == 2) {
+//                    binding.ztname.text = "当前对讲处于关闭状态"
+//                    binding.ztname.setTextColor(Color.parseColor("#999999"))
+//                    binding.thstate.setImageResource(R.mipmap.tonghua1)
+//                    binding.ztiv.setImageResource(R.drawable.ov_ccc)
+//                    binding.roundProgress.progress = 0
+//                } else if (selectList2[position].voiceStatus == 1) {
+//                    binding.ztname.text = "当前对讲处于开启状态"
+//                    binding.ztname.setTextColor(Color.parseColor("#3974f6"))
+//                    binding.thstate.setImageResource(R.mipmap.tonghua3)
+//                    binding.ztiv.setImageResource(R.drawable.ov_3974f6)
+//                    binding.roundProgress.progress = 5000
+//                }
+//
+//                binding.roundProgress.maxProgress = 5000
+//
+//
+////                getSiginData()
+//            }
+//        }
+//        binding.srecyclerview2.adapter = adapterSelect2
+//
+//        binding.recyclerview.layoutManager = LinearLayoutManager(activity)
+//        adapter = FMeetingDeList3Adapter().apply {
+//            submitList(list)
+//            setOnItemClickListener { _, _, position ->
+//                com.dylanc.longan.startActivity<MeetingUserDectivity>(
+//                    "id" to list[position].id.toString(),
+//                    "showType" to type
+//                )
+//            }
+//        }
+//
+//        binding.recyclerview.adapter = adapter
 //        getData()
 //        delayed()
         getData()
