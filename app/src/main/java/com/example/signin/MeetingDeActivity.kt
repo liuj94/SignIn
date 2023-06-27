@@ -137,7 +137,7 @@ var fragments: MutableList<Fragment> = ArrayList<Fragment>()
     private fun initAdapter() {
         val mAdapter = MainViewPagerAdapter(supportFragmentManager, fragments)
         binding.mViewPager.adapter = mAdapter
-        binding.mViewPager.offscreenPageLimit = 1
+        binding.mViewPager.offscreenPageLimit = 2
         initListener()
         binding.mViewPager.currentItem = 0
         if(fragments.size==4){

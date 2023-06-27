@@ -73,7 +73,11 @@ public class PrintUnit {
         this.context = context;
         searchDeviceSPP(context);
     }
-
+    public PrintUnit(Context context,ListPrinter listPrinter) {
+        this.context = context;
+        this.listPrinter = listPrinter;
+        searchDeviceSPP(context);
+    }
     public void PrintUnregisterReceiver() {
         if (receiver != null) {
             context.unregisterReceiver(receiver);
@@ -119,8 +123,10 @@ public class PrintUnit {
 
                         if (isPrinter && !TextUtils.isEmpty(device.getName()) && device.getName().startsWith("CT")) {
                             //系统搜索会有重复的对象,需要自行过滤
+                            Log.e("printUnitXXPermissions", "------------搜索--- $device.getName()=="+device.getName());
                             list.add(device.getName() + "\n\n" + device.getAddress());
                             if(listPrinter!=null){
+                                Log.e("printUnitXXPermissions", "------------istPrinter!=null--- $device.getName()=="+device.getName());
                                 listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
                             }
                         }
@@ -221,17 +227,18 @@ public class PrintUnit {
 
         for (BluetoothDevice bluetoothDevice : devices)
         {
-            Log.d("XXPermissions", "ACTION_FOUND device addr name="+bluetoothDevice.getName()+"==Address===" + bluetoothDevice.getAddress());
+            Log.d("printUnitXXPermissions", "ACTION_FOUND device addr name="+bluetoothDevice.getName()+"==Address===" + bluetoothDevice.getAddress());
             boolean isPrinter = BluetoothClass.Device.Major.IMAGING == bluetoothDevice.getBluetoothClass().getMajorDeviceClass();
-
+            Log.e("printUnitXXPermissions", "------------isPrinter--- "+isPrinter);
             if (isPrinter && !TextUtils.isEmpty(bluetoothDevice.getName()) && bluetoothDevice.getName().startsWith("CT")) {
                 //系统搜索会有重复的对象,需要自行过滤
-                if(list.size()<1){
+//                if(list.size()<1){
                     list.add(bluetoothDevice.getName() + "\n\n" + bluetoothDevice.getAddress());
                     if(listPrinter!=null){
+                        Log.e("printUnitXXPermissions", "------------kkklbluetoothDevice--- bluetoothDevice.getName()=="+bluetoothDevice.getName());
                         listPrinter.printer(bluetoothDevice.getName() + "\n\n" + bluetoothDevice.getAddress());
                     }
-                }
+//                }
 
             }
 

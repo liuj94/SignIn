@@ -1,5 +1,6 @@
 package com.example.signin
 
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -30,7 +31,8 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
     private var selectedDevice: String? = null
     var printUnit: PrintUnit? = null
     override fun initData() {
-        printUnit = PrintUnit(this)
+        var isFrist = true
+
         printkaiguan = kv.getBoolean("printkaiguan", true)
         printZd = kv.getBoolean("printZd", false)
         if (printZd) {
@@ -78,6 +80,27 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
                 device.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
             binding.selected.text = "当前连接设备:" + selectedDevice
         })
+        printUnit = PrintUnit(this,object : PrintUnit.ListPrinter {
+            override fun printer(p: String) {
+                Log.e("printUnitXXPermissions", "------------printer--- $p")
+                if(isFrist){
+                    isFrist = false
+                    selectedDevice =
+                        p.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().get(1)
+                    printUnit?.connectSPP(selectedDevice)
+                    binding.selected.text = "当前连接设备:" + selectedDevice
+                }
+                adapter?.add(p)
+                adapter?.notifyDataSetChanged()
+
+
+            }
+
+            override fun conPrint(p: Boolean) {
+                binding.selected.text = "当前连接设备:" + selectedDevice
+            }
+
+        })
         XXPermissions.with(this@PrintActivity)
             .permission(Permission.BLUETOOTH_SCAN)
             .permission(Permission.BLUETOOTH_CONNECT)
@@ -98,24 +121,7 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
 
                 }
             })
-        var isFrist = true
-        printUnit?.setListPrinter(object : PrintUnit.ListPrinter {
-            override fun printer(p: String) {
-                adapter?.add(p)
-               if(isFrist){
-                   isFrist = false
-                    selectedDevice =
-                       p.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().get(1)
-                   printUnit?.connectSPP(selectedDevice)
-               }
 
-            }
-
-            override fun conPrint(p: Boolean) {
-                binding.selected.text = "当前连接设备:" + selectedDevice
-            }
-
-        })
     }
 
     override fun onDestroy() {
