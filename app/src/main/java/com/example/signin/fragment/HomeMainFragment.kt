@@ -13,19 +13,18 @@ import com.dylanc.longan.startActivity
 import com.example.signin.MeetingDeActivity
 import com.example.signin.PageRoutes
 import com.example.signin.R
-
+import com.example.signin.adapter.HomeListAdapter
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.MeetingData
-
-import com.example.signin.databinding.FragHomeBinding
-import com.example.signin.adapter.HomeListAdapter
 import com.example.signin.bean.SiginUpListData
 import com.example.signin.bean.SiginUpListModel
 import com.example.signin.bean.User
+import com.example.signin.databinding.FragHomeBinding
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
+
 
 /**
  *   author : LiuJie
@@ -169,6 +168,8 @@ var userType = "00"
             "businessId" to businessId,
             "userType" to userType
         )
+
+
 
     }
     private fun getData2(meetingId:String) {
