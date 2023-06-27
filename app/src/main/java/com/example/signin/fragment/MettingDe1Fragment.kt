@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
-import com.example.signin.AppManager
 import com.example.signin.LiveDataBus
 import com.example.signin.PageRoutes
 import com.example.signin.base.BaseBindingFragment
@@ -67,8 +66,15 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
             getList()
         }
     }
+    var isShow: Boolean = false
+    override fun onDestroyView() {
+        super.onDestroyView()
+        isShow = false
+        Log.d("MettingDe2Fragment","MettingDe1Fragmenton==onDestroyView()")
+    }
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
+        isShow = true
         meetingid = arguments?.getString("meetingid", "")
         meetingName = arguments?.getString("meetingName", "")
 
@@ -91,7 +97,7 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
         LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
             .observeForever {
                 try {
-                    if (AppManager.getAppManager().activityInstanceIsLive(activity)) {
+                    if (isShow) {
                         if (!kv.getString("userData", "").isNullOrEmpty()) {
                             var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
                             userData?.let {
@@ -139,12 +145,14 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
                     var allList = SiginUpListModel()
                     allList.list = data
                     kv.putString("SiginUpListModelmeetingId"+meetingid, JSON.toJSONString(allList))
+                    if(!isShow){
+                        return
+                    }
                     try {
 
                         list.clear()
                         list.addAll(data)
                         adapter?.notifyDataSetChanged()
-                        Log.d("getList","接口返回结束===up/app/list")
                     } catch (e: java.lang.Exception) {
                     }
 
@@ -158,6 +166,9 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
                 override fun onFinish() {
                     super.onFinish()
+                    if(!isShow){
+                        return
+                    }
                     try {
                         mViewModel.isShowLoading.value = false
                         binding.refresh.finishRefresh()
@@ -186,6 +197,9 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
                 override fun onMySuccess(data: MeetingStatisticsData) {
                     super.onMySuccess(data)
+                    if(!isShow){
+                        return
+                    }
                     try {
 
                         binding.num1.text = toNum("" + data.browseCount)
@@ -217,6 +231,9 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
                 override fun onFinish() {
                     super.onFinish()
+                    if(!isShow){
+                        return
+                    }
                     try {
                     mViewModel.isShowLoading.value = false
                     } catch (e: java.lang.Exception) {

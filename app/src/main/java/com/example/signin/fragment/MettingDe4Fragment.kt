@@ -65,9 +65,15 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
     var timeLong: Int = 3
     var type: Int = 0
     var userData: User? = null
-
+    var isShow: Boolean = false
+    override fun onDestroyView() {
+        super.onDestroyView()
+        isShow = false
+        Log.d("MettingDe2Fragment","MettingDe4Fragmenton==onDestroyView()")
+    }
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
+        isShow = true
         userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
         setStartData()
 
@@ -162,8 +168,8 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
         binding.recyclerview.adapter = adapter
 //        getData()
-        delayed()
-
+//        delayed()
+        getData()
 //        binding.nameLl.setOnClickListener {
 //            binding.select2Ll.visibility = View.GONE
 //            if (binding.selectLl.visibility == View.VISIBLE) {
@@ -325,8 +331,8 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
             .observeForever {
                 try {
-                    if (AppManager.getAppManager().activityInstanceIsLive(activity)) {
-                        getDatasign_up_app_list()
+                    if (isShow) {
+                            getDatasign_up_app_list()
                     }
                 } catch (e: java.lang.Exception) {
                 }
@@ -592,18 +598,18 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
     }
 
-    private val delayedLoad = SubstepDelayedLoad()
-    private fun delayed() {
-        delayedLoad
-            .delayed(1000)
-            .run {
-                //延时加载布局
-                getData()
-                delayedLoad.clearAllRunable()
-
-            }
-            .start()
-    }
+//    private val delayedLoad = SubstepDelayedLoad()
+//    private fun delayed() {
+//        delayedLoad
+//            .delayed(1000)
+//            .run {
+//                //延时加载布局
+//                getData()
+//                delayedLoad.clearAllRunable()
+//
+//            }
+//            .start()
+//    }
 
     private fun getData() {
         if (!kv.getString("SiginUpListModelmeetingId"+meetingid, "").isNullOrEmpty()) {
@@ -641,6 +647,9 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                     var allList = SiginUpListModel()
                     allList.list = data
                     kv.putString("SiginUpListModelmeetingId"+meetingid, JSON.toJSONString(allList))
+                    if(!isShow){
+                        return
+                    }
                     try {
                         selectList.clear()
                         selectList.addAll(data)
@@ -685,6 +694,9 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
                 override fun onMySuccess(data: List<SiginData>) {
                     super.onMySuccess(data)
+                    if(!isShow){
+                        return
+                    }
                     try {
                     selectList2.clear()
                     selectList2.addAll(data)
@@ -756,6 +768,9 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
 
                 override fun onMySuccess(data: Balance) {
                     super.onMySuccess(data)
+                    if(!isShow){
+                        return
+                    }
                     try {
                         talkTime = data.talkTime
 //                    binding.roundProgress.progress = (data.talkTime/1000)/60
@@ -787,11 +802,6 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
             })
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-//        OkGo.getInstance().cancelTag(PageRoutes.Api_balance)
-//        OkGo.getInstance().cancelTag(PageRoutes.Api_balance + businessId)
-//        OkGo.getInstance().cancelTag(PageRoutes.Api_meetingSignUpLocation + meetingid + 2)
-    }
+
 
 }

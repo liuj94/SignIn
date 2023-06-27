@@ -121,16 +121,14 @@ var userType = "00"
         fragments.add(MettingDe2Fragment.newInstance(meetingId))
         fragments.add(MettingDe3Fragment.newInstance(meetingId))
         fragments.add(MettingDe4Fragment.newInstance(meetingId,businessId))
-        initAdapter()
     }else{
         binding.mRb1.visibility = View.GONE
         fragments.add(MettingDe2Fragment.newInstance(meetingId))
         fragments.add(MettingDe3Fragment.newInstance(meetingId))
         fragments.add(MettingDe4Fragment.newInstance(meetingId,businessId))
-        initAdapter()
     }
 
-
+    initAdapter()
 
 
     }
@@ -139,7 +137,7 @@ var fragments: MutableList<Fragment> = ArrayList<Fragment>()
     private fun initAdapter() {
         val mAdapter = MainViewPagerAdapter(supportFragmentManager, fragments)
         binding.mViewPager.adapter = mAdapter
-        binding.mViewPager.offscreenPageLimit = 4
+        binding.mViewPager.offscreenPageLimit = 1
         initListener()
         binding.mViewPager.currentItem = 0
         if(fragments.size==4){

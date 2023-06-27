@@ -42,7 +42,7 @@ abstract class BaseBindingFragment<VB : ViewBinding,T : BaseViewModel> : Fragmen
     fun initProgressDialog() {
 
 
-        mViewModel.isShowLoadingLiveData().observe(this) {
+        mViewModel.isShowLoadingLiveData().observe(requireActivity()) {
             if (it) {
                 showLoading()
             } else {

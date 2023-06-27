@@ -33,6 +33,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -216,7 +217,25 @@ public class PrintUnit {
             Log.e("XXPermissions", "--------------- 蓝牙打开失败");
 //            myBtResultCallback.showToastMsg("蓝牙打开失败");
         }
+        Set<BluetoothDevice> devices = defaultAdapter.getBondedDevices();
 
+        for (BluetoothDevice bluetoothDevice : devices)
+        {
+            Log.d("XXPermissions", "ACTION_FOUND device addr name="+bluetoothDevice.getName()+"==Address===" + bluetoothDevice.getAddress());
+            boolean isPrinter = BluetoothClass.Device.Major.IMAGING == bluetoothDevice.getBluetoothClass().getMajorDeviceClass();
+
+            if (isPrinter && !TextUtils.isEmpty(bluetoothDevice.getName()) && bluetoothDevice.getName().startsWith("CT")) {
+                //系统搜索会有重复的对象,需要自行过滤
+                if(list.size()<1){
+                    list.add(bluetoothDevice.getName() + "\n\n" + bluetoothDevice.getAddress());
+                    if(listPrinter!=null){
+                        listPrinter.printer(bluetoothDevice.getName() + "\n\n" + bluetoothDevice.getAddress());
+                    }
+                }
+
+            }
+
+        }
         if (defaultAdapter.isDiscovering()) {
             return;
         }

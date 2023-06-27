@@ -3,16 +3,15 @@ package com.example.signin.fragment
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
-import com.example.signin.AppManager
 import com.example.signin.LiveDataBus
 import com.example.signin.MeetingUserDectivity
 import com.example.signin.PageRoutes
-import com.example.signin.SubstepDelayedLoad
 import com.example.signin.adapter.FMeetingDeList3Adapter
 import com.example.signin.adapter.SelectMeetingAdapter
 import com.example.signin.adapter.SelectMeetingAdapter2
@@ -57,10 +56,15 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
     var signUpLocationId: String? = ""
     var status: String? = ""
     var nameMobile: String? = ""
-
+    var isShow: Boolean = false
+    override fun onDestroyView() {
+        super.onDestroyView()
+        isShow = false
+        Log.d("MettingDe2Fragment","MettingDe3Fragmenton==DestroyView()")
+    }
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
-
+        isShow = true
         meetingid = arguments?.getString("meetingid", "")
         binding.srecyclerview3.layoutManager = LinearLayoutManager(activity)
         adapterSelect3 = SelectMeetingAdapter2().apply {
@@ -144,8 +148,8 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         }
         binding.recyclerview.adapter = adapter
 
-        delayed()
-
+//        delayed()
+        getData()
         binding.nameLl.setOnClickListener {
             binding.select2Ll.visibility = View.GONE
             binding.selectLl3.visibility = View.GONE
@@ -238,7 +242,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
             .observeForever {
                 try {
-                    if (AppManager.getAppManager().activityInstanceIsLive(activity)) {
+                    if (isShow) {
                         getDatasign_up_app_list()
                     }
                 } catch (e: java.lang.Exception) {
@@ -248,18 +252,18 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
     }
 
-    private val delayedLoad = SubstepDelayedLoad()
-    private fun delayed() {
-        delayedLoad
-            .delayed(1000)
-            .run {
-                //延时加载布局
-                getData()
-                delayedLoad.clearAllRunable()
-
-            }
-            .start()
-    }
+//    private val delayedLoad = SubstepDelayedLoad()
+//    private fun delayed() {
+//        delayedLoad
+//            .delayed(1000)
+//            .run {
+//                //延时加载布局
+//                getData()
+//                delayedLoad.clearAllRunable()
+//
+//            }
+//            .start()
+//    }
 
     var pageNum = 1
     private fun getList() {
@@ -288,6 +292,9 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             .execute(object : JsonCallback<MeetingUserModel>(MeetingUserModel::class.java) {
 
                 override fun onSuccess(response: Response<MeetingUserModel>) {
+                    if(!isShow){
+                        return
+                    }
                     try {
                         response.body()?.let {
                             response.body().data?.let {
@@ -315,6 +322,9 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 }
 
                 override fun onFinish() {
+                    if(!isShow){
+                        return
+                    }
                     try {
                         binding.refresh.finishLoadMore()
                         binding.refresh.finishRefresh()
@@ -462,6 +472,9 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
                 override fun onMySuccess(data: List<SiginData>) {
                     super.onMySuccess(data)
+                    if(!isShow){
+                        return
+                    }
                     try {
                         selectList3.clear()
                         var a = SiginData()
@@ -488,6 +501,9 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
                 override fun onFinish() {
                     super.onFinish()
+                    if(!isShow){
+                        return
+                    }
                     try {
                         binding.refresh.finishRefresh()
                     }catch (e:Exception){}

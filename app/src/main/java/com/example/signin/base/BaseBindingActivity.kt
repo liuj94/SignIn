@@ -10,8 +10,6 @@ import com.example.signin.R
 abstract class BaseBindingActivity<VB : ViewBinding,VM : BaseViewModel> : BaseActivity<VB, VM>() {
     override fun initRootTitleBar() {
         super.initRootTitleBar()
-
-
         findViewById<View>(R.id.goback)?.let { it.setOnClickListener { onBackPressed() } }
     }
     override fun startPendingTransition() {

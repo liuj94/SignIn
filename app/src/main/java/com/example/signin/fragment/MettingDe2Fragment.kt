@@ -3,6 +3,7 @@ package com.example.signin.fragment
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,10 +45,16 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
     private var selectList: MutableList<SiginUpListData> = ArrayList()
     var meetingid: String? = ""
     var signUpId: String? = ""
-
+    var isShow: Boolean = false
+    override fun onDestroyView() {
+        super.onDestroyView()
+        isShow = false
+        Log.d("MettingDe2Fragment","MettingDe2Fragmenton==onDestroyView()")
+    }
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
-
+        isShow = true
+        Log.d("MettingDe2Fragment","initData()")
         meetingid = arguments?.getString("meetingid", "")
         binding.srecyclerview.layoutManager = LinearLayoutManager(activity)
         adapterSelect = SelectMeetingAdapter().apply {
@@ -117,7 +124,7 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
         LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
             .observeForever {
                 try {
-                    if (AppManager.getAppManager().activityInstanceIsLive(activity)) {
+                    if (isShow) {
                         signUpId = ""
                         getDatasign_up_app_list()
                         getList()
@@ -133,23 +140,24 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
 //            getData()
 //            getList()
 //        }
-        delayed()
-
+//        delayed()
+        getData()
+        getList()
     }
 
-    private val delayedLoad = SubstepDelayedLoad()
-    private fun delayed() {
-        delayedLoad
-            .delayed(1000)
-            .run {
-                //延时加载布局
-                getData()
-                getList()
-                delayedLoad.clearAllRunable()
-
-            }
-            .start()
-    }
+//    private val delayedLoad = SubstepDelayedLoad()
+//    private fun delayed() {
+//        delayedLoad
+//            .delayed(1000)
+//            .run {
+//                //延时加载布局
+//                getData()
+//                getList()
+//                delayedLoad.clearAllRunable()
+//
+//            }
+//            .start()
+//    }
 
 
 
