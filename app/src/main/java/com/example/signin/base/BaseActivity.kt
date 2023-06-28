@@ -47,6 +47,12 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         AppManager.getAppManager().addActivity(this)
         Log.d("ActivityBinding", " onCreate---end")
+//            initProgressDialog()
+//            initIntentStringExtra()
+//            initTitle()
+//            initData()
+//            initListener()
+//            initRootTitleBar()
     }
 
     var isFrist = true;

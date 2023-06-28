@@ -29,7 +29,7 @@ abstract class BaseBindingFragment<VB : ViewBinding,T : BaseViewModel> : Fragmen
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        Log.d("HomeListAdapter","setUserVisibleHint===onCreateView=")
+        Log.d("ActivityBinding","setUserVisibleHint===onCreateView=")
         return createViewWithBinding(inflater, container)
     }
     private var mProgressDialog: ProgressDialog? = null
@@ -59,7 +59,7 @@ abstract class BaseBindingFragment<VB : ViewBinding,T : BaseViewModel> : Fragmen
 
     override fun onStart() {
         super.onStart()
-        Log.d("HomeListAdapter","setUserVisibleHint===onStart=")
+        Log.d("ActivityBinding","setUserVisibleHint===onStart=")
         mProgressDialog = ProgressDialog(requireActivity())
         mViewModel.mContext = requireActivity()
         initProgressDialog()

@@ -141,10 +141,13 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
         adapter = FMeetingDeList3Adapter().apply {
             submitList(list)
             setOnItemClickListener { _, _, position ->
-                com.dylanc.longan.startActivity<MeetingUserDectivity>(
-                    "id" to list[position].id.toString(),
-                    "showType" to 0
-                )
+                if(list.size>position){
+                    com.dylanc.longan.startActivity<MeetingUserDectivity>(
+                        "id" to ""+list[position].id,
+                        "showType" to 0
+                    )
+                }
+
             }
         }
         binding.recyclerview.adapter = adapter

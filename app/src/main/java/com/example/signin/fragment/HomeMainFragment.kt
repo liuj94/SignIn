@@ -1,6 +1,7 @@
 package com.example.signin.fragment
 
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
@@ -10,9 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.startActivity
-import com.example.signin.MeetingDeActivity
-import com.example.signin.PageRoutes
-import com.example.signin.R
+import com.example.signin.*
 import com.example.signin.adapter.HomeListAdapter
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
@@ -24,6 +23,7 @@ import com.example.signin.databinding.FragHomeBinding
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
+import java.time.Instant
 
 
 /**
@@ -134,7 +134,7 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
             submitList(list)
             setEmptyViewLayout(requireActivity(), R.layout.layout_emptyview)
             setOnItemClickListener { _, _, position ->
-                Log.d("HomeListAdapter", "gotogotogotogoto")
+                Log.d("ActivityBinding", "gotogotogotogoto")
                 goto(
                     "" + list[position].id,
                     "" + list[position].name,
@@ -168,7 +168,13 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
         kv.putString("meetingName",meetingName)
         kv.putString("businessId",businessId)
         kv.putString("userType",userType)
-        startActivity<MeetingDeActivity>(
+//        var intent = Intent(activity, MeetingDeActivity::class.java)
+//        intent.putExtra("meetingid",meetingId)
+//        intent.putExtra("meetingName",meetingName)
+//        intent.putExtra("businessId",businessId)
+//        intent.putExtra("userType",userType)
+//        startActivity(intent)
+        startActivity<MeetingDe2Activity>(
             "meetingId" to meetingId,
             "meetingName" to meetingName,
             "businessId" to businessId,
@@ -255,12 +261,12 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
                                 getData2("" + item.id)
                             }
 //                        }
-                            Log.d("ActivityBinding", "gotogotogotogoto")
-                            goto(
-                                "" + list[0].id,
-                                "" + list[0].name,
-                                "" + list[0].businessId
-                            )
+//                            Log.d("hhhhhhhhhhhhhhhhhhh", "gotogotogotogoto")
+//                            goto(
+//                                "" + list[0].id,
+//                                "" + list[0].name,
+//                                "" + list[0].businessId
+//                            )
                         }
                     } catch (e: Exception) {
                     }

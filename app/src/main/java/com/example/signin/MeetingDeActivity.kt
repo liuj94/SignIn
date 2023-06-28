@@ -24,6 +24,7 @@ class MeetingDeActivity : BaseBindingActivity<ActMeetdaBinding, BaseViewModel>()
     var businessId = ""
     var userType = "00"
     override fun initData() {
+        Log.d("ActivityBinding", " MeetingDeActivity")
 //        binding.titlell.addStatusBarHeightToMarginTop()
         intent.getStringExtra("meetingId")?.let {
             meetingId = it

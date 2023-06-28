@@ -60,7 +60,7 @@ public class PrintUnit {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             String toastStr = msg.what == CONN_SUCC ? "连接成功" : "连接失败";
-            Log.d("printUnitXXPermissions", "搜索 conPrint=" + toastStr);
+            Log.d("aaaaprintUnitXXPermissions", " conPrint=" + toastStr);
             if (msg.what == CONN_SUCC) {
                 isConPrint = true;
             } else {
@@ -287,6 +287,10 @@ public class PrintUnit {
 //        byte[] bytes1 = printReceipt(widthPX / printerDot, bitmap.getHeight() / printerDot, bitmap);
         byte[] bytes1 = printReceipt(bitmap);
         if (bytes1 != null && sppSocket != null) {
+            Log.d(
+                    "aaaaprintUnitXXPermissions",
+                    "print(Bitmap bitmap)="
+            );
             sppSocket.getOutputStream().write(bytes1);
         }
     }
@@ -414,8 +418,8 @@ public class PrintUnit {
     };
 
     public void connectSPP(String macAddr) {
-        Log.d("printUnitXXPermissions", "connectSPP=" + macAddr);
-        Log.d("printUnitXXPermissions", "BluetoothAdapter.checkBluetoothAddress(macAddr)=" + BluetoothAdapter.checkBluetoothAddress(macAddr));
+        Log.d("aaaaprintUnitXXPermissions", "connectSPP=" + macAddr);
+        Log.d("aaaaprintUnitXXPermissions", "BluetoothAdapter.checkBluetoothAddress(macAddr)=" + BluetoothAdapter.checkBluetoothAddress(macAddr));
         if (TextUtils.isEmpty(macAddr) || !BluetoothAdapter.checkBluetoothAddress(macAddr)) {
             return;
         }

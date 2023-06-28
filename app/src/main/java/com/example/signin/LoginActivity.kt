@@ -1,6 +1,7 @@
 package com.example.signin
 
 import android.graphics.Color
+import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
@@ -37,6 +38,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
         binding.login.setOnClickListener {
             longin()
         }
+
 //        longin()
     }
     fun longin(){

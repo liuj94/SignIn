@@ -162,20 +162,33 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                 override fun onGranted(permissions: MutableList<String>, all: Boolean) {
                     if (all) {
 
-                        printUnit = PrintUnit(this@MainHomeActivity, object : PrintUnit.ListPrinter {
+                        printUnit =
+                            PrintUnit(this@MainHomeActivity, object : PrintUnit.ListPrinter {
                                 override fun printer(p: SiginData) {
                                     var selectedDevice = p.mac
 //                                    p.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }
 //                                        .toTypedArray().get(1)
 
-                                    printUnit?.connectSPP(p.mac)
+                                    printUnit?.let {
+                                        Log.d(
+                                            "aaaaprintUnitXXPermissions",
+                                            "搜索 selectedDevice=" + selectedDevice
+                                        )
+                                        Log.d(
+                                            "aaaaprintUnitXXPermissions",
+                                            "搜索 name=" + p.name
+                                        )
+                                        it.connectSPP(selectedDevice)
+                                    }
+
                                 }
 
                                 override fun conPrint(p: Boolean) {
                                     Log.d(
-                                        "printUnitXXPermissions",
+                                        "aaaaprintUnitXXPermissions",
                                         "搜索 conPrint=" + p
                                     )
+                                    isConPrint = p
                                 }
 
                             })
@@ -191,11 +204,23 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
                 }
             })
+        binding.dy.setOnClickListener {
+            var a = SocketData()
+            var b = ArrayList<String>()
+            b.add("/profile/upload/2023/05/22/ef4765ff-7f84-45cf-a0eb-5451f129fed3.png")
+//            b.add("/profile/upload/2023/05/22/7e203438-dc37-42ba-afde-927657009c85.png")
+            a.urls = b
+            printImg(a) }
     }
-
+var isConPrint = false
     private fun printImg(data: SocketData) {
+        Log.d(
+            "aaaaprintUnitXXPermissions",
+            "开始打印="
+        )
         val options = RequestOptions()
-            .override(data.cardW.intValueExact(), data.cardH.intValueExact())
+//            .override(data.cardW.intValueExact(), data.cardH.intValueExact())
+            .override(80, 120)
         for (url in data.urls) {
             Glide.with(this@MainHomeActivity).asBitmap()
                 .load(BaseUrl + url)
@@ -220,7 +245,15 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                     ): Boolean {
                         resource?.let { b ->
                             printUnit?.let {
-                                if (it.isConPrint) {
+                                Log.d(
+                                    "aaaaprintUnitXXPermissions",
+                                    "图片下载完成开始打印="
+                                )
+                                if (isConPrint) {
+                                    Log.d(
+                                        "aaaaprintUnitXXPermissions",
+                                        "isConPrint="+it.isConPrint
+                                    )
                                     try {
                                         it.print(b)
                                     } catch (e: Exception) {
@@ -229,6 +262,11 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                                 } else {
                                     toast("打印机未连接")
                                 }
+//                                try {
+//                                    it.print(b)
+//                                } catch (e: Exception) {
+//                                    toast("打印异常")
+//                                }
                             }
 
                         }
@@ -238,6 +276,8 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                 ).submit()
 
         }
+
+
     }
 
 

@@ -57,7 +57,7 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
     }
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
-        Log.d("HomeListAdapter", "gotogotogotogoto结束")
+        Log.d("hhhhhhhhhhhhhhhhhhh", "gotogotogotogoto结束")
         isShow = true
 //        meetingid = arguments?.getString("meetingid", "")
         meetingid =kv.getString("meetingid", "")

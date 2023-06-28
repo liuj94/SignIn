@@ -66,11 +66,12 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
+        android:hardwareAccelerated="true"
         android:theme="@style/AppTheme"
         tools:replace="android:theme"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".TestSpeenActivity"
             android:exported="false" />
 
         <service
@@ -146,7 +147,7 @@
             android:name=".AboutActivity"
             android:exported="false" />
         <activity
-            android:name=".MeetingDeActivity"
+            android:name=".MeetingDe2Activity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
