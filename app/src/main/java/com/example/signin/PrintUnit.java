@@ -60,11 +60,16 @@ public class PrintUnit {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             String toastStr = msg.what == CONN_SUCC ? "连接成功" : "连接失败";
-            if(msg.what == CONN_SUCC){
+            Log.d("printUnitXXPermissions", "搜索 conPrint=" + toastStr);
+            if (msg.what == CONN_SUCC) {
                 isConPrint = true;
-            }else {
+            } else {
                 isConPrint = false;
             }
+            if (listPrinter != null) {
+                listPrinter.conPrint(isConPrint);
+            }
+            ;
 //            Toast.makeText(context, toastStr, Toast.LENGTH_SHORT).show();
         }
     };
@@ -75,11 +80,13 @@ public class PrintUnit {
         this.context = context;
         searchDeviceSPP(context);
     }
-    public PrintUnit(Context context,ListPrinter listPrinter) {
+
+    public PrintUnit(Context context, ListPrinter listPrinter) {
         this.context = context;
         this.listPrinter = listPrinter;
         searchDeviceSPP(context);
     }
+
     public void PrintUnregisterReceiver() {
         if (receiver != null) {
             context.unregisterReceiver(receiver);
@@ -88,9 +95,9 @@ public class PrintUnit {
     }
 
     public void PrintRegisterReceiver() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+//        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+//            return;
+//        }
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);//蓝牙开关
         intentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);//蓝牙连接状态
@@ -113,27 +120,27 @@ public class PrintUnit {
 
                         break;
                     case BluetoothDevice.ACTION_FOUND:
-                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                            return;
-                        }
+//                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+//                            return;
+//                        }
                         Parcelable parcelable = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);//得到该设备
                         if (!(parcelable instanceof BluetoothDevice))
                             return;
                         BluetoothDevice device = (BluetoothDevice) parcelable;
-                        Log.d("123456", "ACTION_FOUND device addr =" + device.getAddress());
-                        boolean isPrinter = BluetoothClass.Device.Major.IMAGING == device.getBluetoothClass().getMajorDeviceClass();
 
+                        boolean isPrinter = BluetoothClass.Device.Major.IMAGING == device.getBluetoothClass().getMajorDeviceClass();
+                        Log.e("aaprintUnitXXPermissions", "------------搜索--- $device.getName()==" + device.getName());
                         if (isPrinter && !TextUtils.isEmpty(device.getName()) && device.getName().startsWith("CT")) {
                             //系统搜索会有重复的对象,需要自行过滤
-                            Log.e("printUnitXXPermissions", "------------搜索--- $device.getName()=="+device.getName());
+                            Log.e("aaprintUnitXXPermissions", "------------搜索--- $device.getName()==" + device.getName());
                             SiginData a = new SiginData();
                             a.setName(device.getName());
                             a.setMac(device.getAddress());
                             a.setKuan(true);
                             list.add(a);
 //                            list.add(device.getName() + "\n\n" + device.getAddress());
-                            if(listPrinter!=null){
-                                Log.e("printUnitXXPermissions", "------------istPrinter!=null--- $device.getName()=="+device.getName());
+                            if (listPrinter != null) {
+                                Log.e("printUnitXXPermissions", "------------istPrinter!=null--- $device.getName()==" + device.getName());
 //                                listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
                                 listPrinter.printer(a);
                             }
@@ -144,6 +151,7 @@ public class PrintUnit {
         };
         context.registerReceiver(receiver, intentFilter);
     }
+
     public void OnePrintRegisterReceiver() {
 //        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
 //            Log.d("XXPermissions", "checkSelfPermission");
@@ -177,19 +185,19 @@ public class PrintUnit {
                         if (!(parcelable instanceof BluetoothDevice))
                             return;
                         BluetoothDevice device = (BluetoothDevice) parcelable;
-                        Log.d("XXPermissions", "ACTION_FOUND device addr name="+device.getName()+"==Address===" + device.getAddress());
                         boolean isPrinter = BluetoothClass.Device.Major.IMAGING == device.getBluetoothClass().getMajorDeviceClass();
 
                         if (isPrinter && !TextUtils.isEmpty(device.getName()) && device.getName().startsWith("CT")) {
+                            Log.d("printUnitXXPermissions", "ACTION_FOUND device addr name=" + device.getName() + "==Address===" + device.getAddress());
                             //系统搜索会有重复的对象,需要自行过滤
-                            if(list.size()<1){
+                            if (list.size() < 1) {
                                 SiginData a = new SiginData();
                                 a.setName(device.getName());
                                 a.setMac(device.getAddress());
                                 a.setKuan(true);
 //                                listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
                                 list.add(a);
-                                if(listPrinter!=null){
+                                if (listPrinter != null) {
                                     listPrinter.printer(a);
 //                                    listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
                                 }
@@ -202,6 +210,7 @@ public class PrintUnit {
         };
         context.registerReceiver(receiver, intentFilter);
     }
+
     ListPrinter listPrinter;
 
     public ListPrinter getListPrinter() {
@@ -212,10 +221,11 @@ public class PrintUnit {
         this.listPrinter = listPrinter;
     }
 
-    public interface ListPrinter{
+    public interface ListPrinter {
         void printer(SiginData p);
+
         void conPrint(boolean p);
-}
+    }
 
     public void searchDeviceSPP(Context context) {
         BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -223,7 +233,7 @@ public class PrintUnit {
             Log.e("XXPermissions", "--------------- 不支持蓝牙");
             return;
         }
-        if ( !defaultAdapter.isEnabled()) {
+        if (!defaultAdapter.isEnabled()) {
             boolean res = defaultAdapter.enable();
             if (res == true) {
                 Log.e("XXPermissions", "--------------- 蓝牙打开成功");
@@ -239,11 +249,10 @@ public class PrintUnit {
         }
         Set<BluetoothDevice> devices = defaultAdapter.getBondedDevices();
 
-        for (BluetoothDevice bluetoothDevice : devices)
-        {
-            Log.d("printUnitXXPermissions", "ACTION_FOUND device addr name="+bluetoothDevice.getName()+"==Address===" + bluetoothDevice.getAddress());
+        for (BluetoothDevice bluetoothDevice : devices) {
+//            Log.d("printUnitXXPermissions", "ACTION_FOUND device addr name=" + bluetoothDevice.getName() + "==Address===" + bluetoothDevice.getAddress());
             boolean isPrinter = BluetoothClass.Device.Major.IMAGING == bluetoothDevice.getBluetoothClass().getMajorDeviceClass();
-            Log.e("printUnitXXPermissions", "------------isPrinter--- "+isPrinter);
+//            Log.e("printUnitXXPermissions", "------------isPrinter--- " + isPrinter);
             if (isPrinter && !TextUtils.isEmpty(bluetoothDevice.getName()) && bluetoothDevice.getName().startsWith("CT")) {
                 //系统搜索会有重复的对象,需要自行过滤
 //                if(list.size()<1){
@@ -251,14 +260,14 @@ public class PrintUnit {
                 a.setName(bluetoothDevice.getName());
                 a.setMac(bluetoothDevice.getAddress());
                 a.setKuan(true);
-                    list.add(a);
-                    if(listPrinter!=null){
-                        Log.e("printUnitXXPermissions", "------------kkklbluetoothDevice--- bluetoothDevice.getName()=="+bluetoothDevice.getName());
+                list.add(a);
+                if (listPrinter != null) {
+                    Log.e("printUnitXXPermissions", "------------kkklbluetoothDevice--- bluetoothDevice.getName()==" + bluetoothDevice.getName());
 
 //                                listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
-                        listPrinter.printer(a);
+                    listPrinter.printer(a);
 //                        listPrinter.printer(bluetoothDevice.getName() + "\n\n" + bluetoothDevice.getAddress());
-                    }
+                }
 //                }
 
             }
@@ -271,19 +280,19 @@ public class PrintUnit {
 
     }
 
-    public void print( Bitmap bitmap) throws Exception {
+    public void print(Bitmap bitmap) throws Exception {
 //        int widthPX = Math.max(0, bitmap.getWidth() % 8 != 0 ?
 //                Math.max(0, bitmap.getWidth() + 8 - (bitmap.getWidth() % 8)) : bitmap.getWidth());//只希望多,不希望裁剪
 
 //        byte[] bytes1 = printReceipt(widthPX / printerDot, bitmap.getHeight() / printerDot, bitmap);
-        byte[] bytes1 = printReceipt( bitmap);
-        if (bytes1 != null&&sppSocket!=null) {
+        byte[] bytes1 = printReceipt(bitmap);
+        if (bytes1 != null && sppSocket != null) {
             sppSocket.getOutputStream().write(bytes1);
         }
     }
 
     private @Nullable byte[] printReceipt(
-                                          @NonNull Bitmap bitmap) throws Exception {
+            @NonNull Bitmap bitmap) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         if (bitmap.getWidth() % 8 != 0) {
@@ -405,10 +414,8 @@ public class PrintUnit {
     };
 
     public void connectSPP(String macAddr) {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
+        Log.d("printUnitXXPermissions", "connectSPP=" + macAddr);
+        Log.d("printUnitXXPermissions", "BluetoothAdapter.checkBluetoothAddress(macAddr)=" + BluetoothAdapter.checkBluetoothAddress(macAddr));
         if (TextUtils.isEmpty(macAddr) || !BluetoothAdapter.checkBluetoothAddress(macAddr)) {
             return;
         }

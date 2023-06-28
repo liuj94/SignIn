@@ -35,50 +35,54 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
         //15310333405
         binding.userName.setText(kv.getString("loginusername","15310333405"))
         binding.login.setOnClickListener {
-            mViewModel.isShowLoading.value = true
-            val params = HashMap<String, String>()
-            params["username"] = binding.userName.text.toString().trim()
-            params["password"] = binding.password.text.toString().trim()
-            //source=app
-            params["source"] = "app"
+            longin()
+        }
+//        longin()
+    }
+    fun longin(){
+        mViewModel.isShowLoading.value = true
+        val params = HashMap<String, String>()
+        params["username"] = binding.userName.text.toString().trim()
+        params["password"] = binding.password.text.toString().trim()
+        //source=app
+        params["source"] = "app"
 
-            OkGo.post<Token>(PageRoutes.Api_login)
-                .tag(PageRoutes.Api_login)
-                .upJson(JSON.toJSONString(params))
-                .execute(object : RequestCallback<Token>() {
-                    override fun onSuccessNullData() {
-                        super.onSuccessNullData()
+        OkGo.post<Token>(PageRoutes.Api_login)
+            .tag(PageRoutes.Api_login)
+            .upJson(JSON.toJSONString(params))
+            .execute(object : RequestCallback<Token>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
 
-                    }
+                }
 
-                    override fun onMySuccess(data: Token) {
-                        super.onMySuccess(data)
-                        kv.putString("token",data.token)
-                        kv.putString("loginusername", binding.userName.text.toString().trim())
-                        OkGo.get<User>(PageRoutes.Api_getUserInfo)
-                            .tag(PageRoutes.Api_getUserInfo)
-                            .headers("Authorization",data.token)
-                            .execute(object : RequestCallback<User>() {
-                                override fun onSuccessNullData() {
-                                    super.onSuccessNullData()
+                override fun onMySuccess(data: Token) {
+                    super.onMySuccess(data)
+                    kv.putString("token", data.token)
+                    kv.putString("loginusername", binding.userName.text.toString().trim())
+                    OkGo.get<User>(PageRoutes.Api_getUserInfo)
+                        .tag(PageRoutes.Api_getUserInfo)
+                        .headers("Authorization", data.token)
+                        .execute(object : RequestCallback<User>() {
+                            override fun onSuccessNullData() {
+                                super.onSuccessNullData()
 
-                                }
+                            }
 
-                                override fun onMySuccess(data: User) {
-                                    super.onMySuccess(data)
-                                    if (data.userType.equals("01")||data.userType.equals("04")){
+                            override fun onMySuccess(data: User) {
+                                super.onMySuccess(data)
+                                if (data.userType.equals("01") || data.userType.equals("04")) {
+                                    data.name = binding.userName.text.toString().trim()
+                                    data.password = binding.password.text.toString().trim()
+                                    kv.putString("userData", JSON.toJSONString(data))
+
+                                    startActivity<MainHomeActivity>()
+                                    finish()
+                                } else {
+                                    if (data.userName.isNullOrEmpty()) {
                                         data.name = binding.userName.text.toString().trim()
                                         data.password = binding.password.text.toString().trim()
-                                        kv.putString("userData",JSON.toJSONString(data))
-
-                                        startActivity<MainHomeActivity>()
-                                        finish()
-                                    }
-                                    else{
-                                    if(data.userName.isNullOrEmpty()){
-                                        data.name = binding.userName.text.toString().trim()
-                                        data.password = binding.password.text.toString().trim()
-                                        kv.putString("userData",JSON.toJSONString(data))
+                                        kv.putString("userData", JSON.toJSONString(data))
 
 
                                         startActivity<MainHomeActivity>()
@@ -98,47 +102,43 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
 //                                            cancelOnTouchOutside(false)	//点击外部不消失
 //                                        }
 
-                                    }
-                                    else{
+                                    } else {
 //                                        com.dylanc.longan.startActivity<MainHomeActivity>("id" to liveDataList[position].id)
 
                                         data.name = binding.userName.text.toString().trim()
                                         data.password = binding.password.text.toString().trim()
-                                        kv.putString("userData",JSON.toJSONString(data))
+                                        kv.putString("userData", JSON.toJSONString(data))
 
                                         startActivity<MainHomeActivity>()
-                                         finish()
+                                        finish()
 
                                     }
-                                    }
                                 }
+                            }
 
 
+                            override fun onFinish() {
+                                super.onFinish()
 
-                                override fun onFinish() {
-                                    super.onFinish()
-
-                                }
-
-
-                            })
-                    }
-
-                    override fun onError(response: Response<Token>) {
-                        super.onError(response)
-
-                        mViewModel.isShowLoading.value = false
-                    }
-
-                    override fun onFinish() {
-                        super.onFinish()
-
-                    }
+                            }
 
 
-                })
-        }
+                        })
+                }
 
+                override fun onError(response: Response<Token>) {
+                    super.onError(response)
+
+                    mViewModel.isShowLoading.value = false
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+
+                }
+
+
+            })
     }
 
     fun add( userName:String,userData :String){

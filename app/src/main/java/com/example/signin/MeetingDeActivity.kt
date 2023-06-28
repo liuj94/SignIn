@@ -37,8 +37,6 @@ class MeetingDeActivity : BaseBindingActivity<ActMeetdaBinding, BaseViewModel>()
             userType = it
         }
 
-//        mViewModel.isShowLoading.value = true
-//        getData()
         getFragmentLists()
         LiveDataBus.get().with("selectLlVISIBLE", String::class.java)
             .observeForever {
@@ -78,7 +76,7 @@ class MeetingDeActivity : BaseBindingActivity<ActMeetdaBinding, BaseViewModel>()
     private fun initAdapter() {
         val mAdapter = MainViewPagerAdapter(supportFragmentManager, fragments)
         binding.mViewPager.adapter = mAdapter
-        binding.mViewPager.offscreenPageLimit = 2
+        binding.mViewPager.offscreenPageLimit = 1
         initListener()
         binding.mViewPager.currentItem = 0
         if (fragments.size == 4) {

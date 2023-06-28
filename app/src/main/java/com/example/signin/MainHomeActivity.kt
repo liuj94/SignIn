@@ -2,6 +2,7 @@ package com.example.signin
 
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.alibaba.fastjson.JSON
 import com.bumptech.glide.Glide
@@ -146,7 +147,11 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
 
             }
+        LiveDataBus.get().with("Printqiehuan", String::class.java)
+            .observeForever {
+                printUnit?.connectSPP(it)
 
+            }
         XXPermissions.with(this@MainHomeActivity)
             .permission(Permission.BLUETOOTH_SCAN)
             .permission(Permission.BLUETOOTH_CONNECT)
@@ -157,21 +162,24 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                 override fun onGranted(permissions: MutableList<String>, all: Boolean) {
                     if (all) {
 
-                        printUnit = PrintUnit(this@MainHomeActivity)
-                        printUnit?.OnePrintRegisterReceiver()
-                        printUnit?.setListPrinter(object : PrintUnit.ListPrinter {
-                            override fun printer(p: SiginData) {
-                                var selectedDevice =p.mac
+                        printUnit = PrintUnit(this@MainHomeActivity, object : PrintUnit.ListPrinter {
+                                override fun printer(p: SiginData) {
+                                    var selectedDevice = p.mac
 //                                    p.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }
 //                                        .toTypedArray().get(1)
-                                printUnit?.connectSPP(p.mac)
-                            }
 
-                            override fun conPrint(p: Boolean) {
+                                    printUnit?.connectSPP(p.mac)
+                                }
 
-                            }
+                                override fun conPrint(p: Boolean) {
+                                    Log.d(
+                                        "printUnitXXPermissions",
+                                        "搜索 conPrint=" + p
+                                    )
+                                }
 
-                        })
+                            })
+                        printUnit?.OnePrintRegisterReceiver()
                     } else {
                         toast("获取蓝牙权限失败")
                     }
@@ -190,7 +198,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
             .override(data.cardW.intValueExact(), data.cardH.intValueExact())
         for (url in data.urls) {
             Glide.with(this@MainHomeActivity).asBitmap()
-                .load(BaseUrl+url)
+                .load(BaseUrl + url)
                 .apply(options)
                 .listener(object : RequestListener<Bitmap> {
                     override fun onLoadFailed(

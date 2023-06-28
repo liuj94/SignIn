@@ -1,7 +1,9 @@
 package com.example.signin
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dylanc.longan.toast
 import com.example.signin.adapter.SelectMeetingAdapter2
 import com.example.signin.base.BaseBindingActivity
@@ -26,7 +28,7 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
      */
     private val printerDot = 8
 
-    private var adapter: SelectMeetingAdapter2? = null
+    private var selectMeetingAdapter: SelectMeetingAdapter2? = null
     private var selectedDevice: String? = null
     var printUnit: PrintUnit? = null
     private var selectList3: MutableList<SiginData> = ArrayList()
@@ -67,35 +69,36 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
                 binding.llkg.visibility = View.GONE
             }
         }
-        adapter = SelectMeetingAdapter2().apply {
-            submitList(selectList3)
-            setOnItemClickListener { _, _, position ->
-                binding.selected.text = "当前连接设备:" + selectList3[position].name
-                printUnit?.connectSPP(selectList3[position].mac)
-                selectedDevice = selectList3[position].name
-            }
+        selectMeetingAdapter = SelectMeetingAdapter2()
+        selectMeetingAdapter?.submitList(selectList3)
+        selectMeetingAdapter?.setOnItemClickListener { _, _, position ->
+            binding.selected.text = "当前连接设备:" + selectList3[position].name
+            printUnit?.connectSPP(selectList3[position].mac)
+            selectedDevice = selectList3[position].name
+            LiveDataBus.get().with("Printqiehuan").postValue(selectList3[position].mac)
         }
-        binding.device.setAdapter(adapter)
-//        binding.device.setOnItemClickListener(AdapterView.OnItemClickListener { parent: AdapterView<*>?, view: View, position: Int, id: Long ->
-//            val device =
-//                (view.findViewById<View>(android.R.id.text1) as TextView).text
-//                    .toString()
-//            selectedDevice =
-//                device.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
-//            binding.selected.text = "当前连接设备:" + selectedDevice
-//        })
-        printUnit = PrintUnit(this,object : PrintUnit.ListPrinter {
+        binding.device.layoutManager = LinearLayoutManager(this)
+        binding.device.setAdapter(selectMeetingAdapter)
+        printUnit = PrintUnit(this, object : PrintUnit.ListPrinter {
             override fun printer(p: SiginData) {
-                Log.e("printUnitXXPermissions", "------------printer--- $p")
-                if(isFrist){
+                for (d in selectList3) {
+                    if (d.mac.equals(p.mac)) {
+                        return
+                    }
+                }
+                selectList3.add(p)
+
+                Log.e("aaaprintUnitXXPermissions", "------aaaa------printer--- " + selectList3)
+//
+                selectMeetingAdapter!!.notifyDataSetChanged()
+
+                if (isFrist) {
                     isFrist = false
                     selectedDevice = p.name
 //                        p.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().get(1)
                     printUnit?.connectSPP(p.mac)
                     binding.selected.text = "当前连接设备:" + p.name
                 }
-                selectList3.add(p)
-                adapter?.notifyDataSetChanged()
 
 
             }
