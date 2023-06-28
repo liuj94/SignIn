@@ -10,7 +10,6 @@ import com.common.apiutil.util.SDKUtil
 import com.common.apiutil.util.SystemUtil
 import com.dylanc.longan.toast
 import com.example.signin.agora.GlobalSettings
-import com.example.signin.face.ToastUtils
 import com.tencent.bugly.crashreport.CrashReport
 import com.xuexiang.xupdate.XUpdate
 import com.xuexiang.xupdate.entity.UpdateError.ERROR.CHECK_NO_NEW_VERSION
@@ -39,6 +38,7 @@ class App :  Application() {
         mApplication = this
         AppManager.getAppManager().init(mApplication)
         SDKUtil.getInstance(this).initSDK()
+//        CTPL.getInstance().init(getInstance(), RespCallback())
         initUtils()
         if (!SystemUtil.checkPackage("com.common.service")) {
             Log.d("tagg", "API 调用 >> 系统反射")

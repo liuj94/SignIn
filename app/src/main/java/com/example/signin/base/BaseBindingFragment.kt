@@ -54,17 +54,17 @@ abstract class BaseBindingFragment<VB : ViewBinding,T : BaseViewModel> : Fragmen
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("ActivityBinding","setUserVisibleHint===onStart=")
         mProgressDialog = ProgressDialog(requireActivity())
         mViewModel.mContext = requireActivity()
         initProgressDialog()
         initData()
         initListener()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("ActivityBinding","setUserVisibleHint===onStart=")
+
 
     }
     fun initProgressDialog() {

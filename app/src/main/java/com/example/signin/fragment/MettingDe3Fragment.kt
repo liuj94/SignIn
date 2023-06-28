@@ -2,7 +2,6 @@ package com.example.signin.fragment
 
 
 import android.os.Build
-import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -60,10 +59,15 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
     override fun onDestroyView() {
         super.onDestroyView()
         isShow = false
-        Log.d("MettingDe2Fragment","MettingDe3Fragmenton==DestroyView()")
+        Log.d("aaaaaaaaaaa","MettingDe3Fragmenton==DestroyView()")
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
+        Log.d("aaaaaaaaaaa","MettingDe3Fragmenton==initData()")
         isShow = true
 //        meetingid = arguments?.getString("meetingid", "")
         meetingid =kv.getString("meetingid", "")
@@ -260,6 +264,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
     var pageNum = 1
     private fun getList() {
+
         if (signUpId.equals("")) {
             return
         }
