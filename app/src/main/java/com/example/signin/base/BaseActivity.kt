@@ -24,11 +24,12 @@ import com.dylanc.viewbinding.base.ActivityBindingDelegate
 import com.example.signin.AppManager
 import com.tencent.mmkv.MMKV
 
-abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActivity(),
+abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatActivity(),
     ActivityBinding<VB> by ActivityBindingDelegate(), MMKVOwner {
-        val mViewModel: VM by lazy {
+    val mViewModel: VM by lazy {
         obtainViewModel(this, getViewModel())
     }
+
     abstract fun getViewModel(): Class<VM>
     override val kv = MMKV.mmkvWithID("MyDataMMKV")
 
@@ -38,18 +39,21 @@ abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActi
         Log.d("ActivityBinding", " onCreate")
         startPendingTransition()
         initTranslucentStatus()
+        Log.d("ActivityBinding", " onCreate--setContentViewWithBinding-start")
         setContentViewWithBinding()
+        Log.d("ActivityBinding", " onCreate--setContentViewWithBinding-end")
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         mViewModel.mContext = this
-        getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         AppManager.getAppManager().addActivity(this)
         Log.d("ActivityBinding", " onCreate---end")
     }
-var isFrist = true;
+
+    var isFrist = true;
     override fun onEnterAnimationComplete() {
         super.onEnterAnimationComplete()
         Log.d("ActivityBinding", " onEnterAnimationComplete")
-        if(isFrist){
+        if (isFrist) {
             isFrist = false
             initProgressDialog()
             initIntentStringExtra()
@@ -60,6 +64,7 @@ var isFrist = true;
         }
 
     }
+
     override fun onDestroy() {
         AppManager.getAppManager().removeActivity(this)
         super.onDestroy()
@@ -75,15 +80,19 @@ var isFrist = true;
     open fun initTitle() {
 
     }
+
     open fun startPendingTransition() {
 
     }
+
     open fun initTranslucentStatus() {
 
     }
+
     open fun finishPendingTransition() {
 
     }
+
     open fun initIntentStringExtra() {
 
     }
@@ -92,7 +101,6 @@ var isFrist = true;
         super.finish()
         finishPendingTransition()
     }
-
 
 
     //隐藏软键盘
@@ -105,7 +113,13 @@ var isFrist = true;
             true
         } else onTouchEvent(ev)
     }
-    fun Activity.hideSoftInput() = currentFocus?.let { (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(it.windowToken, 0) }
+
+    fun Activity.hideSoftInput() = currentFocus?.let {
+        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+            it.windowToken,
+            0
+        )
+    }
 
     override fun getResources(): Resources? {
         val res: Resources = super.getResources()
