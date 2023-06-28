@@ -2,6 +2,7 @@ package com.example.signin
 
 
 import android.graphics.Bitmap
+import android.graphics.Rect
 import android.util.Log
 import androidx.fragment.app.Fragment
 import com.alibaba.fastjson.JSON
@@ -9,8 +10,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.ctaiot.ctprinter.ctpl.CTPL
+import com.ctaiot.ctprinter.ctpl.Device
+import com.ctaiot.ctprinter.ctpl.RespCallback
+import com.dylanc.longan.TAG
 import com.dylanc.longan.toast
 import com.example.signin.PageRoutes.Companion.Api_appVersion
 import com.example.signin.PageRoutes.Companion.BaseUrl
@@ -158,37 +162,43 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
             .permission(Permission.BLUETOOTH_ADVERTISE)
             .permission(Permission.ACCESS_COARSE_LOCATION)
             .request(object : OnPermissionCallback {
-
                 override fun onGranted(permissions: MutableList<String>, all: Boolean) {
                     if (all) {
+                        CTPL.getInstance().init(App.mApplication, object : RespCallback {
+                            override fun onConnectRespsonse(port: Int, reason: Int) {
+                                Log.d(App.TAG, "端口=$port,结果=$reason")
 
+                            }
+
+                            override fun onDataResponse(result: HashMap<String, String>) {
+                                Log.d(App.TAG, "结果=$result")
+
+                            }
+
+                            override fun autoSPPBond(): Boolean {
+                                return true
+                            }
+                        })
                         printUnit =
                             PrintUnit(this@MainHomeActivity, object : PrintUnit.ListPrinter {
                                 override fun printer(p: SiginData) {
-                                    var selectedDevice = p.mac
-//                                    p.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }
-//                                        .toTypedArray().get(1)
 
-                                    printUnit?.let {
-                                        Log.d(
-                                            "aaaaprintUnitXXPermissions",
-                                            "搜索 selectedDevice=" + selectedDevice
-                                        )
-                                        Log.d(
-                                            "aaaaprintUnitXXPermissions",
-                                            "搜索 name=" + p.name
-                                        )
-                                        it.connectSPP(selectedDevice)
+                                    //蓝牙连接
+                                    val d = Device()
+                                    val port =
+                                        if ("SPP" == p.bluetoothType) CTPL.Port.SPP else CTPL.Port.BLE
+                                    d.setPort(port)
+                                    d.bluetoothMacAddr = p.mac
+                                    if (port == CTPL.Port.BLE) {
+                                        d.setBleServiceUUID("49535343-fe7d-4ae5-8fa9-9fafd205e455")
                                     }
+                                    CTPL.getInstance().connect(d)
+
 
                                 }
 
                                 override fun conPrint(p: Boolean) {
-                                    Log.d(
-                                        "aaaaprintUnitXXPermissions",
-                                        "搜索 conPrint=" + p
-                                    )
-                                    isConPrint = p
+
                                 }
 
                             })
@@ -204,27 +214,23 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
                 }
             })
+
         binding.dy.setOnClickListener {
             var a = SocketData()
             var b = ArrayList<String>()
             b.add("/profile/upload/2023/05/22/ef4765ff-7f84-45cf-a0eb-5451f129fed3.png")
 //            b.add("/profile/upload/2023/05/22/7e203438-dc37-42ba-afde-927657009c85.png")
             a.urls = b
-            printImg(a) }
+            printImg(a)
+        }
     }
-var isConPrint = false
+
+
     private fun printImg(data: SocketData) {
-        Log.d(
-            "aaaaprintUnitXXPermissions",
-            "开始打印="
-        )
-        val options = RequestOptions()
-//            .override(data.cardW.intValueExact(), data.cardH.intValueExact())
-            .override(80, 120)
         for (url in data.urls) {
             Glide.with(this@MainHomeActivity).asBitmap()
                 .load(BaseUrl + url)
-                .apply(options)
+//                .apply(options)
                 .listener(object : RequestListener<Bitmap> {
                     override fun onLoadFailed(
                         e: GlideException?,
@@ -244,30 +250,52 @@ var isConPrint = false
                         isFirstResource: Boolean
                     ): Boolean {
                         resource?.let { b ->
-                            printUnit?.let {
-                                Log.d(
-                                    "aaaaprintUnitXXPermissions",
-                                    "图片下载完成开始打印="
-                                )
-                                if (isConPrint) {
-                                    Log.d(
-                                        "aaaaprintUnitXXPermissions",
-                                        "isConPrint="+it.isConPrint
-                                    )
-                                    try {
-                                        it.print(b,80)
-                                    } catch (e: Exception) {
-                                    }
-
-                                } else {
-                                    toast("打印机未连接")
-                                }
-//                                try {
-//                                    it.print(b)
-//                                } catch (e: Exception) {
-//                                    toast("打印异常")
-//                                }
+                            if (!CTPL.getInstance().isConnected) {
+                                toast("打印机未连接")
+                            } else {
+                                CTPL.getInstance()
+                                    .setSize(
+                                        data.cardW.intValueExact(),
+                                        data.cardH.intValueExact()
+                                    ) //设置纸张尺寸,单位:毫米
+                                    .drawBitmap(
+                                        Rect(
+                                            0,
+                                            0,
+                                            data.cardW.intValueExact(),
+                                            data.cardH.intValueExact()
+                                        ), b, false, null
+                                    ) //绘制图像, 单位:像素
+                                    .print(1)
+                                    .execute() //执行打印
                             }
+
+
+//                            CTPL.getInstance().setSize(data.cardW.intValueExact(), data.cardH.intValueExact())
+//                            printUnit?.let {
+//                                Log.d(
+//                                    "aaaaprintUnitXXPermissions",
+//                                    "图片下载完成开始打印="
+//                                )
+//                                if (isConPrint) {
+//                                    Log.d(
+//                                        "aaaaprintUnitXXPermissions",
+//                                        "isConPrint="+it.isConPrint
+//                                    )
+//                                    try {
+//                                        it.print(b,80)
+//                                    } catch (e: Exception) {
+//                                    }
+//
+//                                } else {
+//                                    toast("打印机未连接")
+//                                }
+////                                try {
+////                                    it.print(b)
+////                                } catch (e: Exception) {
+////                                    toast("打印异常")
+////                                }
+//                            }
 
                         }
                         return false

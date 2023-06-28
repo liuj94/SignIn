@@ -1,9 +1,10 @@
 package com.example.signin
 
-import android.annotation.SuppressLint
 import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ctaiot.ctprinter.ctpl.CTPL
+import com.ctaiot.ctprinter.ctpl.Device
 import com.dylanc.longan.toast
 import com.example.signin.adapter.SelectMeetingAdapter2
 import com.example.signin.base.BaseBindingActivity
@@ -91,14 +92,28 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
                 Log.e("aaaprintUnitXXPermissions", "------aaaa------printer--- " + selectList3)
 //
                 selectMeetingAdapter!!.notifyDataSetChanged()
+                if(CTPL.getInstance().isConnected){
 
-                if (isFrist) {
-                    isFrist = false
-                    selectedDevice = p.name
+                    binding.selected.text = "当前连接设备:" + CTPL.getInstance().queryHardwareModel()
+                }else{
+                    if (isFrist) {
+                        isFrist = false
+                        selectedDevice = p.name
 //                        p.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().get(1)
-                    printUnit?.connectSPP(p.mac)
-                    binding.selected.text = "当前连接设备:" + p.name
+//                    printUnit?.connectSPP(p.mac)
+                        binding.selected.text = "当前连接设备:" + p.name
+                        val d = Device()
+                        val port =
+                            if ("SPP" == p.bluetoothType) CTPL.Port.SPP else CTPL.Port.BLE
+                        d.setPort(port)
+                        d.bluetoothMacAddr = p.mac
+                        if (port == CTPL.Port.BLE) {
+                            d.setBleServiceUUID("49535343-fe7d-4ae5-8fa9-9fafd205e455")
+                        }
+                        CTPL.getInstance().connect(d)
+                    }
                 }
+
 
 
             }
@@ -117,6 +132,9 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
                 override fun onGranted(permissions: MutableList<String>, all: Boolean) {
                     if (all) {
                         printUnit?.PrintRegisterReceiver()
+                        if(CTPL.getInstance().isConnected){
+                            binding.selected.text = "当前连接设备:" + CTPL.getInstance().queryHardwareModel()
+                        }
                     } else {
                         toast("获取蓝牙权限失败")
                     }

@@ -28,7 +28,6 @@ import android.util.Log;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 
 import com.example.signin.bean.SiginData;
 
@@ -132,12 +131,20 @@ public class PrintUnit {
 
                         boolean isPrinter = BluetoothClass.Device.Major.IMAGING == device.getBluetoothClass().getMajorDeviceClass();
                         Log.e("aaprintUnitXXPermissions", "------------搜索--- $device.getName()==" + device.getName());
-                        if (isPrinter && !TextUtils.isEmpty(device.getName()) && device.getName().startsWith("CT")) {
+//                        if (isPrinter && !TextUtils.isEmpty(device.getName()) && device.getName().startsWith("CT")) {
+                        if (isPrinter ) {
+
                             //系统搜索会有重复的对象,需要自行过滤
                             Log.e("aaprintUnitXXPermissions", "------------搜索--- $device.getName()==" + device.getName());
                             SiginData a = new SiginData();
                             a.setName(device.getName());
                             a.setMac(device.getAddress());
+                            if(device.getType()==2){
+                                a.setBluetoothType("BLE");
+                            }else {
+                                a.setBluetoothType("SPP");
+                            }
+
                             a.setKuan(true);
                             list.add(a);
 //                            list.add(device.getName() + "\n\n" + device.getAddress());
@@ -189,12 +196,18 @@ public class PrintUnit {
                         BluetoothDevice device = (BluetoothDevice) parcelable;
                         boolean isPrinter = BluetoothClass.Device.Major.IMAGING == device.getBluetoothClass().getMajorDeviceClass();
 
-                        if (isPrinter && !TextUtils.isEmpty(device.getName()) && device.getName().startsWith("CT")) {
+//                        if (isPrinter && !TextUtils.isEmpty(device.getName()) && device.getName().startsWith("CT")) {
+                        if (isPrinter ) {
                             Log.d("printUnitXXPermissions", "ACTION_FOUND device addr name=" + device.getName() + "==Address===" + device.getAddress());
                             //系统搜索会有重复的对象,需要自行过滤
                             if (list.size() < 1) {
                                 SiginData a = new SiginData();
                                 a.setName(device.getName());
+                                if(device.getType()==2){
+                                    a.setBluetoothType("BLE");
+                                }else {
+                                    a.setBluetoothType("SPP");
+                                }
                                 a.setMac(device.getAddress());
                                 a.setKuan(true);
 //                                listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
@@ -255,10 +268,16 @@ public class PrintUnit {
 //            Log.d("printUnitXXPermissions", "ACTION_FOUND device addr name=" + bluetoothDevice.getName() + "==Address===" + bluetoothDevice.getAddress());
             boolean isPrinter = BluetoothClass.Device.Major.IMAGING == bluetoothDevice.getBluetoothClass().getMajorDeviceClass();
 //            Log.e("printUnitXXPermissions", "------------isPrinter--- " + isPrinter);
-            if (isPrinter && !TextUtils.isEmpty(bluetoothDevice.getName()) && bluetoothDevice.getName().startsWith("CT")) {
+//            if (isPrinter && !TextUtils.isEmpty(bluetoothDevice.getName()) && bluetoothDevice.getName().startsWith("CT")) {
+            if (isPrinter) {
                 //系统搜索会有重复的对象,需要自行过滤
 //                if(list.size()<1){
                 SiginData a = new SiginData();
+                if(bluetoothDevice.getType()==2){
+                    a.setBluetoothType("BLE");
+                }else {
+                    a.setBluetoothType("SPP");
+                }
                 a.setName(bluetoothDevice.getName());
                 a.setMac(bluetoothDevice.getAddress());
                 a.setKuan(true);

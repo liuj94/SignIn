@@ -1,7 +1,6 @@
 package com.example.signin.fragment
 
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
@@ -23,7 +22,6 @@ import com.example.signin.databinding.FragHomeBinding
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
-import java.time.Instant
 
 
 /**
@@ -108,7 +106,7 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
         binding.btnLl2.setOnClickListener {
             list.clear()
             pageNum = 1
-            state = 1
+            state = 2
             binding.btnTv2.setTextColor(Color.parseColor("#ff333333"))
             binding.btnTv1.setTextColor(Color.parseColor("#5B5B5B"))
             binding.btnTv3.setTextColor(Color.parseColor("#5B5B5B"))
@@ -119,7 +117,7 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
         }
         binding.btnLl3.setOnClickListener {
             list.clear()
-            state = 2
+            state = 3
             pageNum = 1
             binding.btnTv3.setTextColor(Color.parseColor("#ff333333"))
             binding.btnTv2.setTextColor(Color.parseColor("#5B5B5B"))

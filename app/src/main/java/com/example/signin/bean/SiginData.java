@@ -151,6 +151,7 @@ public class SiginData implements Serializable {
     private int id;
     private int signUpId;
     private String name= "";
+    private String bluetoothType= "";
     private int delTf;
     private int personChargeId;
     private String personChargeName= "";
@@ -193,6 +194,14 @@ public class SiginData implements Serializable {
     private String personChargeUsername= "";
     private String userType= "";
     private String userId= "";
+
+    public String getBluetoothType() {
+        return bluetoothType;
+    }
+
+    public void setBluetoothType(String bluetoothType) {
+        this.bluetoothType = bluetoothType;
+    }
 
     public String getSpeechStatus() {
         return speechStatus;
