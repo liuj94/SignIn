@@ -33,16 +33,16 @@ import io.agora.rtc2.RtcEngine
  *   date   : 2021/2/2513:36
  */
 class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewModel>() {
-    companion object {
-        fun newInstance(meetingid: String, businessId: String): MettingDe4Fragment {
-            val args = Bundle()
-            args.putString("meetingid", meetingid)
-            args.putString("businessId", businessId)
-            val fragment = MettingDe4Fragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
+//    companion object {
+//        fun newInstance(meetingid: String, businessId: String): MettingDe4Fragment {
+//            val args = Bundle()
+//            args.putString("meetingid", meetingid)
+//            args.putString("businessId", businessId)
+//            val fragment = MettingDe4Fragment()
+//            fragment.arguments = args
+//            return fragment
+//        }
+//    }
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
@@ -74,9 +74,10 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         isShow = true
         userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
         setStartData()
-
-        meetingid = arguments?.getString("meetingid", "1")
-        businessId = arguments?.getString("businessId", "1")
+        meetingid =kv.getString("meetingid", "")
+        businessId =kv.getString("businessId", "")
+//        meetingid = arguments?.getString("meetingid", "1")
+//        businessId = arguments?.getString("businessId", "1")
         CHANNEL = "" + meetingid
 //        binding.srecyclerview.layoutManager = LinearLayoutManager(activity)
 //        adapterSelect = SelectMeetingAdapter().apply {

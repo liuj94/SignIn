@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 
 import android.view.MotionEvent
 import android.view.WindowManager
@@ -34,7 +35,7 @@ abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Log.d("ActivityBinding", " onCreate")
         startPendingTransition()
         initTranslucentStatus()
         setContentViewWithBinding()
@@ -42,11 +43,12 @@ abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActi
         mViewModel.mContext = this
         getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         AppManager.getAppManager().addActivity(this)
-
+        Log.d("ActivityBinding", " onCreate---end")
     }
 var isFrist = true;
     override fun onEnterAnimationComplete() {
         super.onEnterAnimationComplete()
+        Log.d("ActivityBinding", " onEnterAnimationComplete")
         if(isFrist){
             isFrist = false
             initProgressDialog()

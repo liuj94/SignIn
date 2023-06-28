@@ -1,8 +1,10 @@
 package com.example.signin.base
 
 import android.app.Activity
+import android.content.Context
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +29,7 @@ abstract class BaseBindingFragment<VB : ViewBinding,T : BaseViewModel> : Fragmen
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-
+        Log.d("HomeListAdapter","setUserVisibleHint===onCreateView=")
         return createViewWithBinding(inflater, container)
     }
     private var mProgressDialog: ProgressDialog? = null
@@ -38,14 +40,32 @@ abstract class BaseBindingFragment<VB : ViewBinding,T : BaseViewModel> : Fragmen
 //        initProgressDialog()
 //        initData()
 //        initListener()
+
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("HomeListAdapter","setUserVisibleHint===onStart=")
         mProgressDialog = ProgressDialog(requireActivity())
         mViewModel.mContext = requireActivity()
         initProgressDialog()
         initData()
         initListener()
+
     }
     fun initProgressDialog() {
 

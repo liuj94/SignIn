@@ -164,6 +164,10 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
 
     var userType = "00"
     private fun goto(meetingId: String, meetingName: String, businessId: String) {
+        kv.putString("meetingid",meetingId)
+        kv.putString("meetingName",meetingName)
+        kv.putString("businessId",businessId)
+        kv.putString("userType",userType)
         startActivity<MeetingDeActivity>(
             "meetingId" to meetingId,
             "meetingName" to meetingName,
@@ -251,7 +255,7 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
                                 getData2("" + item.id)
                             }
 //                        }
-                            Log.d("HomeListAdapter", "gotogotogotogoto")
+                            Log.d("ActivityBinding", "gotogotogotogoto")
                             goto(
                                 "" + list[0].id,
                                 "" + list[0].name,

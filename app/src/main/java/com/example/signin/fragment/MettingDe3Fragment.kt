@@ -30,15 +30,15 @@ import com.lzy.okgo.model.Response
  *   date   : 2021/2/2513:36
  */
 class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewModel>() {
-    companion object {
-        fun newInstance(meetingid: String): MettingDe3Fragment {
-            val args = Bundle()
-            args.putString("meetingid", meetingid)
-            val fragment = MettingDe3Fragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
+//    companion object {
+//        fun newInstance(meetingid: String): MettingDe3Fragment {
+//            val args = Bundle()
+//            args.putString("meetingid", meetingid)
+//            val fragment = MettingDe3Fragment()
+//            fragment.arguments = args
+//            return fragment
+//        }
+//    }
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
@@ -65,7 +65,8 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
         isShow = true
-        meetingid = arguments?.getString("meetingid", "")
+//        meetingid = arguments?.getString("meetingid", "")
+        meetingid =kv.getString("meetingid", "")
         binding.srecyclerview3.layoutManager = LinearLayoutManager(activity)
         adapterSelect3 = SelectMeetingAdapter2().apply {
             submitList(selectList3)

@@ -1,6 +1,7 @@
 package com.example.signin
 
 
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.example.signin.adapter.MainViewPagerAdapter
@@ -56,15 +57,16 @@ class MeetingDeActivity : BaseBindingActivity<ActMeetdaBinding, BaseViewModel>()
         binding.mRb1.visibility = View.GONE
         if (userType.equals("01") || userType.equals("04")) {
             binding.mRb1.visibility = View.VISIBLE
-            fragments.add(MettingDe1Fragment.newInstance(meetingId, meetingName))
-            fragments.add(MettingDe2Fragment.newInstance(meetingId))
-            fragments.add(MettingDe3Fragment.newInstance(meetingId))
-            fragments.add(MettingDe4Fragment.newInstance(meetingId, businessId))
+            Log.d("ActivityBinding", " binding.mRb1.visibility = View.VISIBLE")
+            fragments.add(MettingDe1Fragment())
+            fragments.add(MettingDe2Fragment())
+            fragments.add(MettingDe3Fragment())
+            fragments.add(MettingDe4Fragment())
         } else {
             binding.mRb1.visibility = View.GONE
-            fragments.add(MettingDe2Fragment.newInstance(meetingId))
-            fragments.add(MettingDe3Fragment.newInstance(meetingId))
-            fragments.add(MettingDe4Fragment.newInstance(meetingId, businessId))
+            fragments.add(MettingDe2Fragment())
+            fragments.add(MettingDe3Fragment())
+            fragments.add(MettingDe4Fragment())
         }
 
         initAdapter()
