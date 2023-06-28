@@ -255,7 +255,7 @@ var isConPrint = false
                                         "isConPrint="+it.isConPrint
                                     )
                                     try {
-                                        it.print(b)
+                                        it.print(b,80)
                                     } catch (e: Exception) {
                                     }
 

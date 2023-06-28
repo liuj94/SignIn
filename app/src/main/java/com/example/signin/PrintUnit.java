@@ -25,6 +25,7 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -33,6 +34,7 @@ import com.example.signin.bean.SiginData;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -280,21 +282,151 @@ public class PrintUnit {
 
     }
 
-    public void print(Bitmap bitmap) throws Exception {
+    public void print(Bitmap bitmap)  {
 //        int widthPX = Math.max(0, bitmap.getWidth() % 8 != 0 ?
 //                Math.max(0, bitmap.getWidth() + 8 - (bitmap.getWidth() % 8)) : bitmap.getWidth());//只希望多,不希望裁剪
 
 //        byte[] bytes1 = printReceipt(widthPX / printerDot, bitmap.getHeight() / printerDot, bitmap);
-        byte[] bytes1 = printReceipt(bitmap);
-        if (bytes1 != null && sppSocket != null) {
-            Log.d(
-                    "aaaaprintUnitXXPermissions",
-                    "print(Bitmap bitmap)="
-            );
-            sppSocket.getOutputStream().write(bytes1);
+        try {
+            byte[] bytes1 = printReceipt(bitmap);
+            if (bytes1 != null && sppSocket != null) {
+                Log.d(
+                        "aaaaprintUnitXXPermissions",
+                        "print(Bitmap bitmap)="
+                );
+                sppSocket.getOutputStream().write(bytes1);
+            }
+        }catch (Exception e){}
+
+    }
+    public void print(Bitmap bitmap,int widthPX)  {
+//        int widthPX = Math.max(0, bitmap.getWidth() % 8 != 0 ?
+//                Math.max(0, bitmap.getWidth() + 8 - (bitmap.getWidth() % 8)) : bitmap.getWidth());//只希望多,不希望裁剪
+
+//        byte[] bytes1 = printReceipt(widthPX / printerDot, bitmap.getHeight() / printerDot, bitmap);
+        try {
+            byte[] bytes = printLabel(widthPX / printerDot,
+                    bitmap.getHeight() / printerDot,
+                    0, 0,
+                    15, 5,
+                    1, 2,
+                    0, 0, bitmap, 1);
+            if (bytes != null) {
+                sppSocket.getOutputStream().write(bytes);
+            }
+            if (bytes != null && sppSocket != null) {
+                Log.d(
+                        "aaaaprintUnitXXPermissions",
+                        "print(Bitmap bitmap)="
+                );
+                sppSocket.getOutputStream().write(bytes);
+            }
+        }catch (Exception e){}
+
+    }
+    private @Nullable byte[] printLabel(@IntRange(from = 1, to = 48)int widthMM,
+                                        @IntRange(from = 1, to = 110)int heightMM,
+                                        @IntRange(from = 0, to = 1) int direction,
+                                        @IntRange(from = 0, to = 1) int revert,
+                                        @IntRange(from = 1, to = 15) int density,
+                                        @IntRange(from = 0, to = 5) int speed,
+                                        @IntRange(from = 0, to = 2) int paperType,
+                                        @IntRange(from = 0, to = 10) int gapMM,
+                                        @IntRange(from = 0, to = 10 * 8/*dot*/) int xOffsetDot,
+                                        @IntRange(from = 0, to = 10 * 8/*dot*/) int yOffsetDot,
+                                        @NonNull Bitmap bitmap,
+                                        @IntRange(from = 1, to = 999) int printCount
+    ) throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        //清除缓存
+        baos.write("CLS\r\n".getBytes(StandardCharsets.UTF_8));
+        //设置热敏
+        baos.write( "SET RIBBON OFF\r\n".getBytes(StandardCharsets.UTF_8));
+        //设置打印原点
+        baos.write(("REFERENCE 0,0\r\n").getBytes(StandardCharsets.UTF_8));
+        //旋转0°~180°,镜像翻转
+        baos.write(("DIRECTION " + direction + ',' + revert + "\r\n").getBytes(StandardCharsets.UTF_8));
+        //设置打印浓度
+        baos.write(("DENSITY " + density + "\r\n").getBytes(StandardCharsets.UTF_8));
+        //设置打印速度
+        baos.write(("SPEED " + speed + "\r\n").getBytes(StandardCharsets.UTF_8));
+        //设置纸张类型和纸张间隔
+        baos.write(getPaperType(paperType, gapMM).getBytes(StandardCharsets.UTF_8));
+        //设置标签尺寸
+        baos.write(("SIZE " + widthMM + " mm," + heightMM + " mm" + "\r\n").getBytes(StandardCharsets.UTF_8));
+
+        if (bitmap.getWidth() % 8 != 0) {
+            int w = bitmap.getWidth();
+            w = Math.max(0, w % 8 != 0 ? Math.max(0, w + 8 - (w % 8)) : w);//只希望多,不希望裁剪
+            Bitmap b = Bitmap.createBitmap(w, bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(b);
+            c.drawColor(Color.WHITE);
+            c.drawBitmap(bitmap,
+                    new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()),
+                    new Rect(0, 0, w, bitmap.getHeight()),
+                    null);
+            bitmap = b;
         }
+
+        baos.write(addImageHeader(xOffsetDot, yOffsetDot, bitmap.getWidth(), bitmap.getHeight()));
+        baos.write(addImageBody(bitmap));
+        baos.write(new byte[]{0x0D, 0x0A});
+        //设置份数,执行打印
+        baos.write(("PRINT " + printCount + ",1\r\n").getBytes(StandardCharsets.UTF_8));
+        return baos.toByteArray();
+    }
+    public byte[] addImageHeader(int xDot, int yDot, int bitmapWidth, int bitmapHeight) {
+        xDot = Math.max(0, xDot % 8 != 0 ? Math.max(0, xDot - (xDot % 8)) : xDot);
+
+        yDot = Math.max(0, yDot % 8 != 0 ? Math.max(0, yDot - (yDot % 8)) : yDot);
+
+        String str = "BITMAP " + xDot + "," + yDot + "," + (bitmapWidth / 8) + "," + bitmapHeight + ",1,";
+        return str.getBytes();
     }
 
+    public static byte[] addImageBody(Bitmap b) {
+        int width = b.getWidth(); // 获取位图的宽
+        int height = b.getHeight(); // 获取位图的高
+        byte[] bytes = new byte[(width) / 8 * height];
+        int[] p = new int[8];
+
+        int black = 0, white = 1;
+        int quality = 150;//值越大,越能打印越浅的颜色
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width / 8; j++) {
+                for (int z = 0; z < 8; z++) {
+                    int grey = b.getPixel(j * 8 + z, i);
+                    int red = ((grey & 0x00FF0000) >> 16);
+                    int green = ((grey & 0x0000FF00) >> 8);
+                    int blue = (grey & 0x000000FF);
+                    int gray = (int) (0.29900 * red + 0.58700 * green + 0.11400 * blue); // 灰度转化公式
+                    gray = gray <= quality ? black : white;
+                    p[z] = gray;
+                }
+                byte value = (byte) (p[0] * 128 + p[1] * 64 + p[2] * 32 + p[3] * 16 + p[4] * 8 + p[5] * 4 + p[6] * 2 + p[7]);
+                bytes[width / 8 * i + j] = value;
+            }
+        }
+        return bytes;
+    }
+
+    /**
+     * @param papertype 0是间隙纸,1是连续纸,2是黑标纸
+     * @param gapMM
+     * @return
+     */
+    public String getPaperType(int papertype, int gapMM) {
+        String gapStr;
+        if (papertype == 2) {
+            gapStr = "BLINE " + gapMM + " mm," + 0 + " mm\r\n";
+        } else if (papertype == 1) {
+            gapStr = "GAP " + 0 + " mm," + 0 + " mm\r\n";
+        } else {// 设置标签间隙，按照实际尺寸设置，如果为无间隙纸则设置为0
+            gapStr = "GAP " + gapMM + " mm," + 0 + " mm\r\n";
+        }
+        return gapStr;
+    }
     private @Nullable byte[] printReceipt(
             @NonNull Bitmap bitmap) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
