@@ -134,7 +134,7 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
             submitList(list)
             setEmptyViewLayout(requireActivity(), R.layout.layout_emptyview)
             setOnItemClickListener { _, _, position ->
-
+                Log.d("HomeListAdapter", "gotogotogotogoto")
                 goto(
                     "" + list[position].id,
                     "" + list[position].name,
@@ -158,9 +158,11 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
             var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
             userData?.let {
                 userType = it.userType
-            }}
+            }
+        }
     }
-var userType = "00"
+
+    var userType = "00"
     private fun goto(meetingId: String, meetingName: String, businessId: String) {
         startActivity<MeetingDeActivity>(
             "meetingId" to meetingId,
@@ -170,9 +172,9 @@ var userType = "00"
         )
 
 
-
     }
-    private fun getData2(meetingId:String) {
+
+    private fun getData2(meetingId: String) {
 
         OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingId)
             .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingId)
@@ -187,7 +189,10 @@ var userType = "00"
                     super.onMySuccess(data)
                     var allList = SiginUpListModel()
                     allList.list = data
-                    kv.putString("SiginUpListModelmeetingId"+meetingId, JSON.toJSONString(allList))
+                    kv.putString(
+                        "SiginUpListModelmeetingId" + meetingId,
+                        JSON.toJSONString(allList)
+                    )
 
                 }
 
@@ -206,6 +211,7 @@ var userType = "00"
 
             })
     }
+
     var isFrist = true;
     private fun getData() {
         mViewModel.isShowLoading.value = true
@@ -245,10 +251,15 @@ var userType = "00"
                                 getData2("" + item.id)
                             }
 //                        }
-
+                            Log.d("HomeListAdapter", "gotogotogotogoto")
+                            goto(
+                                "" + list[0].id,
+                                "" + list[0].name,
+                                "" + list[0].businessId
+                            )
                         }
-                    }catch (e:Exception){}
-
+                    } catch (e: Exception) {
+                    }
 
 
                 }
@@ -261,10 +272,11 @@ var userType = "00"
                 override fun onFinish() {
                     super.onFinish()
                     try {
-                    binding.refresh.finishRefresh()
-                    binding.refresh.finishLoadMore()
-                    mViewModel.isShowLoading.value = false
-                    }catch (e:Exception){}
+                        binding.refresh.finishRefresh()
+                        binding.refresh.finishLoadMore()
+                        mViewModel.isShowLoading.value = false
+                    } catch (e: Exception) {
+                    }
                 }
 
 

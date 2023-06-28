@@ -33,7 +33,15 @@ abstract class BaseBindingFragment<VB : ViewBinding,T : BaseViewModel> : Fragmen
     private var mProgressDialog: ProgressDialog? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-         mProgressDialog = ProgressDialog(requireActivity())
+//         mProgressDialog = ProgressDialog(requireActivity())
+//        mViewModel.mContext = requireActivity()
+//        initProgressDialog()
+//        initData()
+//        initListener()
+    }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mProgressDialog = ProgressDialog(requireActivity())
         mViewModel.mContext = requireActivity()
         initProgressDialog()
         initData()
