@@ -4,6 +4,7 @@ package com.example.signin
 import android.graphics.Color
 import android.util.Log
 import android.view.View
+import android.widget.SimpleAdapter
 import android.widget.TextView
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +38,9 @@ class MeetingDe2Activity : BaseBindingActivity<ActMeetda2Binding, BaseViewModel>
     var businessId = ""
     var userType = "00"
     private var adapter: FMeetingDeListAdapter? = null
+//    private var myAdapter: SimpleAdapter? = null
     private var list: MutableList<SiginUpListData> = ArrayList()
+//    private var list: MutableList<String> = ArrayList()
 
 
     override fun initData() {
@@ -67,20 +70,20 @@ class MeetingDe2Activity : BaseBindingActivity<ActMeetda2Binding, BaseViewModel>
         binding.zhez.setOnClickListener {
 
         }
+        binding.name.text = meetingName
         if (userType.equals("01") || userType.equals("04")) {
             binding.mRb1.visibility = View.VISIBLE
             binding.fragmentLL.visibility = View.VISIBLE
              binding.title.text = "数据统计"
             binding.mRb1.isChecked = true
-            binding.recyclerview.layoutManager = LinearLayoutManager(activity)
-            adapter = FMeetingDeListAdapter().apply {
-                submitList(list)
-            }
+            getinitGata()
+
+            binding.recyclerview.layoutManager = LinearLayoutManager(this)
+            adapter = FMeetingDeListAdapter()
+            adapter?.submitList(list)
             binding.recyclerview.adapter = adapter
-            binding.name.text = meetingName
-            mViewModel.isShowLoading.value = true
-            getData()
-            getList()
+
+            getinitList()
         }else {
             binding.mRb1.visibility = View.GONE
             binding.fragmentLL.visibility = View.GONE
@@ -92,14 +95,10 @@ class MeetingDe2Activity : BaseBindingActivity<ActMeetda2Binding, BaseViewModel>
             .observeForever {
                 try {
                     if (AppManager.getAppManager().activityInstanceIsLive(this@MeetingDe2Activity)) {
-                        if (!kv.getString("userData", "").isNullOrEmpty()) {
-                            var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
-                            userData?.let {
-                                if (it.userType.equals("01")||it.userType.equals("04")){
-                                    getData()
-                                    getList()
-                                }
-                            }}
+                        if (userType.equals("01")||userType.equals("04")){
+                            getData()
+                            getList()
+                        }
 
                     }
                 } catch (e: java.lang.Exception) {
@@ -107,6 +106,11 @@ class MeetingDe2Activity : BaseBindingActivity<ActMeetda2Binding, BaseViewModel>
 
 
             }
+
+
+
+
+
     }
     //第一个fragment
 //    private var mettingDe1Fragment: MettingDe1Fragment? = null
@@ -246,8 +250,9 @@ class MeetingDe2Activity : BaseBindingActivity<ActMeetda2Binding, BaseViewModel>
 
     }
 
-    private fun getList() {
+    private fun getinitList() {
         if (!kv.getString("SiginUpListModelmeetingId"+meetingId, "").isNullOrEmpty()) {
+            Log.d("aaaaprintUnitXXPermissions","获取本地===up/app/list")
             var data =
                 JSON.parseObject(kv.getString("SiginUpListModelmeetingId"+meetingId, ""), SiginUpListModel::class.java)
             try {
@@ -257,6 +262,15 @@ class MeetingDe2Activity : BaseBindingActivity<ActMeetda2Binding, BaseViewModel>
             } catch (e: java.lang.Exception) {
             }
         }else{
+            Log.d("getList","接口开始调用===up/app/list")
+            mViewModel.isShowLoading.value = true
+            getList()
+
+        }
+
+    }
+    private fun getList() {
+
             Log.d("getList","接口开始调用===up/app/list")
             mViewModel.isShowLoading.value = true
             OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingId)
@@ -308,10 +322,39 @@ class MeetingDe2Activity : BaseBindingActivity<ActMeetda2Binding, BaseViewModel>
 
                 })
 
-        }
+
 
     }
+    fun getinitGata(){
+        if (!kv.getString("MeetingStatistics"+meetingId, "").isNullOrEmpty()) {
+            Log.d("aaaaprintUnitXXPermissions","获取本地===MeetingStatistics")
+            var data =
+                JSON.parseObject(kv.getString("MeetingStatistics"+meetingId, ""), MeetingStatisticsData::class.java)
+            try {
 
+                binding.num1.text = toNum("" + data.browseCount)
+                binding.num2.text = toNum("" + data.userMeetingCount)
+                binding.num3.text = toNum("" + data.totalAmount)
+                binding.num4.text = toNum("" + data.todayInsertUserCount)
+                binding.num5.text = toNum("" + data.todayBeReviewedCount)
+                binding.num6.text = toNum("" + data.leaveCount)
+                setNumData(
+                    data.todayInsertUserCount,
+                    data.yesterdayInsertUserCount,
+                    binding.num7
+                )
+                setNumData(
+                    data.todayBeReviewedCount,
+                    data.yesterdayBeReviewedCount,
+                    binding.num8
+                )
+                setNumData(data.leaveCount, data.yesterdayLeaveCount, binding.num9)
+            } catch (e: java.lang.Exception) {
+            }
+        }else{
+            getData()
+        }
+    }
     fun getData() {
 
         OkGo.get<MeetingStatisticsData>(PageRoutes.Api_meeting_statistics + meetingId + "?id=" + meetingId)

@@ -29,7 +29,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
     val mViewModel: VM by lazy {
         obtainViewModel(this, getViewModel())
     }
-
+    var isCreateShow = false
     abstract fun getViewModel(): Class<VM>
     override val kv = MMKV.mmkvWithID("MyDataMMKV")
 
@@ -47,20 +47,8 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         AppManager.getAppManager().addActivity(this)
         Log.d("ActivityBinding", " onCreate---end")
-//            initProgressDialog()
-//            initIntentStringExtra()
-//            initTitle()
-//            initData()
-//            initListener()
-//            initRootTitleBar()
-    }
-
-    var isFrist = true;
-    override fun onEnterAnimationComplete() {
-        super.onEnterAnimationComplete()
-        Log.d("ActivityBinding", " onEnterAnimationComplete")
-        if (isFrist) {
-            isFrist = false
+        initCARData()
+        if(isCreateShow){
             initProgressDialog()
             initIntentStringExtra()
             initTitle()
@@ -71,11 +59,28 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
 
     }
 
+    var isFrist = true;
+    override fun onEnterAnimationComplete() {
+        super.onEnterAnimationComplete()
+        Log.d("ActivityBinding", " onEnterAnimationComplete")
+        if (isFrist) {
+            isFrist = false
+            if(!isCreateShow){
+            initProgressDialog()
+            initIntentStringExtra()
+            initTitle()
+            initData()
+            initListener()
+            initRootTitleBar()}
+        }
+
+    }
+
     override fun onDestroy() {
         AppManager.getAppManager().removeActivity(this)
         super.onDestroy()
     }
-
+    open fun initCARData(){}
     abstract fun initData()
     open fun initListener() {}
     open fun initProgressDialog() {}

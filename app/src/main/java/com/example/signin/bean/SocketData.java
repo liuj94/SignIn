@@ -15,26 +15,26 @@ public class SocketData implements Serializable {
      */
 
     private String code;
-    private BigDecimal cardH;
-    private BigDecimal cardW;
+    private String cardH = "80";
+    private String cardW = "120";
     private int count;
     private String type;
     private List<String> urls = new ArrayList<>();
 
 
-    public BigDecimal getCardH() {
+    public String getCardH() {
         return cardH;
     }
 
-    public void setCardH(BigDecimal cardH) {
+    public void setCardH(String cardH) {
         this.cardH = cardH;
     }
 
-    public BigDecimal getCardW() {
+    public String getCardW() {
         return cardW;
     }
 
-    public void setCardW(BigDecimal cardW) {
+    public void setCardW(String cardW) {
         this.cardW = cardW;
     }
 

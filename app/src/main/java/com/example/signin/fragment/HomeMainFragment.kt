@@ -14,10 +14,7 @@ import com.example.signin.*
 import com.example.signin.adapter.HomeListAdapter
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
-import com.example.signin.bean.MeetingData
-import com.example.signin.bean.SiginUpListData
-import com.example.signin.bean.SiginUpListModel
-import com.example.signin.bean.User
+import com.example.signin.bean.*
 import com.example.signin.databinding.FragHomeBinding
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
@@ -257,6 +254,7 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
 //                            isFrist = false
                             for (item in list) {
                                 getData2("" + item.id)
+                                getstatisticsData("" + item.id)
                             }
 //                        }
 //                            Log.d("hhhhhhhhhhhhhhhhhhh", "gotogotogotogoto")
@@ -291,44 +289,38 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
             })
     }
 
-    private fun getList(meetingid: String) {
-        Log.d("getList", "接口开始调用===up/app/list")
-        mViewModel.isShowLoading.value = true
-        OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
-            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+
+    fun getstatisticsData(meetingId:String) {
+
+        OkGo.get<MeetingStatisticsData>(PageRoutes.Api_meeting_statistics + meetingId + "?id=" + meetingId)
+            .tag(PageRoutes.Api_meeting_statistics + meetingId + "?id=" + meetingId)
             .headers("Authorization", kv.getString("token", ""))
-            .execute(object : RequestCallback<List<SiginUpListData>>() {
+            .execute(object : RequestCallback<MeetingStatisticsData>() {
                 override fun onSuccessNullData() {
                     super.onSuccessNullData()
 
                 }
 
-                override fun onMySuccess(data: List<SiginUpListData>) {
+                override fun onMySuccess(data: MeetingStatisticsData) {
                     super.onMySuccess(data)
-                    var a = SiginUpListModel()
-                    a.list = data
-                    kv.putString("SiginUpListModel", JSON.toJSONString(a))
-                    Log.d("getList", "接口返回结束===up/app/list")
+                    kv.putString(
+                        "MeetingStatistics" + meetingId,
+                        JSON.toJSONString(data)
+                    )
 
                 }
 
-                override fun onError(response: Response<List<SiginUpListData>>) {
+                override fun onError(response: Response<MeetingStatisticsData>) {
                     super.onError(response)
-
 
                 }
 
                 override fun onFinish() {
                     super.onFinish()
 
-
                 }
 
 
             })
-
-//        }
-
     }
-
 }

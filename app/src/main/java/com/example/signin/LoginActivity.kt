@@ -34,7 +34,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
             toast(msg)
         }
         //15310333405
-        binding.userName.setText(kv.getString("loginusername","15310333405"))
+        binding.userName.setText(kv.getString("loginusername",""))
         binding.login.setOnClickListener {
             longin()
         }

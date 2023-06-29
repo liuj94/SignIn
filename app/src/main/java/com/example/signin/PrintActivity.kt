@@ -74,27 +74,36 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
         selectMeetingAdapter?.submitList(selectList3)
         selectMeetingAdapter?.setOnItemClickListener { _, _, position ->
             binding.selected.text = "当前连接设备:" + selectList3[position].name
-            printUnit?.connectSPP(selectList3[position].mac)
-            selectedDevice = selectList3[position].name
-            LiveDataBus.get().with("Printqiehuan").postValue(selectList3[position].mac)
+//            printUnit?.connectSPP(selectList3[position].mac)
+           var p = selectList3[position]
+            val d = Device()
+            val port =
+                if ("SPP" == p.bluetoothType) CTPL.Port.SPP else CTPL.Port.BLE
+            d.setPort(port)
+            d.bluetoothMacAddr = p.mac
+            if (port == CTPL.Port.BLE) {
+                d.setBleServiceUUID("49535343-fe7d-4ae5-8fa9-9fafd205e455")
+            }
+            CTPL.getInstance().connect(d)
+            LiveDataBus.get().with("Printqiehuan").postValue(p)
         }
         binding.device.layoutManager = LinearLayoutManager(this)
         binding.device.setAdapter(selectMeetingAdapter)
         printUnit = PrintUnit(this, object : PrintUnit.ListPrinter {
             override fun printer(p: SiginData) {
+                Log.e("aaaCTPLprintUnitXX", "------aaaa------printer--- " + selectList3)
                 for (d in selectList3) {
                     if (d.mac.equals(p.mac)) {
                         return
                     }
                 }
                 selectList3.add(p)
-
-                Log.e("aaaprintUnitXXPermissions", "------aaaa------printer--- " + selectList3)
+                selectMeetingAdapter?.notifyDataSetChanged()
+                Log.e("aaaCTPLprintUnitXX", "------aaaa------printer--- " + selectList3)
 //
-                selectMeetingAdapter!!.notifyDataSetChanged()
-                if(CTPL.getInstance().isConnected){
 
-                    binding.selected.text = "当前连接设备:" + CTPL.getInstance().queryHardwareModel()
+                if(CTPL.getInstance().isConnected){
+                    binding.selected.text = "当前连接设备:" + kv.getString("PrintName","")
                 }else{
                     if (isFrist) {
                         isFrist = false
@@ -132,9 +141,7 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
                 override fun onGranted(permissions: MutableList<String>, all: Boolean) {
                     if (all) {
                         printUnit?.PrintRegisterReceiver()
-                        if(CTPL.getInstance().isConnected){
-                            binding.selected.text = "当前连接设备:" + CTPL.getInstance().queryHardwareModel()
-                        }
+
                     } else {
                         toast("获取蓝牙权限失败")
                     }
@@ -146,7 +153,9 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
 
                 }
             })
-
+        if(CTPL.getInstance().isConnected){
+            binding.selected.text = "当前连接设备:" + kv.getString("PrintName","")
+        }
     }
 
     override fun onDestroy() {

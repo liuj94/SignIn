@@ -99,6 +99,7 @@ public class PrintUnit {
 //        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
 //            return;
 //        }
+        Log.e("aaaCTPLprintUnitXX", "------aaaa------PrintRegisterReceiver--- " );
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);//蓝牙开关
         intentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);//蓝牙连接状态
@@ -135,16 +136,16 @@ public class PrintUnit {
                         if (isPrinter ) {
 
                             //系统搜索会有重复的对象,需要自行过滤
-                            Log.e("aaprintUnitXXPermissions", "------------搜索--- $device.getName()==" + device.getName());
+                            Log.e("aaaCTPLprintUnitXX", "------------搜索--- $device.getName()==" + device.getName());
                             SiginData a = new SiginData();
                             a.setName(device.getName());
                             a.setMac(device.getAddress());
-                            if(device.getType()==2){
+                            if(device.getType()==2||device.getType()==3){
                                 a.setBluetoothType("BLE");
                             }else {
                                 a.setBluetoothType("SPP");
                             }
-
+                            Log.d("aaaCTPLprintUnitXX", "device.getType()="+device.getType());
                             a.setKuan(true);
                             list.add(a);
 //                            list.add(device.getName() + "\n\n" + device.getAddress());
@@ -203,11 +204,12 @@ public class PrintUnit {
                             if (list.size() < 1) {
                                 SiginData a = new SiginData();
                                 a.setName(device.getName());
-                                if(device.getType()==2){
+                                if(device.getType()==2||device.getType()==3){
                                     a.setBluetoothType("BLE");
                                 }else {
                                     a.setBluetoothType("SPP");
                                 }
+                                Log.d("CTPLprintUnitXXPermissions", "device.getType()="+device.getType());
                                 a.setMac(device.getAddress());
                                 a.setKuan(true);
 //                                listPrinter.printer(device.getName() + "\n\n" + device.getAddress());
@@ -273,11 +275,12 @@ public class PrintUnit {
                 //系统搜索会有重复的对象,需要自行过滤
 //                if(list.size()<1){
                 SiginData a = new SiginData();
-                if(bluetoothDevice.getType()==2){
+                if(bluetoothDevice.getType()==2||bluetoothDevice.getType()==3){
                     a.setBluetoothType("BLE");
                 }else {
                     a.setBluetoothType("SPP");
                 }
+                Log.d("CTPLprintUnitXXPermissions", "bluetoothDevice.getType()="+bluetoothDevice.getType());
                 a.setName(bluetoothDevice.getName());
                 a.setMac(bluetoothDevice.getAddress());
                 a.setKuan(true);

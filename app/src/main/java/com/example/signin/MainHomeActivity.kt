@@ -14,6 +14,7 @@ import com.bumptech.glide.request.target.Target
 import com.ctaiot.ctprinter.ctpl.CTPL
 import com.ctaiot.ctprinter.ctpl.Device
 import com.ctaiot.ctprinter.ctpl.RespCallback
+import com.ctaiot.ctprinter.ctpl.param.PaperType
 import com.dylanc.longan.TAG
 import com.dylanc.longan.toast
 import com.example.signin.PageRoutes.Companion.Api_appVersion
@@ -45,6 +46,11 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
     var isMainHome = true
     var client: JWebSocketClient? = null
     var printUnit: PrintUnit? = null
+    var printDevData: SiginData? = null
+    override fun initCARData() {
+        super.initCARData()
+        isCreateShow = true
+    }
     override fun initData() {
         SpeechUtils.getInstance(this@MainHomeActivity)
         val uri: URI = URI.create(
@@ -151,11 +157,43 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
 
             }
-        LiveDataBus.get().with("Printqiehuan", String::class.java)
+        LiveDataBus.get().with("Printqiehuan", SiginData::class.java)
             .observeForever {
-                printUnit?.connectSPP(it)
+//                printUnit?.connectSPP(it)
+                printDevData = it
+//                val d = Device()
+//                val port =
+//                    if ("SPP" == p.bluetoothType) CTPL.Port.SPP else CTPL.Port.BLE
+//                d.setPort(port)
+//                d.bluetoothMacAddr = p.mac
+//                if (port == CTPL.Port.BLE) {
+//                    d.setBleServiceUUID("49535343-fe7d-4ae5-8fa9-9fafd205e455")
+//                }
+//                Log.d("CTPLprintUnitXXPermissions", "port=" + port)
+//                CTPL.getInstance().connect(d)
+            }
+        CTPL.getInstance().init(App.mApplication, object : RespCallback {
+            override fun onConnectRespsonse(port: Int, reason: Int) {
+                Log.d("aaaCTPLprintUnitXX", "端口=$port,结果=$reason")
+//                                CTPL.getInstance().queryFirmwareInfo()
+                if(reason==256){
+                    kv.putString("PrintName",printDevData?.name)
+                    kv.putString("PrintMac",printDevData?.mac)
+                    kv.putString("PrintType",printDevData?.bluetoothType)
+                }
+            }
+
+            override fun onDataResponse(result: HashMap<String, String>) {
+                Log.d("aaaCTPLprintUnitXX", "结果=$result")
+                CTPL.getInstance().clean()
 
             }
+
+            override fun autoSPPBond(): Boolean {
+                Log.d("aaaCTPLprintUnitXX", "autoSPPBond=")
+                return true
+            }
+        })
         XXPermissions.with(this@MainHomeActivity)
             .permission(Permission.BLUETOOTH_SCAN)
             .permission(Permission.BLUETOOTH_CONNECT)
@@ -164,25 +202,11 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
             .request(object : OnPermissionCallback {
                 override fun onGranted(permissions: MutableList<String>, all: Boolean) {
                     if (all) {
-                        CTPL.getInstance().init(App.mApplication, object : RespCallback {
-                            override fun onConnectRespsonse(port: Int, reason: Int) {
-                                Log.d(App.TAG, "端口=$port,结果=$reason")
 
-                            }
-
-                            override fun onDataResponse(result: HashMap<String, String>) {
-                                Log.d(App.TAG, "结果=$result")
-
-                            }
-
-                            override fun autoSPPBond(): Boolean {
-                                return true
-                            }
-                        })
                         printUnit =
                             PrintUnit(this@MainHomeActivity, object : PrintUnit.ListPrinter {
                                 override fun printer(p: SiginData) {
-
+                                    printDevData = p
                                     //蓝牙连接
                                     val d = Device()
                                     val port =
@@ -192,6 +216,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                                     if (port == CTPL.Port.BLE) {
                                         d.setBleServiceUUID("49535343-fe7d-4ae5-8fa9-9fafd205e455")
                                     }
+                                    Log.d("CTPLprintUnitXXPermissions", "port=" + port)
                                     CTPL.getInstance().connect(d)
 
 
@@ -215,21 +240,31 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                 }
             })
 
-        binding.dy.setOnClickListener {
-            var a = SocketData()
-            var b = ArrayList<String>()
-            b.add("/profile/upload/2023/05/22/ef4765ff-7f84-45cf-a0eb-5451f129fed3.png")
-//            b.add("/profile/upload/2023/05/22/7e203438-dc37-42ba-afde-927657009c85.png")
-            a.urls = b
-            printImg(a)
-        }
+//        binding.dy.setOnClickListener {
+////            Log.d("aaaCTPLprintUnitXX", "硬件版本="+CTPL.getInstance().queryHardwareVersion().toString())
+////            Log.d("aaaCTPLprintUnitXX", "打印模式参数设置="+CTPL.getInstance().queryPrintMode().toString())
+////            Log.d("aaaCTPLprintUnitXX", "展示信息="+CTPL.getInstance().queryDisplayInfo().toString())
+////            Log.d("aaaCTPLprintUnitXX", "查询纸张设置="+CTPL.getInstance().queryPaperType().toString())
+////            CTPL.getInstance().setPaperType(PaperType.Label)
+//            var a = SocketData()
+//            var b = ArrayList<String>()
+//            b.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201503%2F08%2F20150308162631_4mCj8.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1690549541&t=e09b7fcfb3f7557bb6807c2dff9f63b4")
+////            b.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201503%2F08%2F20150308162631_4mCj8.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1690549541&t=e09b7fcfb3f7557bb6807c2dff9f63b4")
+////            b.add("/profile/upload/2023/05/22/ef4765ff-7f84-45cf-a0eb-5451f129fed3.png")
+////            b.add("/profile/upload/2023/05/22/7e203438-dc37-42ba-afde-927657009c85.png")
+//            a.urls = b
+//            a.cardW = "120.0"
+//            a.cardH = "80.0"
+//            printImg(a)
+//        }
     }
 
 
     private fun printImg(data: SocketData) {
         for (url in data.urls) {
             Glide.with(this@MainHomeActivity).asBitmap()
-                .load(BaseUrl + url)
+//                .load(BaseUrl + url)
+                .load(url)
 //                .apply(options)
                 .listener(object : RequestListener<Bitmap> {
                     override fun onLoadFailed(
@@ -253,18 +288,22 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                             if (!CTPL.getInstance().isConnected) {
                                 toast("打印机未连接")
                             } else {
-                                CTPL.getInstance()
+                                Log.d("aaaCTPLprintUnitXX", "打印机打印=")
+//                                data.cardW.intValueExact(),120
+//                                data.cardH.intValueExact()80
+
+                                CTPL.getInstance().setPaperType(PaperType.Label).setPrintSpeed(1)
                                     .setSize(
-                                        data.cardW.intValueExact(),
-                                        data.cardH.intValueExact()
+                                        data.cardW.toDouble().toInt(),
+                                        data.cardH.toDouble().toInt()
                                     ) //设置纸张尺寸,单位:毫米
                                     .drawBitmap(
                                         Rect(
                                             0,
                                             0,
-                                            data.cardW.intValueExact(),
-                                            data.cardH.intValueExact()
-                                        ), b, false, null
+                                            data.cardW.toDouble().toInt()*8 + 50,
+                                            data.cardH.toDouble().toInt()*8 + 30
+                                        ), b, true, null
                                     ) //绘制图像, 单位:像素
                                     .print(1)
                                     .execute() //执行打印
