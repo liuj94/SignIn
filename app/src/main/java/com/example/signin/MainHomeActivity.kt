@@ -48,13 +48,18 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
     override fun initData() {
         SpeechUtils.getInstance(this@MainHomeActivity)
+//        val uri: URI = URI.create(
+//            "wss://meeting.nbqichen.com/websocket/user?source=sys&mac=" + MacUitl.getMac(this) + "&Authorization=" + kv.getString(
+//                "token",
+//                ""
+//            )
+//        )
         val uri: URI = URI.create(
-            "wss://meeting.nbqichen.com/websocket/user?source=sys&mac=" + MacUitl.getMac(this) + "&Authorization=" + kv.getString(
+            "wss://meeting.nbqichen.com/websocket/user?source=sys&Authorization=" + kv.getString(
                 "token",
                 ""
             )
         )
-
         Log.d(
             "JWebSocketClient",
             "wss://meeting.nbqichen.com/websocket/user?source=sys&mac=" + MacUitl.getMac(this) + "&Authorization=" + kv.getString(
@@ -62,7 +67,39 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                 ""
             )
         )
+
         client = object : JWebSocketClient(uri) {
+            override fun onError(ex: java.lang.Exception?) {
+                super.onError(ex)
+                object : Thread() {
+                    override fun run() {
+                        try {
+                            Log.e("JWebSocketClientService", "开启重连")
+                            client?.reconnectBlocking()
+                        } catch (e: InterruptedException) {
+                            e.printStackTrace()
+                        }
+                    }
+                }.start()
+            }
+
+            override fun onClose(code: Int, reason: String?, remote: Boolean) {
+                super.onClose(code, reason, remote)
+                if (!remote && code != 1000) {
+                    object : Thread() {
+                        override fun run() {
+                            try {
+                                Log.e("JWebSocketClientService", "开启重连")
+                                client?.reconnectBlocking()
+                            } catch (e: InterruptedException) {
+                                e.printStackTrace()
+                            }
+                        }
+                    }.start()
+
+                }
+            }
+
             override fun onMessage(message: String) {
 
                 try {
@@ -265,6 +302,11 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
 
     private fun printImg(data: SocketData) {
+        var printkaiguan = kv.getBoolean("printkaiguan", true)
+        if(!printkaiguan){
+            toast("请前往设置开启打印机")
+            return
+        }
         for (url in data.urls) {
             Glide.with(this@MainHomeActivity).asBitmap()
 //                .load(BaseUrl + url)
