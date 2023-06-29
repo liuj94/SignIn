@@ -101,7 +101,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
             }
 
             override fun onMessage(message: String) {
-
+                Log.e("JWebSocketClient", "onMessage()=="+message)
                 try {
                     var data = JSON.parseObject(message, SocketData::class.java)
                     if (data.code.equals("200")) {

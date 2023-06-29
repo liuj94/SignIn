@@ -62,20 +62,20 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             binding.print.visibility = View.GONE
         }
         binding.print.setOnClickListener {
-            var message = kv.getString("printData", "")
-            if (message.isNullOrEmpty()) {
-                try {
-                    var a = SocketData()
-                    var b = ArrayList<String>()
-                    b.add("https://hbimg.huaban.com/adcb59c23bb2a7af53be2a720781d7ce1ed732322213-xMdPVc_fw658")
-                    a.urls = b
-                    a.cardW = "120.0"
-                    a.cardH = "80.0"
-                    printImg(a)
-                } catch (e: Exception) {
-                }
-            }
-//            LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("JWebSocketClientlocationPrint")
+//            var message = kv.getString("printData", "")
+//            if (message.isNullOrEmpty()) {
+//                try {
+//                    var a = SocketData()
+//                    var b = ArrayList<String>()
+//                    b.add("https://hbimg.huaban.com/adcb59c23bb2a7af53be2a720781d7ce1ed732322213-xMdPVc_fw658")
+//                    a.urls = b
+//                    a.cardW = "120.0"
+//                    a.cardH = "80.0"
+//                    printImg(a)
+//                } catch (e: Exception) {
+//                }
+//            }
+            LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("JWebSocketClientlocationPrint")
         }
         if(!d.isNullOrEmpty()){
             try {
