@@ -17,6 +17,7 @@ import com.ctaiot.ctprinter.ctpl.RespCallback
 import com.ctaiot.ctprinter.ctpl.param.PaperType
 import com.dylanc.longan.toast
 import com.example.signin.PageRoutes.Companion.Api_appVersion
+import com.example.signin.PageRoutes.Companion.BaseUrl
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
@@ -112,7 +113,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                             LiveDataBus.get().with("JWebSocketClientlocation").postValue("1")
                         } else if (data.type.equals("print")) {
                             toast("打印通知")
-                            kv.putString(message, "printData")
+                            kv.putString("printData", message)
                             var printZd = kv.getBoolean("printZd", false)
                             if (printZd) {
                                 printImg(data)
@@ -309,8 +310,8 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
         }
         for (url in data.urls) {
             Glide.with(this@MainHomeActivity).asBitmap()
-//                .load(BaseUrl + url)
-                .load(url)
+                .load(BaseUrl + url)
+//                .load(url)
 //                .apply(options)
                 .listener(object : RequestListener<Bitmap> {
                     override fun onLoadFailed(
