@@ -49,13 +49,19 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
     override fun initData() {
         SpeechUtils.getInstance(this@MainHomeActivity)
         val uri: URI = URI.create(
-            "wss://meeting.nbqichen.com/websocket/user?source=sys&Authorization=" + kv.getString(
+            "wss://meeting.nbqichen.com/websocket/user?source=sys&mac=" + MacUitl.getMac(this) + "&Authorization=" + kv.getString(
                 "token",
                 ""
             )
         )
 
-
+        Log.d(
+            "JWebSocketClient",
+            "wss://meeting.nbqichen.com/websocket/user?source=sys&mac=" + MacUitl.getMac(this) + "&Authorization=" + kv.getString(
+                "token",
+                ""
+            )
+        )
         client = object : JWebSocketClient(uri) {
             override fun onMessage(message: String) {
 
@@ -214,7 +220,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                                     if (port == CTPL.Port.BLE) {
                                         d.setBleServiceUUID("49535343-fe7d-4ae5-8fa9-9fafd205e455")
                                     }
-                                    Log.d("CTPLprintUnitXXPermissions", "port=" + port)
+//                                    Log.d("CTPLprintUnitXXPermissions", "port=" + port)
                                     CTPL.getInstance().connect(d)
 
 
