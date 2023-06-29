@@ -44,6 +44,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
     var invoiceStatus: String = "0"
     override fun initData() {
         intent.getStringExtra("id")?.let { id = it }
+        Log.d("getDataaaaaa","getData()=="+id)
         intent.getIntExtra("showType", 0)?.let { showType = it }
         if (showType != 0) {
             binding.itemZcbd.root.visibility = View.GONE
@@ -239,6 +240,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
     var meetingUserDeData: MeetingUserDeData? = null
     private fun getData() {
         mViewModel.isShowLoading.value = true
+        Log.d("getDataaaaaa","getData()=="+id)
         OkGo.get<MeetingUserDeData>(PageRoutes.Api_meetinguser_data + id + "?id=" + id)
             .tag(PageRoutes.Api_meetinguser_data + id + "?id=" + id)
             .headers("Authorization", kv.getString("token", ""))
@@ -987,6 +989,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
     override fun onResume() {
         super.onResume()
+        Log.d("getDataaaaaa","onResume()=="+id)
         getData()
 
 
@@ -1173,6 +1176,19 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
                 override fun onMySuccess(data: SiginData) {
                     super.onMySuccess(data)
+                    data.meetingSignUpLocationConfig?.let {
+                        if(it.printModel==1){
+                            kv.putBoolean("printZd",true)
+                        }else{
+                            kv.putBoolean("printZd",false)
+                        }
+                        if(it.printStatus==1){
+                            kv.putBoolean("printStatus",true)
+                        }else{
+                            kv.putBoolean("printStatus",false)
+                        }
+
+                    }
                     meetingFormData = MeetingFormData()
                     meetingFormData?.meetingFormList = data.meetingFormList
 

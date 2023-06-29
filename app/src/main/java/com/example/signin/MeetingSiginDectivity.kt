@@ -474,6 +474,20 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                         meetingFormData = MeetingFormData()
                         meetingFormData?.meetingFormList = data.meetingFormList
                         kv.putString("MeetingFormData", JSON.toJSONString(meetingFormData))
+                        data.meetingSignUpLocationConfig?.let {
+                            if(it.printModel==1){
+                                kv.putBoolean("printZd",true)
+                            }else{
+                                kv.putBoolean("printZd",false)
+                            }
+                            if(it.printStatus==1){
+                                kv.putBoolean("printStatus",true)
+                            }else{
+                                kv.putBoolean("printStatus",false)
+                            }
+
+                        }
+
                         binding.num1.text = "" + data.beUserCount
                         binding.num2.text = "" + data.signUpCount
                         binding.num3.text = "" + data.localSignUpCount

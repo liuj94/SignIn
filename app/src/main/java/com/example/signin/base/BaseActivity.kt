@@ -29,7 +29,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
     val mViewModel: VM by lazy {
         obtainViewModel(this, getViewModel())
     }
-    var isCreateShow = false
+    var isCreateShow = true
     abstract fun getViewModel(): Class<VM>
     override val kv = MMKV.mmkvWithID("MyDataMMKV")
 

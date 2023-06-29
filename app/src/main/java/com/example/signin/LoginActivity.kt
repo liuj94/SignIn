@@ -1,7 +1,6 @@
 package com.example.signin
 
 import android.graphics.Color
-import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.startActivity
 import com.dylanc.longan.toast
@@ -34,7 +33,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
             toast(msg)
         }
         //15310333405
-        binding.userName.setText(kv.getString("loginusername",""))
+        binding.userName.setText(kv.getString("loginusername","15310333405"))
         binding.login.setOnClickListener {
             longin()
         }

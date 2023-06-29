@@ -2,7 +2,6 @@ package com.example.signin.fragment
 
 
 import android.os.Build
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -50,6 +49,16 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
         super.onDestroyView()
         isShow = false
         Log.d("MettingDe2Fragment","MettingDe2Fragmenton==onDestroyView()")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getData()
+        getList()
+    }
+    fun shuaxin(){
+        getData()
+        getList()
     }
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
@@ -134,9 +143,9 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
                 }
 
             }
-        getData()
-        getList()
+
     }
+
 
 //    private val delayedLoad = SubstepDelayedLoad()
 //    private fun delayed() {

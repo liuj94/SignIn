@@ -1,6 +1,8 @@
 package com.example.signin
 
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Rect
 import android.media.MediaPlayer
 import android.os.CountDownTimer
 import android.util.Log
@@ -8,9 +10,16 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
+import com.ctaiot.ctprinter.ctpl.CTPL
+import com.ctaiot.ctprinter.ctpl.param.PaperType
 import com.dylanc.longan.activity
+import com.dylanc.longan.toast
 import com.example.signin.adapter.ReAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
@@ -18,6 +27,7 @@ import com.example.signin.base.StatusBarUtil
 import com.example.signin.bean.MeetingFormData
 import com.example.signin.bean.MeetingFormList
 import com.example.signin.bean.SignUpUser
+import com.example.signin.bean.SocketData
 import com.example.signin.databinding.ActSigninStateBinding
 
 
@@ -45,14 +55,27 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
     var meetingFormList: MutableList<MeetingFormList> = ArrayList()
     override fun initData() {
         var d = kv.getString("MeetingFormData","")
-        var isPrint = kv.getBoolean("printkaiguan", true)
+        var isPrint = kv.getBoolean("printStatus", true)
         if(isPrint){
             binding.print.visibility = View.VISIBLE
         }else{
             binding.print.visibility = View.GONE
         }
         binding.print.setOnClickListener {
-            LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("JWebSocketClientlocationPrint")
+            var message = kv.getString("printData", "")
+            if (message.isNullOrEmpty()) {
+                try {
+                    var a = SocketData()
+                    var b = ArrayList<String>()
+                    b.add("https://hbimg.huaban.com/adcb59c23bb2a7af53be2a720781d7ce1ed732322213-xMdPVc_fw658")
+                    a.urls = b
+                    a.cardW = "120.0"
+                    a.cardH = "80.0"
+                    printImg(a)
+                } catch (e: Exception) {
+                }
+            }
+//            LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("JWebSocketClientlocationPrint")
         }
         if(!d.isNullOrEmpty()){
             try {
@@ -302,5 +325,91 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             submitList(meetingFormList)
         }
         binding.recyclerView.adapter = adapter
+    }
+    private fun printImg(data: SocketData) {
+        for (url in data.urls) {
+            Glide.with(this@SiginReAutoActivity).asBitmap()
+//                .load(BaseUrl + url)
+                .load(url)
+//                .apply(options)
+                .listener(object : RequestListener<Bitmap> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Bitmap>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Bitmap?,
+                        model: Any?,
+                        target: Target<Bitmap>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        resource?.let { b ->
+                            if (!CTPL.getInstance().isConnected) {
+                                toast("打印机未连接")
+                            } else {
+                                Log.d("aaaCTPLprintUnitXX", "打印机打印=")
+//                                data.cardW.intValueExact(),120
+//                                data.cardH.intValueExact()80
+
+                                CTPL.getInstance().setPaperType(PaperType.Label).setPrintSpeed(1)
+                                    .setSize(
+                                        data.cardW.toDouble().toInt(),
+                                        data.cardH.toDouble().toInt()
+                                    ) //设置纸张尺寸,单位:毫米
+                                    .drawBitmap(
+                                        Rect(
+                                            0,
+                                            0,
+                                            data.cardW.toDouble().toInt() * 8 + 50,
+                                            data.cardH.toDouble().toInt() * 8 + 30
+                                        ), b, true, null
+                                    ) //绘制图像, 单位:像素
+                                    .print(1)
+                                    .execute() //执行打印
+                            }
+
+
+//                            CTPL.getInstance().setSize(data.cardW.intValueExact(), data.cardH.intValueExact())
+//                            printUnit?.let {
+//                                Log.d(
+//                                    "aaaaprintUnitXXPermissions",
+//                                    "图片下载完成开始打印="
+//                                )
+//                                if (isConPrint) {
+//                                    Log.d(
+//                                        "aaaaprintUnitXXPermissions",
+//                                        "isConPrint="+it.isConPrint
+//                                    )
+//                                    try {
+//                                        it.print(b,80)
+//                                    } catch (e: Exception) {
+//                                    }
+//
+//                                } else {
+//                                    toast("打印机未连接")
+//                                }
+////                                try {
+////                                    it.print(b)
+////                                } catch (e: Exception) {
+////                                    toast("打印异常")
+////                                }
+//                            }
+
+                        }
+                        return false
+                    }
+                }
+                ).submit()
+
+        }
+
+
     }
 }

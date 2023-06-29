@@ -15,10 +15,8 @@ import com.ctaiot.ctprinter.ctpl.CTPL
 import com.ctaiot.ctprinter.ctpl.Device
 import com.ctaiot.ctprinter.ctpl.RespCallback
 import com.ctaiot.ctprinter.ctpl.param.PaperType
-import com.dylanc.longan.TAG
 import com.dylanc.longan.toast
 import com.example.signin.PageRoutes.Companion.Api_appVersion
-import com.example.signin.PageRoutes.Companion.BaseUrl
 import com.example.signin.adapter.MainViewPagerAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
@@ -47,10 +45,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
     var client: JWebSocketClient? = null
     var printUnit: PrintUnit? = null
     var printDevData: SiginData? = null
-    override fun initCARData() {
-        super.initCARData()
-        isCreateShow = true
-    }
+
     override fun initData() {
         SpeechUtils.getInstance(this@MainHomeActivity)
         val uri: URI = URI.create(
@@ -73,6 +68,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                         ) {
                             LiveDataBus.get().with("JWebSocketClientlocation").postValue("1")
                         } else if (data.type.equals("print")) {
+                            toast("打印通知")
                             kv.putString(message, "printData")
                             var printZd = kv.getBoolean("printZd", false)
                             if (printZd) {
@@ -146,13 +142,15 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
         LiveDataBus.get().with("JWebSocketClientlocationPrint", String::class.java)
             .observeForever {
                 var message = kv.getString("printData", "")
-                if (message.isNullOrEmpty()) {
+                if (!message.isNullOrEmpty()) {
                     try {
                         var data = JSON.parseObject(message, SocketData::class.java)
                         printImg(data)
                     } catch (e: Exception) {
                     }
 
+                } else {
+                    toast("打印参数为空")
                 }
 
 
@@ -176,10 +174,10 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
             override fun onConnectRespsonse(port: Int, reason: Int) {
                 Log.d("aaaCTPLprintUnitXX", "端口=$port,结果=$reason")
 //                                CTPL.getInstance().queryFirmwareInfo()
-                if(reason==256){
-                    kv.putString("PrintName",printDevData?.name)
-                    kv.putString("PrintMac",printDevData?.mac)
-                    kv.putString("PrintType",printDevData?.bluetoothType)
+                if (reason == 256) {
+                    kv.putString("PrintName", printDevData?.name)
+                    kv.putString("PrintMac", printDevData?.mac)
+                    kv.putString("PrintType", printDevData?.bluetoothType)
                 }
             }
 
@@ -301,8 +299,8 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                                         Rect(
                                             0,
                                             0,
-                                            data.cardW.toDouble().toInt()*8 + 50,
-                                            data.cardH.toDouble().toInt()*8 + 30
+                                            data.cardW.toDouble().toInt() * 8 + 50,
+                                            data.cardH.toDouble().toInt() * 8 + 30
                                         ), b, true, null
                                     ) //绘制图像, 单位:像素
                                     .print(1)

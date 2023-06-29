@@ -101,6 +101,16 @@ public class SiginData implements Serializable {
     private String modelType= "";
 
     private String signUpNeedCount= "";
+    private MeetingSignUpLocationConfig meetingSignUpLocationConfig;
+
+    public MeetingSignUpLocationConfig getMeetingSignUpLocationConfig() {
+        return meetingSignUpLocationConfig;
+    }
+
+    public void setMeetingSignUpLocationConfig(MeetingSignUpLocationConfig meetingSignUpLocationConfig) {
+        this.meetingSignUpLocationConfig = meetingSignUpLocationConfig;
+    }
+
     private boolean isMyselect;
 
     public String getMeetingSignUpCount() {
