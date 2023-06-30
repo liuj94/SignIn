@@ -62,6 +62,32 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
         } else {
             binding.print.visibility = View.GONE
         }
+        LiveDataBus.get().with("JWebSocketClientlocationPrint", String::class.java)
+            .observeForever {
+                runOnUiThread(Runnable {
+                    var message = kv.getString("printData", "")
+                    if (!message.isNullOrEmpty()) {
+                        try {
+                            var data = JSON.parseObject(message, SocketData::class.java)
+                            var printZd = kv.getBoolean("printZd", true)
+                            if (printZd) {
+                                toast("自动打印开启")
+                                printImg(data)
+                            } else {
+                                toast("自动打印未开启")
+                            }
+                        } catch (e: Exception) {
+                            Log.d("JWebSocketClient", "ExceptionionPrint=" + e.message)
+                        }
+
+                    } else {
+                        toast("打印参数为空")
+                    }
+
+                })
+
+
+            }
         binding.print.setOnClickListener {
             if (!CTPL.getInstance().isConnected) {
                 toast("打印机未连接")
@@ -405,12 +431,12 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
 //                                if(data.cardH.toDouble().toInt()<80){
 //                                    h = data.cardH.toDouble().toInt()
 //                                }
-                                var w:Int = 80
-                                if(data.cardW.toDouble().toInt()<80){
+                                var w: Int = 80
+                                if (data.cardW.toDouble().toInt() < 80) {
                                     w = data.cardW.toDouble().toInt()
                                 }
-                                var h:Int = 50
-                                if(data.cardH.toDouble().toInt()<50){
+                                var h: Int = 50
+                                if (data.cardH.toDouble().toInt() < 50) {
                                     h = data.cardH.toDouble().toInt()
                                 }
                                 CTPL.getInstance().setPaperType(PaperType.Label).setPrintSpeed(1)

@@ -117,13 +117,18 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                         } else if (data.type.equals("print")) {
 //                            toast("打印通知")
                             kv.putString("printData", message)
+                            LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("1")
+
 //                            Log.e("JWebSocketClient", "printData()=="+kv.getString("printData",""))
-                            runOnUiThread(Runnable {
-                                var printZd = kv.getBoolean("printZd", true)
-                                if (printZd) {
-                                    printImg3(data)
-                                }
-                            })
+//                            runOnUiThread(Runnable {
+//                                var printZd = kv.getBoolean("printZd", true)
+//                                if (printZd) {
+//                                    toast("自动打印开启")
+//                                    printImg3(data)
+//                                }else{
+//                                    toast("自动打印未开启")
+//                                }
+//                            })
 
                         }
 

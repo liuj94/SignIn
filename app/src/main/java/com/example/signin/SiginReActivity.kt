@@ -67,6 +67,32 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
         } else {
             binding.print.visibility = View.GONE
         }
+        LiveDataBus.get().with("JWebSocketClientlocationPrint", String::class.java)
+            .observeForever {
+                runOnUiThread(Runnable {
+                    var message = kv.getString("printData", "")
+                    if (!message.isNullOrEmpty()) {
+                        try {
+                            var data = JSON.parseObject(message, SocketData::class.java)
+                            var printZd = kv.getBoolean("printZd", true)
+                            if (printZd) {
+                                toast("自动打印开启")
+                                printImg(data)
+                            } else {
+                                toast("自动打印未开启")
+                            }
+                        } catch (e: Exception) {
+                            Log.d("JWebSocketClient", "ExceptionionPrint=" + e.message)
+                        }
+
+                    } else {
+                        toast("打印参数为空")
+                    }
+
+                })
+
+
+            }
         binding.print.setOnClickListener {
             if (!CTPL.getInstance().isConnected) {
                 toast("打印机未连接")
