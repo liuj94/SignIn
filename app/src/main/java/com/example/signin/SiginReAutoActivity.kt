@@ -74,7 +74,9 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                         App.getInstance().toast("接收到打印通知")
                         var printZd = kv.getBoolean("printZd", true)
                         if (printZd) {
-                            App.getInstance().toast("自动打印开启")
+//                            App.getInstance().toast("自动打印开启")
+                            var message = kv.getString("printData", "")
+                            Log.d("JWebSocketClient", "message=" + message)
                             if (!CTPL.getInstance().isConnected) {
 //                            if (false) {
                                 App.getInstance().toast("打印机未连接")

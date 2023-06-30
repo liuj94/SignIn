@@ -110,6 +110,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                                         data.password = binding.password.text.toString().trim()
                                         kv.putString("userData", JSON.toJSONString(data))
 
+//                                        startActivity<MainHomeActivity>()
                                         startActivity<MainHomeActivity>()
                                         finish()
 

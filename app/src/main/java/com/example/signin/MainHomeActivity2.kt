@@ -36,20 +36,22 @@ import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
 import com.xuexiang.xupdate.XUpdate
+import dev.gustavoavila.websocketclient.WebSocketClient
 import getDataType
 import java.net.URI
 
 
-class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>() {
+class MainHomeActivity2 : BaseBindingActivity<ActivityMainBinding, BaseViewModel>() {
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
     var isMainHome = true
-    var client: JWebSocketClient? = null
+//    var client: JWebSocketClient? = null
+//    var client: WebSocketClient  ? = null
     var printUnit: PrintUnit? = null
     var printDevData: SiginData? = null
 
     override fun initData() {
-        SpeechUtils.getInstance(this@MainHomeActivity)
+        SpeechUtils.getInstance(this@MainHomeActivity2)
 //        val uri: URI = URI.create(
 //            "wss://meeting.nbqichen.com/websocket/user?source=sys&mac=" + MacUitl.getMac(this) + "&Authorization=" + kv.getString(
 //                "token",
@@ -69,78 +71,79 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                 ""
             )
         )
-        Log.e("JWebSocketClient", "MyJWebSocketClient()==")
-        client = object : JWebSocketClient(uri) {
-            override fun onError(ex: Exception) {
-                super.onError(ex)
-                object : Thread() {
-                    override fun run() {
-                        try {
-                            Log.e("JWebSocketClientService", "开启重连")
-                            client?.reconnectBlocking()
-                        } catch (e: InterruptedException) {
-                            e.printStackTrace()
-                        }
-                    }
-                }.start()
-            }
+        createWebSocketClient()
 
-            override fun onClose(code: Int, reason: String?, remote: Boolean) {
-                super.onClose(code, reason, remote)
-                if (!remote && code != 1000) {
-                    object : Thread() {
-                        override fun run() {
-                            try {
-                                Log.e("JWebSocketClientService", "开启重连")
-                                client?.reconnectBlocking()
-                            } catch (e: InterruptedException) {
-                                e.printStackTrace()
-                            }
-                        }
-                    }.start()
-
-                }else{
-                    toast("Socket连接已断开，请重新登录")
-                }
-            }
-
-            override fun onMessage(message: String) {
-                Log.e("JWebSocketClient", "onMessage()=="+message)
-
-                try {
-                    var data = JSON.parseObject(message, SocketData::class.java)
-                    if (data.code.equals("200")) {
-                        if (data.type.equals("refresh") || data.type.equals("delete_location") || data.type.equals("add_location")
-                        ) {
-                            LiveDataBus.get().with("JWebSocketClientlocation").postValue("1")
-                        } else if (data.type.equals("print")) {
-                            Log.e("JWebSocketClient", "type.equals(print)==onMessage()=="+message)
-                            kv.putString("printData", message)
-                            LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("1")
-//                            object : Thread() {
-//                                override fun run() {
-//                                    super.run()
-//                                    sleep(1000) //休眠3秒
-//                                    LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("1")
-//                                }
-//                            }.start()
-                        }
-
-                    }
-                } catch (e: Exception) {
-                    Log.e("JWebSocketClient", "e()=="+e.message)
-                }
-
-
-            }
-
-
-        }
-        try {
-            client?.connect()
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
+//        client = object : JWebSocketClient(uri) {
+//            override fun onError(ex: Exception) {
+//                super.onError(ex)
+//                object : Thread() {
+//                    override fun run() {
+//                        try {
+//                            Log.e("JWebSocketClientService", "开启重连")
+//                            client?.reconnectBlocking()
+//                        } catch (e: InterruptedException) {
+//                            e.printStackTrace()
+//                        }
+//                    }
+//                }.start()
+//            }
+//
+//            override fun onClose(code: Int, reason: String?, remote: Boolean) {
+//                super.onClose(code, reason, remote)
+//                if (!remote && code != 1000) {
+//                    object : Thread() {
+//                        override fun run() {
+//                            try {
+//                                Log.e("JWebSocketClientService", "开启重连")
+//                                client?.reconnectBlocking()
+//                            } catch (e: InterruptedException) {
+//                                e.printStackTrace()
+//                            }
+//                        }
+//                    }.start()
+//
+//                }else{
+//                    toast("Socket连接已断开，请重新登录")
+//                }
+//            }
+//
+//            override fun onMessage(message: String) {
+//                Log.e("JWebSocketClient", "onMessage()=="+message)
+//
+//                try {
+//                    var data = JSON.parseObject(message, SocketData::class.java)
+//                    if (data.code.equals("200")) {
+//                        if (data.type.equals("refresh") || data.type.equals("delete_location") || data.type.equals("add_location")
+//                        ) {
+//                            LiveDataBus.get().with("JWebSocketClientlocation").postValue("1")
+//                        } else if (data.type.equals("print")) {
+//                            Log.e("JWebSocketClient", "type.equals(print)==onMessage()=="+message)
+//                            kv.putString("printData", message)
+//                            LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("1")
+////                            object : Thread() {
+////                                override fun run() {
+////                                    super.run()
+////                                    sleep(1000) //休眠3秒
+////                                    LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("1")
+////                                }
+////                            }.start()
+//                        }
+//
+//                    }
+//                } catch (e: Exception) {
+//                    Log.e("JWebSocketClient", "e()=="+e.message)
+//                }
+//
+//
+//            }
+//
+//
+//        }
+//        try {
+//            client?.connectBlocking()
+//        } catch (e: InterruptedException) {
+//            e.printStackTrace()
+//        }
         getFragmentLists()
 
         getDataType("sys_zhuce") {
@@ -234,7 +237,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                 return true
             }
         })
-        XXPermissions.with(this@MainHomeActivity)
+        XXPermissions.with(this@MainHomeActivity2)
             .permission(Permission.BLUETOOTH_SCAN)
             .permission(Permission.BLUETOOTH_CONNECT)
             .permission(Permission.BLUETOOTH_ADVERTISE)
@@ -244,7 +247,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                     if (all) {
 
                         printUnit =
-                            PrintUnit(this@MainHomeActivity, object : PrintUnit.ListPrinter {
+                            PrintUnit(this@MainHomeActivity2, object : PrintUnit.ListPrinter {
                                 override fun printer(p: SiginData) {
                                     printDevData = p
                                     //蓝牙连接
@@ -324,7 +327,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
         Log.d("JWebSocketClient", "printkaiguan=" + printkaiguan)
         for (url in data.urls) {
             Log.d("JWebSocketClient", "url=" + url)
-            Glide.with(this@MainHomeActivity).asBitmap()
+            Glide.with(this@MainHomeActivity2).asBitmap()
                 .load(BaseUrl + url)
                 .skipMemoryCache(true)//跳过内存缓存
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -412,7 +415,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
             Log.d("JWebSocketClient", "url=" + url)
             object : Thread() {
                     override fun run() {
-                        Glide.with(this@MainHomeActivity).asBitmap()
+                        Glide.with(this@MainHomeActivity2).asBitmap()
                             .load(BaseUrl + url)
                             .skipMemoryCache(true)//跳过内存缓存
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -668,12 +671,79 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
     override fun onDestroy() {
         super.onDestroy()
         try {
-            client?.close()
+//            client?.close()
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
         printUnit?.PrintUnregisterReceiver()
     }
+    private var webSocketClient: WebSocketClient? = null
 
+    private fun createWebSocketClient() {
+        val uri: URI = URI.create(
+            "wss://meeting.nbqichen.com/websocket/user?source=sys&Authorization=" + kv.getString(
+                "token",
+                ""
+            )
+        )
+        webSocketClient = object : WebSocketClient(uri) {
+            override fun onOpen() {
+                println("onOpen")
+//                webSocketClient!!.send("Hello, World!")
+            }
+
+            override fun onTextReceived(message: String?) {
+                println("onTextReceived")
+                Log.e("JWebSocketClientService", "onTextReceived="+message)
+                try {
+                    var data = JSON.parseObject(message, SocketData::class.java)
+                    if (data.code.equals("200")) {
+                        if (data.type.equals("refresh") || data.type.equals("delete_location") || data.type.equals("add_location")
+                        ) {
+                            LiveDataBus.get().with("JWebSocketClientlocation").postValue("1")
+                        } else if (data.type.equals("print")) {
+                            Log.e("JWebSocketClient", "type.equals(print)==onMessage()=="+message)
+                            kv.putString("printData", message)
+                            LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("1")
+
+                        }
+
+                    }
+                } catch (e: Exception) {
+                    Log.e("JWebSocketClient", "e()=="+e.message)
+                }
+            }
+
+            override  fun onBinaryReceived(data: ByteArray?) {
+                println("onBinaryReceived")
+                Log.e("JWebSocketClient", "onBinaryReceived==")
+            }
+
+            override fun onPingReceived(data: ByteArray?) {
+                println("onPingReceived")
+            }
+
+            override  fun onPongReceived(data: ByteArray?) {
+                println("onPongReceived")
+            }
+
+            override  fun onException(e: Exception) {
+                println(e.message)
+                Log.e("JWebSocketClientService", "onException+")
+            }
+
+            override fun onCloseReceived(reason: Int, description: String?) {
+                println("onCloseReceived")
+                Log.e("JWebSocketClientService", "onCloseReceived")
+            }
+
+
+        }
+        webSocketClient?.setConnectTimeout(10000)
+        webSocketClient?.setReadTimeout(600000000)
+//        webSocketClient.addHeader("Origin", "http://developer.example.com")
+        webSocketClient?.enableAutomaticReconnection(5000)
+        webSocketClient?.connect()
+    }
 
 }
