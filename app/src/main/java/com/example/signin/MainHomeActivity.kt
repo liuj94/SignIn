@@ -106,30 +106,24 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
             override fun onMessage(message: String) {
                 Log.e("JWebSocketClient", "onMessage()=="+message)
+
                 try {
                     var data = JSON.parseObject(message, SocketData::class.java)
                     if (data.code.equals("200")) {
-                        if (data.type.equals("refresh") || data.type.equals("delete_location") || data.type.equals(
-                                "add_location"
-                            )
+                        if (data.type.equals("refresh") || data.type.equals("delete_location") || data.type.equals("add_location")
                         ) {
                             LiveDataBus.get().with("JWebSocketClientlocation").postValue("1")
                         } else if (data.type.equals("print")) {
-//                            toast("打印通知")
+                            Log.e("JWebSocketClient", "type.equals(print)==onMessage()=="+message)
                             kv.putString("printData", message)
                             LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("1")
-
-//                            Log.e("JWebSocketClient", "printData()=="+kv.getString("printData",""))
-//                            runOnUiThread(Runnable {
-//                                var printZd = kv.getBoolean("printZd", true)
-//                                if (printZd) {
-//                                    toast("自动打印开启")
-//                                    printImg3(data)
-//                                }else{
-//                                    toast("自动打印未开启")
+//                            object : Thread() {
+//                                override fun run() {
+//                                    super.run()
+//                                    sleep(1000) //休眠3秒
+//                                    LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("1")
 //                                }
-//                            })
-
+//                            }.start()
                         }
 
                     }

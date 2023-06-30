@@ -13,8 +13,8 @@ android {
         applicationId "com.example.signin"
         minSdk 21
         targetSdk 33
-        versionCode 151
-        versionName "1.5.1"
+        versionCode 154
+        versionName "1.5.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

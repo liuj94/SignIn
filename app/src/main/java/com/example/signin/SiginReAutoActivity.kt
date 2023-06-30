@@ -76,6 +76,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                         if (printZd) {
                             App.getInstance().toast("自动打印开启")
                             if (!CTPL.getInstance().isConnected) {
+//                            if (false) {
                                 App.getInstance().toast("打印机未连接")
                                 Log.d("JWebSocketClient", "打印机未连接=")
                             } else {
@@ -85,6 +86,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                                         var data = JSON.parseObject(message, SocketData::class.java)
                                         printImg(data)
                                     } catch (e: Exception) {
+                                        App.getInstance().toast("数据解析异常")
                                         Log.d("JWebSocketClient", "ExceptionionPrint=" + e.message)
                                     }
 
@@ -115,6 +117,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                         var data = JSON.parseObject(message, SocketData::class.java)
                         printImg(data)
                     } catch (e: Exception) {
+                        App.getInstance().toast("数据解析异常")
                         Log.d("JWebSocketClient", "ExceptionionPrint=" + e.message)
                     }
 
@@ -395,6 +398,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             App.getInstance().toast("请前往设置开启打印机")
             return
         }
+        App.getInstance().toast("正在下载打印图片请等待")
         for (url in data.urls) {
             Glide.with(this@SiginReAutoActivity).asBitmap()
                 .load(BaseUrl + url)
@@ -407,7 +411,8 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                         target: Target<Bitmap>?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        App.getInstance().toast("图片下载失败")
+//                        App.getInstance().toast("图片下载失败")
+                        Log.d("JWebSocketClient", "图片下载失败=")
                         return false
                     }
 
@@ -419,11 +424,13 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                         isFirstResource: Boolean
                     ): Boolean {
                         resource?.let { b ->
-                            if (!CTPL.getInstance().isConnected) {
-                                App.getInstance().toast("打印机未连接")
+                            Log.d("JWebSocketClient", "打印机打印=")
+//                            if (!CTPL.getInstance().isConnected) {
+                            if (false) {
+//                                App.getInstance().toast("打印机未连接")
                             } else {
-                                App.getInstance().toast("正在打印请等待")
-                                Log.d("aaaCTPLprintUnitXX", "打印机打印=")
+//                                App.getInstance().toast("正在打印请等待")
+                                Log.d("JWebSocketClient", "打印机打印=")
 //                                data.cardW.intValueExact(),120
 //                                data.cardH.intValueExact()80
 //                                var w:Int = 120
@@ -458,7 +465,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                                     .print(1)
                                     .execute() //执行打印
                             }
-
+                            Log.d("JWebSocketClient", "打印机打印=rrrr")
 
                         }
                         return false

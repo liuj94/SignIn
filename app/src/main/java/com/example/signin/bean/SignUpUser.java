@@ -53,11 +53,20 @@ public class SignUpUser implements Serializable {
     private String signUpLocationId= "";
     private String status = "1";
     private String userMeetingId= "";
+    private String userId= "";
     private String userMeetingTypeName = "";
     private String failedMsg = "签到失败";
     private String okMsg = "签到成功";
     private String repeatMsg = "重复签到";
     private String success = "";
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getVoiceStatus() {
         return voiceStatus;
