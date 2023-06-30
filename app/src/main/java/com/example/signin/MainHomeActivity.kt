@@ -118,11 +118,12 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 //                            toast("打印通知")
                             kv.putString("printData", message)
 //                            Log.e("JWebSocketClient", "printData()=="+kv.getString("printData",""))
+                            runOnUiThread(Runnable {
                                 var printZd = kv.getBoolean("printZd", true)
                                 if (printZd) {
-                                    printImg(data)
+                                    printImg3(data)
                                 }
-
+                            })
 
                         }
 
@@ -309,7 +310,87 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 //            }
 //        }
     }
+    private fun printImg3(data: SocketData) {
 
+        var printkaiguan = kv.getBoolean("printkaiguan", true)
+        if(!printkaiguan){
+            toast("请前往设置开启打印机")
+            return
+        }
+        if (!CTPL.getInstance().isConnected) {
+            toast("打印机未连接")
+            Log.d("JWebSocketClient", "打印机未连接=" )
+            return
+        }
+        Log.d("JWebSocketClient", "printkaiguan=" + printkaiguan)
+        for (url in data.urls) {
+            Log.d("JWebSocketClient", "url=" + url)
+            Glide.with(this@MainHomeActivity).asBitmap()
+                .load(BaseUrl + url)
+                .skipMemoryCache(true)//跳过内存缓存
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .listener(object : RequestListener<Bitmap> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Bitmap>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        runOnUiThread(Runnable {
+                            toast("打印图片下载失败")
+                        })
+                        Log.d("JWebSocketClient", "图片下载失败=" )
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Bitmap?,
+                        model: Any?,
+                        target: Target<Bitmap>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        Log.d("JWebSocketClient", "打印机打印=" )
+                        resource?.let { b ->
+
+                            Log.d("JWebSocketClient", "打印机开始=" )
+                            runOnUiThread(Runnable {
+                                toast("正在打印请稍候")
+                            })
+
+                            var w:Int = 80
+                            if(data.cardW.toDouble().toInt()<80){
+                                w = data.cardW.toDouble().toInt()
+                            }
+                            var h:Int = 50
+                            if(data.cardH.toDouble().toInt()<50){
+                                h = data.cardH.toDouble().toInt()
+                            }
+                            CTPL.getInstance().setPaperType(PaperType.Label).setPrintSpeed(1)
+                                .setSize(w, h) //设置纸张尺寸,单位:毫米
+                                .drawBitmap(
+                                    Rect(
+                                        0,
+                                        0,
+                                        w * 12 ,
+                                        h * 12
+                                    ), b, true, null
+                                ) //绘制图像, 单位:像素
+                                .print(1)
+                                .execute() //执行打印
+                            Log.d("JWebSocketClient", "打印机结束=" )
+//                                        }
+
+                        }
+                        return false
+                    }
+                }
+                ).submit()
+
+        }
+
+
+    }
 
     private fun printImg(data: SocketData) {
 
