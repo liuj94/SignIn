@@ -69,27 +69,71 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
         }
         LiveDataBus.get().with("JWebSocketClientlocationPrint", String::class.java)
             .observeForever {
-                runOnUiThread(Runnable {
-                    var message = kv.getString("printData", "")
-                    if (!message.isNullOrEmpty()) {
-                        try {
-                            var data = JSON.parseObject(message, SocketData::class.java)
+//                runOnUiThread(Runnable {
+//                    binding.print.performClick()
+//                    var message = kv.getString("printData", "")
+//                    if (!message.isNullOrEmpty()) {
+//                        try {
+//                            var data = JSON.parseObject(message, SocketData::class.java)
+//                            var printZd = kv.getBoolean("printZd", true)
+//                            if (printZd) {
+//                                toast("自动打印开启")
+//                                printImg(data)
+//                            } else {
+//                                toast("自动打印未开启")
+//                            }
+//                        } catch (e: Exception) {
+//                            Log.d("JWebSocketClient", "ExceptionionPrint=" + e.message)
+//                        }
+//
+//                    } else {
+//                        toast("打印参数为空")
+//                    }
+//
+//                })
+//                if (AppManager.getAppManager()
+//                        .activityInstanceIsLive(this@SiginReActivity)
+//                )
+                Log.d("JWebSocketClient", "JWebSocketClientlocationPrint=")
+                if (AppManager.getAppManager().activityInstanceIsLive(this@SiginReActivity)){
+                    try {
+                        App.getInstance().toast("接收到打印通知")
+                        var printZd = kv.getBoolean("printZd", true)
+                        if (printZd) {
+                            App.getInstance().toast("自动打印开启")
+//                            binding.print.performClick()
                             var printZd = kv.getBoolean("printZd", true)
                             if (printZd) {
-                                toast("自动打印开启")
-                                printImg(data)
+                                App.getInstance().toast("自动打印开启")
+                                if (!CTPL.getInstance().isConnected) {
+                                    App.getInstance().toast("打印机未连接")
+                                    Log.d("JWebSocketClient", "打印机未连接=")
+                                } else {
+                                    var message = kv.getString("printData", "")
+                                    if (!message.isNullOrEmpty()) {
+                                        try {
+                                            var data = JSON.parseObject(message, SocketData::class.java)
+                                            printImg(data)
+                                        } catch (e: Exception) {
+                                            Log.d("JWebSocketClient", "ExceptionionPrint=" + e.message)
+                                        }
+
+                                    } else {
+                                        App.getInstance().toast("打印参数为空")
+                                    }
+                                }
+//                            binding.print.performClick()
                             } else {
-                                toast("自动打印未开启")
+                                App.getInstance().toast("自动打印未开启")
                             }
-                        } catch (e: Exception) {
-                            Log.d("JWebSocketClient", "ExceptionionPrint=" + e.message)
+                        } else {
+                            App.getInstance().toast("自动打印未开启")
                         }
 
-                    } else {
-                        toast("打印参数为空")
+                    } catch (e: Exception) {
+                        App.getInstance().toast("线程异常")
                     }
-
-                })
+                }
 
 
             }
@@ -437,12 +481,13 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
             mRingPlayer?.release()
             mRingPlayer = null;
         }
+
     }
 
     private fun printImg(data: SocketData) {
         var printkaiguan = kv.getBoolean("printkaiguan", true)
         if (!printkaiguan) {
-            toast("请前往设置开启打印机")
+            App.getInstance().toast("请前往设置开启打印机")
             return
         }
         for (url in data.urls) {
@@ -457,7 +502,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                         target: Target<Bitmap>?,
                         isFirstResource: Boolean
                     ): Boolean {
-
+                        App.getInstance().toast("图片下载失败")
                         return false
                     }
 
@@ -470,8 +515,9 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                     ): Boolean {
                         resource?.let { b ->
                             if (!CTPL.getInstance().isConnected) {
-                                toast("打印机未连接")
+                                App.getInstance().toast("打印机未连接")
                             } else {
+                                App.getInstance().toast("正在打印请等待")
                                 Log.d("aaaCTPLprintUnitXX", "打印机打印=")
 //                                data.cardW.intValueExact(),120
 //                                data.cardH.intValueExact()80
@@ -483,12 +529,12 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
 //                                if(data.cardH.toDouble().toInt()<80){
 //                                    h = data.cardH.toDouble().toInt()
 //                                }
-                                var w:Int = 80
-                                if(data.cardW.toDouble().toInt()<80){
+                                var w: Int = 80
+                                if (data.cardW.toDouble().toInt() < 80) {
                                     w = data.cardW.toDouble().toInt()
                                 }
-                                var h:Int = 50
-                                if(data.cardH.toDouble().toInt()<50){
+                                var h: Int = 50
+                                if (data.cardH.toDouble().toInt() < 50) {
                                     h = data.cardH.toDouble().toInt()
                                 }
                                 CTPL.getInstance().setPaperType(PaperType.Label).setPrintSpeed(1)

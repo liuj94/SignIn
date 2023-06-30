@@ -64,27 +64,42 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
         }
         LiveDataBus.get().with("JWebSocketClientlocationPrint", String::class.java)
             .observeForever {
-                runOnUiThread(Runnable {
-                    var message = kv.getString("printData", "")
-                    if (!message.isNullOrEmpty()) {
-                        try {
-                            var data = JSON.parseObject(message, SocketData::class.java)
-                            var printZd = kv.getBoolean("printZd", true)
-                            if (printZd) {
-                                toast("自动打印开启")
-                                printImg(data)
+                Log.d("JWebSocketClient", "JWebSocketClientlocationPrint=")
+                if (AppManager.getAppManager()
+                        .activityInstanceIsLive(this@SiginReAutoActivity)
+                )
+                   {
+                    try {
+                        App.getInstance().toast("接收到打印通知")
+                        var printZd = kv.getBoolean("printZd", true)
+                        if (printZd) {
+                            App.getInstance().toast("自动打印开启")
+                            if (!CTPL.getInstance().isConnected) {
+                                App.getInstance().toast("打印机未连接")
+                                Log.d("JWebSocketClient", "打印机未连接=")
                             } else {
-                                toast("自动打印未开启")
+                                var message = kv.getString("printData", "")
+                                if (!message.isNullOrEmpty()) {
+                                    try {
+                                        var data = JSON.parseObject(message, SocketData::class.java)
+                                        printImg(data)
+                                    } catch (e: Exception) {
+                                        Log.d("JWebSocketClient", "ExceptionionPrint=" + e.message)
+                                    }
+
+                                } else {
+                                    App.getInstance().toast("打印参数为空")
+                                }
                             }
-                        } catch (e: Exception) {
-                            Log.d("JWebSocketClient", "ExceptionionPrint=" + e.message)
+//                            binding.print.performClick()
+                        } else {
+                            App.getInstance().toast("自动打印未开启")
                         }
 
-                    } else {
-                        toast("打印参数为空")
+                    } catch (e: Exception) {
+                        App.getInstance().toast("线程异常")
                     }
-
-                })
+                }
 
 
             }
@@ -361,6 +376,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             mRingPlayer?.release()
             mRingPlayer = null;
         }
+
     }
 
     private fun setInfo() {
@@ -374,7 +390,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
     private fun printImg(data: SocketData) {
         var printkaiguan = kv.getBoolean("printkaiguan", true)
         if (!printkaiguan) {
-            toast("请前往设置开启打印机")
+            App.getInstance().toast("请前往设置开启打印机")
             return
         }
         for (url in data.urls) {
@@ -389,7 +405,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                         target: Target<Bitmap>?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        toast("图片下载失败")
+                        App.getInstance().toast("图片下载失败")
                         return false
                     }
 
@@ -402,27 +418,12 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                     ): Boolean {
                         resource?.let { b ->
                             if (!CTPL.getInstance().isConnected) {
-                                toast("打印机未连接")
+                                App.getInstance().toast("打印机未连接")
                             } else {
+                                App.getInstance().toast("正在打印请等待")
                                 Log.d("aaaCTPLprintUnitXX", "打印机打印=")
 //                                data.cardW.intValueExact(),120
 //                                data.cardH.intValueExact()80
-//
-//                                CTPL.getInstance().setPaperType(PaperType.Label).setPrintSpeed(1)
-//                                    .setSize(
-//                                        data.cardW.toDouble().toInt(),
-//                                        data.cardH.toDouble().toInt()
-//                                    ) //设置纸张尺寸,单位:毫米
-//                                    .drawBitmap(
-//                                        Rect(
-//                                            0,
-//                                            0,
-//                                            data.cardW.toDouble().toInt() * 8 + 50,
-//                                            data.cardH.toDouble().toInt() * 8 + 30
-//                                        ), b, true, null
-//                                    ) //绘制图像, 单位:像素
-//                                    .print(1)
-//                                    .execute() //执行打印
 //                                var w:Int = 120
 //                                if(data.cardW.toDouble().toInt()<120){
 //                                    w = data.cardW.toDouble().toInt()
