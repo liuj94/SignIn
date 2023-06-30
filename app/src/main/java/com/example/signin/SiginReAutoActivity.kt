@@ -20,6 +20,7 @@ import com.ctaiot.ctprinter.ctpl.CTPL
 import com.ctaiot.ctprinter.ctpl.param.PaperType
 import com.dylanc.longan.activity
 import com.dylanc.longan.toast
+import com.example.signin.PageRoutes.Companion.BaseUrl
 import com.example.signin.adapter.ReAdapter
 import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
@@ -54,37 +55,50 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
     var isShowAvatar: Boolean = false
     var meetingFormList: MutableList<MeetingFormList> = ArrayList()
     override fun initData() {
-        var d = kv.getString("MeetingFormData","")
+        var d = kv.getString("MeetingFormData", "")
         var isPrint = kv.getBoolean("printStatus", true)
-        if(isPrint){
+        if (isPrint) {
             binding.print.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.print.visibility = View.GONE
         }
         binding.print.setOnClickListener {
             if (!CTPL.getInstance().isConnected) {
                 toast("打印机未连接")
-                Log.d("JWebSocketClient", "打印机未连接=" )
-            }else{
-                LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("JWebSocketClientlocationPrint")
+                Log.d("JWebSocketClient", "打印机未连接=")
+            } else {
+                var message = kv.getString("printData", "")
+                if (!message.isNullOrEmpty()) {
+                    try {
+                        var data = JSON.parseObject(message, SocketData::class.java)
+                        printImg(data)
+                    } catch (e: Exception) {
+                        Log.d("JWebSocketClient", "ExceptionionPrint=" + e.message)
+                    }
+
+                } else {
+                    toast("打印参数为空")
+                }
+//                LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("JWebSocketClientlocationPrint")
             }
-   }
-        if(!d.isNullOrEmpty()){
+        }
+        if (!d.isNullOrEmpty()) {
             try {
                 var meetingFormData = JSON.parseObject(d, MeetingFormData::class.java)
                 meetingFormData?.let {
                     for (list in it.meetingFormList) {
                         if (list.type.equals("avatar")) {
                             isShowAvatar = list.showStatus == 1
-                        }else{
-                            if(list.showStatus == 1) {
+                        } else {
+                            if (list.showStatus == 1) {
                                 meetingFormList.add(list)
-                                Log.d("meetingFormList",list.toString())
+                                Log.d("meetingFormList", list.toString())
                             }
                         }
                     }
                 }
-            }catch (e:Exception){}
+            } catch (e: Exception) {
+            }
 
         }
 //setInfo()
@@ -99,20 +113,20 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             params["signUpId"] = it.signUpId//签到站id
             params["userMeetingId"] = it.userMeetingId//用户参与会议id
             params["status"] = "2"//用户参与会议id
-            it.meetingName?.let {meetingName-> binding.name.text = meetingName }
-            it.failedMsg?.let {it-> failedMsg = it }
-            it.okMsg?.let {it-> okMsg = it }
-            it.repeatMsg?.let {it-> repeatMsg = it }
+            it.meetingName?.let { meetingName -> binding.name.text = meetingName }
+            it.failedMsg?.let { it -> failedMsg = it }
+            it.okMsg?.let { it -> okMsg = it }
+            it.repeatMsg?.let { it -> repeatMsg = it }
 //            it.name?.let { name-> binding.userName.text = encode(name)
 //                binding.userName.visibility = View.VISIBLE}
 //            it.corporateName?.let {companyName-> binding.companyName.text = encode(companyName)
 //                binding.companyName.visibility = View.VISIBLE}
 //            it.userMeetingTypeName?.let {userMeetingTypeName->binding.type.text = encode(userMeetingTypeName)
 //                binding.type.visibility = View.VISIBLE}
-            it.timeLong?.let {t-> timeLong=t }
-            it.success?.let {t-> success=t }
-            it.voiceStatus?.let {t-> voiceStatus=t }
-            it.autoStatus?.let {t-> autoStatus=t }
+            it.timeLong?.let { t -> timeLong = t }
+            it.success?.let { t -> success = t }
+            it.voiceStatus?.let { t -> voiceStatus = t }
+            it.autoStatus?.let { t -> autoStatus = t }
 
 
 //            if(it.name.isNullOrEmpty()){
@@ -168,16 +182,19 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                 binding.stateTv.text = "入住办理"
                 binding.submit.text = "确认入住"
             }
+
             4 -> {
                 binding.title.text = "会场签到"
 //                binding.numEt.visibility = View.VISIBLE
                 binding.numEt.hint = "请输入座位号"
             }
+
             5 -> {
                 binding.title.text = "餐饮签到"
 //                binding.numEt.visibility = View.VISIBLE
                 binding.numEt.hint = "请输入座位号"
             }
+
             6 -> binding.title.text = "礼品签到"
             7 -> binding.title.text = "返程签到"
             8 -> binding.title.text = "发票签到"
@@ -185,53 +202,56 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
 
         if (success.equals("1")) {
             setInfo()
-            if(voiceStatus.equals("1")){
+            if (voiceStatus.equals("1")) {
 //                LiveDataBus.get().with("voiceStatus").postValue(okMsg)
-                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
-                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(okMsg);
-                }else{
-                    if(okMsg.contains("签出")){
-                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.dccg);
-                    }else{
-                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.cg);
-                    }
-
-                    mRingPlayer?.start();
+//                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
+//                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(okMsg);
+//                }else{
+//
+//                }
+                if (okMsg.contains("签出")) {
+                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.dccg);
+                } else {
+                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.cg);
                 }
+
+                mRingPlayer?.start();
             }
             binding.stateTv.text = okMsg
             binding.stateTv.setTextColor(Color.parseColor("#3974F6"))
-            if(avatar.isNullOrEmpty()){
+            if (avatar.isNullOrEmpty()) {
                 binding.stateIv.setImageResource(R.mipmap.qd2)
-            }else{
+            } else {
                 Glide.with(this@SiginReAutoActivity).load(PageRoutes.BaseUrl + avatar).apply(
                     RequestOptions.bitmapTransform(
                         CircleCrop()
-                    ))
+                    )
+                )
                     .error(R.mipmap.qd2).into(binding.stateIv)
             }
-            if(!isShowAvatar){
+            if (!isShowAvatar) {
                 binding.stateIv.setImageResource(R.mipmap.qd2)
             }
         } else if (success.equals("2")) {
             setInfo()
-            if(voiceStatus.equals("1")){
+            if (voiceStatus.equals("1")) {
 //                LiveDataBus.get().with("voiceStatus").postValue(repeatMsg)
-                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
-                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(repeatMsg);
-                }else{
-                    if(repeatMsg.contains("签出")){
-                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.dccf);
-                    }else{
-                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.cf);
-                    }
-                    mRingPlayer?.start();
+//                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
+//                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(repeatMsg);
+//                }else{
+//
+//                }
+                if (repeatMsg.contains("签出")) {
+                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.dccf);
+                } else {
+                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.cf);
                 }
+                mRingPlayer?.start();
             }
             binding.stateTv.text = repeatMsg
             binding.stateTv.setTextColor(Color.parseColor("#FFC300"))
             binding.stateIv.setImageResource(R.mipmap.qd3)
-        } else if(success.equals("501")) {
+        } else if (success.equals("501")) {
 //            binding.userName.text = ""
 //            binding.companyName.text = ""
 //            binding.type.text = ""
@@ -241,20 +261,21 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             binding.stateTv.text = failedMsg
             binding.stateTv.setTextColor(Color.parseColor("#D43030"))
             binding.stateIv.setImageResource(R.mipmap.cw_h)
-            if(voiceStatus.equals("1")){
+            if (voiceStatus.equals("1")) {
 //                LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
-                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
-                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(failedMsg);
-                }else{
-                    if(failedMsg.contains("签出")){
-                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.dcsb);
-                    }else{
-                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.qdsb);
-                    }
-                    mRingPlayer?.start();
+//                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
+//                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(failedMsg);
+//                }else{
+//
+//                }
+                if (failedMsg.contains("签出")) {
+                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.dcsb);
+                } else {
+                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.qdsb);
                 }
+                mRingPlayer?.start();
             }
-        }else {
+        } else {
 //            binding.userName.visibility = View.GONE
 //            binding.companyName.visibility = View.GONE
 //            binding.type.visibility = View.GONE
@@ -264,26 +285,27 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             binding.stateTv.text = failedMsg
             binding.stateTv.setTextColor(Color.parseColor("#D43030"))
             binding.stateIv.setImageResource(R.mipmap.cw_h)
-            if(voiceStatus.equals("1")){
+            if (voiceStatus.equals("1")) {
 //                LiveDataBus.get().with("voiceStatus").postValue(failedMsg)
-                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
-                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(failedMsg);
-                }else{
-                    if(failedMsg.contains("签出")){
-                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.dcsb);
-                    }else{
-                        mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.qdsb);
-                    }
-
-                    mRingPlayer?.start();
+//                if(SpeechUtils.getInstance(this@SiginReAutoActivity).isSpeech){
+//                    SpeechUtils.getInstance(this@SiginReAutoActivity).speakText(failedMsg);
+//                }else{
+//
+//                }
+                if (failedMsg.contains("签出")) {
+                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.dcsb);
+                } else {
+                    mRingPlayer = MediaPlayer.create(this@SiginReAutoActivity, R.raw.qdsb);
                 }
+
+                mRingPlayer?.start();
             }
         }
-        if(autoStatus.equals("1")){
+        if (autoStatus.equals("1")) {
             timer()
-            binding.submit.text = "返回（"+timeLong+"）"
+            binding.submit.text = "返回（" + timeLong + "）"
             timer?.start()
-        }else{
+        } else {
             binding.submit.text = "返回"
         }
         binding.submit.setOnClickListener { finish() }
@@ -309,8 +331,12 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
 
     override fun onDestroy() {
         super.onDestroy()
-
+        if (mRingPlayer != null) {
+            mRingPlayer?.release()
+            mRingPlayer = null;
+        }
     }
+
     private fun setInfo() {
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         var adapter = ReAdapter().apply {
@@ -318,11 +344,17 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
         }
         binding.recyclerView.adapter = adapter
     }
+
     private fun printImg(data: SocketData) {
+        var printkaiguan = kv.getBoolean("printkaiguan", true)
+        if (!printkaiguan) {
+            toast("请前往设置开启打印机")
+            return
+        }
         for (url in data.urls) {
             Glide.with(this@SiginReAutoActivity).asBitmap()
-//                .load(BaseUrl + url)
-                .load(url)
+                .load(BaseUrl + url)
+//                .load(url)
 //                .apply(options)
                 .listener(object : RequestListener<Bitmap> {
                     override fun onLoadFailed(
@@ -331,7 +363,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                         target: Target<Bitmap>?,
                         isFirstResource: Boolean
                     ): Boolean {
-
+                        toast("图片下载失败")
                         return false
                     }
 
@@ -349,50 +381,55 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
                                 Log.d("aaaCTPLprintUnitXX", "打印机打印=")
 //                                data.cardW.intValueExact(),120
 //                                data.cardH.intValueExact()80
-
+//
+//                                CTPL.getInstance().setPaperType(PaperType.Label).setPrintSpeed(1)
+//                                    .setSize(
+//                                        data.cardW.toDouble().toInt(),
+//                                        data.cardH.toDouble().toInt()
+//                                    ) //设置纸张尺寸,单位:毫米
+//                                    .drawBitmap(
+//                                        Rect(
+//                                            0,
+//                                            0,
+//                                            data.cardW.toDouble().toInt() * 8 + 50,
+//                                            data.cardH.toDouble().toInt() * 8 + 30
+//                                        ), b, true, null
+//                                    ) //绘制图像, 单位:像素
+//                                    .print(1)
+//                                    .execute() //执行打印
+//                                var w:Int = 120
+//                                if(data.cardW.toDouble().toInt()<120){
+//                                    w = data.cardW.toDouble().toInt()
+//                                }
+//                                var h:Int = 80
+//                                if(data.cardH.toDouble().toInt()<80){
+//                                    h = data.cardH.toDouble().toInt()
+//                                }
+                                var w:Int = 80
+                                if(data.cardW.toDouble().toInt()<80){
+                                    w = data.cardW.toDouble().toInt()
+                                }
+                                var h:Int = 50
+                                if(data.cardH.toDouble().toInt()<50){
+                                    h = data.cardH.toDouble().toInt()
+                                }
                                 CTPL.getInstance().setPaperType(PaperType.Label).setPrintSpeed(1)
                                     .setSize(
-                                        data.cardW.toDouble().toInt(),
-                                        data.cardH.toDouble().toInt()
+                                        w,
+                                        h
                                     ) //设置纸张尺寸,单位:毫米
                                     .drawBitmap(
                                         Rect(
                                             0,
                                             0,
-                                            data.cardW.toDouble().toInt() * 8 + 50,
-                                            data.cardH.toDouble().toInt() * 8 + 30
+                                            w * 12,
+                                            h * 12
                                         ), b, true, null
                                     ) //绘制图像, 单位:像素
                                     .print(1)
                                     .execute() //执行打印
                             }
 
-
-//                            CTPL.getInstance().setSize(data.cardW.intValueExact(), data.cardH.intValueExact())
-//                            printUnit?.let {
-//                                Log.d(
-//                                    "aaaaprintUnitXXPermissions",
-//                                    "图片下载完成开始打印="
-//                                )
-//                                if (isConPrint) {
-//                                    Log.d(
-//                                        "aaaaprintUnitXXPermissions",
-//                                        "isConPrint="+it.isConPrint
-//                                    )
-//                                    try {
-//                                        it.print(b,80)
-//                                    } catch (e: Exception) {
-//                                    }
-//
-//                                } else {
-//                                    toast("打印机未连接")
-//                                }
-////                                try {
-////                                    it.print(b)
-////                                } catch (e: Exception) {
-////                                    toast("打印异常")
-////                                }
-//                            }
 
                         }
                         return false
@@ -404,4 +441,5 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
 
 
     }
+
 }
