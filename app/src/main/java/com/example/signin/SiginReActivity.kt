@@ -60,6 +60,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
     var isShowAvatar: Boolean = false
     var meetingFormList: MutableList<MeetingFormList> = ArrayList()
     override fun initData() {
+        CTPL.getInstance().clean()
         var d = kv.getString("MeetingFormData", "")
         var isPrint = kv.getBoolean("printStatus", true)
         if (isPrint) {
@@ -481,7 +482,7 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
             mRingPlayer?.release()
             mRingPlayer = null;
         }
-
+        kv.putString("printData", "")
     }
 
     private fun printImg(data: SocketData) {
