@@ -26,6 +26,7 @@ import com.hello.scan.ScanTool
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
+import com.jeremyliao.liveeventbus.LiveEventBus
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import sigin
@@ -78,8 +79,11 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
         intent.getIntExtra("timeLong", 3)?.let { timeLong = it }
         intent.getIntExtra("showType", 0)?.let { showType = it }
 //        LiveDataBus.get().with("JWebSocketClientRefresh", String::class.java)
-        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
-            .observeForever {
+//        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
+//            .observeForever {
+                LiveEventBus
+                    .get<String>("JWebSocketClientlocation", String::class.java)
+                    .observe(this) {
                 try {
                     if (AppManager.getAppManager()
                             .activityInstanceIsLive(MeetingSiginDectivity@ this)

@@ -8,7 +8,6 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
-import com.example.signin.LiveDataBus
 import com.example.signin.MeetingUserDectivity
 import com.example.signin.PageRoutes
 import com.example.signin.adapter.FMeetingDeList3Adapter
@@ -21,6 +20,7 @@ import com.example.signin.bean.*
 import com.example.signin.databinding.FragMeetingde3Binding
 import com.example.signin.net.JsonCallback
 import com.example.signin.net.RequestCallback
+import com.jeremyliao.liveeventbus.LiveEventBus
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 
@@ -83,7 +83,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 binding.qddTv.text = selectList3[position].name
                 adapterSelect3?.notifyDataSetChanged()
                 binding.selectLl3.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
                 list.clear()
                 getList()
             }
@@ -102,7 +102,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 binding.nameTv.text = siginUpList[position].name
                 adapterSelect?.notifyDataSetChanged()
                 binding.selectLl.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
                 setSelect2Data(siginUpList[position].type)
                 adapter?.setSiginUp2List(siginUp2List)
                 status = ""
@@ -133,7 +133,7 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
                 binding.name2Tv.text = siginUp2List[position].dictLabel
                 adapterSelect2?.notifyDataSetChanged()
                 binding.select2Ll.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
                 pageNum = 1
                 list.clear()
                 getList()
@@ -163,10 +163,10 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             binding.selectLl3.visibility = View.GONE
             if (binding.selectLl.visibility == View.VISIBLE) {
                 binding.selectLl.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
             } else {
                 binding.selectLl.visibility = View.VISIBLE
-                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
+                LiveEventBus.get<String>("selectLlVISIBLE").post("1")
             }
         }
         binding.qddLl.setOnClickListener {
@@ -175,10 +175,10 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
 
             if (binding.selectLl3.visibility == View.VISIBLE) {
                 binding.selectLl3.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
             } else {
                 binding.selectLl3.visibility = View.VISIBLE
-                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
+                LiveEventBus.get<String>("selectLlVISIBLE").post("1")
             }
         }
         binding.name2Ll.setOnClickListener {
@@ -186,30 +186,31 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             binding.selectLl3.visibility = View.GONE
             if (binding.select2Ll.visibility == View.VISIBLE) {
                 binding.select2Ll.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
             } else {
                 binding.select2Ll.visibility = View.VISIBLE
-                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
+                LiveEventBus.get<String>("selectLlVISIBLE").post("1")
             }
 
         }
         binding.select2Ll.setOnClickListener {
             if (binding.select2Ll.visibility == View.VISIBLE) {
                 binding.select2Ll.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
             }
         }
         binding.selectLl.setOnClickListener {
             if (binding.selectLl.visibility == View.VISIBLE) {
                 binding.selectLl.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
+
             }
 
         }
         binding.selectLl3.setOnClickListener {
             if (binding.selectLl3.visibility == View.VISIBLE) {
                 binding.selectLl3.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
             }
 
         }
@@ -246,9 +247,9 @@ class MettingDe3Fragment : BaseBindingFragment<FragMeetingde3Binding, BaseViewMo
             pageNum++
             getList()
         }
-
-        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
-            .observeForever {
+        LiveEventBus
+            .get<String>("JWebSocketClientlocation", String::class.java)
+            .observe(this) {
                 try {
                     if (isShow) {
                         getDatasign_up_app_list()

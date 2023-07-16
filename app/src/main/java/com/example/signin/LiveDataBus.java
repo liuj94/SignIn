@@ -1,147 +1,247 @@
-package com.example.signin;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * @desciption : 利用LivaData来实现数据传递,可用来替换EventBus
- */
-public class LiveDataBus {
-    private final Map<String, BusMutableLiveData<Object>> bus;
-
-    private LiveDataBus() {
-        bus = new HashMap<>();
-    }
-
-    private static class SingletonHolder {
-        private static final LiveDataBus DEFAULT_BUS = new LiveDataBus();
-    }
-
-    public static LiveDataBus get() {
-        return SingletonHolder.DEFAULT_BUS;
-    }
-
-    public <T> MutableLiveData<T> with(String key, Class<T> type) {
-        if (!bus.containsKey(key)) {
-            bus.put(key, new BusMutableLiveData<>());
-        }
-        return (MutableLiveData<T>) bus.get(key);
-    }
-
-    public MutableLiveData<Object> with(String key) {
-        return with(key, Object.class);
-    }
-
-    private static class ObserverWrapper<T> implements Observer<T> {
-
-        private Observer<T> observer;
-
-        public ObserverWrapper(Observer<T> observer) {
-            this.observer = observer;
-        }
-
-        @Override
-        public void onChanged(@Nullable T t) {
-            if (observer != null) {
-                if (isCallOnObserve()) {
-                    return;
-                }
-                observer.onChanged(t);
-            }
-        }
-
-        private boolean isCallOnObserve() {
-            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-            if (stackTrace != null && stackTrace.length > 0) {
-                for (StackTraceElement element : stackTrace) {
-                    if ("android.arch.lifecycle.LiveData".equals(element.getClassName()) &&
-                            "observeForever".equals(element.getMethodName())) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-    }
-
-    private static class BusMutableLiveData<T> extends MutableLiveData<T> {
-
-        private Map<Observer, Observer> observerMap = new HashMap<>();
-        // 生命周期感知的注册监听处理，去除粘性事件
-        @Override
-        public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
-            super.observe(owner, observer);
-            try {
-                hook(observer);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        // 非生命周期感知的注册监听处理，去除粘性事件
-        @Override
-        public void observeForever(@NonNull Observer<? super T> observer) {
-            if (!observerMap.containsKey(observer)) {
-                observerMap.put(observer, new ObserverWrapper(observer));
-            }
-            super.observeForever(observerMap.get(observer));
-        }
-        // 非生命周期感知取消注册监听
-        @Override
-        public void removeObserver(@NonNull Observer<? super T> observer) {
-            Observer realObserver = null;
-            if (observerMap.containsKey(observer)) {
-                realObserver = observerMap.remove(observer);
-            } else {
-                realObserver = observer;
-            }
-            super.removeObserver(realObserver);
-        }
-        // 去除粘性事件
-        private void hook(@NonNull Observer<? super T> observer) throws Exception {
-            //get wrapper's version
-            //1.得到mLastVersion
-            //获取到LivData的类中的mObservers对象
-            Class<LiveData> classLiveData = LiveData.class;
-            Field fieldObservers = classLiveData.getDeclaredField("mObservers");
-            fieldObservers.setAccessible(true);
-            //获取到这个成员变量的对象
-            Object objectObservers = fieldObservers.get(this);
-            //得到map对象的class对象
-            Class<?> classObservers = objectObservers.getClass();
-            //获取到mObservers对象的get方法
-            Method methodGet = classObservers.getDeclaredMethod("get", Object.class);
-            methodGet.setAccessible(true);
-            //执行get方法
-            Object objectWrapperEntry = methodGet.invoke(objectObservers, observer);
-            //取到entry中的value
-            Object objectWrapper = null;
-            if (objectWrapperEntry instanceof Map.Entry) {
-                objectWrapper = ((Map.Entry) objectWrapperEntry).getValue();
-            }
-            if (objectWrapper == null) {
-                throw new NullPointerException("Wrapper can not be bull!");
-            }
-            //得到observerWraperr的类对象
-            Class<?> classObserverWrapper = objectWrapper.getClass().getSuperclass();
-            Field fieldLastVersion = classObserverWrapper.getDeclaredField("mLastVersion");
-            fieldLastVersion.setAccessible(true);
-            //get livedata's version
-            //2.得到mVersion
-            Field fieldVersion = classLiveData.getDeclaredField("mVersion");
-            fieldVersion.setAccessible(true);
-            //3.mLastVersion=mVersion
-            Object objectVersion = fieldVersion.get(this);
-            //set wrapper's version
-            fieldLastVersion.set(objectWrapper, objectVersion);
-        }
-    }
-}
+//package com.example.signin;
+//
+//import android.arch.lifecycle.Observer;
+//import android.content.Intent;
+//import android.databinding.DataBindingUtil;
+//import android.os.Bundle;
+//import android.os.Handler;
+//import android.support.annotation.Nullable;
+//import android.support.v7.app.AppCompatActivity;
+//import android.widget.Toast;
+//
+//import com.jeremyliao.lebapp.activity.ObserverActiveLevelActivity;
+//import com.jeremyliao.lebapp.activity.PostDelayActivity;
+//import com.jeremyliao.lebapp.activity.StickyActivity;
+//import com.jeremyliao.lebapp.databinding.ActivityLiveDataBusDemoBinding;
+//import com.jeremyliao.lebapp.event.DemoEvent;
+//import com.jeremyliao.lebapp.service.IpcService;
+//import com.jeremyliao.liveeventbus.LiveEventBus;
+//
+//import java.util.Random;
+//import java.util.concurrent.ExecutorService;
+//import java.util.concurrent.Executors;
+//
+//public class LiveEventBusDemo extends AppCompatActivity {
+//    public static final String KEY_TEST_OBSERVE = "key_test_observe";
+//    public static final String KEY_TEST_OBSERVE_FOREVER = "key_test_observe_forever";
+//    public static final String KEY_TEST_STICKY = "key_test_sticky";
+//    public static final String KEY_TEST_MULTI_THREAD_POST = "key_test_multi_thread_post";
+//    public static final String KEY_TEST_MSG_SET_BEFORE_ON_CREATE = "key_test_msg_set_before_on_create";
+//    public static final String KEY_TEST_CLOSE_ALL_PAGE = "key_test_close_all_page";
+//    public static final String KEY_TEST_ACTIVE_LEVEL = "key_test_active_level";
+//    public static final String KEY_TEST_ACTIVE_LEVEL_SINGLE = "key_test_active_level_single";
+//    public static final String KEY_TEST_BROADCAST = "key_test_broadcast";
+//    public static final String KEY_TEST_BROADCAST_IN_APP = "key_test_broadcast_in_app";
+//    public static final String KEY_TEST_BROADCAST_GLOBAL = "key_test_broadcast_global";
+//    public static final String KEY_TEST_DELAY_LIFE = "key_test_delay_life";
+//
+//    private int sendCount = 0;
+//    private int receiveCount = 0;
+//    private String randomKey = null;
+//
+//
+//    private ActivityLiveDataBusDemoBinding binding;
+//
+//    private Observer<String> observer = new Observer<String>() {
+//        @Override
+//        public void onChanged(@Nullable String s) {
+//            Toast.makeText(LiveEventBusDemo.this, s, Toast.LENGTH_SHORT).show();
+//        }
+//    };
+//
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        startService(new Intent(this, IpcService.class));
+//        binding = DataBindingUtil.setContentView(this, R.layout.activity_live_data_bus_demo);
+//        binding.setHandler(this);
+//        binding.setLifecycleOwner(this);
+//        LiveEventBus
+//                .get(KEY_TEST_OBSERVE, String.class)
+//                .observe(this, new Observer<String>() {
+//                    @Override
+//                    public void onChanged(@Nullable String s) {
+//                        Toast.makeText(LiveEventBusDemo.this, s, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//        LiveEventBus
+//                .get(KEY_TEST_OBSERVE_FOREVER, String.class)
+//                .observeForever(observer);
+//        LiveEventBus
+//                .get(KEY_TEST_CLOSE_ALL_PAGE, Boolean.class)
+//                .observe(this, new Observer<Boolean>() {
+//                    @Override
+//                    public void onChanged(@Nullable Boolean b) {
+//                        if (b) {
+//                            finish();
+//                        }
+//                    }
+//                });
+//        LiveEventBus
+//                .get(KEY_TEST_MULTI_THREAD_POST, String.class)
+//                .observe(this, new Observer<String>() {
+//                    @Override
+//                    public void onChanged(@Nullable String s) {
+//                        receiveCount++;
+//                    }
+//                });
+//        LiveEventBus
+//                .get(KEY_TEST_ACTIVE_LEVEL, String.class)
+//                .observe(this, new Observer<String>() {
+//                    @Override
+//                    public void onChanged(@Nullable String s) {
+//                        Toast.makeText(LiveEventBusDemo.this, "Receive message: " + s,
+//                                Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//        LiveEventBus
+//                .get(KEY_TEST_ACTIVE_LEVEL_SINGLE, String.class)
+//                .observe(this, new Observer<String>() {
+//                    @Override
+//                    public void onChanged(@Nullable String s) {
+//                        Toast.makeText(LiveEventBusDemo.this, "Receive message: " + s,
+//                                Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//        LiveEventBus
+//                .get(KEY_TEST_DELAY_LIFE, String.class)
+//                .observe(this, new Observer<String>() {
+//                    @Override
+//                    public void onChanged(@Nullable String s) {
+//                        Toast.makeText(LiveEventBusDemo.this, "Receive message: " + s,
+//                                Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//        LiveEventBus.get(DemoEvent.class)
+//                .observe(this, new Observer<DemoEvent>() {
+//                    @Override
+//                    public void onChanged(@Nullable DemoEvent demoEvent) {
+//                        Toast.makeText(LiveEventBusDemo.this, "Receive message: " +
+//                                demoEvent.content, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//        testMessageSetBeforeOnCreate();
+//    }
+//
+//    private void testMessageSetBeforeOnCreate() {
+//        //先发出一个消息
+//        LiveEventBus.get(KEY_TEST_MSG_SET_BEFORE_ON_CREATE, String.class).post("msg set before");
+//        //然后订阅这个消息
+//        LiveEventBus
+//                .get(KEY_TEST_MSG_SET_BEFORE_ON_CREATE, String.class)
+//                .observe(this, new Observer<String>() {
+//                    @Override
+//                    public void onChanged(@Nullable String s) {
+//                        Toast.makeText(LiveEventBusDemo.this, s, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//    }
+//
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        LiveEventBus
+//                .get(KEY_TEST_OBSERVE_FOREVER, String.class)
+//                .removeObserver(observer);
+//    }
+//
+//    public void sendMsgByPostValue() {
+//        LiveEventBus.get(KEY_TEST_OBSERVE)
+//                .post("Message By PostValue: " + new Random().nextInt(100));
+//    }
+//
+//    public void sendMsgToForeverObserver() {
+//        LiveEventBus.get(KEY_TEST_OBSERVE_FOREVER)
+//                .post("Message To ForeverObserver: " + new Random().nextInt(100));
+//    }
+//
+//    public void sendMsgToStickyReceiver() {
+//        LiveEventBus.get(KEY_TEST_STICKY)
+//                .post("Message Sticky: " + new Random().nextInt(100));
+//    }
+//
+//    public void startStickyActivity() {
+//        startActivity(new Intent(this, StickyActivity.class));
+//    }
+//
+//    public void startNewActivity() {
+//        startActivity(new Intent(this, LiveEventBusDemo.class));
+//    }
+//
+//    public void closeAll() {
+//        LiveEventBus.get(KEY_TEST_CLOSE_ALL_PAGE).post(true);
+//    }
+//
+//    public void postValueCountTest() {
+//        sendCount = 1000;
+//        receiveCount = 0;
+//        ExecutorService threadPool = Executors.newFixedThreadPool(2);
+//        for (int i = 0; i < sendCount; i++) {
+//            threadPool.execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    LiveEventBus.get(KEY_TEST_MULTI_THREAD_POST).post("test_data");
+//                }
+//            });
+//        }
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Toast.makeText(LiveEventBusDemo.this, "sendCount: " + sendCount +
+//                        " | receiveCount: " + receiveCount, Toast.LENGTH_LONG).show();
+//            }
+//        }, 1000);
+//    }
+//
+//    public void testMessageSetBefore() {
+//        //先动态生成一个key
+//        randomKey = "key_random_" + new Random().nextInt();
+//        //然后发出一个消息
+//        LiveEventBus.get(randomKey, String.class).post("msg set before");
+//        //然后订阅这个消息
+//        LiveEventBus
+//                .get(randomKey, String.class)
+//                .observe(this, new Observer<String>() {
+//                    @Override
+//                    public void onChanged(@Nullable String s) {
+//                        Toast.makeText(LiveEventBusDemo.this, s, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//    }
+//
+//    public void sendMessageSetBefore() {
+//        LiveEventBus.get(randomKey, String.class).post("msg set after");
+//    }
+//
+//    public void testObserverActiveLevel() {
+//        startActivity(new Intent(this, ObserverActiveLevelActivity.class));
+//    }
+//
+//    public void testBroadcast() {
+//        LiveEventBus
+//                .get(KEY_TEST_BROADCAST)
+//                .postAcrossApp("broadcast msg");
+//    }
+//
+//    public void testBroadcastInApp() {
+//        LiveEventBus
+//                .get(KEY_TEST_BROADCAST_IN_APP)
+//                .postAcrossProcess("broadcast msg");
+//    }
+//
+//    public void testBroadcastGlobal() {
+//        LiveEventBus
+//                .get(KEY_TEST_BROADCAST_GLOBAL)
+//                .postAcrossApp("broadcast msg");
+//    }
+//
+//    public void testDelayLife() {
+//        startActivity(new Intent(this, PostDelayActivity.class));
+//    }
+//
+//    public void sendDemoEvent() {
+//        LiveEventBus
+//                .get(DemoEvent.class)
+//                .post(new DemoEvent("Hello world"));
+//    }
+//}

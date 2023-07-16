@@ -76,6 +76,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                                     data.name = binding.userName.text.toString().trim()
                                     data.password = binding.password.text.toString().trim()
                                     kv.putString("userData", JSON.toJSONString(data))
+                                    kv.putString("userDataId", data.userId)
 
                                     startActivity<MainHomeActivity>()
                                     finish()
@@ -84,7 +85,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                                         data.name = binding.userName.text.toString().trim()
                                         data.password = binding.password.text.toString().trim()
                                         kv.putString("userData", JSON.toJSONString(data))
-
+                                        kv.putString("userDataId", data.userId)
 
                                         startActivity<MainHomeActivity>()
                                         finish()
@@ -109,7 +110,7 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                                         data.name = binding.userName.text.toString().trim()
                                         data.password = binding.password.text.toString().trim()
                                         kv.putString("userData", JSON.toJSONString(data))
-
+                                        kv.putString("userDataId", data.userId)
 //                                        startActivity<MainHomeActivity>()
                                         startActivity<MainHomeActivity>()
                                         finish()

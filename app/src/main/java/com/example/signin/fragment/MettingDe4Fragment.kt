@@ -21,6 +21,7 @@ import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.*
 import com.example.signin.databinding.FragMeetingde4Binding
 import com.example.signin.net.RequestCallback
+import com.jeremyliao.liveeventbus.LiveEventBus
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import io.agora.rtc2.ChannelMediaOptions
@@ -327,8 +328,9 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
         }
 //        getSiginData()
 
-        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
-            .observeForever {
+        LiveEventBus
+            .get<String>("JWebSocketClientlocation", String::class.java)
+            .observe(this) {
                 try {
                     if (isShow) {
                             getDatasign_up_app_list()
@@ -396,7 +398,7 @@ class MettingDe4Fragment : BaseBindingFragment<FragMeetingde4Binding, BaseViewMo
                 val params = HashMap<String, Any>()
                 params["meetingId"] = "" + meetingid
                 params["time"] = it.totalDuration * 1000
-                LiveDataBus.get().with("voiceTime").postValue(JSON.toJSONString(params))
+                LiveEventBus.get<String>("voiceTime").post(JSON.toJSONString(params))
             }
 
 

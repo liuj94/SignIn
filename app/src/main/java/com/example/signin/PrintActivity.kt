@@ -14,6 +14,7 @@ import com.example.signin.databinding.ActPrintBinding
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
+import com.jeremyliao.liveeventbus.LiveEventBus
 
 class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
@@ -85,7 +86,7 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
                 d.setBleServiceUUID("49535343-fe7d-4ae5-8fa9-9fafd205e455")
             }
             CTPL.getInstance().connect(d)
-            LiveDataBus.get().with("Printqiehuan").postValue(p)
+            LiveEventBus.get<SiginData>("Printqiehuan").post(p)
         }
         binding.device.layoutManager = LinearLayoutManager(this)
         binding.device.setAdapter(selectMeetingAdapter)

@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
-import com.example.signin.LiveDataBus
 import com.example.signin.PageRoutes
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
@@ -20,6 +19,7 @@ import com.example.signin.adapter.FMeetingDeListAdapter
 import com.example.signin.bean.SiginUpListModel
 import com.example.signin.bean.User
 import com.example.signin.net.RequestCallback
+import com.jeremyliao.liveeventbus.LiveEventBus
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import java.math.BigDecimal
@@ -79,8 +79,11 @@ class MettingDe1Fragment : BaseBindingFragment<FragMeetingde1Binding, BaseViewMo
 
         getData()
         getList()
-        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
-            .observeForever {
+        LiveEventBus
+            .get<String>("JWebSocketClientlocation", String::class.java)
+            .observe(this) {
+//        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
+//            .observeForever {
                 try {
                     if (isShow) {
                         if (!kv.getString("userData", "").isNullOrEmpty()) {

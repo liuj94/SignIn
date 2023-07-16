@@ -32,6 +32,7 @@ import com.example.signin.net.RequestCallback
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
+import com.jeremyliao.liveeventbus.LiveEventBus
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
@@ -69,7 +70,6 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                 ""
             )
         )
-        Log.e("JWebSocketClient", "MyJWebSocketClient()==")
         client = object : JWebSocketClient(uri) {
             override fun onError(ex: Exception) {
                 super.onError(ex)
@@ -112,18 +112,10 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                     if (data.code.equals("200")) {
                         if (data.type.equals("refresh") || data.type.equals("delete_location") || data.type.equals("add_location")
                         ) {
-                            LiveDataBus.get().with("JWebSocketClientlocation").postValue("1")
+                            LiveEventBus.get<String>("JWebSocketClientlocation").post("1")
                         } else if (data.type.equals("print")) {
-                            Log.e("JWebSocketClient", "type.equals(print)==onMessage()=="+message)
                             kv.putString("printData", message)
-                            LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("1")
-//                            object : Thread() {
-//                                override fun run() {
-//                                    super.run()
-//                                    sleep(1000) //休眠3秒
-//                                    LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("1")
-//                                }
-//                            }.start()
+                            LiveEventBus.get<String>("PrintJWebSocketPrint").post("1")
                         }
 
                     }
@@ -186,7 +178,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 
         }
 
-        LiveDataBus.get().with("voiceTime", String::class.java)
+        LiveEventBus.get<String>("voiceTime", String::class.java)
             .observeForever {
                 setState(it)
 
@@ -208,7 +200,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
 //
 //
 //            }
-        LiveDataBus.get().with("Printqiehuan", SiginData::class.java)
+        LiveEventBus.get<SiginData>("Printqiehuan", SiginData::class.java)
             .observeForever {
                 printDevData = it
             }

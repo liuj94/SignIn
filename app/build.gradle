@@ -13,8 +13,8 @@ android {
         applicationId "com.example.signin"
         minSdk 21
         targetSdk 33
-        versionCode 154
-        versionName "1.5.4"
+        versionCode 155
+        versionName "1.5.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -118,5 +118,5 @@ dependencies {
     implementation 'com.github.xuexiangjys.XUtil:xutil-sub:2.0.0'
 //    implementation "org.java-websocket:Java-WebSocket:1.4.0"
     implementation 'org.java-websocket:Java-WebSocket:1.5.3'
-    implementation 'dev.gustavoavila:java-android-websocket-client:2.0.2'
+    implementation 'io.github.jeremyliao:live-event-bus-x:1.8.0'
 }

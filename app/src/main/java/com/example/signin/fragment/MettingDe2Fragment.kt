@@ -17,6 +17,7 @@ import com.example.signin.adapter.FMeetingDeList2Adapter
 import com.example.signin.adapter.SelectMeetingAdapter
 import com.example.signin.bean.SiginUpListModel
 import com.example.signin.net.RequestCallback
+import com.jeremyliao.liveeventbus.LiveEventBus
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 
@@ -78,7 +79,7 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
                 binding.nameTv.text = selectList[position].name
                 adapterSelect?.notifyDataSetChanged()
                 binding.selectLl.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
                 getList()
             }
         }
@@ -111,17 +112,17 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
 
         binding.nameLl.setOnClickListener {
             if (binding.selectLl.visibility == View.VISIBLE) {
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
                 binding.selectLl.visibility = View.GONE
             } else {
-                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
+                LiveEventBus.get<String>("selectLlVISIBLE").post("1")
                 binding.selectLl.visibility = View.VISIBLE
             }
         }
         binding.selectLl.setOnClickListener {
 
             if (binding.selectLl.visibility == View.VISIBLE) {
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
                 binding.selectLl.visibility = View.GONE
             }
 
@@ -131,8 +132,9 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
         binding.refresh.setOnRefreshListener {
             getList()
         }
-        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
-            .observeForever {
+        LiveEventBus
+            .get<String>("JWebSocketClientlocation", String::class.java)
+            .observe(this) {
                 try {
                     if (isShow) {
                         signUpId = ""

@@ -23,6 +23,7 @@ import com.example.signin.bean.User
 import com.example.signin.databinding.FragMyBinding
 
 import com.example.signin.net.RequestCallback
+import com.jeremyliao.liveeventbus.LiveEventBus
 
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
@@ -106,8 +107,11 @@ class MyFragment : BaseBindingFragment<FragMyBinding, BaseViewModel>() {
         binding.img.setOnClickListener {
             activity?.let { it1 -> takePhotoDialog(it1) { submitUserAvatar(it) } }
         }
-        LiveDataBus.get().with("Avatar", String::class.java)
-            .observeForever {
+        LiveEventBus
+            .get<String>("Avatar", String::class.java)
+            .observe(this) {
+//        LiveDataBus.get().with("Avatar", String::class.java)
+//            .observeForever {
                 userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
                 activity?.let {
                     Glide.with(it).load(PageRoutes.BaseUrl + userData?.avatar)

@@ -19,6 +19,7 @@ import com.example.signin.fragment.MettingDe2Fragment
 import com.example.signin.fragment.MettingDe3Fragment
 import com.example.signin.fragment.MettingDe4Fragment
 import com.example.signin.net.RequestCallback
+import com.jeremyliao.liveeventbus.LiveEventBus
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import java.math.BigDecimal
@@ -60,13 +61,18 @@ class MeetingDe2Activity : BaseBindingActivity<ActMeetda2Binding, BaseViewModel>
         intent.getStringExtra("userType")?.let {
             userType = it
         }
-
-        LiveDataBus.get().with("selectLlVISIBLE", String::class.java)
-            .observeForever {
+        LiveEventBus
+            .get<String>("selectLlVISIBLE", String::class.java)
+            .observe(this) {
+//        LiveDataBus.get().with("selectLlVISIBLE", String::class.java)
+//            .observeForever {
                 binding.zhez.visibility = View.VISIBLE
             }
-        LiveDataBus.get().with("selectLlGONE", String::class.java)
-            .observeForever {
+        LiveEventBus
+            .get<String>("selectLlGONE", String::class.java)
+            .observe(this) {
+//        LiveDataBus.get().with("selectLlGONE", String::class.java)
+//            .observeForever {
                 binding.zhez.visibility = View.GONE
             }
         binding.zhez.setOnClickListener {
@@ -93,8 +99,11 @@ class MeetingDe2Activity : BaseBindingActivity<ActMeetda2Binding, BaseViewModel>
             binding.mRb2.isChecked = true
             checkFragment2()
         }
-        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
-            .observeForever {
+        LiveEventBus
+            .get<String>("JWebSocketClientlocation", String::class.java)
+            .observe(this) {
+//        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
+//            .observeForever {
                 try {
                     if (AppManager.getAppManager()
                             .activityInstanceIsLive(this@MeetingDe2Activity)

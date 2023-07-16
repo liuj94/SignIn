@@ -12,6 +12,7 @@ import com.example.signin.fragment.MettingDe1Fragment
 import com.example.signin.fragment.MettingDe2Fragment
 import com.example.signin.fragment.MettingDe3Fragment
 import com.example.signin.fragment.MettingDe4Fragment
+import com.jeremyliao.liveeventbus.LiveEventBus
 
 
 class MeetingDeActivity : BaseBindingActivity<ActMeetdaBinding, BaseViewModel>() {
@@ -40,12 +41,18 @@ class MeetingDeActivity : BaseBindingActivity<ActMeetdaBinding, BaseViewModel>()
         }
 
         getFragmentLists()
-        LiveDataBus.get().with("selectLlVISIBLE", String::class.java)
-            .observeForever {
+        LiveEventBus
+            .get<String>("selectLlVISIBLE", String::class.java)
+            .observe(this) {
+//        LiveDataBus.get().with("selectLlVISIBLE", String::class.java)
+//            .observeForever {
                 binding.zhez.visibility = View.VISIBLE
             }
-        LiveDataBus.get().with("selectLlGONE", String::class.java)
-            .observeForever {
+                LiveEventBus
+                    .get<String>("selectLlGONE", String::class.java)
+                    .observe(this) {
+//        LiveDataBus.get().with("selectLlGONE", String::class.java)
+//            .observeForever {
                 binding.zhez.visibility = View.GONE
             }
         binding.zhez.setOnClickListener {

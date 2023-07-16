@@ -29,19 +29,25 @@ import com.example.signin.databinding.ActivityMainBinding
 import com.example.signin.fragment.HomeMainFragment
 import com.example.signin.fragment.MyFragment
 import com.example.signin.net.RequestCallback
+import com.example.signin.webs.IReceiveMessage
+import com.example.signin.webs.WebSocketManager
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
+import com.jeremyliao.liveeventbus.LiveEventBus
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.tencent.mmkv.MMKV
 import com.xuexiang.xupdate.XUpdate
-import dev.gustavoavila.websocketclient.WebSocketClient
 import getDataType
+import kotlin.concurrent.thread
+import okhttp3.OkHttpClient
 import java.net.URI
+import java.util.concurrent.TimeUnit
 
 
-class MainHomeActivity2 : BaseBindingActivity<ActivityMainBinding, BaseViewModel>() {
+class MainHomeActivity2 : BaseBindingActivity<ActivityMainBinding, BaseViewModel>(),
+    IReceiveMessage {
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
     var isMainHome = true
@@ -51,7 +57,7 @@ class MainHomeActivity2 : BaseBindingActivity<ActivityMainBinding, BaseViewModel
     var printDevData: SiginData? = null
 
     override fun initData() {
-        SpeechUtils.getInstance(this@MainHomeActivity2)
+//        SpeechUtils.getInstance(this@MainHomeActivity2)
 //        val uri: URI = URI.create(
 //            "wss://meeting.nbqichen.com/websocket/user?source=sys&mac=" + MacUitl.getMac(this) + "&Authorization=" + kv.getString(
 //                "token",
@@ -189,7 +195,7 @@ class MainHomeActivity2 : BaseBindingActivity<ActivityMainBinding, BaseViewModel
 
         }
 
-        LiveDataBus.get().with("voiceTime", String::class.java)
+        LiveEventBus.get<String>("voiceTime", String::class.java)
             .observeForever {
                 setState(it)
 
@@ -211,7 +217,7 @@ class MainHomeActivity2 : BaseBindingActivity<ActivityMainBinding, BaseViewModel
 //
 //
 //            }
-        LiveDataBus.get().with("Printqiehuan", SiginData::class.java)
+        LiveEventBus.get<SiginData>("Printqiehuan", SiginData::class.java)
             .observeForever {
                 printDevData = it
             }
@@ -675,9 +681,10 @@ class MainHomeActivity2 : BaseBindingActivity<ActivityMainBinding, BaseViewModel
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
+        WebSocketManager.getInstance().close()
         printUnit?.PrintUnregisterReceiver()
     }
-    private var webSocketClient: WebSocketClient? = null
+
 
     private fun createWebSocketClient() {
         val uri: URI = URI.create(
@@ -686,26 +693,44 @@ class MainHomeActivity2 : BaseBindingActivity<ActivityMainBinding, BaseViewModel
                 ""
             )
         )
-        webSocketClient = object : WebSocketClient(uri) {
-            override fun onOpen() {
-                println("onOpen")
-//                webSocketClient!!.send("Hello, World!")
+        var url =  "wss://meeting.nbqichen.com/websocket/user?source=sys&Authorization=" + kv.getString(
+            "token",
+            ""
+        )
+        thread {
+            kotlin.run {
+                WebSocketManager.getInstance().init(url, this)
             }
+        }
 
-            override fun onTextReceived(message: String?) {
-                println("onTextReceived")
-                Log.e("JWebSocketClientService", "onTextReceived="+message)
+    }
+
+    override fun onConnectSuccess() {
+        Log.d("JWebSocketClient","onConnectSuccess==")
+    }
+
+    override fun onConnectFailed() {
+        Log.d("JWebSocketClient","onConnectFailed==")
+    }
+
+    override fun onClose() {
+        Log.d("JWebSocketClient","onClose==")
+    }
+
+    override fun onMessage(message: String?) {
+        runOnUiThread {
+           Log.d("JWebSocketClient","text=="+message)
+            if(!message.isNullOrEmpty()){
                 try {
                     var data = JSON.parseObject(message, SocketData::class.java)
                     if (data.code.equals("200")) {
                         if (data.type.equals("refresh") || data.type.equals("delete_location") || data.type.equals("add_location")
                         ) {
-                            LiveDataBus.get().with("JWebSocketClientlocation").postValue("1")
+                            LiveEventBus.get<String>("JWebSocketClientlocation").post("1")
                         } else if (data.type.equals("print")) {
                             Log.e("JWebSocketClient", "type.equals(print)==onMessage()=="+message)
                             kv.putString("printData", message)
-                            LiveDataBus.get().with("JWebSocketClientlocationPrint").postValue("1")
-
+                            LiveEventBus.get<String>("PrintJWebSocketPrint").post(message)
                         }
 
                     }
@@ -714,36 +739,7 @@ class MainHomeActivity2 : BaseBindingActivity<ActivityMainBinding, BaseViewModel
                 }
             }
 
-            override  fun onBinaryReceived(data: ByteArray?) {
-                println("onBinaryReceived")
-                Log.e("JWebSocketClient", "onBinaryReceived==")
-            }
-
-            override fun onPingReceived(data: ByteArray?) {
-                println("onPingReceived")
-            }
-
-            override  fun onPongReceived(data: ByteArray?) {
-                println("onPongReceived")
-            }
-
-            override  fun onException(e: Exception) {
-                println(e.message)
-                Log.e("JWebSocketClientService", "onException+")
-            }
-
-            override fun onCloseReceived(reason: Int, description: String?) {
-                println("onCloseReceived")
-                Log.e("JWebSocketClientService", "onCloseReceived")
-            }
-
-
         }
-        webSocketClient?.setConnectTimeout(10000)
-        webSocketClient?.setReadTimeout(600000000)
-//        webSocketClient.addHeader("Origin", "http://developer.example.com")
-        webSocketClient?.enableAutomaticReconnection(5000)
-        webSocketClient?.connect()
     }
 
 }

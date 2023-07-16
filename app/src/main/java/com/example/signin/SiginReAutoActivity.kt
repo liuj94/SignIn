@@ -30,6 +30,8 @@ import com.example.signin.bean.MeetingFormList
 import com.example.signin.bean.SignUpUser
 import com.example.signin.bean.SocketData
 import com.example.signin.databinding.ActSigninStateBinding
+import com.jeremyliao.liveeventbus.LiveEventBus
+import getprintImg
 
 
 class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel>() {
@@ -53,6 +55,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
     var avatar: String = ""
     var mRingPlayer: MediaPlayer? = null
     var isShowAvatar: Boolean = false
+    var isShowFrist: Boolean = true
     var meetingFormList: MutableList<MeetingFormList> = ArrayList()
     override fun initData() {
         CTPL.getInstance().clean()
@@ -63,48 +66,59 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
         } else {
             binding.print.visibility = View.GONE
         }
-        LiveDataBus.get().with("JWebSocketClientlocationPrint", String::class.java)
-            .observeForever {
-                Log.d("JWebSocketClient", "JWebSocketClientlocationPrint=")
-                if (AppManager.getAppManager()
-                        .activityInstanceIsLive(this@SiginReAutoActivity)
-                )
-                   {
-                    try {
-                        App.getInstance().toast("接收到打印通知")
-                        var printZd = kv.getBoolean("printZd", true)
-                        if (printZd) {
-//                            App.getInstance().toast("自动打印开启")
-                            var message = kv.getString("printData", "")
-                            Log.d("JWebSocketClient", "message=" + message)
-                            if (!CTPL.getInstance().isConnected) {
-//                            if (false) {
-                                App.getInstance().toast("打印机未连接")
-                                Log.d("JWebSocketClient", "打印机未连接=")
-                            } else {
-                                var message = kv.getString("printData", "")
-                                if (!message.isNullOrEmpty()) {
-                                    try {
-                                        var data = JSON.parseObject(message, SocketData::class.java)
-                                        printImg(data)
-                                    } catch (e: Exception) {
-                                        App.getInstance().toast("数据解析异常")
-                                        Log.d("JWebSocketClient", "ExceptionionPrint=" + e.message)
-                                    }
-
-                                } else {
-                                    App.getInstance().toast("打印参数为空")
-                                }
-                            }
-//                            binding.print.performClick()
-                        } else {
-                            App.getInstance().toast("自动打印未开启")
-                        }
-
-                    } catch (e: Exception) {
-                        App.getInstance().toast("线程异常")
-                    }
+        LiveEventBus
+            .get<String>("PrintJWebSocketPrint", String::class.java)
+            .observe(this) {
+                if (!isShowFrist){
+                    return@observe
                 }
+                isShowFrist = false
+                    if (AppManager.getAppManager()
+                            .activityInstanceIsLive(this@SiginReAutoActivity)
+                    ) {
+                        Log.d("JWebSocketClient", "JWebSocketClientlocationPrint=")
+                        try {
+                            App.getInstance().toast("接收到打印通知")
+                            var printZd = kv.getBoolean("printZd", true)
+                            if (printZd) {
+//                            App.getInstance().toast("自动打印开启")
+                                var message = kv.getString("printData", "")
+                                Log.d("JWebSocketClient", "message=" + message)
+                            if (!CTPL.getInstance().isConnected) {
+//                                if (false) {
+                                    App.getInstance().toast("打印机未连接")
+                                    Log.d("JWebSocketClient", "打印机未连接=")
+                                } else {
+                                    var message = kv.getString("printData", "")
+                                    if (!message.isNullOrEmpty()) {
+                                        try {
+                                            var data =
+                                                JSON.parseObject(message, SocketData::class.java)
+                                            printImg(data)
+                                        } catch (e: Exception) {
+                                            App.getInstance().toast("数据解析异常")
+                                            Log.d(
+                                                "JWebSocketClient",
+                                                "ExceptionionPrint=" + e.message
+                                            )
+                                        }
+
+                                    } else {
+                                        App.getInstance().toast("打印参数为空")
+                                    }
+                                }
+//                            binding.print.performClick()
+                            } else {
+                                App.getInstance().toast("自动打印未开启")
+                                Log.d("JWebSocketClient", "自动打印未开启=")
+                            }
+
+                        } catch (e: Exception) {
+                            App.getInstance().toast("线程异常")
+                            Log.d("JWebSocketClient", "线程异常=")
+
+                        }
+                    }
 
 
             }
@@ -155,6 +169,7 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             signUpUser = it as SignUpUser
         }
         signUpUser?.let {
+
             params["meetingId"] = it.meetingId//会议id
             params["signUpLocationId"] = it.signUpLocationId//签到点id
             params["signUpId"] = it.signUpId//签到站id
@@ -174,6 +189,9 @@ class SiginReAutoActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewM
             it.success?.let { t -> success = t }
             it.voiceStatus?.let { t -> voiceStatus = t }
             it.autoStatus?.let { t -> autoStatus = t }
+            if (success.equals("1")) {
+                getprintImg(it.userMeetingId)
+            }
 
 
 //            if(it.name.isNullOrEmpty()){
