@@ -161,10 +161,43 @@ class ScanActivity : BaseBindingActivity<ActScanBinding, BaseViewModel>(), QRCod
                     }
 
                     if (showType == 3) {
-                        com.dylanc.longan.startActivity<SiginReActivity>(
+                        data.meetingSignUps?.let {
+                            for (item in data.meetingSignUps) {
+                                if (item.type == 3) {
+                                    item.userMeetingAccommodation?.let { userMeetingAccommodation ->
+                                        userMeetingAccommodation.roomNo?.let { location ->
+                                            signUpUser.location = location
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        var ruzhustatus = "1"
+                        for (item in data.meetingSignUps) {
+                            when (item.type) {
+                                3 -> {
+                                    ruzhustatus =  "" + item.select
+                                }
+                            }}
+                        var avatar = ""
+                        data.avatar?.let { avatar = it }
+                    if (signUpUser.location.isNullOrEmpty()){
+
+                        signUpUser.success = "500"
+                        com.dylanc.longan.startActivity<SiginReAutoActivity>(
                             "type" to showType,
-                            "data" to signUpUser
+                            "data" to signUpUser,
+                            "avatar" to avatar
                         )
+                    }else{
+                        com.dylanc.longan.startActivity<SiginReActivity>(
+                            "ruzhustatus" to "2",
+                            "type" to showType,
+                            "data" to signUpUser,
+                            "avatar" to avatar
+                        )
+                    }
+
                     } else {
                         if (showType != 8) {
                             var avatar = ""

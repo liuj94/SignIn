@@ -1,10 +1,10 @@
 package com.example.signin
 
+import android.bluetooth.BluetoothClass
 import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ctaiot.ctprinter.ctpl.CTPL
-import com.ctaiot.ctprinter.ctpl.Device
 import com.dylanc.longan.toast
 import com.example.signin.adapter.SelectMeetingAdapter2
 import com.example.signin.base.BaseBindingActivity
@@ -77,7 +77,7 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
             binding.selected.text = "当前连接设备:" + selectList3[position].name
 //            printUnit?.connectSPP(selectList3[position].mac)
            var p = selectList3[position]
-            val d = Device()
+            val d = BluetoothClass.Device()
             val port =
                 if ("SPP" == p.bluetoothType) CTPL.Port.SPP else CTPL.Port.BLE
             d.setPort(port)
@@ -112,7 +112,7 @@ class PrintActivity : BaseBindingActivity<ActPrintBinding, BaseViewModel>() {
 //                        p.split("\n\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().get(1)
 //                    printUnit?.connectSPP(p.mac)
                         binding.selected.text = "当前连接设备:" + p.name
-                        val d = Device()
+                        val d = BluetoothClass.Device()
                         val port =
                             if ("SPP" == p.bluetoothType) CTPL.Port.SPP else CTPL.Port.BLE
                         d.setPort(port)

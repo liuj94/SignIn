@@ -115,7 +115,20 @@ class LoginActivity : BaseBindingActivity<ActLoginBinding, BaseViewModel>() {
                                         startActivity<MainHomeActivity>()
                                         finish()
 
-                                    }
+                                    }//                                        MaterialDialog(this@LoginActivity).show {
+//                                          customView(	//自定义弹窗
+//                                                viewRes = R.layout.tc_user_add,//自定义文件
+//                                                dialogWrapContent = true,	//让自定义宽度生效
+//                                                scrollable = true,			//让自定义宽高生效
+//                                                noVerticalPadding = true    //让自定义高度生效
+//                                            ).apply {
+//                                              findViewById<TextView>(R.id.add).setOnClickListener {
+//                                                  add(findViewById<EditText>(R.id.userName).text.toString().trim(),JSON.toJSONString(data))
+//                                              }
+//                                          }
+//
+//                                            cancelOnTouchOutside(false)	//点击外部不消失
+//                                        }
                                 }
                             }
 

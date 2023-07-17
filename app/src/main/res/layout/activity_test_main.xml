@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:weightSum="3"
+    tools:context=".MainActivity">
+
+    <ListView
+        android:id="@+id/device"
+        android:layout_weight="2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+    <TextView
+        android:id="@+id/selected"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:layout_marginTop="120dp"
+        android:background="@android:color/holo_blue_light"
+        android:gravity="center"
+        android:text="选中设备:"
+        android:textColor="@color/white"
+        android:textSize="24sp" />
+    <TextView
+        android:id="@+id/conn"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="120dp"
+        android:background="@android:color/holo_blue_light"
+        android:gravity="center"
+        android:onClick="onViewClick"
+        android:text="连接"
+        android:textColor="@color/white"
+        android:textSize="24sp" />
+    <TextView
+        android:id="@+id/print"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/holo_blue_light"
+        android:gravity="center"
+        android:onClick="onViewClick"
+        android:text="打印"
+        android:textColor="@color/white"
+        android:textSize="24sp" />
+
+</LinearLayout>

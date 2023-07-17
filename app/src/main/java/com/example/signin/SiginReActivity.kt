@@ -7,8 +7,6 @@ import android.media.MediaPlayer
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
-import androidx.annotation.Nullable
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
 import com.bumptech.glide.Glide
@@ -29,14 +27,16 @@ import com.example.signin.base.BaseViewModel
 import com.example.signin.base.StatusBarUtil
 import com.example.signin.bean.MeetingFormData
 import com.example.signin.bean.MeetingFormList
+import com.example.signin.bean.SiginReData
 import com.example.signin.bean.SignUpUser
 import com.example.signin.bean.SocketData
 import com.example.signin.databinding.ActSigninStateBinding
 import com.example.signin.net.RequestCallback
-import com.jeremyliao.liveeventbus.LiveEventBus
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import getprintImg
+import okhttp3.Response
+import javax.sql.DataSource
 
 
 class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel>() {
@@ -74,49 +74,49 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
         } else {
             binding.print.visibility = View.GONE
         }
-        LiveEventBus
-            .get<String>("PrintJWebSocketPrint", String::class.java)
-            .observe(this) {
-                if (!isShowFrist){
-                    return@observe
-                }
-                isShowFrist = false
-                if (AppManager.getAppManager().activityInstanceIsLive(this@SiginReActivity)) {
-                    Log.d("JWebSocketClient", "JWebSocketClientlocationPrint=")
-                    try {
-                        App.getInstance().toast("接收到打印通知")
-                        var printZd = kv.getBoolean("printZd", true)
-                        if (printZd) {
-                            App.getInstance().toast("自动打印开启")
-                            if (!CTPL.getInstance().isConnected) {
-                                //                            if (false) {
-                                App.getInstance().toast("打印机未连接")
-                                Log.d("JWebSocketClient", "打印机未连接=")
-                            } else {
-                                var message = kv.getString("printData", "")
-                                if (!message.isNullOrEmpty()) {
-                                    try {
-                                        var data = JSON.parseObject(message, SocketData::class.java)
-                                        printImg(data)
-                                    } catch (e: Exception) {
-                                        App.getInstance().toast("数据解析异常")
-                                        Log.d("JWebSocketClient", "ExceptionionPrint=" + e.message)
-                                    }
-
-                                } else {
-                                    App.getInstance().toast("打印参数为空")
-                                }
-                            }
-                            //                            binding.print.performClick()
-                        } else {
-                            App.getInstance().toast("自动打印未开启")
-                        }
-
-                    } catch (e: Exception) {
-                        App.getInstance().toast("线程异常")
-                    }
-                }
-            }
+//        LiveEventBus
+//            .get<String>("PrintJWebSocketPrint", String::class.java)
+//            .observe(this) {
+//                if (!isShowFrist){
+//                    return@observe
+//                }
+//                isShowFrist = false
+//                if (AppManager.getAppManager().activityInstanceIsLive(this@SiginReActivity)) {
+//                    Log.d("JWebSocketClient", "JWebSocketClientlocationPrint=")
+//                    try {
+//                        App.getInstance().toast("接收到打印通知")
+//                        var printZd = kv.getBoolean("printZd", true)
+//                        if (printZd) {
+//                            App.getInstance().toast("自动打印开启")
+//                            if (!CTPL.getInstance().isConnected) {
+//                                //                            if (false) {
+//                                App.getInstance().toast("打印机未连接")
+//                                Log.d("JWebSocketClient", "打印机未连接=")
+//                            } else {
+//                                var message = kv.getString("printData", "")
+//                                if (!message.isNullOrEmpty()) {
+//                                    try {
+//                                        var data = JSON.parseObject(message, SocketData::class.java)
+//                                        printImg(data)
+//                                    } catch (e: Exception) {
+//                                        App.getInstance().toast("数据解析异常")
+//                                        Log.d("JWebSocketClient", "ExceptionionPrint=" + e.message)
+//                                    }
+//
+//                                } else {
+//                                    App.getInstance().toast("打印参数为空")
+//                                }
+//                            }
+//                            //                            binding.print.performClick()
+//                        } else {
+//                            App.getInstance().toast("自动打印未开启")
+//                        }
+//
+//                    } catch (e: Exception) {
+//                        App.getInstance().toast("线程异常")
+//                    }
+//                }
+//            }
 
         binding.print.setOnClickListener {
             if (!CTPL.getInstance().isConnected) {
@@ -233,6 +233,14 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
             binding.stateTv.setTextColor(Color.parseColor("#FFC300"))
             binding.stateIv.setImageResource(R.mipmap.qd3)
             signUpUser?.let {
+                if(type==3){
+                    if(it.location.isNullOrEmpty()){
+
+                    }else{
+                        it.location?.let {location-> binding.numEt.text = location }
+                    }
+
+                }
                 if (it.autoStatus.equals("1")) {
                     binding.submit.text = "返回（3）"
                     timer?.start()
@@ -276,27 +284,46 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
     private fun sigin() {
 //        if (type == 3 || type == 4 || type == 5) {
         if (type == 3) {
-            if (binding.numEt.text.toString().trim().equals("")) {
-                if (type == 3) {
-                    toast("请输入房号")
-                }
-                return
-            }
+//            if (binding.numEt.text.toString().trim().equals("")) {
+//                if (type == 3) {
+//                    toast("请输入房号")
+//                }
+//                return
+//            }
             params["location"] = binding.numEt.text.toString().trim()
         }
 
         mViewModel.isShowLoading.value = true
-        OkGo.post<String>(PageRoutes.Api_sigin)
+        OkGo.post<SocketData>(PageRoutes.Api_sigin)
             .tag(PageRoutes.Api_sigin)
             .upJson(JSON.toJSONString(params))
             .headers("Authorization", kv.getString("token", ""))
-            .execute(object : RequestCallback<String>() {
+            .execute(object : RequestCallback<SiginReData>() {
                 override fun onSuccessNullData() {
                     super.onSuccessNullData()
                 }
 
-                override fun onMySuccess(data: String) {
-                    super.onMySuccess(data)
+                override fun onSuccess(response: com.lzy.okgo.model.Response<SiginReData>) {
+                    super.onSuccess(response)
+                    var data = response.body().data.signUp
+                    if(response.body().data.urls.size>0){
+                        kv.putString("printData", JSON.toJSONString(response.body().data))
+                        var printZd = kv.getBoolean("printZd", true)
+                        if (printZd) {
+//                            App.getInstance().toast("自动打印开启")
+                            if (!CTPL.getInstance().isConnected) {
+                                //                            if (false) {
+                                App.getInstance().toast("打印机未连接")
+                                Log.d("JWebSocketClient", "打印机未连接=")
+                            } else {
+                                printImg(response.body().data)
+                            }
+                            //                            binding.print.performClick()
+                        } else {
+                            App.getInstance().toast("自动打印未开启")
+                        }
+                    }
+
 
                     if (autoStatus.equals("1")) {
                         timer()
@@ -407,11 +434,17 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
 
                         }
                     }
-
-
                 }
 
-                override fun onError(response: Response<String>) {
+//                override fun onMySuccess(data: SiginReData) {
+//                    super.onMySuccess(data)
+//
+//
+//
+//
+//                }
+
+                override fun onError(response: Response<SiginReData>) {
                     super.onError(response)
                     mViewModel.isShowLoading.value = false
                     binding.stateTv.text = failedMsg
@@ -469,6 +502,10 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
     }
 
     private fun printImg(data: SocketData) {
+        var speed = kv.getString("printshudu", "1")?.toDouble()?.toInt()
+        var density = kv.getString("printnongdu", "15")?.toDouble()?.toInt()
+        var cardW = kv.getString("printkuangdu", "0")?.toDouble()?.toInt()
+        var cardH = kv.getString("printgaodu", "0")?.toDouble()?.toInt()
         var printkaiguan = kv.getBoolean("printkaiguan", true)
         if (!printkaiguan) {
             App.getInstance().toast("请前往设置开启打印机")
@@ -512,7 +549,14 @@ class SiginReActivity : BaseBindingActivity<ActSigninStateBinding, BaseViewModel
                                 if (data.cardH.toDouble().toInt() < 50) {
                                     h = data.cardH.toDouble().toInt()
                                 }
-                                CTPL.getInstance().setPaperType(PaperType.Label).setPrintSpeed(1)
+                            if(cardW!=0){
+                                cardW?.let { w =  it }
+
+                            }
+                            if(cardH!=0){
+                                cardH?.let { h =  it }
+                            }
+                                CTPL.getInstance().setPaperType(PaperType.Label).setPrintSpeed(speed).setPrintDensity(density)
                                     .setSize(
                                         w,
                                         h

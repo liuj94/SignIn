@@ -29,6 +29,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
     //var data : MeetingUserDeData
     var id = ""
+    var location = ""
     var showType = 0
     var state_dingdan = "1"
     var order: MeetingUserDeData.UserOrderBean = MeetingUserDeData.UserOrderBean()
@@ -44,7 +45,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
     var invoiceStatus: String = "0"
     override fun initData() {
         intent.getStringExtra("id")?.let { id = it }
-        Log.d("getDataaaaaa","getData()=="+id)
+        Log.d("getDataaaaaa", "getData()==" + id)
         intent.getIntExtra("showType", 0)?.let { showType = it }
         if (showType != 0) {
             binding.itemZcbd.root.visibility = View.GONE
@@ -58,21 +59,27 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 1 -> {
                     binding.itemZcbd.root.visibility = View.VISIBLE
                 }
+
                 2 -> {
                     binding.itemLcxx.root.visibility = View.VISIBLE
                 }
+
                 3 -> {
                     binding.itemRzxx.root.visibility = View.VISIBLE
                 }
+
                 4 -> {
                     binding.itemHcqd.root.visibility = View.VISIBLE
                 }
+
                 5 -> {
                     binding.itemCyxi.root.visibility = View.VISIBLE
                 }
+
                 6 -> {
                     binding.itemLpff.root.visibility = View.VISIBLE
                 }
+
                 7 -> {
                     binding.itemFcxx.root.visibility = View.VISIBLE
                 }
@@ -92,7 +99,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             )
         }
         binding.itemDdxx.ll.setOnClickListener {
-            if (!examineStatus.equals("-1")){
+            if (!examineStatus.equals("-1")) {
                 startActivity<ExamineActivity>("order" to order)
             }
 
@@ -100,7 +107,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         binding.itemDdxx.ddBtn.setOnClickListener {
             if (examineStatus.equals("2")) {
                 if (cAmount > 0) {
-                    if(invoiceStatus.equals("2")){
+                    if (invoiceStatus.equals("2")) {
                         startActivity<ExamineKPActivity>("order" to order)
                     }
 
@@ -110,10 +117,9 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
             } else if (examineStatus.equals("1")) {
                 startActivity<ExamineActivity>("order" to order)
-            }else if (examineStatus.equals("-1")){
+            } else if (examineStatus.equals("-1")) {
 
-            }
-            else{
+            } else {
                 startActivity<ExamineActivity>("order" to order)
             }
 //            if (invoiceStatus.equals("5")) {
@@ -138,12 +144,21 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
         binding.itemRzxx.ddBtn.setOnClickListener {
             if (state_ruzhu.status.equals("1")) {
 //                gotoSigin(state_ruzhu,3)
-                startActivity<SiginReActivity>(
-                    "ruzhustatus" to "1",
-                    "type" to 3,
-                    "data" to state_ruzhu,
-                    "avatar" to avatar
-                )
+                if(location.isNullOrEmpty()){
+                    state_ruzhu.success = "500"
+                    startActivity<SiginReAutoActivity>(
+                        "type" to 3,
+                        "data" to state_ruzhu, "avatar" to avatar
+                    )
+                }else{
+                    startActivity<SiginReActivity>(
+                        "ruzhustatus" to "2",
+                        "type" to 3,
+                        "data" to state_ruzhu,
+                        "avatar" to avatar
+                    )
+                }
+
             }
         }
         binding.itemHcqd.zcBtn.setOnClickListener {
@@ -240,7 +255,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
     var meetingUserDeData: MeetingUserDeData? = null
     private fun getData() {
         mViewModel.isShowLoading.value = true
-        Log.d("getDataaaaaa","getData()=="+id)
+        Log.d("getDataaaaaa", "getData()==" + id)
         OkGo.get<MeetingUserDeData>(PageRoutes.Api_meetinguser_data + id + "?id=" + id)
             .tag(PageRoutes.Api_meetinguser_data + id + "?id=" + id)
             .headers("Authorization", kv.getString("token", ""))
@@ -395,34 +410,34 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             binding.itemDdxx.ddBtn.text = ""
             binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
             binding.infoLl.visibility = View.GONE
-            if(examineStatus.equals("2")){
+            if (examineStatus.equals("2")) {
                 binding.infoLl.visibility = View.VISIBLE
                 binding.itemDdxx.ddBtn.text = ""
                 if (cAmount > 0) {
-                    if (invoiceStatus.equals("2")){
+                    if (invoiceStatus.equals("2")) {
                         binding.itemDdxx.ddBtn.text = "开具发票"
                         binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
 
-                    }else if(invoiceStatus.equals("5")){
+                    } else if (invoiceStatus.equals("5")) {
                         binding.itemDdxx.ddBtn.text = "已开票"
                         binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
 
-                    }else{
+                    } else {
                         binding.itemDdxx.ddBtn.text = "待申请"
                         binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
                     }
-                }else{
+                } else {
                     binding.itemDdxx.ddBtn.text = "订单详情"
                     binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
                 }
-            }else if(examineStatus.equals("3")){
+            } else if (examineStatus.equals("3")) {
                 binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
                 binding.itemDdxx.ddBtn.text = "审核失败"
-            }else{
+            } else {
                 binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_ff3974f6_15)
                 binding.itemDdxx.ddBtn.text = "待审核"
             }
-            if(data.userMeeting.status.equals("-1")){
+            if (data.userMeeting.status.equals("-1")) {
                 binding.itemDdxx.ddBtn.setBackgroundResource(R.drawable.shape_bg_999999_15)
                 binding.itemDdxx.ddBtn.text = "待付款"
                 examineStatus = "-1"
@@ -467,7 +482,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 //            }
 
         }
-        data.userInvoice?.let{
+        data.userInvoice?.let {
             it.no?.let { invoiceNo -> binding.itemDdxx.ddNum.text = invoiceNo }
         }
 
@@ -491,6 +506,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         it.name?.let { name -> order.meetingSignUpLocationName = name }
                     }
                 }
+
                 1 -> {
 
                     try {
@@ -531,6 +547,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     }
 
                 }
+
                 6 -> {
                     try {
 
@@ -564,7 +581,9 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
                             }
                             it.address?.let { address -> binding.itemLpff.address.text = address }
-                            it.location?.let { location -> binding.itemLpff.location.text = location }
+                            it.location?.let { location ->
+                                binding.itemLpff.location.text = location
+                            }
 
 
                         }
@@ -573,6 +592,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     }
 
                 }
+
                 3 -> {
                     try {
 
@@ -583,8 +603,12 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                             binding.itemRzxx.ll.visibility = View.VISIBLE
                             //入住签到
 
-                            state_ruzhu.status =  "" + item.select
-                            setStateColor(model.sys_ruzhu, state_ruzhu.status, binding.itemRzxx.ddBtn)
+                            state_ruzhu.status = "" + item.select
+                            setStateColor(
+                                model.sys_ruzhu,
+                                state_ruzhu.status,
+                                binding.itemRzxx.ddBtn
+                            )
                             item.userMeetingSignUp?.let {
 
 
@@ -593,10 +617,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
                                         if (list.dictValue.equals("1")) {
                                             binding.itemRzxx.location.text =
-                                                "签到后分配"
+                                                "房间号：暂无"
                                         } else {
                                             binding.itemRzxx.location.text =
-                                                "待分配"
+                                                "房间号：暂无"
                                         }
                                     }
                                 }
@@ -635,10 +659,10 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                                 binding.itemRzxx.address.text = address
                             }
 
-                            userMeetingAccommodation.roomNo?.let { location ->
-
+                            userMeetingAccommodation.roomNo?.let { l ->
+                                location = l
                                 binding.itemRzxx.location.text =
-                                    "房间号：" + location
+                                    "房间号：" + l
                             }
 
                         }
@@ -648,6 +672,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     }
 
                 }
+
                 4 -> {
                     try {
 
@@ -712,6 +737,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     //会场签到
 
                 }
+
                 5 -> {
                     try {
 
@@ -777,6 +803,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                     }
 
                 }
+
                 7 -> {
                     try {
 
@@ -863,6 +890,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                         Log.d("Exception", "" + e?.message)
                     }
                 }
+
                 2 -> {
                     try {
 
@@ -955,30 +983,70 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
             }
         }
         var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
-        userData?.let {uDara->
-            if(uDara.userType=="06"){
+        userData?.let { uDara ->
+            if (uDara.userType == "06") {
                 for (type in uDara.types) {
-                    when(type){
-                        "1" -> {binding.itemZcbd.root.visibility = View.VISIBLE}
-                        "2" -> { binding.itemLcxx.root.visibility = View.VISIBLE}
-                        "3" -> { binding.itemRzxx.root.visibility = View.VISIBLE}
-                        "4" -> { binding.itemHcqd.root.visibility = View.VISIBLE}
-                        "5" -> {binding.itemCyxi.root.visibility = View.VISIBLE}
-                        "6" -> {binding.itemLpff.root.visibility = View.VISIBLE}
-                        "7" -> {binding.itemFcxx.root.visibility = View.VISIBLE}
+                    when (type) {
+                        "1" -> {
+                            binding.itemZcbd.root.visibility = View.VISIBLE
+                        }
+
+                        "2" -> {
+                            binding.itemLcxx.root.visibility = View.VISIBLE
+                        }
+
+                        "3" -> {
+                            binding.itemRzxx.root.visibility = View.VISIBLE
+                        }
+
+                        "4" -> {
+                            binding.itemHcqd.root.visibility = View.VISIBLE
+                        }
+
+                        "5" -> {
+                            binding.itemCyxi.root.visibility = View.VISIBLE
+                        }
+
+                        "6" -> {
+                            binding.itemLpff.root.visibility = View.VISIBLE
+                        }
+
+                        "7" -> {
+                            binding.itemFcxx.root.visibility = View.VISIBLE
+                        }
                     }
                 }
 
-            }else{
+            } else {
                 for (item in data.meetingSignUps) {
                     when (item.type) {
-                        1 -> {binding.itemZcbd.root.visibility = View.VISIBLE}
-                        2-> { binding.itemLcxx.root.visibility = View.VISIBLE}
-                        3 -> {   binding.itemRzxx.root.visibility = View.VISIBLE}
-                        4-> { binding.itemHcqd.root.visibility = View.VISIBLE}
-                        5 -> {binding.itemCyxi.root.visibility = View.VISIBLE}
-                        6 -> {binding.itemLpff.root.visibility = View.VISIBLE}
-                        7 -> {binding.itemFcxx.root.visibility = View.VISIBLE}
+                        1 -> {
+                            binding.itemZcbd.root.visibility = View.VISIBLE
+                        }
+
+                        2 -> {
+                            binding.itemLcxx.root.visibility = View.VISIBLE
+                        }
+
+                        3 -> {
+                            binding.itemRzxx.root.visibility = View.VISIBLE
+                        }
+
+                        4 -> {
+                            binding.itemHcqd.root.visibility = View.VISIBLE
+                        }
+
+                        5 -> {
+                            binding.itemCyxi.root.visibility = View.VISIBLE
+                        }
+
+                        6 -> {
+                            binding.itemLpff.root.visibility = View.VISIBLE
+                        }
+
+                        7 -> {
+                            binding.itemFcxx.root.visibility = View.VISIBLE
+                        }
                     }
                 }
             }
@@ -989,7 +1057,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
     override fun onResume() {
         super.onResume()
-        Log.d("getDataaaaaa","onResume()=="+id)
+        Log.d("getDataaaaaa", "onResume()==" + id)
         getData()
 
 
@@ -1030,6 +1098,7 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
 
         }
     }
+
     fun getDateStr(format: String, dateStr: String): String {
         if (format.isNullOrEmpty() || dateStr.isNullOrEmpty()) {
             return ""
@@ -1177,15 +1246,15 @@ class MeetingUserDectivity : BaseBindingActivity<ActMeetingUserInfoBinding, Base
                 override fun onMySuccess(data: SiginData) {
                     super.onMySuccess(data)
                     data.meetingSignUpLocationConfig?.let {
-                        if(it.printModel==1){
-                            kv.putBoolean("printZd",true)
-                        }else{
-                            kv.putBoolean("printZd",false)
+                        if (it.printModel == 1) {
+                            kv.putBoolean("printZd", true)
+                        } else {
+                            kv.putBoolean("printZd", false)
                         }
-                        if(it.printStatus==1){
-                            kv.putBoolean("printStatus",true)
-                        }else{
-                            kv.putBoolean("printStatus",false)
+                        if (it.printStatus == 1) {
+                            kv.putBoolean("printStatus", true)
+                        } else {
+                            kv.putBoolean("printStatus", false)
                         }
 
                     }

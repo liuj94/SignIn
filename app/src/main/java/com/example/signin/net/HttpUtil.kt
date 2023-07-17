@@ -96,20 +96,22 @@ fun sigin(
     finish: (() -> Unit)? = null
 ) {
 
-    OkGo.post<String>(PageRoutes.Api_sigin)
+    OkGo.post<SocketData>(PageRoutes.Api_sigin)
         .tag(PageRoutes.Api_sigin)
         .upJson(params)
         .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token", ""))
-        .execute(object : RequestCallback<String>() {
+        .execute(object : RequestCallback<SocketData>() {
 
-            override fun onMySuccess(data: String) {
+            override fun onMySuccess(data: SocketData) {
                 super.onMySuccess(data)
                 //1成功 2重复
-                success?.invoke(data)
-
+                success?.invoke(data.signUp)
+                if(data.urls.size>0){
+                    MMKV.mmkvWithID("MyDataMMKV").putString("printData", JSON.toJSONString(data))
+                }
             }
 
-            override fun onError(response: Response<String>) {
+            override fun onError(response: Response<SocketData>) {
                 super.onError(response)
                 error?.invoke()
             }

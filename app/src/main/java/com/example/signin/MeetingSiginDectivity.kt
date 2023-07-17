@@ -2,6 +2,7 @@ package com.example.signin
 
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.MediaPlayer
@@ -21,6 +22,7 @@ import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.*
 import com.example.signin.databinding.ActMeetingSigindeBinding
 import com.example.signin.net.RequestCallback
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hello.scan.ScanCallBack
 import com.hello.scan.ScanTool
 import com.hjq.permissions.OnPermissionCallback
@@ -338,7 +340,18 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
             }
         }
         binding.moshill.setOnClickListener {
-            setState()
+            MaterialAlertDialogBuilder(this)
+                .setTitle("提示")
+                .setMessage("是否切换签入/签出模式")
+                .setNegativeButton("否") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("是") { dialog: DialogInterface?, which: Int ->
+                    setState()
+                }
+                .show()
+
+
         }
         binding.shaoma.setOnClickListener {
             if (moshi.equals("识别模式") || moshi.isNullOrEmpty()) {
@@ -761,9 +774,19 @@ class MeetingSiginDectivity : BaseBindingActivity<ActMeetingSigindeBinding, Base
                                     ruzhustatus =  "" + item.select
                                 }
                             }}
-
+                        data.meetingSignUps?.let {
+                            for (item in data.meetingSignUps) {
+                                if (item.type == 3) {
+                                    item.userMeetingAccommodation?.let { userMeetingAccommodation ->
+                                        userMeetingAccommodation.roomNo?.let { location ->
+                                            signUpUser.location = location
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         com.dylanc.longan.startActivity<SiginReActivity>(
-                            "ruzhustatus" to ruzhustatus,
+                            "ruzhustatus" to "2",
                             "type" to showType,
                             "data" to signUpUser,
                             "avatar" to avatar

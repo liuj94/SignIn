@@ -47,7 +47,7 @@
         android:layout_height="wrap_content">
         <LinearLayout
             android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:paddingRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -175,10 +175,10 @@
                 android:id="@+id/lc_btn"
                 android:background="@drawable/shape_bg_ff3974f6_15"
                 android:layout_width="wrap_content"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:minWidth="76dp"
-                android:layout_height="30dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:minWidth="50dp"
+                android:layout_height="25dp"
                 android:gravity="center"
                 android:text="接到"
                 android:textColor="#ffffffff"

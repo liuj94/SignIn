@@ -1,6 +1,7 @@
 package com.example.signin
 
 
+import android.bluetooth.BluetoothClass
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.util.Log
@@ -13,7 +14,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.ctaiot.ctprinter.ctpl.CTPL
-import com.ctaiot.ctprinter.ctpl.Device
 import com.ctaiot.ctprinter.ctpl.RespCallback
 import com.ctaiot.ctprinter.ctpl.param.PaperType
 import com.dylanc.longan.toast
@@ -115,7 +115,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                             LiveEventBus.get<String>("JWebSocketClientlocation").post("1")
                         } else if (data.type.equals("print")) {
                             kv.putString("printData", message)
-                            LiveEventBus.get<String>("PrintJWebSocketPrint").post("1")
+//                            LiveEventBus.get<String>("PrintJWebSocketPrint").post("1")
                         }
 
                     }
@@ -240,7 +240,7 @@ class MainHomeActivity : BaseBindingActivity<ActivityMainBinding, BaseViewModel>
                                 override fun printer(p: SiginData) {
                                     printDevData = p
                                     //蓝牙连接
-                                    val d = Device()
+                                    val d = BluetoothClass.Device()
                                     val port =
                                         if ("SPP" == p.bluetoothType) CTPL.Port.SPP else CTPL.Port.BLE
                                     d.setPort(port)

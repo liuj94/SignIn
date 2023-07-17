@@ -19,21 +19,142 @@ import com.tencent.mmkv.MMKV
 class SigninSetActivity : BaseBindingActivity<ActivitySiginSetBinding, BaseViewModel>() {
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
-
+    var moshi: String? = ""
+    var printkaiguan = true
+    var printZd = true
     override fun initData() {
         mViewModel.isShowLoading.value = true
         intent.getStringExtra("id")?.let {
             id = it
         }
 
-//        if (!kv.getString("userData", "").isNullOrEmpty()) {
-//            var data = JSON.parseObject(kv.getString("userData", ""), User::class.java)
-//            activity?.let {
-//                Glide.with(it).load(PageRoutes.BaseUrl + data.avatar).error(R.drawable.ov_ccc).into(binding.img)
-//            }
-//            binding.name.text = data.bame
-//            binding.password.text = data.phonenumber
-//        }
+        moshi = kv.getString("shaomamoshi", "激光头识别")
+        binding.smms.text = moshi
+        if (moshi.equals("激光头识别")) {
+            binding.jgt.visibility = View.VISIBLE
+            binding.ewm.visibility = View.GONE
+            binding.sxt.visibility = View.GONE
+
+        } else if (moshi.equals("二维码识别")) {
+            binding.jgt.visibility = View.GONE
+            binding.ewm.visibility = View.VISIBLE
+            binding.sxt.visibility = View.GONE
+
+
+        } else if (moshi.equals("摄像头识别")) {
+            binding.jgt.visibility = View.GONE
+            binding.ewm.visibility = View.GONE
+            binding.sxt.visibility = View.VISIBLE
+
+        }
+        printkaiguan = kv.getBoolean("printkaiguan", true)
+        if(printkaiguan){
+            binding.dajkg.setImageResource(R.mipmap.kaiguan1)
+            binding.dyjsz.visibility = View.VISIBLE
+        }else{
+            binding.dajkg.setImageResource(R.mipmap.kaiguan2)
+            binding.dyjsz.visibility = View.GONE
+        }
+        printZd = kv.getBoolean("printZd", false)
+        if (printZd) {
+            binding.dajzdkg.setImageResource(R.mipmap.kaiguan1)
+        } else {
+            binding.dajzdkg.setImageResource(R.mipmap.kaiguan2)
+        }
+        binding.dajkgll.setOnClickListener {
+            printkaiguan = !printkaiguan
+            kv.putBoolean("printkaiguan", printkaiguan)
+            if(printkaiguan){
+                binding.dajkg.setImageResource(R.mipmap.kaiguan1)
+            }else{
+                binding.dajkg.setImageResource(R.mipmap.kaiguan2)
+            }
+        }
+        binding.dajsd.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                s?.let {
+                    kv.putString("printshudu", it.toString())
+                }
+
+            }
+        })
+        binding.dajnd.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                s?.let {
+                    kv.putString("printnongdu", it.toString())
+                }
+
+            }
+        })
+        binding.dajkuangdu.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                s?.let {
+                    kv.putString("printkuangdu", it.toString())
+                }
+
+            }
+        })
+        binding.dajgaodu.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                s?.let {
+                    kv.putString("printgaodu", it.toString())
+                }
+
+            }
+        })
+        binding.jgtll.setOnClickListener {
+            moshi = "激光头识别"
+            kv.putString("shaomamoshi", moshi)
+            binding.jgt.visibility = View.VISIBLE
+            binding.ewm.visibility = View.GONE
+            binding.sxt.visibility = View.GONE
+        }
+        binding.ewmll.setOnClickListener {
+            moshi = "二维码识别"
+            kv.putString("shaomamoshi", moshi)
+            binding.jgt.visibility = View.GONE
+            binding.ewm.visibility = View.VISIBLE
+            binding.sxt.visibility = View.GONE
+        }
+        binding.sxtll.setOnClickListener {
+            moshi = "摄像头识别"
+            kv.putString("shaomamoshi", moshi)
+            binding.jgt.visibility = View.GONE
+            binding.ewm.visibility = View.GONE
+            binding.sxt.visibility = View.VISIBLE
+        }
         binding.kg.setOnClickListener {
             if(autoStatus.equals("1")){
                 autoStatus = "2"
