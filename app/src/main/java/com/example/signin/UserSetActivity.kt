@@ -11,6 +11,7 @@ import com.example.signin.base.BaseBindingActivity
 import com.example.signin.base.BaseViewModel
 import com.example.signin.bean.User
 import com.example.signin.databinding.ActivityUserSetBinding
+import com.jeremyliao.liveeventbus.LiveEventBus
 import upFile
 import java.io.File
 
@@ -54,7 +55,7 @@ class UserSetActivity : BaseBindingActivity<ActivityUserSetBinding, BaseViewMode
                         Glide.with(it).load(PageRoutes.BaseUrl + avatar).error(R.drawable.ov_999)
                             .into(binding.img)
                     }
-                    LiveDataBus.get().with("Avatar").postValue("1")
+                    LiveEventBus.get<String>("Avatar").post("1")
                 },
                 { mViewModel.isShowLoading.value = false
                     toast("头像修改失败")},

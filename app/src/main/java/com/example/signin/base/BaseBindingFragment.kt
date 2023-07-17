@@ -1,8 +1,10 @@
 package com.example.signin.base
 
 import android.app.Activity
+import android.content.Context
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,22 +29,48 @@ abstract class BaseBindingFragment<VB : ViewBinding,T : BaseViewModel> : Fragmen
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-
+        Log.d("ActivityBinding","setUserVisibleHint===onCreateView=")
         return createViewWithBinding(inflater, container)
     }
     private var mProgressDialog: ProgressDialog? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-         mProgressDialog = ProgressDialog(requireActivity())
+//         mProgressDialog = ProgressDialog(requireActivity())
+//        mViewModel.mContext = requireActivity()
+//        initProgressDialog()
+//        initData()
+//        initListener()
+
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mProgressDialog = ProgressDialog(requireActivity())
         mViewModel.mContext = requireActivity()
         initProgressDialog()
         initData()
         initListener()
     }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("ActivityBinding","setUserVisibleHint===onStart=")
+
+
+    }
     fun initProgressDialog() {
 
 
-        mViewModel.isShowLoadingLiveData().observe(this) {
+        mViewModel.isShowLoadingLiveData().observe(requireActivity()) {
             if (it) {
                 showLoading()
             } else {

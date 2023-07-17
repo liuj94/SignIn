@@ -224,7 +224,18 @@
                     android:text="关于我们"
                     android:textColor="#ff333333"
                     android:textSize="14sp" />
-
+                <TextView
+                    android:id="@+id/dyj"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/dyj"
+                    android:drawableRight="@mipmap/jiantou"
+                    android:drawablePadding="11dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    android:text="打印机设置"
+                    android:textColor="#ff333333"
+                    android:textSize="14sp" />
                 <TextView
                     android:id="@+id/gjtc"
                     android:layout_width="match_parent"

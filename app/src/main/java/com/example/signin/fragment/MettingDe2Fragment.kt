@@ -2,7 +2,7 @@ package com.example.signin.fragment
 
 
 import android.os.Build
-import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,26 +17,24 @@ import com.example.signin.adapter.FMeetingDeList2Adapter
 import com.example.signin.adapter.SelectMeetingAdapter
 import com.example.signin.bean.SiginUpListModel
 import com.example.signin.net.RequestCallback
+import com.jeremyliao.liveeventbus.LiveEventBus
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 /**
  *   author : LiuJie
  *   date   : 2021/2/2513:36
  */
 class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewModel>() {
-    companion object {
-        fun newInstance(meetingid: String): MettingDe2Fragment {
-            val args = Bundle()
-            args.putString("meetingid", meetingid)
-            val fragment = MettingDe2Fragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
+//    companion object {
+//        fun newInstance(meetingid: String): MettingDe2Fragment {
+//            val args = Bundle()
+//            args.putString("meetingid", meetingid)
+//            val fragment = MettingDe2Fragment()
+//            fragment.arguments = args
+//            return fragment
+//        }
+//    }
 
     override fun getViewModel(): Class<BaseViewModel> = BaseViewModel::class.java
 
@@ -47,11 +45,28 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
     private var selectList: MutableList<SiginUpListData> = ArrayList()
     var meetingid: String? = ""
     var signUpId: String? = ""
+    var isShow: Boolean = false
+    override fun onDestroyView() {
+        super.onDestroyView()
+        isShow = false
+        Log.d("MettingDe2Fragment","MettingDe2Fragmenton==onDestroyView()")
+    }
 
+    override fun onResume() {
+        super.onResume()
+        getData()
+        getList()
+    }
+    fun shuaxin(){
+        getData()
+        getList()
+    }
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
-
-        meetingid = arguments?.getString("meetingid", "")
+        isShow = true
+        Log.d("MettingDe2Fragment","initData()")
+//        meetingid = arguments?.getString("meetingid", "")
+        meetingid =kv.getString("meetingid", "")
         binding.srecyclerview.layoutManager = LinearLayoutManager(activity)
         adapterSelect = SelectMeetingAdapter().apply {
             submitList(selectList)
@@ -64,7 +79,7 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
                 binding.nameTv.text = selectList[position].name
                 adapterSelect?.notifyDataSetChanged()
                 binding.selectLl.visibility = View.GONE
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
                 getList()
             }
         }
@@ -97,17 +112,17 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
 
         binding.nameLl.setOnClickListener {
             if (binding.selectLl.visibility == View.VISIBLE) {
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
                 binding.selectLl.visibility = View.GONE
             } else {
-                LiveDataBus.get().with("selectLlVISIBLE").postValue("1")
+                LiveEventBus.get<String>("selectLlVISIBLE").post("1")
                 binding.selectLl.visibility = View.VISIBLE
             }
         }
         binding.selectLl.setOnClickListener {
 
             if (binding.selectLl.visibility == View.VISIBLE) {
-                LiveDataBus.get().with("selectLlGONE").postValue("1")
+                LiveEventBus.get<String>("selectLlGONE").post("1")
                 binding.selectLl.visibility = View.GONE
             }
 
@@ -117,10 +132,11 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
         binding.refresh.setOnRefreshListener {
             getList()
         }
-        LiveDataBus.get().with("JWebSocketClientlocation", String::class.java)
-            .observeForever {
+        LiveEventBus
+            .get<String>("JWebSocketClientlocation", String::class.java)
+            .observe(this) {
                 try {
-                    if (AppManager.getAppManager().activityInstanceIsLive(activity)) {
+                    if (isShow) {
                         signUpId = ""
                         getDatasign_up_app_list()
                         getList()
@@ -130,29 +146,22 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
 
             }
 
-//        GlobalScope.launch {
-//            delay(1000) // 延时1秒
-//            // 在这里执行需要延时的操作
-//            getData()
-//            getList()
-//        }
-        delayed()
-
     }
 
-    private val delayedLoad = SubstepDelayedLoad()
-    private fun delayed() {
-        delayedLoad
-            .delayed(1000)
-            .run {
-                //延时加载布局
-                getData()
-                getList()
-                delayedLoad.clearAllRunable()
 
-            }
-            .start()
-    }
+//    private val delayedLoad = SubstepDelayedLoad()
+//    private fun delayed() {
+//        delayedLoad
+//            .delayed(1000)
+//            .run {
+//                //延时加载布局
+//                getData()
+//                getList()
+//                delayedLoad.clearAllRunable()
+//
+//            }
+//            .start()
+//    }
 
 
 
@@ -197,20 +206,22 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
     }
 
     private fun getData() {
-//        if(!kv.getString("SiginUpListModel","").isNullOrEmpty()){
-//            var data = JSON.parseObject(kv.getString("SiginUpListModel",""), SiginUpListModel::class.java)
-//            selectList.clear()
-//
-//            var all = SiginUpListData()
-//            all.name = "全部签到站点"
-//            all.id = ""
-//            all.isMyselect = true
-//            selectList.add(all)
-//            selectList.addAll(data.list)
-//            adapterSelect?.notifyDataSetChanged()
-//        }else{
+        if(!kv.getString("SiginUpListModelmeetingId"+meetingid,"").isNullOrEmpty()){
+            var data = JSON.parseObject(kv.getString("SiginUpListModelmeetingId"+meetingid,""), SiginUpListModel::class.java)
+            try {
+                selectList.clear()
+                var all = SiginUpListData()
+                all.name = "全部签到站点"
+                all.id = ""
+                all.isMyselect = true
+                selectList.add(all)
+                selectList.addAll(data.list)
+                adapterSelect?.notifyDataSetChanged()
+            } catch (e: java.lang.Exception) {
+            }
+        }else{
         getDatasign_up_app_list()
-//        }
+        }
 
     }
 
@@ -228,11 +239,11 @@ class MettingDe2Fragment : BaseBindingFragment<FragMeetingde2Binding, BaseViewMo
                 override fun onMySuccess(data: List<SiginUpListData>) {
                     super.onMySuccess(data)
                     try {
+                        var allList = SiginUpListModel()
+                        allList.list = data
+                        kv.putString("SiginUpListModelmeetingId"+meetingid, JSON.toJSONString(allList))
 
 
-                        var list = SiginUpListModel()
-                        list.list = data
-                        kv.putString("SiginUpListModel", JSON.toJSONString(list))
                         selectList.clear()
 
                         var all = SiginUpListData()

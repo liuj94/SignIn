@@ -1,3 +1,4 @@
+import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.example.signin.PageRoutes
 import com.example.signin.bean.*
@@ -116,6 +117,34 @@ fun sigin(
             override fun onFinish() {
                 super.onFinish()
                 finish?.invoke()
+            }
+
+
+        })
+}
+fun getprintImg(
+    userMeetingIds: String
+) {
+    Log.e("JWebSocketClient", "参数()="+MMKV.mmkvWithID("MyDataMMKV").getString("userDataId", "")+"?userMeetingIds="+userMeetingIds)
+
+    OkGo.get<String>("https://meeting.nbqichen.com/prod-api/common/print/"+MMKV.mmkvWithID("MyDataMMKV").getString("userDataId", "")+"?userMeetingIds="+userMeetingIds)
+        .tag("https://meeting.nbqichen.com/prod-api/common/print/")
+//        .headers("Authorization", MMKV.mmkvWithID("MyDataMMKV").getString("token", ""))
+        .execute(object : RequestCallback<String>() {
+            override fun onSuccess(response: Response<String>?) {
+                super.onSuccess(response)
+                Log.e("JWebSocketClient", "MyJWebSocketClient()=prod-api/common/print=onSuccess")
+            }
+
+
+            override fun onError(response: Response<String>) {
+                super.onError(response)
+
+            }
+
+            override fun onFinish() {
+                super.onFinish()
+
             }
 
 

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 
 import android.view.MotionEvent
 import android.view.WindowManager
@@ -23,38 +24,63 @@ import com.dylanc.viewbinding.base.ActivityBindingDelegate
 import com.example.signin.AppManager
 import com.tencent.mmkv.MMKV
 
-abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActivity(),
+abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatActivity(),
     ActivityBinding<VB> by ActivityBindingDelegate(), MMKVOwner {
-        val mViewModel: VM by lazy {
+    val mViewModel: VM by lazy {
         obtainViewModel(this, getViewModel())
     }
+    var isCreateShow = true
     abstract fun getViewModel(): Class<VM>
     override val kv = MMKV.mmkvWithID("MyDataMMKV")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Log.d("ActivityBinding", " onCreate")
         startPendingTransition()
         initTranslucentStatus()
+        Log.d("ActivityBinding", " onCreate--setContentViewWithBinding-start")
         setContentViewWithBinding()
+        Log.d("ActivityBinding", " onCreate--setContentViewWithBinding-end")
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         mViewModel.mContext = this
-        getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         AppManager.getAppManager().addActivity(this)
-        initProgressDialog()
-        initIntentStringExtra()
-        initTitle()
-        initData()
-        initListener()
-        initRootTitleBar()
+        Log.d("ActivityBinding", " onCreate---end")
+        initCARData()
+        if(isCreateShow){
+            initProgressDialog()
+            initIntentStringExtra()
+            initTitle()
+            initData()
+            initListener()
+            initRootTitleBar()
+        }
+
+    }
+
+    var isFrist = true;
+    override fun onEnterAnimationComplete() {
+        super.onEnterAnimationComplete()
+        Log.d("ActivityBinding", " onEnterAnimationComplete")
+        if (isFrist) {
+            isFrist = false
+            if(!isCreateShow){
+            initProgressDialog()
+            initIntentStringExtra()
+            initTitle()
+            initData()
+            initListener()
+            initRootTitleBar()}
+        }
+
     }
 
     override fun onDestroy() {
         AppManager.getAppManager().removeActivity(this)
         super.onDestroy()
     }
-
+    open fun initCARData(){}
     abstract fun initData()
     open fun initListener() {}
     open fun initProgressDialog() {}
@@ -65,15 +91,19 @@ abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActi
     open fun initTitle() {
 
     }
+
     open fun startPendingTransition() {
 
     }
+
     open fun initTranslucentStatus() {
 
     }
+
     open fun finishPendingTransition() {
 
     }
+
     open fun initIntentStringExtra() {
 
     }
@@ -82,7 +112,6 @@ abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActi
         super.finish()
         finishPendingTransition()
     }
-
 
 
     //隐藏软键盘
@@ -95,7 +124,13 @@ abstract class BaseActivity<VB : ViewBinding,VM : BaseViewModel> : AppCompatActi
             true
         } else onTouchEvent(ev)
     }
-    fun Activity.hideSoftInput() = currentFocus?.let { (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(it.windowToken, 0) }
+
+    fun Activity.hideSoftInput() = currentFocus?.let {
+        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+            it.windowToken,
+            0
+        )
+    }
 
     override fun getResources(): Resources? {
         val res: Resources = super.getResources()

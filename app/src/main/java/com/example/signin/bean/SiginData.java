@@ -66,6 +66,17 @@ public class SiginData implements Serializable {
      * userId : null
      */
 
+
+    private String mac= "";
+
+    public String getMac() {
+        return mac;
+    }
+
+    public void setMac(String mac) {
+        this.mac = mac;
+    }
+
     private String searchValue= "";
     private List<MeetingFormList> meetingFormList= new ArrayList<>();
     private boolean kuan= false;
@@ -90,6 +101,16 @@ public class SiginData implements Serializable {
     private String modelType= "";
 
     private String signUpNeedCount= "";
+    private MeetingSignUpLocationConfig meetingSignUpLocationConfig;
+
+    public MeetingSignUpLocationConfig getMeetingSignUpLocationConfig() {
+        return meetingSignUpLocationConfig;
+    }
+
+    public void setMeetingSignUpLocationConfig(MeetingSignUpLocationConfig meetingSignUpLocationConfig) {
+        this.meetingSignUpLocationConfig = meetingSignUpLocationConfig;
+    }
+
     private boolean isMyselect;
 
     public String getMeetingSignUpCount() {
@@ -140,6 +161,7 @@ public class SiginData implements Serializable {
     private int id;
     private int signUpId;
     private String name= "";
+    private String bluetoothType= "";
     private int delTf;
     private int personChargeId;
     private String personChargeName= "";
@@ -182,6 +204,14 @@ public class SiginData implements Serializable {
     private String personChargeUsername= "";
     private String userType= "";
     private String userId= "";
+
+    public String getBluetoothType() {
+        return bluetoothType;
+    }
+
+    public void setBluetoothType(String bluetoothType) {
+        this.bluetoothType = bluetoothType;
+    }
 
     public String getSpeechStatus() {
         return speechStatus;

@@ -43,6 +43,18 @@
                 android:textColor="#fff"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+            <TextView
+                android:id="@+id/print"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:text="打印"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </RelativeLayout>
         <!--        <androidx.core.widget.NestedScrollView-->
         <!--            android:layout_width="match_parent"-->

@@ -1,13 +1,15 @@
 package com.example.signin
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.AsyncTask
 import android.os.CountDownTimer
 import android.text.Html
-import android.view.KeyEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -22,7 +24,6 @@ import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
 import com.alibaba.fastjson.JSON
 import com.bumptech.glide.Glide
-import com.common.apiutil.decode.DecodeReader
 import com.common.face.api.FaceUtil
 import com.dylanc.longan.activity
 import com.dylanc.longan.startActivity
@@ -44,7 +45,6 @@ import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import java.io.File
 import java.io.UnsupportedEncodingException
-import java.nio.charset.StandardCharsets
 
 
 class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), ScanCallBack {
@@ -62,8 +62,9 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
     var id: String = ""
     override fun initData() {
         moshi = kv.getString("shaomamoshi", "")
+        registerReceiver()
         if (moshi.equals("激光头识别")) {
-            openHardreader()
+//            openHardreader()
         } else if (moshi.equals("二维码识别")) {
             ScanTool.GET.initSerial(
                 this@ExamineKPActivity,
@@ -352,10 +353,10 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
                     kv.putString("shaomamoshi", moshi)
                     if (moshi.equals("激光头识别")) {
                         ScanTool.GET.release()
-                        openHardreader()
+//                        openHardreader()
                     } else if (moshi.equals("二维码识别")) {
-                        mDecodeReader?.close()
-                        mDecodeReader = null
+//                        mDecodeReader?.close()
+//                        mDecodeReader = null
                         ScanTool.GET.initSerial(
                             this@ExamineKPActivity,
                             "/dev/ttyACM0",
@@ -367,8 +368,8 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
 
                     }else{
                         ScanTool.GET.release()
-                        mDecodeReader?.close()
-                        mDecodeReader = null
+//                        mDecodeReader?.close()
+//                        mDecodeReader = null
                     }
                 }
                 findViewById<ImageView>(R.id.gb).setOnClickListener { dismiss() }
@@ -395,70 +396,70 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
         }
     }
 
-    private var mDecodeReader: DecodeReader? = null
-    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        //要是重虚拟键盘输入怎不拦截
-        if ("Virtual" == event.device.name) {
-            return super.dispatchKeyEvent(event)
-        }
-        if (moshi.equals("激光头识别")) {
-            mDecodeReader?.open(115200)
-        }
-        return true
-    }
+//    private var mDecodeReader: DecodeReader? = null
+//    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+//        //要是重虚拟键盘输入怎不拦截
+//        if ("Virtual" == event.device.name) {
+//            return super.dispatchKeyEvent(event)
+//        }
+////        if (moshi.equals("激光头识别")) {
+////            mDecodeReader?.open(115200)
+////        }
+//        return true
+//    }
 
-    private fun openHardreader() {
-        if (mDecodeReader == null) {
-            mDecodeReader = DecodeReader(this) //初始化
-            mDecodeReader?.setDecodeReaderListener { data ->
-                if (isPause) {
-                    return@setDecodeReaderListener
-                }
-                var mRingPlayer =
-                    MediaPlayer.create(this@ExamineKPActivity, R.raw.ddd)
-                mRingPlayer?.start()
-            mDecodeReader?.close()
-                try {
-                    val str = String(data, StandardCharsets.UTF_8)
-                    runOnUiThread {
-                        try {
-                            var temp = str.split(",")
-                            var dm = temp[2]
-                            var hm = temp[3]
-                            binding.invoiceNumber.setText(dm)
-                            binding.invoiceNo.setText(hm)
-                        } catch (e: java.lang.Exception) {
-                            toast("请提供正确发票码")
-                        }
-
-
-                    }
-                } catch (e: UnsupportedEncodingException) {
-                    e.printStackTrace()
-                }
-
-            }
-        }
-
-
-
-
-    }
+//    private fun openHardreader() {
+//        if (mDecodeReader == null) {
+//            mDecodeReader = DecodeReader(this) //初始化
+//            mDecodeReader?.setDecodeReaderListener { data ->
+//                if (isPause) {
+//                    return@setDecodeReaderListener
+//                }
+//                var mRingPlayer =
+//                    MediaPlayer.create(this@ExamineKPActivity, R.raw.ddd)
+//                mRingPlayer?.start()
+//            mDecodeReader?.close()
+//                try {
+//                    val str = String(data, StandardCharsets.UTF_8)
+//                    runOnUiThread {
+//                        try {
+//                            var temp = str.split(",")
+//                            var dm = temp[2]
+//                            var hm = temp[3]
+//                            binding.invoiceNumber.setText(dm)
+//                            binding.invoiceNo.setText(hm)
+//                        } catch (e: java.lang.Exception) {
+//                            toast("请提供正确发票码")
+//                        }
+//
+//
+//                    }
+//                } catch (e: UnsupportedEncodingException) {
+//                    e.printStackTrace()
+//                }
+//
+//            }
+//        }
+//
+//
+//
+//
+//    }
 
     var isPause = true
     override fun onResume() {
         super.onResume()
         isPause = false
-        if (moshi.equals("激光头识别")) {
-            openHardreader()
-            mDecodeReader?.close()
-        }
+//        if (moshi.equals("激光头识别")) {
+//            openHardreader()
+//            mDecodeReader?.close()
+//        }
     }
 
     override fun onPause() {
         super.onPause()
         isPause = true
-        mDecodeReader = null
+//        mDecodeReader = null
     }
 
     override fun onScanCallBack(p0: String?) {
@@ -483,7 +484,7 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
 
     override fun onDestroy() {
         super.onDestroy()
-        mDecodeReader?.close()
+        unregisterReceiver(receiver)
         ScanTool.GET.release()
         closeBlue()
         closeRed()
@@ -532,4 +533,53 @@ class ExamineKPActivity : BaseBindingActivity<ActKpBinding, BaseViewModel>(), Sc
             }
         }
     }
+
+    private val ACTION_DATA_CODE_RECEIVED = "com.sunmi.scanner.ACTION_DATA_CODE_RECEIVED"
+    private val DATA = "data"
+    private val SOURCE = "source_byte"
+    private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            if (moshi.equals("激光头识别")) {
+                if (isPause) {
+                    return
+                }
+
+                var mRingPlayer =
+                    MediaPlayer.create(this@ExamineKPActivity, R.raw.ddd)
+                mRingPlayer?.start()
+                try {
+                    val code = intent.getStringExtra(DATA)
+                    /* val data: ByteArray? = intent.getByteArrayExtra(SOURCE)*/
+                    if (code != null && !code.isEmpty()) {
+                        try {
+                            var temp = code.split(",")
+                            var dm = temp[2]
+                            var hm = temp[3]
+                            binding.invoiceNumber.setText(dm)
+                            binding.invoiceNo.setText(hm)
+                        } catch (e: java.lang.Exception) {
+                            toast("请提供正确发票码")
+                        }
+                    }else{
+                        toast("请提供正确发票码")
+                    }
+
+                } catch (e: UnsupportedEncodingException) {
+                    e.printStackTrace()
+                    toast("请提供正确发票码")
+                }
+
+            }
+
+
+        }
+    }
+
+    private fun registerReceiver() {
+        val filter = IntentFilter()
+        filter.addAction(ACTION_DATA_CODE_RECEIVED)
+        registerReceiver(receiver, filter)
+
+    }
+
 }

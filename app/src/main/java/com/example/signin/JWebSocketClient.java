@@ -10,7 +10,7 @@ import java.net.URI;
 
 public class JWebSocketClient extends WebSocketClient {
     public JWebSocketClient(URI serverUri) {
-        super(serverUri, new Draft_6455());
+        super(serverUri,new Draft_6455());
     }
 
     @Override

@@ -10,21 +10,16 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
 import com.dylanc.longan.startActivity
-import com.example.signin.MeetingDeActivity
-import com.example.signin.PageRoutes
-import com.example.signin.R
-
+import com.example.signin.*
+import com.example.signin.adapter.HomeListAdapter
 import com.example.signin.base.BaseBindingFragment
 import com.example.signin.base.BaseViewModel
-import com.example.signin.bean.MeetingData
-
+import com.example.signin.bean.*
 import com.example.signin.databinding.FragHomeBinding
-import com.example.signin.adapter.HomeListAdapter
-import com.example.signin.bean.SiginUpListData
-import com.example.signin.bean.SiginUpListModel
 import com.example.signin.net.RequestCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
+
 
 /**
  *   author : LiuJie
@@ -132,13 +127,9 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
         binding.recyclerview.layoutManager = LinearLayoutManager(activity)
         adapter = HomeListAdapter().apply {
             submitList(list)
+            setEmptyViewLayout(requireActivity(), R.layout.layout_emptyview)
             setOnItemClickListener { _, _, position ->
-                setEmptyViewLayout(requireActivity(), R.layout.layout_emptyview)
-//                startActivity<MeetingDeActivity>(
-//                    "meetingId" to "" + list[position].id,
-//                    "meetingName" to "" + list[position].name,
-//                    "businessId" to "" + list[position].businessId
-//                )
+                Log.d("ActivityBinding", "gotogotogotogoto")
                 goto(
                     "" + list[position].id,
                     "" + list[position].name,
@@ -158,52 +149,72 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
             pageNum++
             getData()
         }
+        if (!kv.getString("userData", "").isNullOrEmpty()) {
+            var userData = JSON.parseObject(kv.getString("userData", ""), User::class.java)
+            userData?.let {
+                userType = it.userType
+            }
+        }
+    }
+
+    var userType = "00"
+    private fun goto(meetingId: String, meetingName: String, businessId: String) {
+        kv.putString("meetingid",meetingId)
+        kv.putString("meetingName",meetingName)
+        kv.putString("businessId",businessId)
+        kv.putString("userType",userType)
+//        var intent = Intent(activity, MeetingDeActivity::class.java)
+//        intent.putExtra("meetingid",meetingId)
+//        intent.putExtra("meetingName",meetingName)
+//        intent.putExtra("businessId",businessId)
+//        intent.putExtra("userType",userType)
+//        startActivity(intent)
+        startActivity<MeetingDe2Activity>(
+            "meetingId" to meetingId,
+            "meetingName" to meetingName,
+            "businessId" to businessId,
+            "userType" to userType
+        )
+
 
     }
 
-    private fun goto(meetingId: String, meetingName: String, businessId: String) {
-        startActivity<MeetingDeActivity>(
-            "meetingId" to meetingId,
-            "meetingName" to meetingName,
-            "businessId" to businessId
-        )
-//        mViewModel.isShowLoading.value = true
-//        OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingId)
-//            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingId)
-//            .headers("Authorization", kv.getString("token", ""))
-//            .execute(object : RequestCallback<List<SiginUpListData>>() {
-//                override fun onSuccessNullData() {
-//                    super.onSuccessNullData()
-//
-//                }
-//
-//                override fun onMySuccess(data: List<SiginUpListData>) {
-//                    super.onMySuccess(data)
-//                    var list = SiginUpListModel()
-//                    list.list = data
-//                    kv.putString("SiginUpListModel", JSON.toJSONString(list))
-//
-//                }
-//
-//                override fun onError(response: Response<List<SiginUpListData>>) {
-//                    super.onError(response)
-//
-//
-//                }
-//
-//                override fun onFinish() {
-//                    super.onFinish()
-//                    mViewModel.isShowLoading.value = false
-////                    getFragmentLists()
-//                    startActivity<MeetingDeActivity>(
-//                        "meetingId" to meetingId,
-//                        "meetingName" to meetingName,
-//                        "businessId" to businessId
-//                    )
-//                }
-//
-//
-//            })
+    private fun getData2(meetingId: String) {
+
+        OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingId)
+            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingId)
+            .headers("Authorization", kv.getString("token", ""))
+            .execute(object : RequestCallback<List<SiginUpListData>>() {
+                override fun onSuccessNullData() {
+                    super.onSuccessNullData()
+
+                }
+
+                override fun onMySuccess(data: List<SiginUpListData>) {
+                    super.onMySuccess(data)
+                    var allList = SiginUpListModel()
+                    allList.list = data
+                    kv.putString(
+                        "SiginUpListModelmeetingId" + meetingId,
+                        JSON.toJSONString(allList)
+                    )
+
+                }
+
+                override fun onError(response: Response<List<SiginUpListData>>) {
+                    super.onError(response)
+
+
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+
+
+                }
+
+
+            })
     }
 
     var isFrist = true;
@@ -227,24 +238,33 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
 
                 override fun onMySuccess(data: List<MeetingData>) {
                     super.onMySuccess(data)
-                    if (pageNum == 1) {
-                        list.clear()
-                    }
-                    list.addAll(data)
-                    adapter?.notifyDataSetChanged()
-                    if (list.size <= 0) {
-                        binding.recyclerview.visibility = View.GONE
-                        binding.kong.visibility = View.VISIBLE
-                    } else {
-                        binding.recyclerview.visibility = View.VISIBLE
-                        binding.kong.visibility = View.GONE
+                    try {
+                        if (pageNum == 1) {
+                            list.clear()
+                        }
+                        list.addAll(data)
+                        adapter?.notifyDataSetChanged()
+                        if (list.size <= 0) {
+                            binding.recyclerview.visibility = View.GONE
+                            binding.kong.visibility = View.VISIBLE
+                        } else {
+                            binding.recyclerview.visibility = View.VISIBLE
+                            binding.kong.visibility = View.GONE
 //                        if(isFrist){
 //                            isFrist = false
-//                            for (item in list) {
-//                                getList("" + item.id)
-//                            }
+                            for (item in list) {
+                                getData2("" + item.id)
+                                getstatisticsData("" + item.id)
+                            }
 //                        }
-
+//                            Log.d("hhhhhhhhhhhhhhhhhhh", "gotogotogotogoto")
+//                            goto(
+//                                "" + list[0].id,
+//                                "" + list[0].name,
+//                                "" + list[0].businessId
+//                            )
+                        }
+                    } catch (e: Exception) {
                     }
 
 
@@ -257,53 +277,50 @@ class HomeMainFragment : BaseBindingFragment<FragHomeBinding, BaseViewModel>() {
 
                 override fun onFinish() {
                     super.onFinish()
-                    binding.refresh.finishRefresh()
-                    binding.refresh.finishLoadMore()
-                    mViewModel.isShowLoading.value = false
+                    try {
+                        binding.refresh.finishRefresh()
+                        binding.refresh.finishLoadMore()
+                        mViewModel.isShowLoading.value = false
+                    } catch (e: Exception) {
+                    }
                 }
 
 
             })
     }
 
-    private fun getList(meetingid: String) {
-        Log.d("getList", "接口开始调用===up/app/list")
-        mViewModel.isShowLoading.value = true
-        OkGo.get<List<SiginUpListData>>(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
-            .tag(PageRoutes.Api_meeting_sign_up_app_list + meetingid)
+
+    fun getstatisticsData(meetingId:String) {
+
+        OkGo.get<MeetingStatisticsData>(PageRoutes.Api_meeting_statistics + meetingId + "?id=" + meetingId)
+            .tag(PageRoutes.Api_meeting_statistics + meetingId + "?id=" + meetingId)
             .headers("Authorization", kv.getString("token", ""))
-            .execute(object : RequestCallback<List<SiginUpListData>>() {
+            .execute(object : RequestCallback<MeetingStatisticsData>() {
                 override fun onSuccessNullData() {
                     super.onSuccessNullData()
 
                 }
 
-                override fun onMySuccess(data: List<SiginUpListData>) {
+                override fun onMySuccess(data: MeetingStatisticsData) {
                     super.onMySuccess(data)
-                    var a = SiginUpListModel()
-                    a.list = data
-                    kv.putString("SiginUpListModel", JSON.toJSONString(a))
-                    Log.d("getList", "接口返回结束===up/app/list")
+                    kv.putString(
+                        "MeetingStatistics" + meetingId,
+                        JSON.toJSONString(data)
+                    )
 
                 }
 
-                override fun onError(response: Response<List<SiginUpListData>>) {
+                override fun onError(response: Response<MeetingStatisticsData>) {
                     super.onError(response)
-
 
                 }
 
                 override fun onFinish() {
                     super.onFinish()
 
-
                 }
 
 
             })
-
-//        }
-
     }
-
 }
